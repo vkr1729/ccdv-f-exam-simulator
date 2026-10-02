@@ -471,12 +471,22 @@ function renderCurrentQuestion() {
   document.getElementById('exam-title-header').textContent = exam.title + modeSuffix;
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
   
-  const domainInfo = DOMAIN_METADATA[q.domain_id] || { name: q.domain_name, weight: 10 };
-  const domainBadge = document.getElementById('domain-badge');
-  domainBadge.textContent = `${q.domain_id}: ${domainInfo.name} (${domainInfo.weight}%)`;
+  // Question Metadata Tags (Domain & Topic): visible in Study Mode and Review Mode, hidden during timed Exam Mode
+  const tagsContainer = document.getElementById('question-tags-container');
+  const showMetadataTags = Boolean(State.isStudyMode || State.isReviewMode);
+  if (tagsContainer) {
+    if (showMetadataTags) {
+      tagsContainer.classList.remove('hidden');
+      const domainInfo = DOMAIN_METADATA[q.domain_id] || { name: q.domain_name, weight: 10 };
+      const domainBadge = document.getElementById('domain-badge');
+      if (domainBadge) domainBadge.textContent = `${q.domain_id}: ${domainInfo.name} (${domainInfo.weight}%)`;
 
-  const topicBadge = document.getElementById('topic-badge');
-  topicBadge.textContent = q.topic || 'Core Scenario';
+      const topicBadge = document.getElementById('topic-badge');
+      if (topicBadge) topicBadge.textContent = q.topic || 'Core Scenario';
+    } else {
+      tagsContainer.classList.add('hidden');
+    }
+  }
 
   // Flag state & visibility in review mode
   const flagBtn = document.getElementById('flag-btn');
