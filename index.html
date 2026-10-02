@@ -2,10 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Claude Certified Developer (CCDV-F) — 10 Mock Exam Simulator</title>
   <meta name="description" content="10 full-length blueprint-balanced practice exams for the Anthropic Claude Certified Developer - Foundations (CCDV-F) certification with gap diagnostics.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="alternate icon" href="icons/icon-192.png">
+
+  <!-- PWA Meta & App Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FAF7F2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="CCDV-F">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
   <!-- Google Fonts: Newsreader (Editorial Serif) + Inter + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +54,13 @@
       background-color: #faf7f2;
       color: #1c1917;
       font-family: 'Inter', sans-serif;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    button, a {
+      touch-action: manipulation;
     }
     .custom-scroll::-webkit-scrollbar {
       width: 5px;
@@ -92,11 +108,21 @@
         </a>
       </nav>
 
-      <!-- Stats Pill in Header -->
-      <div class="hidden md:flex items-center space-x-3">
-        <span id="header-stats-pill" class="px-3 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 border border-stone-200">
-          Loading question bank...
+      <!-- Actions: Install PWA & Offline Indicator & Stats Pill -->
+      <div class="flex items-center space-x-2.5">
+        <button id="pwa-install-btn" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white transition flex items-center space-x-1.5 shadow-xs">
+          <span>📲</span>
+          <span>Install App</span>
+        </button>
+        <span id="connection-badge" class="px-2 py-0.5 rounded-full text-[11px] font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center space-x-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span id="connection-text">Offline Ready</span>
         </span>
+        <div class="hidden md:flex items-center space-x-3">
+          <span id="header-stats-pill" class="px-3 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 border border-stone-200">
+            Loading question bank...
+          </span>
+        </div>
       </div>
     </div>
   </header>
@@ -188,7 +214,13 @@
           <span id="q-counter" class="text-xs font-mono text-stone-600">Question 1 of 53</span>
         </div>
 
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2.5">
+          <!-- Mobile Question Matrix Toggle -->
+          <button id="mobile-matrix-toggle-btn" onclick="window.App.toggleMobileMatrix()" class="lg:hidden px-3 py-1.5 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition">
+            <span>📋</span>
+            <span id="mobile-matrix-btn-label">Question Matrix</span>
+          </button>
+
           <!-- Timer -->
           <div class="flex items-center space-x-2 bg-stone-50 px-3.5 py-1.5 rounded-xl border border-stone-200">
             <svg class="w-4 h-4 text-amber-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -198,7 +230,7 @@
           <!-- Flag Button -->
           <button id="flag-btn" onclick="window.App.toggleFlag()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition">
             <span>☆</span>
-            <span>Flag for Review</span>
+            <span class="hidden sm:inline">Flag for Review</span>
           </button>
         </div>
       </div>
@@ -257,8 +289,8 @@
           </div>
         </div>
 
-        <!-- Question Matrix Drawer / Sidebar -->
-        <div class="lg:col-span-1 space-y-4">
+        <!-- Question Matrix Drawer / Sidebar (Desktop Only) -->
+        <div class="hidden lg:block lg:col-span-1 space-y-4">
           <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">Question Matrix</h4>
@@ -324,9 +356,51 @@
 
   </main>
 
+  <!-- Mobile Question Matrix Bottom Sheet / Modal -->
+  <div id="mobile-matrix-modal" onclick="if(event.target === this) window.App.toggleMobileMatrix(false);" role="dialog" aria-modal="true" aria-labelledby="mobile-matrix-title" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-5 border border-stone-200 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <div>
+          <h3 id="mobile-matrix-title" class="text-base font-editorial font-bold text-stone-900">Question Matrix</h3>
+          <p id="mobile-matrix-summary-text" class="text-[11px] font-mono text-stone-500">0 of 53 answered</p>
+        </div>
+        <button onclick="window.App.toggleMobileMatrix(false)" aria-label="Close matrix" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600 font-bold text-base transition">
+          &times;
+        </button>
+      </div>
+
+      <!-- 53 Item Grid (scrollable) -->
+      <div id="mobile-question-matrix-grid" class="grid grid-cols-6 sm:grid-cols-5 gap-2 custom-scroll overflow-y-auto p-1 flex-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Legend -->
+      <div class="pt-3 border-t border-stone-100 text-xs font-mono text-stone-500 flex flex-wrap gap-x-4 gap-y-1">
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-stone-800"></span>
+          <span>Answered</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded border border-amber-500 bg-amber-100"></span>
+          <span>Flagged</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-stone-100 border border-stone-200"></span>
+          <span>Unvisited</span>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button onclick="window.App.toggleMobileMatrix(false); window.App.openSubmitModal();" class="w-full py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition">
+          Submit & Finish Exam
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Submit Confirmation Modal -->
-  <div id="submit-modal" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
+  <div id="submit-modal" onclick="if(event.target === this) window.App.closeSubmitModal();" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-2xl space-y-5">
       <div class="space-y-2">
         <h3 class="text-xl font-editorial text-stone-900 font-semibold">Finish and Score Exam?</h3>
         <p class="text-xs text-stone-600 leading-relaxed font-sans">

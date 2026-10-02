@@ -31,6 +31,13 @@ EXPECTED_BLUEPRINT = {
 def test_files_exist():
     required_files = [
         "index.html",
+        "manifest.json",
+        "sw.js",
+        "icons/icon.svg",
+        "icons/icon-192.png",
+        "icons/icon-512.png",
+        "icons/icon-maskable.png",
+        "icons/apple-touch-icon.png",
         "js/exam-data.js",
         "js/storage.js",
         "js/analytics.js",
@@ -45,6 +52,66 @@ def test_files_exist():
         assert os.path.exists(p), f"Missing required file: {rf}"
         assert os.path.getsize(p) > 0, f"File is empty: {rf}"
         print(f"✓ {rf} exists ({os.path.getsize(p)} bytes)")
+
+import struct
+
+def test_pwa_configuration():
+    # 1. Manifest Structure & Asset Existence
+    manifest_path = os.path.join(BASE_DIR, "manifest.json")
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    assert manifest.get("display") == "standalone", "manifest.json must have display: standalone"
+    assert manifest.get("start_url") == "./", "manifest.json must define start_url as ./"
+    assert manifest.get("id") == "./", "manifest.json must define id as ./"
+    assert manifest.get("theme_color") == "#FAF7F2", "manifest.json theme_color must match #FAF7F2"
+    assert manifest.get("background_color") == "#FAF7F2", "manifest.json background_color must match #FAF7F2"
+    assert len(manifest.get("icons", [])) >= 4, "manifest.json must specify at least 4 icon configurations"
+
+    manifest_icon_srcs = []
+    for icon_entry in manifest["icons"]:
+        src = icon_entry["src"]
+        manifest_icon_srcs.append(src)
+        p = os.path.join(BASE_DIR, src)
+        assert os.path.exists(p), f"Manifest icon file does not exist on disk: {src}"
+        assert os.path.getsize(p) > 0, f"Manifest icon file is empty: {src}"
+
+    # 2. Service Worker Precaching
+    sw_path = os.path.join(BASE_DIR, "sw.js")
+    with open(sw_path, "r", encoding="utf-8") as f:
+        sw_text = f.read()
+    assert "CACHE_NAME" in sw_text, "sw.js must define CACHE_NAME"
+    assert "js/exam-data.js" in sw_text, "sw.js must pre-cache js/exam-data.js for offline exam availability"
+    assert "allSettled" in sw_text, "sw.js must use allSettled for resilient pre-caching"
+    for src in manifest_icon_srcs:
+        assert src in sw_text, f"Manifest icon {src} must be listed in sw.js PRECACHE_ASSETS"
+    assert "icons/apple-touch-icon.png" in sw_text, "apple-touch-icon.png must be in sw.js PRECACHE_ASSETS"
+
+    # 3. Binary PNG Dimensions Verification (via IHDR struct)
+    png_checks = [
+        ("icons/icon-192.png", 192, 192),
+        ("icons/icon-512.png", 512, 512),
+        ("icons/icon-maskable.png", 512, 512),
+        ("icons/apple-touch-icon.png", 180, 180)
+    ]
+    for rel_path, exp_w, exp_h in png_checks:
+        abs_p = os.path.join(BASE_DIR, rel_path)
+        with open(abs_p, "rb") as f:
+            header = f.read(24)
+            assert header[:8] == b"\x89PNG\r\n\x1a\n", f"Invalid PNG magic in {rel_path}"
+            w, h = struct.unpack(">II", header[16:24])
+            assert (w, h) == (exp_w, exp_h), f"{rel_path} dimensions {w}x{h} do not match expected {exp_w}x{exp_h}"
+
+    # 4. index.html Head Elements
+    index_path = os.path.join(BASE_DIR, "index.html")
+    with open(index_path, "r", encoding="utf-8") as f:
+        html = f.read()
+    assert 'rel="manifest"' in html, "index.html must link to manifest.json"
+    assert 'rel="apple-touch-icon"' in html, "index.html must link apple-touch-icon"
+    assert 'name="theme-color" content="#FAF7F2"' in html, "index.html must set theme-color"
+    assert 'viewport-fit=cover' in html, "index.html viewport must include viewport-fit=cover"
+    assert 'id="mobile-matrix-modal"' in html, "index.html must provide mobile matrix drawer modal"
+
+    print("✓ PWA Manifest, Service Worker, and Multi-resolution Icons verified for offline commute readiness!")
 
 def test_exam_data():
     all_path = os.path.join(BASE_DIR, "data", "all_questions.json")
@@ -127,6 +194,7 @@ if __name__ == "__main__":
     print("  CCDV-F EXAM SIMULATOR SYSTEM INTEGRITY VALIDATION  ")
     print("=====================================================")
     test_files_exist()
+    test_pwa_configuration()
     test_exam_data()
     print("\n=====================================================")
     print("  ALL SYSTEM CHECKS & BLUEPRINT TESTS PASSED (100%)  ")

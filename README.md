@@ -10,12 +10,13 @@ Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/
 
 - **10 Full-Length Exam Forms (530 Questions Total)**: Every form strictly simulates the real 53-item, 120-minute Pearson VUE exam structure and blueprint domain weights.
 - **Strict Developer Scope**: Rigorously curated and audited for Developer-specific scenarios (Messages API, Agent SDK, MCP, streaming, caching, hooks, security boundaries) rather than high-level Architect topologies.
+- **PWA & Offline Commute Ready**: Installable as a Progressive Web App (PWA) with responsive mobile bottom-sheet ergonomics, touch optimizations (`touch-action: manipulation`), safe-area padding for notch/gesture bars, and Service Worker caching. Once loaded online initially, the entire application shell and all 530 questions are cached for complete offline practice on trains, subways, or flights without internet.
 - **Claude Studio Design Language**: Built in a warm, editorial, distraction-free light theme inspired by Anthropic's brand aesthetic (`Newsreader` serif headlines + `Inter` body + `JetBrains Mono` code blocks).
 - **Persistent Missed Questions Vault**: Incorrect answers across all attempts automatically save to local browser storage for revision.
 - **Lagging-Area Gap Diagnostic**: Dynamically ranks your proficiency across the 8 exam domains against the 72% (720/1000) passing threshold and provides targeted topic watch-outs.
-- **Targeted Remediation Quiz**: Launch custom drills containing only your previously missed questions until mastered.
+- **Targeted Remediation Quiz**: Launch custom drills composed exclusively of your previously missed questions until mastered.
 - **Zero-Dependency Architecture**: Standalone modern HTML5, Tailwind CSS, and Vanilla ES Modules with 100% offline capability and zero backend requirements.
-- **Transparent Provenance**: Complete author attribution and repository citations for all open-source question sources.
+- **Transparent Provenance**: Complete author attribution and repository citations across 5 vetted developer repositories.
 
 ---
 
@@ -81,8 +82,9 @@ Or open `preview/index.html` to view the 3 UI/UX design variants explored during
 
 This educational study project incorporates and normalizes authentic scenario items from the following community developer repositories:
 - **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** by Srinivas Pusuluri
+- **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** by Nat Sh.
+- **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** by Turjoy
 - **[hbacheller-tribe/CCDV-F-Exam](https://github.com/hbacheller-tribe/CCDV-F-Exam)** by H. Bacheller
 - **[Amey-Thakur/CLAUDE-CERTIFICATIONS](https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS)** by Amey Thakur
-- **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** by Nat Sh.
 
 See [SOURCES.md](SOURCES.md) for full provenance and licensing details.

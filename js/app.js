@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     State.sourcesMetadata = window.EXAM_DATA.sources || null;
   }
   
+  // Initialize Progressive Web App capabilities
+  initPWA();
+
   // Set up Hash router
   window.addEventListener('hashchange', handleRouting);
   
@@ -48,9 +51,94 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Modal Escape key listener
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const mobileModal = document.getElementById('mobile-matrix-modal');
+      if (mobileModal && !mobileModal.classList.contains('hidden')) {
+        toggleMobileMatrix(false);
+        return;
+      }
+      const submitModal = document.getElementById('submit-modal');
+      if (submitModal && !submitModal.classList.contains('hidden')) {
+        closeSubmitModal();
+      }
+    }
+  });
+
   // Initial Route
   handleRouting();
 });
+
+// PWA Service Worker & Offline Liveness Support
+function initPWA() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .then(reg => {
+          console.log('[PWA] Service worker registered with scope:', reg.scope);
+        })
+        .catch(err => {
+          console.warn('[PWA] Service worker registration failed:', err);
+        });
+    });
+
+    navigator.serviceWorker.ready.then(() => {
+      updateConnectionBadge();
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      updateConnectionBadge();
+    });
+  }
+
+  function updateConnectionBadge() {
+    const badge = document.getElementById('connection-badge');
+    if (!badge) return;
+
+    const isOffline = !navigator.onLine;
+    const hasActiveController = Boolean(navigator.serviceWorker && navigator.serviceWorker.controller);
+
+    if (isOffline) {
+      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-amber-300 bg-amber-50 text-amber-800 flex items-center space-x-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span id="connection-text">Offline Mode</span>';
+    } else if (hasActiveController) {
+      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-emerald-200 bg-emerald-50 text-emerald-700 flex items-center space-x-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span id="connection-text">Offline Ready</span>';
+    } else {
+      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center space-x-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-stone-400"></span><span id="connection-text">Online</span>';
+    }
+  }
+
+  window.addEventListener('online', updateConnectionBadge);
+  window.addEventListener('offline', updateConnectionBadge);
+  updateConnectionBadge();
+
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const installBtn = document.getElementById('pwa-install-btn');
+    if (installBtn) {
+      installBtn.classList.remove('hidden');
+      installBtn.onclick = async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        console.log(`[PWA] Install prompt outcome: ${outcome}`);
+        deferredInstallPrompt = null;
+        installBtn.classList.add('hidden');
+      };
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    console.log('[PWA] App successfully installed');
+    const installBtn = document.getElementById('pwa-install-btn');
+    if (installBtn) installBtn.classList.add('hidden');
+  });
+}
 
 // View Routing
 function handleRouting() {
@@ -62,6 +150,9 @@ function handleRouting() {
   // Pause timer if leaving exam view without finishing
   if (State.currentView === 'exam' && route !== 'exam' && State.timerInterval) {
     pauseTimer();
+  }
+  if (route !== 'exam') {
+    toggleMobileMatrix(false);
   }
 
   State.currentView = route;
@@ -401,10 +492,10 @@ function renderCurrentQuestion() {
     const isFlagged = State.flaggedQuestions.has(q.id);
     if (isFlagged) {
       flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1.5";
-      flagBtn.innerHTML = `<span>★</span><span>Flagged</span>`;
+      flagBtn.innerHTML = `<span>★</span><span class="hidden sm:inline">Flagged</span>`;
     } else {
       flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition";
-      flagBtn.innerHTML = `<span>☆</span><span>Flag for Review</span>`;
+      flagBtn.innerHTML = `<span>☆</span><span class="hidden sm:inline">Flag for Review</span>`;
     }
   }
 
@@ -629,55 +720,94 @@ function renderQuestionMatrix() {
   if (!exam) return;
 
   const matrixContainer = document.getElementById('question-matrix-grid');
-  if (!matrixContainer) return;
-  matrixContainer.innerHTML = '';
+  const mobileContainer = document.getElementById('mobile-question-matrix-grid');
+  if (!matrixContainer && !mobileContainer) return;
 
   const answeredCount = getAnsweredCount();
   const flaggedCount = State.flaggedQuestions.size;
   const totalCount = exam.questions.length;
 
-  document.getElementById('matrix-summary-text').textContent = `${answeredCount} of ${totalCount} answered · ${flaggedCount} flagged`;
+  const summaryText = `${answeredCount} of ${totalCount} answered · ${flaggedCount} flagged`;
+  const summaryEl = document.getElementById('matrix-summary-text');
+  if (summaryEl) summaryEl.textContent = summaryText;
+  const mobileSummaryEl = document.getElementById('mobile-matrix-summary-text');
+  if (mobileSummaryEl) mobileSummaryEl.textContent = summaryText;
+
+  const mobBtnLabel = document.getElementById('mobile-matrix-btn-label');
+  if (mobBtnLabel) mobBtnLabel.textContent = `Grid (${totalCount})`;
+
+  if (matrixContainer) matrixContainer.innerHTML = '';
+  if (mobileContainer) mobileContainer.innerHTML = '';
 
   exam.questions.forEach((q, idx) => {
     const isAnswered = State.userAnswers[q.id] && State.userAnswers[q.id].length > 0;
     const isFlagged = State.flaggedQuestions.has(q.id);
     const isCurrent = idx === State.currentQuestionIndex;
 
-    const btn = document.createElement('button');
-    btn.onclick = () => goToQuestion(idx);
-
-    let classes = "w-8 h-8 rounded-lg text-xs font-mono flex items-center justify-center transition relative ";
+    let baseClasses = "rounded-lg text-xs font-mono flex items-center justify-center transition relative ";
 
     if (State.isReviewMode) {
       const userSel = State.userAnswers[q.id] || [];
       const correctSel = q.correct_answers || [];
       const isCorrect = userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
       if (isCurrent) {
-        classes += "ring-2 ring-stone-900 font-bold ";
+        baseClasses += "ring-2 ring-stone-900 font-bold ";
       }
       if (isCorrect) {
-        classes += "bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 ";
+        baseClasses += "bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 ";
       } else {
-        classes += "bg-rose-100 text-rose-800 font-bold border border-rose-300 ";
+        baseClasses += "bg-rose-100 text-rose-800 font-bold border border-rose-300 ";
       }
     } else {
       if (isCurrent) {
-        classes += "ring-2 ring-amber-700 font-bold bg-amber-100 text-amber-900 ";
+        baseClasses += "ring-2 ring-amber-700 font-bold bg-amber-100 text-amber-900 ";
       } else if (isAnswered) {
-        classes += "bg-stone-800 text-white font-medium ";
+        baseClasses += "bg-stone-800 text-white font-medium ";
       } else {
-        classes += "bg-stone-100 text-stone-600 hover:bg-stone-200 ";
+        baseClasses += "bg-stone-100 text-stone-600 hover:bg-stone-200 ";
       }
 
       if (isFlagged) {
-        classes += "border-2 border-amber-500 ";
+        baseClasses += "border-2 border-amber-500 ";
       }
     }
 
-    btn.className = classes;
-    btn.innerHTML = `${idx + 1}${isFlagged && !State.isReviewMode ? '<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500"></span>' : ''}`;
-    matrixContainer.appendChild(btn);
+    const flagBadge = isFlagged && !State.isReviewMode ? '<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500"></span>' : '';
+
+    if (matrixContainer) {
+      const btn = document.createElement('button');
+      btn.onclick = () => goToQuestion(idx);
+      btn.className = "w-8 h-8 " + baseClasses;
+      btn.innerHTML = `${idx + 1}${flagBadge}`;
+      matrixContainer.appendChild(btn);
+    }
+
+    if (mobileContainer) {
+      const mobBtn = document.createElement('button');
+      mobBtn.onclick = () => {
+        goToQuestion(idx);
+        toggleMobileMatrix(false);
+      };
+      mobBtn.className = "w-10 h-10 min-h-[40px] text-sm " + baseClasses;
+      mobBtn.innerHTML = `${idx + 1}${flagBadge}`;
+      mobileContainer.appendChild(mobBtn);
+    }
   });
+}
+
+function toggleMobileMatrix(forceState) {
+  const modal = document.getElementById('mobile-matrix-modal');
+  if (!modal) return;
+  const isHidden = modal.classList.contains('hidden');
+  const shouldOpen = forceState !== undefined ? forceState : isHidden;
+  if (shouldOpen) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    renderQuestionMatrix();
+  } else {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
 }
 
 // Timer Logic
@@ -771,6 +901,7 @@ function closeSubmitModal() {
 
 function finishExam() {
   closeSubmitModal();
+  toggleMobileMatrix(false);
   pauseTimer();
 
   const exam = State.activeExam;
@@ -1122,6 +1253,7 @@ window.App = {
   nextQuestion,
   prevQuestion,
   toggleFlag,
+  toggleMobileMatrix,
   clearCurrentAnswer,
   openSubmitModal,
   closeSubmitModal,
