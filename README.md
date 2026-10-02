@@ -1,6 +1,9 @@
-# Anthropic Claude Certified Developer — Foundations (CCDV-F) 10-Mock Exam Simulator
+# Claude Certified Developer Foundations (CCDV-F) — 10 Mock Exam Simulator
+*(Unofficial Community Study & Practice Platform)*
 
-A standalone, production-grade practice exam platform for candidates preparing for the **Anthropic Claude Certified Developer – Foundations (CCDV-F)** certification.
+> **Disclaimer:** This is an independent, open-source community preparation project. It is **not** affiliated with, endorsed by, sponsored by, or certified by Anthropic PBC. Claude and CCDV-F are trademarks or service marks of Anthropic PBC.
+
+A standalone, production-grade practice exam platform for candidates preparing for the **Claude Certified Developer – Foundations (CCDV-F)** certification.
 
 Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/](https://vkr1729.github.io/ccdv-f-exam-simulator/)**
 
