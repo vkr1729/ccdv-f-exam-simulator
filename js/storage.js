@@ -11,6 +11,16 @@ const STORAGE_KEYS = {
   USER_SETTINGS: 'ccdv_f_settings'
 };
 
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (e) {
+    console.warn(`localStorage.setItem failed for key "${key}":`, e);
+    return false;
+  }
+}
+
 export const Storage = {
   // --- Exam Attempts History ---
   getAttempts() {
@@ -28,7 +38,7 @@ export const Storage = {
     attempt.id = 'att_' + Date.now();
     attempt.date = new Date().toISOString();
     attempts.unshift(attempt); // latest first
-    localStorage.setItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(attempts));
+    safeSetItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(attempts));
     
     // Automatically record missed questions to the vault
     if (attempt.missed_questions && attempt.missed_questions.length > 0) {
@@ -54,11 +64,24 @@ export const Storage = {
   },
 
   saveActiveExam(state) {
-    localStorage.setItem(STORAGE_KEYS.ACTIVE_EXAM, JSON.stringify(state));
+    // Only store minimal necessary data to prevent quota bloat:
+    // don't duplicate full question definitions if exam_id is 1-10
+    const minimalState = {
+      exam_id: state.exam ? state.exam.exam_id : null,
+      exam_title: state.exam ? state.exam.title : '',
+      currentQuestionIndex: state.currentQuestionIndex || 0,
+      userAnswers: state.userAnswers || {},
+      flaggedQuestions: Array.isArray(state.flaggedQuestions) ? state.flaggedQuestions : Array.from(state.flaggedQuestions || []),
+      timerSecondsRemaining: state.timerSecondsRemaining || 7200,
+      drillQuestions: (state.exam && state.exam.exam_id >= 900) ? state.exam.questions : null
+    };
+    safeSetItem(STORAGE_KEYS.ACTIVE_EXAM, JSON.stringify(minimalState));
   },
 
   clearActiveExam() {
-    localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM);
+    try {
+      localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM);
+    } catch (e) {}
   },
 
   // --- Missed Questions Vault ---
@@ -92,30 +115,30 @@ export const Storage = {
       }
     }
     const updated = Array.from(vaultMap.values());
-    localStorage.setItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(updated));
+    safeSetItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(updated));
     return updated;
+  },
+
+  // Mark questions mastered or remove them after a successful remediation drill
+  clearMasteredQuestions(questionIds) {
+    if (!questionIds || questionIds.length === 0) return;
+    const idSet = new Set(questionIds);
+    const vault = this.getMissedQuestions().filter(q => !idSet.has(q.id));
+    safeSetItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(vault));
+    return vault;
   },
 
   removeMissedQuestion(questionId) {
     const vault = this.getMissedQuestions().filter(q => q.id !== questionId);
-    localStorage.setItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(vault));
-    return vault;
-  },
-
-  toggleMastered(questionId) {
-    const vault = this.getMissedQuestions().map(q => {
-      if (q.id === questionId) {
-        return { ...q, mastered: !q.mastered };
-      }
-      return q;
-    });
-    localStorage.setItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(vault));
+    safeSetItem(STORAGE_KEYS.MISSED_VAULT, JSON.stringify(vault));
     return vault;
   },
 
   clearAllData() {
-    localStorage.removeItem(STORAGE_KEYS.ATTEMPTS);
-    localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM);
-    localStorage.removeItem(STORAGE_KEYS.MISSED_VAULT);
+    try {
+      localStorage.removeItem(STORAGE_KEYS.ATTEMPTS);
+      localStorage.removeItem(STORAGE_KEYS.ACTIVE_EXAM);
+      localStorage.removeItem(STORAGE_KEYS.MISSED_VAULT);
+    } catch (e) {}
   }
 };

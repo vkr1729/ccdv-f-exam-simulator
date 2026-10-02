@@ -87,14 +87,14 @@ export const Analytics = {
         total: 0,
         correct: 0,
         percentage: 0,
-        status: "Unset"
+        status: "Untested"
       };
     });
 
     exam.questions.forEach((q, idx) => {
       const dId = q.domain_id || "D1";
       if (!domainStats[dId]) {
-        domainStats[dId] = { id: dId, name: q.domain_name, weight: 10, expected: 5, total: 0, correct: 0, percentage: 0 };
+        domainStats[dId] = { id: dId, name: q.domain_name, weight: 10, expected: 5, total: 0, correct: 0, percentage: 0, status: "Untested" };
       }
       domainStats[dId].total += 1;
 
@@ -126,17 +126,30 @@ export const Analytics = {
     });
 
     const percentage = totalQuestions > 0 ? (rawScore / totalQuestions) * 100 : 0;
-    // Official Pearson VUE scaled score: 100 to 1000, passing mark is 720 (72%)
-    const scaledScore = Math.min(1000, Math.max(100, Math.round(100 + (percentage / 100) * 900)));
     const isPassing = percentage >= 72.0;
+
+    // Piecewise scaled score anchored at 72.0% -> 720
+    let scaledScore = 100;
+    if (percentage >= 72.0) {
+      // Maps [72.0, 100.0] -> [720, 1000]
+      scaledScore = Math.min(1000, 720 + Math.round(((percentage - 72.0) / 28.0) * 280));
+    } else {
+      // Maps [0.0, 71.99] -> [100, 719]
+      scaledScore = Math.max(100, 100 + Math.round((percentage / 72.0) * 619));
+    }
 
     // Calculate domain percentages and status
     Object.keys(domainStats).forEach(dId => {
       const st = domainStats[dId];
-      st.percentage = st.total > 0 ? (st.correct / st.total) * 100 : 0;
-      if (st.percentage >= 80) st.status = "Strong";
-      else if (st.percentage >= 72) st.status = "Passing";
-      else st.status = "Lagging";
+      if (st.total === 0) {
+        st.percentage = 0;
+        st.status = "Untested";
+      } else {
+        st.percentage = Math.round((st.correct / st.total) * 1000) / 10;
+        if (st.percentage >= 80) st.status = "Strong";
+        else if (st.percentage >= 72) st.status = "Passing";
+        else st.status = "Lagging";
+      }
     });
 
     return {
@@ -146,17 +159,30 @@ export const Analytics = {
       scaled_score: scaledScore,
       is_passing: isPassing,
       domain_stats: domainStats,
-      missed_questions: missedQuestions
+      missed_questions: missedQuestions,
+      user_answers: userAnswers
     };
   },
 
   // Perform cross-exam diagnostic gap analysis
   diagnoseGaps(attempts, missedQuestions) {
-    if (!attempts || attempts.length === 0) {
+    // Only analyze full exams (not single-topic drills) for overall readiness
+    const fullExams = (attempts || []).filter(a => a.total_questions >= 50);
+
+    if (!fullExams || fullExams.length === 0) {
       return {
-        total_attempts: 0,
+        total_attempts: attempts ? attempts.length : 0,
         average_score: 0,
         readiness_level: "Not Started",
+        domain_rankings: Object.keys(DOMAIN_METADATA).map(dId => ({
+          id: dId,
+          name: DOMAIN_METADATA[dId].name,
+          weight: DOMAIN_METADATA[dId].weight,
+          total: 0,
+          correct: 0,
+          percentage: 0,
+          is_lagging: false
+        })),
         lagging_domains: [],
         strong_domains: [],
         top_topic_gaps: [],
@@ -164,14 +190,14 @@ export const Analytics = {
       };
     }
 
-    // Aggregate domain accuracy across all attempts
+    // Aggregate domain accuracy across all full attempts
     const domainTotals = {};
     Object.keys(DOMAIN_METADATA).forEach(dId => {
       domainTotals[dId] = { total: 0, correct: 0 };
     });
 
     let totalPctSum = 0;
-    attempts.forEach(att => {
+    fullExams.forEach(att => {
       totalPctSum += att.percentage;
       if (att.domain_stats) {
         Object.keys(att.domain_stats).forEach(dId => {
@@ -183,7 +209,7 @@ export const Analytics = {
       }
     });
 
-    const avgScore = Math.round((totalPctSum / attempts.length) * 10) / 10;
+    const avgScore = Math.round((totalPctSum / fullExams.length) * 10) / 10;
     
     // Compute aggregate domain accuracy
     const domainRankings = Object.keys(DOMAIN_METADATA).map(dId => {
@@ -197,7 +223,7 @@ export const Analytics = {
         total: stats.total,
         correct: stats.correct,
         percentage: pct,
-        is_lagging: pct < 72.0
+        is_lagging: stats.total > 0 && pct < 72.0
       };
     });
 
@@ -208,7 +234,7 @@ export const Analytics = {
 
     // Identify topic frequency in missed questions
     const topicFrequency = {};
-    missedQuestions.forEach(q => {
+    (missedQuestions || []).forEach(q => {
       const t = q.topic || "General";
       topicFrequency[t] = (topicFrequency[t] || 0) + 1;
     });
@@ -242,6 +268,7 @@ export const Analytics = {
 
     return {
       total_attempts: attempts.length,
+      full_attempts: fullExams.length,
       average_score: avgScore,
       readiness_level: readiness,
       domain_rankings: domainRankings,
@@ -265,9 +292,9 @@ export const Analytics = {
 
     missedQuestions.forEach((q, i) => {
       const domainName = DOMAIN_METADATA[q.domain_id]?.name || q.domain_name || "Domain";
-      md += `### ${i + 1}. [${q.domain_id}] ${domainName} &mdash; ${q.topic || 'Core'}\n\n`;
+      md += `### ${i + 1}. [${q.domain_id}] ${domainName} — ${q.topic || 'Core'}\n\n`;
       md += `**Question:** ${q.prompt}\n\n`;
-      md += `**Your Answer:** ${q.user_selected ? q.user_selected.join(', ') : 'None'}\n`;
+      md += `**Your Answer:** ${q.user_selected && q.user_selected.length > 0 ? q.user_selected.join(', ') : 'None'}\n`;
       md += `**Correct Answer:** ${q.correct_answers.join(', ')}\n\n`;
       md += `> **Why it's correct:**\n> ${q.explanation}\n\n`;
       

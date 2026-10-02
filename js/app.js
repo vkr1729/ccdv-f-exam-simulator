@@ -14,13 +14,14 @@ const State = {
   sourcesMetadata: null,
   activeExam: null,
   currentQuestionIndex: 0,
-  userAnswers: {},     // { [qId]: ['A', 'C'] }
+  userAnswers: {},          // { [qId]: ['A', 'C'] }
   flaggedQuestions: new Set(),
   timerSecondsRemaining: 120 * 60,
+  timerEndTime: null,       // Wall-clock timestamp for drift prevention
   timerInterval: null,
   lastCompletedAttempt: null,
-  isReviewMode: false, // when reviewing a finished exam
-  drillMode: null      // null, 'vault', or 'domain'
+  isReviewMode: false,      // when reviewing a finished exam
+  drillMode: null           // null, 'vault', or 'topic'
 };
 
 // Initialize Application
@@ -33,11 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up Hash router
   window.addEventListener('hashchange', handleRouting);
   
-  // Check if there is an in-progress active exam in localStorage
-  const savedActive = Storage.getActiveExam();
-  if (savedActive && savedActive.exam) {
-    // Show resume banner on dashboard
-  }
+  // Wall-clock sync on tab visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && State.timerEndTime && State.currentView === 'exam' && !State.isReviewMode) {
+      const now = Date.now();
+      State.timerSecondsRemaining = Math.max(0, Math.round((State.timerEndTime - now) / 1000));
+      updateTimerDisplay();
+      if (State.timerSecondsRemaining <= 0) {
+        clearInterval(State.timerInterval);
+        alert('Time expired while you were away! Submitting exam.');
+        finishExam();
+      }
+    }
+  });
 
   // Initial Route
   handleRouting();
@@ -111,6 +120,11 @@ function updateNavUI(activeRoute) {
   }
 }
 
+// Helper: Count truly answered questions (not empty arrays)
+function getAnsweredCount() {
+  return Object.values(State.userAnswers).filter(a => Array.isArray(a) && a.length > 0).length;
+}
+
 // -------------------------------------------------------------
 // DASHBOARD VIEW
 // -------------------------------------------------------------
@@ -122,18 +136,19 @@ function renderDashboard() {
   const missedVault = Storage.getMissedQuestions();
   const diagnostic = Analytics.diagnoseGaps(attempts, missedVault);
 
-  // Resume Banner if an active exam exists
-  const activeExamState = Storage.getActiveExam();
+  // Resume Banner if an active exam exists in storage
+  const savedActive = Storage.getActiveExam();
   const resumeContainer = document.getElementById('resume-banner-container');
-  if (activeExamState && activeExamState.exam) {
-    const answeredCount = Object.keys(activeExamState.userAnswers || {}).length;
+  if (savedActive && savedActive.exam_id) {
+    const answeredCount = Object.values(savedActive.userAnswers || {}).filter(a => Array.isArray(a) && a.length > 0).length;
+    const totalQ = savedActive.drillQuestions ? savedActive.drillQuestions.length : 53;
     resumeContainer.innerHTML = `
       <div class="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 shadow-sm flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center space-x-3">
           <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
           <div>
-            <h3 class="text-sm font-semibold text-stone-900">Active Exam in Progress: ${activeExamState.exam.title}</h3>
-            <p class="text-xs text-stone-600 font-sans">${answeredCount} of ${activeExamState.exam.questions.length} answered · ${Math.floor(activeExamState.timerSecondsRemaining / 60)} minutes remaining</p>
+            <h3 class="text-sm font-semibold text-stone-900">Active Exam in Progress: ${escapeHtml(savedActive.exam_title || 'Mock Exam')}</h3>
+            <p class="text-xs text-stone-600 font-sans">${answeredCount} of ${totalQ} answered · ${Math.floor(savedActive.timerSecondsRemaining / 60)} minutes remaining</p>
           </div>
         </div>
         <div class="flex items-center space-x-2">
@@ -172,7 +187,7 @@ function renderDashboard() {
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
           <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
             <div class="text-xs text-stone-500 font-sans">Full Exams Taken</div>
-            <div class="text-2xl font-editorial text-stone-900 font-normal mt-1">${diagnostic.total_attempts} / 10</div>
+            <div class="text-2xl font-editorial text-stone-900 font-normal mt-1">${diagnostic.full_attempts || 0} / 10</div>
           </div>
           <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
             <div class="text-xs text-stone-500 font-sans">Average Score</div>
@@ -227,8 +242,8 @@ function renderDashboard() {
           <span class="text-xs font-mono text-amber-800 font-semibold uppercase tracking-wider">Form #${exam.exam_id}</span>
           ${statusBadge}
         </div>
-        <h3 class="text-xl font-editorial text-stone-900 font-normal leading-snug">${exam.title}</h3>
-        <p class="text-xs text-stone-600 leading-relaxed font-sans">${exam.description}</p>
+        <h3 class="text-xl font-editorial text-stone-900 font-normal leading-snug">${escapeHtml(exam.title)}</h3>
+        <p class="text-xs text-stone-600 leading-relaxed font-sans">${escapeHtml(exam.description)}</p>
         
         <div class="pt-2 flex flex-wrap gap-1.5 text-xs font-mono text-stone-500">
           <span class="px-2 py-0.5 bg-stone-100 rounded">53 Questions</span>
@@ -255,19 +270,41 @@ function renderDashboard() {
 // -------------------------------------------------------------
 // EXAM RUNNER VIEW
 // -------------------------------------------------------------
-function renderExamRunner(examId) {
+function renderExamRunner(paramId) {
   const container = document.getElementById('view-exam');
   container.classList.remove('hidden');
 
-  // If starting fresh or resuming
-  if (!State.activeExam) {
-    const idToLoad = examId ? parseInt(examId) : 1;
-    const foundExam = State.allExams.find(e => e.exam_id === idToLoad);
-    if (!foundExam) {
-      window.location.hash = '#dashboard';
-      return;
+  // Check if an in-progress exam is saved in storage
+  const savedActive = Storage.getActiveExam();
+
+  if (!State.isReviewMode) {
+    if (savedActive && (!paramId || parseInt(paramId) === savedActive.exam_id)) {
+      // Restore from active storage
+      let fullExam = null;
+      if (savedActive.exam_id < 900) {
+        fullExam = State.allExams.find(e => e.exam_id === savedActive.exam_id);
+      } else if (savedActive.drillQuestions) {
+        fullExam = {
+          exam_id: savedActive.exam_id,
+          title: savedActive.exam_title,
+          description: "Targeted Drill Session",
+          time_limit_minutes: Math.ceil(savedActive.timerSecondsRemaining / 60),
+          questions: savedActive.drillQuestions
+        };
+      }
+      
+      if (fullExam) {
+        State.activeExam = fullExam;
+        State.currentQuestionIndex = savedActive.currentQuestionIndex || 0;
+        State.userAnswers = savedActive.userAnswers || {};
+        State.flaggedQuestions = new Set(savedActive.flaggedQuestions || []);
+        State.timerSecondsRemaining = savedActive.timerSecondsRemaining || (fullExam.time_limit_minutes * 60);
+      } else {
+        startFreshExam(paramId);
+      }
+    } else {
+      startFreshExam(paramId);
     }
-    initNewExamSession(foundExam);
   }
 
   // Setup UI for current question
@@ -276,12 +313,23 @@ function renderExamRunner(examId) {
   startTimer();
 }
 
+function startFreshExam(paramId) {
+  const idToLoad = paramId ? parseInt(paramId) : 1;
+  const foundExam = State.allExams.find(e => e.exam_id === idToLoad);
+  if (!foundExam) {
+    window.location.hash = '#dashboard';
+    return;
+  }
+  initNewExamSession(foundExam);
+}
+
 function initNewExamSession(exam) {
   State.activeExam = exam;
   State.currentQuestionIndex = 0;
   State.userAnswers = {};
   State.flaggedQuestions = new Set();
   State.timerSecondsRemaining = (exam.time_limit_minutes || 120) * 60;
+  State.timerEndTime = Date.now() + State.timerSecondsRemaining * 1000;
   State.isReviewMode = false;
   State.drillMode = null;
 
@@ -309,7 +357,7 @@ function renderCurrentQuestion() {
   const totalQ = exam.questions.length;
 
   // Header info
-  document.getElementById('exam-title-header').textContent = exam.title;
+  document.getElementById('exam-title-header').textContent = exam.title + (State.isReviewMode ? ' (Review Mode)' : '');
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
   
   const domainInfo = DOMAIN_METADATA[q.domain_id] || { name: q.domain_name, weight: 10 };
@@ -319,24 +367,30 @@ function renderCurrentQuestion() {
   const topicBadge = document.getElementById('topic-badge');
   topicBadge.textContent = q.topic || 'Core Scenario';
 
-  // Flag state
-  const isFlagged = State.flaggedQuestions.has(q.id);
+  // Flag state & visibility in review mode
   const flagBtn = document.getElementById('flag-btn');
-  if (isFlagged) {
-    flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1.5";
-    flagBtn.innerHTML = `<span>★</span><span>Flagged</span>`;
+  if (State.isReviewMode) {
+    flagBtn.classList.add('hidden');
   } else {
-    flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition";
-    flagBtn.innerHTML = `<span>☆</span><span>Flag for Review</span>`;
+    flagBtn.classList.remove('hidden');
+    const isFlagged = State.flaggedQuestions.has(q.id);
+    if (isFlagged) {
+      flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1.5";
+      flagBtn.innerHTML = `<span>★</span><span>Flagged</span>`;
+    } else {
+      flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition";
+      flagBtn.innerHTML = `<span>☆</span><span>Flag for Review</span>`;
+    }
   }
 
-  // Question Prompt (formatted with code if needed)
+  // Question Prompt
   const promptEl = document.getElementById('question-prompt');
   promptEl.innerHTML = formatPromptText(q.prompt);
 
   // Question Type Guidance
   const typeGuidance = document.getElementById('question-type-guidance');
-  if (q.type === 'multiple' || (q.correct_answers && q.correct_answers.length > 1)) {
+  const isMultiple = q.type === 'multiple' || (q.correct_answers && q.correct_answers.length > 1);
+  if (isMultiple) {
     typeGuidance.textContent = `Multiple Response — Select ${q.correct_answers.length} options:`;
     typeGuidance.classList.add('text-amber-800', 'font-semibold');
   } else {
@@ -351,31 +405,58 @@ function renderCurrentQuestion() {
   const userSelected = State.userAnswers[q.id] || [];
 
   q.options.forEach(opt => {
-    const isChecked = userSelected.includes(opt.key);
+    const isUserChoice = userSelected.includes(opt.key);
+    const isCorrectChoice = q.correct_answers.includes(opt.key);
     const card = document.createElement('div');
-    const isMultiple = q.type === 'multiple' || (q.correct_answers && q.correct_answers.length > 1);
 
-    card.className = `p-4 rounded-xl border transition cursor-pointer flex items-start space-x-4 ${
-      isChecked 
-        ? 'border-2 border-amber-700 bg-amber-50/70 shadow-xs' 
-        : 'border-stone-200 bg-white hover:bg-stone-50 hover:border-stone-300'
-    }`;
+    let cardClasses = "p-4 rounded-xl border transition flex items-start space-x-4 ";
+    let radioDisabled = "";
 
-    card.onclick = () => handleOptionClick(q, opt.key, isMultiple);
+    if (State.isReviewMode) {
+      radioDisabled = "disabled";
+      if (isCorrectChoice) {
+        // High visual contrast for correct choice
+        cardClasses += "border-2 border-emerald-600 bg-emerald-50/80 shadow-xs";
+      } else if (isUserChoice && !isCorrectChoice) {
+        // High visual contrast for wrong user choice
+        cardClasses += "border-2 border-rose-500 bg-rose-50/80 shadow-xs";
+      } else {
+        cardClasses += "border-stone-200 bg-white opacity-70";
+      }
+    } else {
+      card.onclick = () => handleOptionClick(q, opt.key, isMultiple);
+      if (isUserChoice) {
+        cardClasses += "border-2 border-amber-700 bg-amber-50/70 shadow-xs cursor-pointer";
+      } else {
+        cardClasses += "border-stone-200 bg-white hover:bg-stone-50 hover:border-stone-300 cursor-pointer";
+      }
+    }
+
+    card.className = cardClasses;
+
+    let markerBadge = '';
+    if (State.isReviewMode) {
+      if (isCorrectChoice) {
+        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">✓ Correct</span>`;
+      } else if (isUserChoice) {
+        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded">✕ Your Choice</span>`;
+      }
+    }
 
     card.innerHTML = `
       <div class="mt-0.5">
-        <input type="${isMultiple ? 'checkbox' : 'radio'}" name="question_opt" ${isChecked ? 'checked' : ''} class="h-4 w-4 text-amber-700 focus:ring-amber-500 border-stone-300 rounded${isMultiple ? '' : '-full'}">
+        <input type="${isMultiple ? 'checkbox' : 'radio'}" name="question_opt" ${isUserChoice ? 'checked' : ''} ${radioDisabled} class="h-4 w-4 text-amber-700 focus:ring-amber-500 border-stone-300 rounded${isMultiple ? '' : '-full'}">
       </div>
       <div class="flex-1">
-        <span class="font-serif font-bold text-sm ${isChecked ? 'text-amber-900' : 'text-stone-700'} mr-2">${opt.key}.</span>
-        <span class="text-sm ${isChecked ? 'text-stone-900 font-medium' : 'text-stone-800'} leading-relaxed font-sans">${escapeHtml(opt.text)}</span>
+        <span class="font-serif font-bold text-sm ${isUserChoice ? 'text-amber-900' : 'text-stone-700'} mr-2">${opt.key}.</span>
+        <span class="text-sm ${isUserChoice ? 'text-stone-900 font-medium' : 'text-stone-800'} leading-relaxed font-sans">${escapeHtml(opt.text)}</span>
       </div>
+      ${markerBadge}
     `;
     optionsContainer.appendChild(card);
   });
 
-  // Review mode / Explanation drawer if reviewing
+  // Review mode / Explanation drawer
   const explanationBox = document.getElementById('explanation-drawer');
   if (State.isReviewMode) {
     explanationBox.classList.remove('hidden');
@@ -383,7 +464,7 @@ function renderCurrentQuestion() {
       <div class="p-5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-900">Answer Key & Official Rationale</span>
-          <span class="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-emerald-100 text-emerald-800">Correct: ${q.correct_answers.join(', ')}</span>
+          <span class="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">Official Correct: ${q.correct_answers.join(', ')}</span>
         </div>
         <p class="text-sm text-stone-800 leading-relaxed font-sans">${escapeHtml(q.explanation)}</p>
         ${q.distractor_explanations && Object.keys(q.distractor_explanations).length > 0 ? `
@@ -410,16 +491,31 @@ function renderCurrentQuestion() {
     : "px-4 py-2 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition";
 
   if (State.currentQuestionIndex === totalQ - 1) {
-    nextBtn.innerHTML = `<span>Finish & Review</span> <span>&rarr;</span>`;
-    nextBtn.className = "px-5 py-2 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+    if (State.isReviewMode) {
+      nextBtn.innerHTML = `<span>Back to Results</span> <span>&rarr;</span>`;
+      nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+    } else {
+      nextBtn.innerHTML = `<span>Finish & Review</span> <span>&rarr;</span>`;
+      nextBtn.className = "px-5 py-2 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+    }
   } else {
     nextBtn.innerHTML = `<span>Next Question</span> <span>&rarr;</span>`;
     nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
   }
+
+  // Hide submit button in sidebar during review
+  const sidebarSubmit = document.querySelector('#view-exam button[onclick="window.App.openSubmitModal()"]');
+  if (sidebarSubmit) {
+    if (State.isReviewMode) {
+      sidebarSubmit.classList.add('hidden');
+    } else {
+      sidebarSubmit.classList.remove('hidden');
+    }
+  }
 }
 
 function handleOptionClick(q, optKey, isMultiple) {
-  if (State.isReviewMode) return; // read only during review
+  if (State.isReviewMode) return;
 
   let current = State.userAnswers[q.id] || [];
   if (isMultiple) {
@@ -432,13 +528,20 @@ function handleOptionClick(q, optKey, isMultiple) {
     current = [optKey];
   }
 
-  State.userAnswers[q.id] = current;
+  // If array is empty, delete key so it is not counted as answered
+  if (current.length === 0) {
+    delete State.userAnswers[q.id];
+  } else {
+    State.userAnswers[q.id] = current;
+  }
+
   saveCurrentSession();
   renderCurrentQuestion();
   renderQuestionMatrix();
 }
 
 function toggleFlag() {
+  if (State.isReviewMode) return;
   const exam = State.activeExam;
   if (!exam) return;
   const q = exam.questions[State.currentQuestionIndex];
@@ -461,7 +564,11 @@ function nextQuestion() {
     renderCurrentQuestion();
     renderQuestionMatrix();
   } else {
-    openSubmitModal();
+    if (State.isReviewMode) {
+      window.location.hash = State.lastCompletedAttempt ? `#results/${State.lastCompletedAttempt.id}` : '#dashboard';
+    } else {
+      openSubmitModal();
+    }
   }
 }
 
@@ -500,7 +607,7 @@ function renderQuestionMatrix() {
   if (!matrixContainer) return;
   matrixContainer.innerHTML = '';
 
-  const answeredCount = Object.keys(State.userAnswers).length;
+  const answeredCount = getAnsweredCount();
   const flaggedCount = State.flaggedQuestions.size;
   const totalCount = exam.questions.length;
 
@@ -516,20 +623,34 @@ function renderQuestionMatrix() {
 
     let classes = "w-8 h-8 rounded-lg text-xs font-mono flex items-center justify-center transition relative ";
 
-    if (isCurrent) {
-      classes += "ring-2 ring-amber-700 font-bold bg-amber-100 text-amber-900 ";
-    } else if (isAnswered) {
-      classes += "bg-stone-800 text-white font-medium ";
+    if (State.isReviewMode) {
+      const userSel = State.userAnswers[q.id] || [];
+      const correctSel = q.correct_answers || [];
+      const isCorrect = userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
+      if (isCurrent) {
+        classes += "ring-2 ring-stone-900 font-bold ";
+      }
+      if (isCorrect) {
+        classes += "bg-emerald-100 text-emerald-800 font-bold border border-emerald-300 ";
+      } else {
+        classes += "bg-rose-100 text-rose-800 font-bold border border-rose-300 ";
+      }
     } else {
-      classes += "bg-stone-100 text-stone-600 hover:bg-stone-200 ";
-    }
+      if (isCurrent) {
+        classes += "ring-2 ring-amber-700 font-bold bg-amber-100 text-amber-900 ";
+      } else if (isAnswered) {
+        classes += "bg-stone-800 text-white font-medium ";
+      } else {
+        classes += "bg-stone-100 text-stone-600 hover:bg-stone-200 ";
+      }
 
-    if (isFlagged) {
-      classes += "border-2 border-amber-500 ";
+      if (isFlagged) {
+        classes += "border-2 border-amber-500 ";
+      }
     }
 
     btn.className = classes;
-    btn.innerHTML = `${idx + 1}${isFlagged ? '<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500"></span>' : ''}`;
+    btn.innerHTML = `${idx + 1}${isFlagged && !State.isReviewMode ? '<span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500"></span>' : ''}`;
     matrixContainer.appendChild(btn);
   });
 }
@@ -542,15 +663,20 @@ function startTimer() {
     return;
   }
 
+  // Anchor wall-clock end time
+  State.timerEndTime = Date.now() + State.timerSecondsRemaining * 1000;
   updateTimerDisplay();
+
   State.timerInterval = setInterval(() => {
-    if (State.timerSecondsRemaining > 0) {
-      State.timerSecondsRemaining--;
-      updateTimerDisplay();
-      if (State.timerSecondsRemaining % 30 === 0) {
-        saveCurrentSession();
-      }
-    } else {
+    const now = Date.now();
+    State.timerSecondsRemaining = Math.max(0, Math.round((State.timerEndTime - now) / 1000));
+    updateTimerDisplay();
+
+    if (State.timerSecondsRemaining % 30 === 0) {
+      saveCurrentSession();
+    }
+
+    if (State.timerSecondsRemaining <= 0) {
       clearInterval(State.timerInterval);
       alert('Time is up! Submitting exam automatically.');
       finishExam();
@@ -586,11 +712,12 @@ function updateTimerDisplay() {
 
 // Exam Submission Modal
 function openSubmitModal() {
+  if (State.isReviewMode) return;
   const exam = State.activeExam;
   if (!exam) return;
 
   const total = exam.questions.length;
-  const answered = Object.keys(State.userAnswers).length;
+  const answered = getAnsweredCount();
   const unanswered = total - answered;
   const flagged = State.flaggedQuestions.size;
 
@@ -625,8 +752,24 @@ function finishExam() {
     exam_id: exam.exam_id,
     exam_title: exam.title,
     time_spent_seconds: (exam.time_limit_minutes * 60) - State.timerSecondsRemaining,
+    user_answers: { ...State.userAnswers },
+    questions: exam.exam_id >= 900 ? exam.questions : null, // keep questions for drill reviews
     ...evalResult
   };
+
+  // If this was a remediation drill, remove correctly answered questions from vault
+  if (State.drillMode === 'vault' || exam.exam_id >= 900) {
+    const correctIds = exam.questions
+      .filter(q => {
+        const userSel = State.userAnswers[q.id] || [];
+        const correctSel = q.correct_answers || [];
+        return userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
+      })
+      .map(q => q.id);
+    if (correctIds.length > 0) {
+      Storage.clearMasteredQuestions(correctIds);
+    }
+  }
 
   // Save to persistent storage
   Storage.saveAttempt(attempt);
@@ -663,7 +806,7 @@ function renderResults(attemptId) {
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div>
         <span class="text-xs font-serif uppercase tracking-widest ${isPass ? 'text-emerald-800' : 'text-amber-800'} font-semibold">Official Score Report</span>
-        <h2 class="text-3xl font-editorial text-stone-900">${attempt.exam_title}</h2>
+        <h2 class="text-3xl font-editorial text-stone-900">${escapeHtml(attempt.exam_title)}</h2>
         <p class="text-xs text-stone-600 mt-1">Completed on ${new Date(attempt.date).toLocaleString()} · Duration: ${Math.floor((attempt.time_spent_seconds || 0) / 60)} minutes</p>
       </div>
       <div class="px-5 py-2.5 rounded-xl font-mono text-center ${isPass ? 'bg-emerald-600 text-white shadow-md' : 'bg-amber-700 text-white shadow-md'}">
@@ -680,11 +823,13 @@ function renderResults(attemptId) {
         ${Object.values(attempt.domain_stats).map(d => `
           <div class="p-3.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-medium text-stone-900">[${d.id}] ${d.name} (${d.weight}%)</span>
-              <span class="font-mono ${d.percentage >= 72 ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold'}">${d.correct}/${d.total} (${d.percentage}%)</span>
+              <span class="font-medium text-stone-900">[${d.id}] ${escapeHtml(d.name)} (${d.weight}%)</span>
+              <span class="font-mono ${d.total === 0 ? 'text-stone-400' : (d.percentage >= 72 ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold')}">
+                ${d.total === 0 ? 'Untested' : `${d.correct}/${d.total} (${d.percentage}%)`}
+              </span>
             </div>
             <div class="w-full bg-stone-100 rounded-full h-2 overflow-hidden">
-              <div class="h-2 rounded-full ${d.percentage >= 72 ? 'bg-emerald-600' : 'bg-amber-600'}" style="width: ${d.percentage}%"></div>
+              <div class="h-2 rounded-full ${d.total === 0 ? 'bg-stone-300' : (d.percentage >= 72 ? 'bg-emerald-600' : 'bg-amber-600')}" style="width: ${d.total === 0 ? 0 : d.percentage}%"></div>
             </div>
           </div>
         `).join('')}
@@ -693,7 +838,7 @@ function renderResults(attemptId) {
 
     <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
       <div class="flex space-x-3">
-        <button onclick="window.App.reviewExamAnswers(${attempt.exam_id})" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition">
+        <button onclick="window.App.reviewAttemptAnswers('${attempt.id}')" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition">
           Review Question Explanations &rarr;
         </button>
         <a href="#vault" class="px-4 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
@@ -751,7 +896,7 @@ function renderGapsView() {
             <tbody class="divide-y divide-stone-100">
               ${diagnostic.domain_rankings.map(d => `
                 <tr class="${d.is_lagging && d.total > 0 ? 'bg-amber-50/50' : ''}">
-                  <td class="py-2.5 font-medium text-stone-900">[${d.id}] ${d.name}</td>
+                  <td class="py-2.5 font-medium text-stone-900">[${d.id}] ${escapeHtml(d.name)}</td>
                   <td class="py-2.5 text-stone-600 font-mono">${d.weight}%</td>
                   <td class="py-2.5 text-stone-600 font-mono">${d.total}</td>
                   <td class="py-2.5 font-mono ${d.percentage >= 72 ? 'text-emerald-700 font-bold' : (d.total === 0 ? 'text-stone-400' : 'text-amber-800 font-bold')}">${d.total > 0 ? d.percentage + '%' : '–'}</td>
@@ -770,25 +915,27 @@ function renderGapsView() {
     <div class="space-y-4">
       <h3 class="text-lg font-editorial text-stone-900">High-Impact Misconception Topics:</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        ${diagnostic.top_topic_gaps.map(item => `
+        ${diagnostic.top_topic_gaps.map(item => {
+          const safeTopic = encodeURIComponent(item.topic);
+          return `
           <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
-              <h4 class="text-base font-semibold text-stone-900">${item.topic}</h4>
+              <h4 class="text-base font-semibold text-stone-900">${escapeHtml(item.topic)}</h4>
               <span class="px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-100 text-amber-900 border border-amber-200">${item.count} misses</span>
             </div>
             ${item.guide ? `
-              <p class="text-xs text-stone-700 leading-relaxed font-sans">${item.guide.summary}</p>
+              <p class="text-xs text-stone-700 leading-relaxed font-sans">${escapeHtml(item.guide.summary)}</p>
               <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900">
-                <strong>Watch out for:</strong> ${item.guide.traps}
+                <strong>Watch out for:</strong> ${escapeHtml(item.guide.traps)}
               </div>
             ` : '<p class="text-xs text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
             <div class="pt-2 flex justify-end">
-              <button onclick="window.App.startTopicDrill('${item.topic}')" class="text-xs font-semibold text-amber-800 hover:text-amber-900">
+              <button onclick="window.App.startTopicDrill('${safeTopic}')" class="text-xs font-semibold text-amber-800 hover:text-amber-900">
                 Drill Missed Questions in this Topic &rarr;
               </button>
             </div>
           </div>
-        `).join('')}
+        `}).join('')}
       </div>
     </div>
   `;
@@ -837,12 +984,12 @@ function renderVaultView() {
             <a href="#dashboard" class="px-4 py-2 rounded-lg bg-stone-900 text-white text-xs font-semibold shadow">Go to Mock Exams &rarr;</a>
           </div>
         </div>
-      ` : missedVault.map((q, idx) => `
+      ` : missedVault.map(q => `
         <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
           <div class="flex items-center justify-between text-xs">
             <div class="flex items-center space-x-2">
-              <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold bg-amber-100 text-amber-900 border border-amber-200">[${q.domain_id}] ${q.domain_name}</span>
-              <span class="text-stone-500 font-mono">${q.topic || 'General'}</span>
+              <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold bg-amber-100 text-amber-900 border border-amber-200">[${q.domain_id}] ${escapeHtml(q.domain_name)}</span>
+              <span class="text-stone-500 font-mono">${escapeHtml(q.topic || 'General')}</span>
             </div>
             <div class="flex items-center space-x-2">
               <span class="text-xs text-stone-400 font-mono">Missed ${q.miss_count || 1} time${(q.miss_count || 1) > 1 ? 's' : ''}</span>
@@ -887,10 +1034,10 @@ function renderSourcesView() {
         ${meta.sources.map(src => `
           <div class="p-5 rounded-xl bg-stone-50 border border-stone-200/90 space-y-2">
             <div class="flex items-center justify-between">
-              <h4 class="text-sm font-semibold text-stone-900 font-mono">${src.name}</h4>
+              <h4 class="text-sm font-semibold text-stone-900 font-mono">${escapeHtml(src.name)}</h4>
               <span class="px-2 py-0.5 rounded-full text-xs font-mono bg-stone-200 text-stone-700 font-medium">${src.contributed_questions} questions</span>
             </div>
-            <p class="text-xs text-stone-600 font-sans leading-relaxed">${src.description}</p>
+            <p class="text-xs text-stone-600 font-sans leading-relaxed">${escapeHtml(src.description)}</p>
             <div class="pt-2">
               <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-amber-800 hover:text-amber-900 underline flex items-center space-x-1">
                 <span>View on GitHub</span>
@@ -909,7 +1056,7 @@ function renderSourcesView() {
 // -------------------------------------------------------------
 function escapeHtml(str) {
   if (!str) return '';
-  return str
+  return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -919,7 +1066,6 @@ function escapeHtml(str) {
 
 function formatPromptText(text) {
   if (!text) return '';
-  // Convert markdown code ticks to <code> tags
   let formatted = escapeHtml(text);
   formatted = formatted.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-stone-100 text-amber-900 text-xs font-mono font-medium">$1</code>');
   return formatted;
@@ -952,13 +1098,29 @@ window.App = {
     window.location.hash = `#results/${attemptId}`;
   },
 
-  reviewExamAnswers(examId) {
-    const exam = State.allExams.find(e => e.exam_id === examId);
+  reviewAttemptAnswers(attemptId) {
+    const attempt = Storage.getAttempts().find(a => a.id === attemptId);
+    if (!attempt) return;
+
+    let exam = null;
+    if (attempt.exam_id < 900) {
+      exam = State.allExams.find(e => e.exam_id === attempt.exam_id);
+    } else if (attempt.questions) {
+      exam = {
+        exam_id: attempt.exam_id,
+        title: attempt.exam_title,
+        description: "Targeted Drill Review",
+        questions: attempt.questions
+      };
+    }
+
     if (!exam) return;
     State.activeExam = exam;
+    State.userAnswers = attempt.user_answers || {};
     State.currentQuestionIndex = 0;
     State.isReviewMode = true;
-    window.location.hash = `#exam/${examId}`;
+    State.lastCompletedAttempt = attempt;
+    window.location.hash = `#exam/${attempt.exam_id}`;
   },
 
   startRemediationQuiz() {
@@ -978,7 +1140,8 @@ window.App = {
     window.location.hash = '#exam/999';
   },
 
-  startTopicDrill(topic) {
+  startTopicDrill(encodedTopic) {
+    const topic = decodeURIComponent(encodedTopic);
     const missedVault = Storage.getMissedQuestions().filter(q => q.topic === topic);
     if (missedVault.length === 0) {
       alert(`No missed questions found for topic: ${topic}. Good job!`);
@@ -1004,17 +1167,34 @@ window.App = {
   exportMistakesLog() {
     const missedVault = Storage.getMissedQuestions();
     const md = Analytics.generateMistakesMarkdown(missedVault);
-    navigator.clipboard.writeText(md).then(() => {
-      alert(`Copied ${missedVault.length} missed question analysis blocks to clipboard!\nYou can paste directly into mistakes.md.`);
-    }).catch(err => {
-      console.error('Failed to copy', err);
-      // Fallback download
-      const blob = new Blob([md], { type: 'text/markdown' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'mistakes_export.md';
-      a.click();
-    });
+    
+    // Robust clipboard fallback
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(md).then(() => {
+        alert(`Copied ${missedVault.length} missed question analysis blocks to clipboard!\nYou can paste directly into mistakes.md.`);
+      }).catch(() => fallbackCopy(md));
+    } else {
+      fallbackCopy(md);
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        alert(`Copied ${missedVault.length} missed question analysis blocks to clipboard!\nYou can paste directly into mistakes.md.`);
+      } catch (err) {
+        // Direct download fallback
+        const blob = new Blob([text], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'mistakes_export.md';
+        a.click();
+      }
+      document.body.removeChild(textarea);
+    }
   }
 };

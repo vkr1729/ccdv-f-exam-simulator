@@ -51,7 +51,7 @@ def test_exam_data():
         assert os.path.exists(p), f"Exam file {p} missing"
         with open(p, "r", encoding="utf-8") as f:
             ex = json.load(f)
-        assert len(ex["questions"]) == 533 or len(ex["questions"]) == 53, f"Exam {i} has {len(ex['questions'])} questions"
+        assert len(ex["questions"]) == 53, f"Exam {i} has {len(ex['questions'])} questions, expected 53"
         print(f"✓ Exam #{i:02d} verified: {len(ex['questions'])} questions")
 
 if __name__ == "__main__":
