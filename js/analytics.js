@@ -171,53 +171,98 @@ export const Analytics = {
   },
 
   // Perform cross-exam diagnostic gap analysis
-  diagnoseGaps(attempts, missedQuestions) {
-    // Only analyze full exams (exam_id < 900 and at least 50 questions) for overall readiness
+  diagnoseGaps(attempts, missedQuestions, activeExam = null) {
     const fullExams = (attempts || []).filter(a => (a.exam_id !== undefined ? a.exam_id < 900 : true) && a.total_questions >= 50);
 
-    if (!fullExams || fullExams.length === 0) {
-      return {
-        total_attempts: attempts ? attempts.length : 0,
-        full_attempts: 0,
-        average_score: 0,
-        readiness_level: "Not Started",
-        domain_rankings: Object.keys(DOMAIN_METADATA).map(dId => ({
-          id: dId,
-          name: DOMAIN_METADATA[dId].name,
-          weight: DOMAIN_METADATA[dId].weight,
-          total: 0,
-          correct: 0,
-          percentage: 0,
-          is_lagging: false
-        })),
-        lagging_domains: [],
-        strong_domains: [],
-        top_topic_gaps: [],
-        recommendations: ["Take Mock Exam #01 to establish your initial diagnostic baseline."]
-      };
-    }
-
-    // Aggregate domain accuracy across all full attempts
+    // Initialize domain statistics across all 8 domains
     const domainTotals = {};
     Object.keys(DOMAIN_METADATA).forEach(dId => {
       domainTotals[dId] = { total: 0, correct: 0 };
     });
 
     let totalPctSum = 0;
-    fullExams.forEach(att => {
-      totalPctSum += att.percentage;
+    let totalQuestionsEvaluated = 0;
+    let totalCorrectEvaluated = 0;
+
+    // 1. Aggregate from full completed exams
+    if (fullExams && fullExams.length > 0) {
+      fullExams.forEach(att => {
+        totalPctSum += att.percentage;
+        if (att.domain_stats) {
+          Object.keys(att.domain_stats).forEach(dId => {
+            if (domainTotals[dId]) {
+              domainTotals[dId].total += att.domain_stats[dId].total || 0;
+              domainTotals[dId].correct += att.domain_stats[dId].correct || 0;
+              totalQuestionsEvaluated += att.domain_stats[dId].total || 0;
+              totalCorrectEvaluated += att.domain_stats[dId].correct || 0;
+            }
+          });
+        }
+      });
+    }
+
+    // 2. Aggregate from other attempts (drills, partial sessions)
+    const otherAttempts = (attempts || []).filter(a => !fullExams.includes(a));
+    otherAttempts.forEach(att => {
       if (att.domain_stats) {
         Object.keys(att.domain_stats).forEach(dId => {
           if (domainTotals[dId]) {
             domainTotals[dId].total += att.domain_stats[dId].total || 0;
             domainTotals[dId].correct += att.domain_stats[dId].correct || 0;
+            totalQuestionsEvaluated += att.domain_stats[dId].total || 0;
+            totalCorrectEvaluated += att.domain_stats[dId].correct || 0;
           }
         });
       }
     });
 
-    const avgScore = Math.round((totalPctSum / fullExams.length) * 10) / 10;
-    
+    // 3. Aggregate from active in-progress exam / study session
+    const allMissed = [...(missedQuestions || [])];
+    const missedIdSet = new Set(allMissed.map(q => q.id));
+
+    if (activeExam) {
+      const activeQuestions = activeExam.questions || (activeExam.exam && activeExam.exam.questions) || [];
+      const checkedMap = activeExam.checkedQuestions || {};
+
+      activeQuestions.forEach(q => {
+        const checked = checkedMap[q.id];
+        if (checked) {
+          if (domainTotals[q.domain_id]) {
+            domainTotals[q.domain_id].total += 1;
+            totalQuestionsEvaluated += 1;
+            if (checked.isCorrect) {
+              domainTotals[q.domain_id].correct += 1;
+              totalCorrectEvaluated += 1;
+            } else {
+              if (!missedIdSet.has(q.id)) {
+                allMissed.push(q);
+                missedIdSet.add(q.id);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 4. Ensure any missed questions in vault are reflected in domain totals if untested
+    allMissed.forEach(q => {
+      if (domainTotals[q.domain_id] && domainTotals[q.domain_id].total === 0) {
+        domainTotals[q.domain_id].total = q.miss_count || 1;
+        domainTotals[q.domain_id].correct = 0;
+        totalQuestionsEvaluated += q.miss_count || 1;
+      }
+    });
+
+    // Compute average score:
+    // If full exams exist, use average percentage of full exams.
+    // Otherwise if questions were evaluated, use ratio of correct/total.
+    let avgScore = 0;
+    if (fullExams.length > 0) {
+      avgScore = Math.round((totalPctSum / fullExams.length) * 10) / 10;
+    } else if (totalQuestionsEvaluated > 0) {
+      avgScore = Math.round((totalCorrectEvaluated / totalQuestionsEvaluated) * 1000) / 10;
+    }
+
     // Compute aggregate domain accuracy
     const domainRankings = Object.keys(DOMAIN_METADATA).map(dId => {
       const meta = DOMAIN_METADATA[dId];
@@ -234,16 +279,22 @@ export const Analytics = {
       };
     });
 
-    domainRankings.sort((a, b) => a.percentage - b.percentage);
+    domainRankings.sort((a, b) => {
+      // Tested domains with lower accuracy first, then untested
+      if (a.total > 0 && b.total > 0) return a.percentage - b.percentage;
+      if (a.total > 0) return -1;
+      if (b.total > 0) return 1;
+      return b.weight - a.weight;
+    });
 
     const laggingDomains = domainRankings.filter(d => d.total > 0 && d.is_lagging);
     const strongDomains = domainRankings.filter(d => d.total > 0 && d.percentage >= 80);
 
     // Identify topic frequency in missed questions
     const topicFrequency = {};
-    (missedQuestions || []).forEach(q => {
+    allMissed.forEach(q => {
       const t = q.topic || "General";
-      topicFrequency[t] = (topicFrequency[t] || 0) + 1;
+      topicFrequency[t] = (topicFrequency[t] || 0) + (q.miss_count || 1);
     });
 
     const topTopicGaps = Object.entries(topicFrequency)
@@ -253,20 +304,29 @@ export const Analytics = {
         guide: TOPIC_STUDY_GUIDES[topic] || null
       }))
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+      .slice(0, 6);
 
-    let readiness = "Needs Work (<70%)";
-    if (avgScore >= 85) readiness = "Exam Ready (Very Strong)";
-    else if (avgScore >= 75) readiness = "Passing Zone (Ready)";
-    else if (avgScore >= 70) readiness = "Borderline Passing (Focus on Gaps)";
+    let readiness = "Not Started";
+    if (fullExams.length > 0) {
+      if (avgScore >= 85) readiness = "Exam Ready (Very Strong)";
+      else if (avgScore >= 75) readiness = "Passing Zone (Ready)";
+      else if (avgScore >= 70) readiness = "Borderline Passing (Focus on Gaps)";
+      else readiness = "Needs Work (<70%)";
+    } else if (totalQuestionsEvaluated > 0) {
+      readiness = `In Progress (${avgScore}%)`;
+    }
 
     const recommendations = [];
     if (laggingDomains.length > 0) {
       laggingDomains.forEach(ld => {
         recommendations.push(`Prioritize **${ld.name}** (${ld.weight}% exam weight) — currently at ${ld.percentage}%.`);
       });
-    } else {
+    } else if (fullExams.length > 0) {
       recommendations.push("All tested domains meet or exceed the 72% pass line! Keep practicing full timed exams to build stamina.");
+    } else if (totalQuestionsEvaluated > 0) {
+      recommendations.push(`You have evaluated ${totalQuestionsEvaluated} question${totalQuestionsEvaluated === 1 ? '' : 's'} (${totalCorrectEvaluated} correct, ${avgScore}% accuracy). Complete Mock Exam #01 to establish your formal baseline.`);
+    } else {
+      recommendations.push("Take Mock Exam #01 or begin Study Mode to establish your initial diagnostic baseline.");
     }
 
     if (topTopicGaps.length > 0) {
@@ -274,8 +334,9 @@ export const Analytics = {
     }
 
     return {
-      total_attempts: attempts.length,
+      total_attempts: (attempts ? attempts.length : 0),
       full_attempts: fullExams.length,
+      total_questions_tested: totalQuestionsEvaluated,
       average_score: avgScore,
       readiness_level: readiness,
       domain_rankings: domainRankings,

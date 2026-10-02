@@ -187,6 +187,7 @@ function handleRouting() {
       renderResults(param);
       break;
     case 'gaps':
+    case 'diagnostics':
       renderGapsView();
       break;
     case 'vault':
@@ -204,9 +205,10 @@ function handleRouting() {
 }
 
 function updateNavUI(activeRoute) {
+  const effectiveRoute = activeRoute === 'diagnostics' ? 'gaps' : activeRoute;
   document.querySelectorAll('.nav-link').forEach(link => {
     const route = link.dataset.route;
-    if (route === activeRoute) {
+    if (route === effectiveRoute) {
       link.setAttribute('aria-current', 'page');
       link.className = "nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line";
     } else {
@@ -244,10 +246,10 @@ function renderDashboard() {
 
   const attempts = Storage.getAttempts();
   const missedVault = Storage.getMissedQuestions();
-  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault);
+  const savedActive = Storage.getActiveExam();
+  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, savedActive);
 
   // Resume Banner if an active exam exists in storage
-  const savedActive = Storage.getActiveExam();
   const resumeContainer = document.getElementById('resume-banner-container');
   if (savedActive && savedActive.exam_id) {
     const isStudy = Boolean(savedActive.isStudyMode);
@@ -285,14 +287,19 @@ function renderDashboard() {
     resumeContainer.classList.add('hidden');
   }
 
-  // Quick Diagnostic Strip (only displayed once user has taken at least 1 exam)
+  // Quick Diagnostic Strip (displayed if attempts exist, active questions tested, or missed questions in vault)
   const diagContainer = document.getElementById('dashboard-readiness-card');
   if (diagContainer) {
-    if (diagnostic.total_attempts > 0) {
+    const hasData = (diagnostic.full_attempts > 0) || (diagnostic.total_questions_tested > 0) || (missedVault.length > 0);
+    if (hasData) {
+      const summaryText = diagnostic.full_attempts > 0
+        ? `<span class="font-semibold text-stone-900">${diagnostic.full_attempts}/10 Completed</span>`
+        : `<span class="font-semibold text-stone-900">${diagnostic.total_questions_tested} Questions Evaluated</span>`;
+
       diagContainer.innerHTML = `
         <div class="px-4 py-3.5 rounded-xl bg-white border border-stone-200 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
           <div class="flex items-center gap-3 text-stone-700">
-            <span class="font-semibold text-stone-900">${diagnostic.full_attempts || 0}/10 Completed</span>
+            ${summaryText}
             <span class="text-stone-300" aria-hidden="true">·</span>
             <span>Avg: <strong class="text-stone-900">${diagnostic.average_score}%</strong></span>
             <span class="text-stone-300" aria-hidden="true">·</span>
@@ -584,7 +591,7 @@ function renderCurrentQuestion() {
 
     card.innerHTML = `
       <div class="mt-0.5 shrink-0">
-        <input type="${isMultiple ? 'checkbox' : 'radio'}" id="${inputId}" name="question_opt" ${isUserChoice ? 'checked' : ''} ${radioDisabled} class="cursor-pointer">
+        <input type="${isMultiple ? 'checkbox' : 'radio'}" id="${inputId}" name="question_opt" value="${opt.key}" ${isUserChoice ? 'checked' : ''} ${radioDisabled} class="cursor-pointer">
       </div>
       <div class="flex-1">
         <label for="${inputId}" class="cursor-pointer">
@@ -688,13 +695,21 @@ function renderCurrentQuestion() {
     nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
   }
 
-  // Hide submit button in sidebar during review
-  const sidebarSubmit = document.querySelector('#view-exam button[onclick="window.App.openSubmitModal()"]');
-  if (sidebarSubmit) {
+  // Hide submit and save buttons in sidebar and header during review
+  const sidebarActions = document.getElementById('sidebar-exam-actions');
+  if (sidebarActions) {
     if (State.isReviewMode) {
-      sidebarSubmit.classList.add('hidden');
+      sidebarActions.classList.add('hidden');
     } else {
-      sidebarSubmit.classList.remove('hidden');
+      sidebarActions.classList.remove('hidden');
+    }
+  }
+  const headerSave = document.getElementById('header-save-btn');
+  if (headerSave) {
+    if (State.isReviewMode) {
+      headerSave.classList.add('hidden');
+    } else {
+      headerSave.classList.remove('hidden');
     }
   }
 }
@@ -742,6 +757,14 @@ function checkCurrentAnswer() {
     isCorrect,
     userAnswers: [...userSel]
   };
+
+  // Immediate sync to vault for diagnostics and practice
+  if (!isCorrect) {
+    Storage.addMissedQuestions([{
+      ...q,
+      user_selected: userSel
+    }]);
+  }
 
   saveCurrentSession();
   renderCurrentQuestion();
@@ -804,6 +827,14 @@ function nextQuestion() {
       userAnswers: [...userSel]
     };
     State.quickChecking = true;
+
+    // Immediate sync to vault for diagnostics and practice
+    if (!isCorrect) {
+      Storage.addMissedQuestions([{
+        ...q,
+        user_selected: userSel
+      }]);
+    }
 
     saveCurrentSession();
     renderCurrentQuestion();
@@ -1240,7 +1271,8 @@ function renderGapsView() {
 
   const attempts = Storage.getAttempts();
   const missedVault = Storage.getMissedQuestions();
-  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault);
+  const savedActive = Storage.getActiveExam();
+  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, savedActive);
 
   const content = document.getElementById('gaps-content');
   content.innerHTML = `
@@ -1257,6 +1289,16 @@ function renderGapsView() {
           <span>Copy mistakes.md</span>
         </button>
       </div>
+
+      <!-- Recommendations -->
+      ${diagnostic.recommendations && diagnostic.recommendations.length > 0 ? `
+        <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-amber-950 space-y-1.5 font-sans">
+          <strong class="font-semibold block text-stone-900 font-editorial uppercase tracking-wider text-[11px]">Recommended Study Focus:</strong>
+          <ul class="list-disc list-inside space-y-1">
+            ${diagnostic.recommendations.map(r => `<li>${escapeHtml(r).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
 
       <!-- Domain Rankings Table -->
       <div class="pt-4 border-t border-stone-200">
@@ -1293,30 +1335,37 @@ function renderGapsView() {
     <!-- Targeted Remediation Topics -->
     <div class="space-y-4">
       <h3 class="text-lg font-editorial text-stone-900">High-Impact Misconception Topics:</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        ${diagnostic.top_topic_gaps.map(item => `
-          <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3">
-            <div class="flex items-center justify-between gap-2">
-              <h4 class="text-base font-semibold text-stone-900">${escapeHtml(item.topic)}</h4>
-              <span class="px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-100 text-amber-900 border border-amber-200 whitespace-nowrap">${item.count} misses</span>
-            </div>
-            ${item.guide ? `
-              <p class="text-sm text-stone-700 leading-relaxed font-sans">${escapeHtml(item.guide.summary)}</p>
-              <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900">
-                <strong>Watch out for:</strong> ${escapeHtml(item.guide.traps)}
+      ${diagnostic.top_topic_gaps && diagnostic.top_topic_gaps.length > 0 ? `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          ${diagnostic.top_topic_gaps.map(item => `
+            <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="text-base font-semibold text-stone-900">${escapeHtml(item.topic)}</h4>
+                <span class="px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-100 text-amber-900 border border-amber-200 whitespace-nowrap">${item.count} misses</span>
               </div>
-            ` : '<p class="text-sm text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
-            <div class="pt-2 flex items-center justify-end gap-3">
-              <button data-action="topic-study" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-stone-600 hover:text-brand-terracotta">
-                Study Drill
-              </button>
-              <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep">
-                Timed Drill <span aria-hidden="true">&rarr;</span>
-              </button>
+              ${item.guide ? `
+                <p class="text-sm text-stone-700 leading-relaxed font-sans">${escapeHtml(item.guide.summary)}</p>
+                <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900">
+                  <strong>Watch out for:</strong> ${escapeHtml(item.guide.traps)}
+                </div>
+              ` : '<p class="text-sm text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
+              <div class="pt-2 flex items-center justify-end gap-3">
+                <button data-action="topic-study" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-stone-600 hover:text-brand-terracotta">
+                  Study Drill
+                </button>
+                <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep">
+                  Timed Drill <span aria-hidden="true">&rarr;</span>
+                </button>
+              </div>
             </div>
-          </div>
-        `).join('')}
-      </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="p-6 rounded-2xl bg-white border border-stone-200 text-center space-y-2">
+          <p class="text-stone-800 text-sm font-sans font-medium">No misconception topics recorded yet.</p>
+          <p class="text-xs text-stone-500 font-sans">Any questions you answer incorrectly during mock exams or study mode will automatically be analyzed and surfaced here.</p>
+        </div>
+      `}
     </div>
   `;
 }
@@ -1455,6 +1504,64 @@ function formatPromptText(text) {
   return formatted;
 }
 
+function showToast(message, duration = 3000) {
+  let toast = document.getElementById('app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-mono shadow-2xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-2';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span>${escapeHtml(message)}</span>`;
+  toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+  }, duration);
+}
+
+function syncStudyMissedToVault() {
+  const exam = State.activeExam;
+  if (!exam || !State.isStudyMode) return;
+  const missedList = [];
+  exam.questions.forEach(q => {
+    const checked = State.checkedQuestions[q.id];
+    if (checked && !checked.isCorrect) {
+      missedList.push({
+        ...q,
+        user_selected: checked.userAnswers || []
+      });
+    }
+  });
+  if (missedList.length > 0) {
+    Storage.addMissedQuestions(missedList);
+  }
+}
+
+function saveAndExitExam() {
+  cancelAutoAdvance();
+  const exam = State.activeExam;
+  if (!exam || State.isReviewMode) {
+    window.location.hash = '#dashboard';
+    return;
+  }
+
+  // Ensure any wrong answers checked in study mode are captured in the vault
+  syncStudyMissedToVault();
+
+  // Save current active session
+  saveCurrentSession();
+
+  // Close any open modals
+  closeSubmitModal();
+  toggleMobileMatrix(false);
+
+  // Navigate to dashboard
+  window.location.hash = '#dashboard';
+
+  // Show friendly toast confirmation
+  showToast('Progress saved! You can resume anytime from the dashboard.');
+}
+
 // Global API object attached to window.App
 window.App = {
   startExam(examId) {
@@ -1477,6 +1584,7 @@ window.App = {
     renderDashboard();
   },
 
+  saveAndExitExam,
   nextQuestion,
   prevQuestion,
   checkCurrentAnswer,
