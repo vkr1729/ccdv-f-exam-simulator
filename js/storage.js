@@ -59,9 +59,9 @@ export const Storage = {
       safeSetItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(trimmed));
     }
     
-    // Automatically record missed questions to the vault
+    // Automatically record missed questions to the vault (deduplicated by attempt id)
     if (attempt.missed_questions && attempt.missed_questions.length > 0) {
-      this.addMissedQuestions(attempt.missed_questions);
+      this.addMissedQuestions(attempt.missed_questions, attempt.id || attempt.session_id);
     }
     return attempt;
   },
@@ -92,10 +92,12 @@ export const Storage = {
       userAnswers: state.userAnswers || {},
       flaggedQuestions: Array.isArray(state.flaggedQuestions) ? state.flaggedQuestions : Array.from(state.flaggedQuestions || []),
       timerSecondsRemaining: state.timerSecondsRemaining ?? 7200,
+      time_limit_minutes: state.exam ? (state.exam.time_limit_minutes || 120) : (state.time_limit_minutes || 120),
       drillQuestions: (state.exam && state.exam.exam_id >= 900) ? state.exam.questions : null,
       isStudyMode: Boolean(state.isStudyMode),
       checkedQuestions: state.checkedQuestions || {},
-      studyElapsedSeconds: state.studyElapsedSeconds || 0
+      studyElapsedSeconds: state.studyElapsedSeconds || 0,
+      sessionId: state.sessionId || (state.exam ? `sess_${state.exam.exam_id}_${Date.now()}` : null)
     };
     safeSetItem(STORAGE_KEYS.ACTIVE_EXAM, JSON.stringify(minimalState));
   },
@@ -116,22 +118,31 @@ export const Storage = {
     }
   },
 
-  addMissedQuestions(questions) {
+  addMissedQuestions(questions, sessionId = null) {
+    if (!questions || !questions.length) return [];
     const vault = this.getMissedQuestions();
     const vaultMap = new Map(vault.map(q => [q.id, q]));
 
     for (const q of questions) {
       if (vaultMap.has(q.id)) {
         const existing = vaultMap.get(q.id);
-        existing.miss_count = (existing.miss_count || 1) + 1;
-        existing.last_missed = new Date().toISOString();
-        existing.user_selected = q.user_selected;
+        // Deduplicate within the same session: avoid incrementing miss_count repeatedly
+        if (sessionId && existing.last_session_id === sessionId) {
+          existing.last_missed = new Date().toISOString();
+          if (q.user_selected) existing.user_selected = q.user_selected;
+        } else {
+          existing.miss_count = (existing.miss_count || 1) + 1;
+          existing.last_missed = new Date().toISOString();
+          existing.last_session_id = sessionId;
+          if (q.user_selected) existing.user_selected = q.user_selected;
+        }
       } else {
         vaultMap.set(q.id, {
           ...q,
           miss_count: 1,
           added_at: new Date().toISOString(),
           last_missed: new Date().toISOString(),
+          last_session_id: sessionId,
           mastered: false
         });
       }

@@ -238,6 +238,40 @@ function getAnsweredCount() {
 }
 
 // -------------------------------------------------------------
+// SESSION & ACTIVE EXAM HELPERS
+// -------------------------------------------------------------
+function getActiveExamWithQuestions() {
+  const savedActive = Storage.getActiveExam();
+  if (!savedActive) return null;
+  if (State.activeExam && State.activeExam.exam_id === savedActive.exam_id && State.activeExam.questions) {
+    savedActive.questions = State.activeExam.questions;
+  } else if (savedActive.drillQuestions) {
+    savedActive.questions = savedActive.drillQuestions;
+  } else if (savedActive.exam_id && State.allExams) {
+    const match = State.allExams.find(e => e.exam_id === savedActive.exam_id);
+    if (match) savedActive.questions = match.questions;
+  }
+  return savedActive;
+}
+
+function confirmOverwriteSession() {
+  const savedActive = Storage.getActiveExam();
+  if (savedActive && savedActive.exam_id) {
+    const hasAnswers = (savedActive.userAnswers && Object.values(savedActive.userAnswers).some(a => Array.isArray(a) && a.length > 0)) ||
+                       (savedActive.checkedQuestions && Object.keys(savedActive.checkedQuestions).length > 0);
+    if (hasAnswers) {
+      const modeLabel = savedActive.isStudyMode ? 'Study session' : 'Exam';
+      const confirmMsg = `You have an in-progress ${modeLabel} for "${savedActive.exam_title || ('Exam #' + savedActive.exam_id)}". Starting a new session will discard your saved progress. Proceed?`;
+      if (!confirm(confirmMsg)) {
+        return false;
+      }
+      Storage.clearActiveExam();
+    }
+  }
+  return true;
+}
+
+// -------------------------------------------------------------
 // DASHBOARD VIEW
 // -------------------------------------------------------------
 function renderDashboard() {
@@ -247,7 +281,8 @@ function renderDashboard() {
   const attempts = Storage.getAttempts();
   const missedVault = Storage.getMissedQuestions();
   const savedActive = Storage.getActiveExam();
-  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, savedActive);
+  const activeWithQuestions = getActiveExamWithQuestions();
+  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, activeWithQuestions);
 
   // Resume Banner if an active exam exists in storage
   const resumeContainer = document.getElementById('resume-banner-container');
@@ -392,13 +427,14 @@ function renderExamRunner(paramId) {
           exam_id: savedActive.exam_id,
           title: savedActive.exam_title,
           description: "Targeted Drill Session",
-          time_limit_minutes: Math.ceil((savedActive.timerSecondsRemaining ?? 7200) / 60),
+          time_limit_minutes: savedActive.time_limit_minutes || Math.ceil((savedActive.timerSecondsRemaining ?? 7200) / 60),
           questions: savedActive.drillQuestions
         };
       }
       
       if (fullExam) {
         State.activeExam = fullExam;
+        State.sessionId = savedActive.sessionId || (`sess_${fullExam.exam_id}_${Date.now()}`);
         State.currentQuestionIndex = savedActive.currentQuestionIndex || 0;
         State.userAnswers = savedActive.userAnswers || {};
         State.flaggedQuestions = new Set(savedActive.flaggedQuestions || []);
@@ -410,20 +446,12 @@ function renderExamRunner(paramId) {
         startFreshExam(paramId);
       }
     } else if (savedActive && paramId && parseInt(paramId) !== savedActive.exam_id) {
-      // P1-2: Confirm before overwriting saved in-progress exam
-      const hasAnswers = savedActive.userAnswers && Object.values(savedActive.userAnswers).some(a => Array.isArray(a) && a.length > 0);
-      if (hasAnswers) {
-        const confirmMsg = `You have an in-progress session for "${savedActive.exam_title || ('Exam #' + savedActive.exam_id)}". Starting this exam will discard your saved progress. Proceed?`;
-        if (confirm(confirmMsg)) {
-          Storage.clearActiveExam();
-          startFreshExam(paramId);
-        } else {
-          window.location.hash = savedActive.exam_id < 900 ? `#exam/${savedActive.exam_id}` : '#exam';
-          return;
-        }
-      } else {
-        Storage.clearActiveExam();
+      // Confirm before overwriting saved in-progress exam
+      if (confirmOverwriteSession()) {
         startFreshExam(paramId);
+      } else {
+        window.location.hash = savedActive.exam_id < 900 ? `#exam/${savedActive.exam_id}` : '#exam';
+        return;
       }
     } else {
       startFreshExam(paramId);
@@ -447,8 +475,13 @@ function startFreshExam(paramId, isStudy = false) {
 }
 
 function initNewExamSession(exam, isStudy = false) {
+  if (State.timerInterval) {
+    clearInterval(State.timerInterval);
+    State.timerInterval = null;
+  }
   cancelAutoAdvance();
   State.activeExam = exam;
+  State.sessionId = `sess_${exam.exam_id}_${Date.now()}`;
   State.currentQuestionIndex = 0;
   State.userAnswers = {};
   State.flaggedQuestions = new Set();
@@ -471,9 +504,11 @@ function saveCurrentSession() {
       userAnswers: State.userAnswers,
       flaggedQuestions: Array.from(State.flaggedQuestions),
       timerSecondsRemaining: State.timerSecondsRemaining,
+      time_limit_minutes: State.activeExam.time_limit_minutes,
       isStudyMode: State.isStudyMode,
       checkedQuestions: State.checkedQuestions,
-      studyElapsedSeconds: State.studyElapsedSeconds
+      studyElapsedSeconds: State.studyElapsedSeconds,
+      sessionId: State.sessionId
     });
   }
 }
@@ -497,6 +532,7 @@ function renderCurrentQuestion() {
   if (tagsContainer) {
     if (showMetadataTags) {
       tagsContainer.classList.remove('hidden');
+      tagsContainer.classList.add('flex');
       const domainInfo = DOMAIN_METADATA[q.domain_id] || { name: q.domain_name, weight: 10 };
       const domainBadge = document.getElementById('domain-badge');
       if (domainBadge) domainBadge.textContent = `${q.domain_id}: ${domainInfo.name} (${domainInfo.weight}%)`;
@@ -505,6 +541,7 @@ function renderCurrentQuestion() {
       if (topicBadge) topicBadge.textContent = q.topic || 'Core Scenario';
     } else {
       tagsContainer.classList.add('hidden');
+      tagsContainer.classList.remove('flex');
     }
   }
 
@@ -674,10 +711,10 @@ function renderCurrentQuestion() {
     const isCorrect = qChecked && qChecked.isCorrect;
     nextBtn.disabled = true;
     if (isCorrect) {
-      nextBtn.className = "px-5 py-2 rounded-lg bg-emerald-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait";
+      nextBtn.className = "px-5 py-2 rounded-lg bg-emerald-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait motion-safe:animate-pulse";
       nextBtn.innerHTML = `<span>✓ Correct</span> <span aria-hidden="true">&rarr;</span>`;
     } else {
-      nextBtn.className = "px-5 py-2 rounded-lg bg-rose-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait";
+      nextBtn.className = "px-5 py-2 rounded-lg bg-rose-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait motion-safe:animate-pulse";
       nextBtn.innerHTML = `<span>✕ Incorrect</span> <span aria-hidden="true">&rarr;</span>`;
     }
   } else if (State.currentQuestionIndex === totalQ - 1) {
@@ -695,7 +732,7 @@ function renderCurrentQuestion() {
     nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
   }
 
-  // Hide submit and save buttons in sidebar and header during review
+  // Hide submit and save buttons in sidebar, header, and mobile matrix during review
   const sidebarActions = document.getElementById('sidebar-exam-actions');
   if (sidebarActions) {
     if (State.isReviewMode) {
@@ -710,6 +747,14 @@ function renderCurrentQuestion() {
       headerSave.classList.add('hidden');
     } else {
       headerSave.classList.remove('hidden');
+    }
+  }
+  const mobileMatrixActions = document.getElementById('mobile-matrix-actions');
+  if (mobileMatrixActions) {
+    if (State.isReviewMode) {
+      mobileMatrixActions.classList.add('hidden');
+    } else {
+      mobileMatrixActions.classList.remove('hidden');
     }
   }
 }
@@ -762,8 +807,10 @@ function checkCurrentAnswer() {
   if (!isCorrect) {
     Storage.addMissedQuestions([{
       ...q,
+      exam_id: exam.exam_id,
+      exam_title: exam.title,
       user_selected: userSel
-    }]);
+    }], State.sessionId);
   }
 
   saveCurrentSession();
@@ -832,8 +879,10 @@ function nextQuestion() {
     if (!isCorrect) {
       Storage.addMissedQuestions([{
         ...q,
+        exam_id: exam.exam_id,
+        exam_title: exam.title,
         user_selected: userSel
-      }]);
+      }], State.sessionId);
     }
 
     saveCurrentSession();
@@ -1033,9 +1082,10 @@ function startTimer() {
   }
 
   if (State.isStudyMode) {
+    const studyStartTime = Date.now() - (State.studyElapsedSeconds || 0) * 1000;
     updateTimerDisplay();
     State.timerInterval = setInterval(() => {
-      State.studyElapsedSeconds = (State.studyElapsedSeconds || 0) + 1;
+      State.studyElapsedSeconds = Math.max(0, Math.floor((Date.now() - studyStartTime) / 1000));
       updateTimerDisplay();
 
       if (State.studyElapsedSeconds % 30 === 0) {
@@ -1140,6 +1190,7 @@ function closeSubmitModal() {
 }
 
 function finishExam() {
+  cancelAutoAdvance();
   closeSubmitModal();
   toggleMobileMatrix(false);
   pauseTimer();
@@ -1271,8 +1322,8 @@ function renderGapsView() {
 
   const attempts = Storage.getAttempts();
   const missedVault = Storage.getMissedQuestions();
-  const savedActive = Storage.getActiveExam();
-  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, savedActive);
+  const activeWithQuestions = getActiveExamWithQuestions();
+  const diagnostic = Analytics.diagnoseGaps(attempts, missedVault, activeWithQuestions);
 
   const content = document.getElementById('gaps-content');
   content.innerHTML = `
@@ -1504,18 +1555,27 @@ function formatPromptText(text) {
   return formatted;
 }
 
+let toastTimeoutId = null;
+
 function showToast(message, duration = 3000) {
   let toast = document.getElementById('app-toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'app-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
     toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-xl bg-stone-900 text-white text-xs font-mono shadow-2xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-2';
     document.body.appendChild(toast);
   }
+  if (toastTimeoutId) {
+    clearTimeout(toastTimeoutId);
+    toastTimeoutId = null;
+  }
   toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span>${escapeHtml(message)}</span>`;
   toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
-  setTimeout(() => {
+  toastTimeoutId = setTimeout(() => {
     toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+    toastTimeoutId = null;
   }, duration);
 }
 
@@ -1528,12 +1588,14 @@ function syncStudyMissedToVault() {
     if (checked && !checked.isCorrect) {
       missedList.push({
         ...q,
+        exam_id: exam.exam_id,
+        exam_title: exam.title,
         user_selected: checked.userAnswers || []
       });
     }
   });
   if (missedList.length > 0) {
-    Storage.addMissedQuestions(missedList);
+    Storage.addMissedQuestions(missedList, State.sessionId);
   }
 }
 
@@ -1567,6 +1629,7 @@ window.App = {
   startExam(examId) {
     const exam = State.allExams.find(e => e.exam_id === examId);
     if (!exam) return;
+    if (!confirmOverwriteSession()) return;
     initNewExamSession(exam, false);
     window.location.hash = `#exam/${examId}`;
   },
@@ -1574,6 +1637,7 @@ window.App = {
   startStudyExam(examId) {
     const exam = State.allExams.find(e => e.exam_id === examId);
     if (!exam) return;
+    if (!confirmOverwriteSession()) return;
     initNewExamSession(exam, true);
     window.location.hash = `#exam/${examId}`;
   },

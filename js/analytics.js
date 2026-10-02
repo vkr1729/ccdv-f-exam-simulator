@@ -221,7 +221,10 @@ export const Analytics = {
     const missedIdSet = new Set(allMissed.map(q => q.id));
 
     if (activeExam) {
-      const activeQuestions = activeExam.questions || (activeExam.exam && activeExam.exam.questions) || [];
+      const activeQuestions = activeExam.questions ||
+                              activeExam.drillQuestions ||
+                              (activeExam.exam && (activeExam.exam.questions || activeExam.exam.drillQuestions)) ||
+                              [];
       const checkedMap = activeExam.checkedQuestions || {};
 
       activeQuestions.forEach(q => {
@@ -244,12 +247,11 @@ export const Analytics = {
       });
     }
 
-    // 4. Ensure any missed questions in vault are reflected in domain totals if untested
+    // 4. Ingest vault-only missed questions (from standalone reviews or past drills)
+    // Track them in domain missed_in_vault without synthesizing phantom totalQuestionsEvaluated
     allMissed.forEach(q => {
-      if (domainTotals[q.domain_id] && domainTotals[q.domain_id].total === 0) {
-        domainTotals[q.domain_id].total = q.miss_count || 1;
-        domainTotals[q.domain_id].correct = 0;
-        totalQuestionsEvaluated += q.miss_count || 1;
+      if (domainTotals[q.domain_id]) {
+        domainTotals[q.domain_id].missedInVault = (domainTotals[q.domain_id].missedInVault || 0) + (q.miss_count || 1);
       }
     });
 
@@ -268,6 +270,7 @@ export const Analytics = {
       const meta = DOMAIN_METADATA[dId];
       const stats = domainTotals[dId];
       const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 1000) / 10 : 0;
+      const isLagging = (stats.total > 0 && pct < 72.0) || (stats.total === 0 && (stats.missedInVault || 0) > 0);
       return {
         id: dId,
         name: meta.name,
@@ -275,7 +278,8 @@ export const Analytics = {
         total: stats.total,
         correct: stats.correct,
         percentage: pct,
-        is_lagging: stats.total > 0 && pct < 72.0
+        missed_in_vault: stats.missedInVault || 0,
+        is_lagging: isLagging
       };
     });
 
