@@ -25,7 +25,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -36,13 +35,11 @@
           colors: {
             brand: {
               cream: '#faf7f2',
-              card: '#ffffff',
-              border: '#e7e5e4',
-              terracotta: '#c2410c',
-              'terracotta-hover': '#9a3412',
-              amber: '#d97706',
-              charcoal: '#1c1917',
-              muted: '#78716c'
+              ink: '#1c1917',
+              terracotta: '#9a3412',
+              'terracotta-deep': '#7c2d12',
+              'terracotta-tint': '#ffedd5',
+              'terracotta-line': '#fed7aa'
             }
           }
         }
@@ -62,6 +59,34 @@
     button, a {
       touch-action: manipulation;
     }
+    /* Visible keyboard focus everywhere (terracotta, matches brand accent) */
+    :focus-visible {
+      outline: 2px solid #9a3412;
+      outline-offset: 2px;
+    }
+    /* Prevent iOS auto-zoom; keep native controls on-brand */
+    input, select, textarea {
+      font-size: 16px;
+    }
+    input[type="radio"], input[type="checkbox"] {
+      accent-color: #9a3412;
+      width: 18px;
+      height: 18px;
+    }
+    /* Honor reduced-motion: no ambient animation, no smooth scroll */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      html { scroll-behavior: auto !important; }
+    }
+    /* Comfortable touch targets on coarse pointers */
+    @media (pointer: coarse) {
+      button, .nav-link { min-height: 44px; }
+    }
+    .no-scrollbar { scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
     .custom-scroll::-webkit-scrollbar {
       width: 5px;
       height: 5px;
@@ -72,53 +97,57 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-brand-cream text-brand-charcoal antialiased">
+<body class="min-h-screen flex flex-col bg-brand-cream text-brand-ink antialiased">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:rounded-lg focus:bg-brand-terracotta focus:text-white focus:text-sm">
+    Skip to content
+  </a>
 
   <!-- Top Navigation Header -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-stone-200/90 shadow-2xs">
+  <header class="sticky top-0 z-40 bg-white border-b border-stone-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
-      
+
       <!-- Brand & Title -->
-      <a href="#dashboard" class="flex items-center space-x-3 group">
-        <div class="w-9 h-9 rounded-xl bg-amber-700 text-white flex items-center justify-center font-editorial text-xl font-bold shadow-xs group-hover:bg-amber-800 transition">
+      <a href="#dashboard" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg bg-brand-terracotta text-brand-cream flex items-center justify-center font-editorial text-xl font-bold group-hover:bg-brand-terracotta-deep transition" aria-hidden="true">
           C
         </div>
         <div>
-          <div class="flex items-center space-x-2">
-            <span class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">Anthropic Certified</span>
-            <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-stone-100 text-stone-600">CCDV-F</span>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Anthropic Certified</span>
+            <span class="px-1.5 py-0.5 rounded text-xs font-mono bg-stone-100 text-stone-600">CCDV-F</span>
           </div>
-          <h1 class="text-sm font-semibold text-stone-900 group-hover:text-amber-900 transition">Developer Foundations Exam Simulator</h1>
+          <h1 class="text-sm font-semibold text-stone-900 group-hover:text-brand-terracotta-deep transition">Developer Foundations Exam Simulator</h1>
         </div>
       </a>
 
-      <!-- Primary Nav Tabs -->
-      <nav class="flex items-center space-x-1.5 bg-stone-100/80 p-1 rounded-xl border border-stone-200">
-        <a href="#dashboard" data-route="dashboard" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium bg-amber-100 text-stone-900 border border-amber-200 shadow-xs">
-          Mock Exams (10)
+      <!-- Primary Nav Tabs (own scrollable row on small screens) -->
+      <nav aria-label="Primary" class="order-last sm:order-none w-full sm:w-auto flex items-center flex-nowrap gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200 overflow-x-auto no-scrollbar">
+        <a href="#dashboard" data-route="dashboard" aria-current="page" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">
+          Exams (10)
         </a>
-        <a href="#gaps" data-route="gaps" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
+        <a href="#gaps" data-route="gaps" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
           Diagnostics
         </a>
-        <a href="#vault" data-route="vault" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
-          Missed Vault
+        <a href="#vault" data-route="vault" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
+          Vault
         </a>
-        <a href="#sources" data-route="sources" class="nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
+        <a href="#sources" data-route="sources" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
           Sources
         </a>
       </nav>
 
       <!-- Actions: Install PWA & Offline Indicator & Stats Pill -->
-      <div class="flex items-center space-x-2.5">
-        <button id="pwa-install-btn" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-700 hover:bg-amber-800 text-white transition flex items-center space-x-1.5 shadow-xs">
-          <span>📲</span>
+      <div class="flex items-center gap-2.5">
+        <button id="pwa-install-btn" class="hidden px-2.5 py-2 rounded-lg text-xs font-semibold bg-brand-terracotta hover:bg-brand-terracotta-deep text-white transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
           <span>Install App</span>
         </button>
-        <span id="connection-badge" class="px-2 py-0.5 rounded-full text-[11px] font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center space-x-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span id="connection-badge" class="px-2 py-0.5 rounded-full text-xs font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
           <span id="connection-text">Offline Ready</span>
         </span>
-        <div class="hidden md:flex items-center space-x-3">
+        <div class="hidden md:flex items-center gap-3">
           <span id="header-stats-pill" class="px-3 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 border border-stone-200">
             Loading question bank...
           </span>
@@ -128,13 +157,13 @@
   </header>
 
   <!-- Main Content Wrapper -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    
+  <main id="main" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
     <!-- ======================================================== -->
     <!-- VIEW: DASHBOARD                                          -->
     <!-- ======================================================== -->
     <div id="view-dashboard" class="view-container space-y-6">
-      
+
       <!-- Resume In-Progress Banner (Injected dynamically) -->
       <div id="resume-banner-container" class="hidden"></div>
 
@@ -147,41 +176,41 @@
       <!-- Quick Readiness Summary (Injected dynamically only if attempts exist) -->
       <div id="dashboard-readiness-card"></div>
 
-      <!-- 10 Full-Length Exam Cards -->
-      <div id="exam-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <!-- Form Register: one row per mock exam (rendered by app.js) -->
+      <ol id="exam-register" class="rounded-2xl bg-white border border-stone-200 divide-y divide-stone-100 overflow-hidden">
         <!-- Injected dynamically by app.js -->
-      </div>
+      </ol>
     </div>
 
     <!-- ======================================================== -->
     <!-- VIEW: EXAM RUNNER                                        -->
     <!-- ======================================================== -->
     <div id="view-exam" class="view-container hidden space-y-6">
-      
+
       <!-- Top Exam Sticky Control Bar -->
       <div class="p-4 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center space-x-3">
-          <span id="exam-title-header" class="text-base font-editorial text-stone-900 font-semibold">Mock Exam</span>
-          <span class="text-stone-300">|</span>
-          <span id="q-counter" class="text-xs font-mono text-stone-600">Question 1 of 53</span>
+        <div class="flex items-center gap-3">
+          <h2 id="exam-title-header" class="text-base font-editorial text-stone-900 font-semibold">Mock Exam</h2>
+          <span class="text-stone-300" aria-hidden="true">|</span>
+          <span id="q-counter" aria-live="polite" class="text-xs font-mono text-stone-600">Question 1 of 53</span>
         </div>
 
-        <div class="flex items-center space-x-2.5">
+        <div class="flex items-center gap-2.5">
           <!-- Mobile Question Matrix Toggle -->
-          <button id="mobile-matrix-toggle-btn" onclick="window.App.toggleMobileMatrix()" class="lg:hidden px-3 py-1.5 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition">
-            <span>📋</span>
+          <button id="mobile-matrix-toggle-btn" onclick="window.App.toggleMobileMatrix()" class="lg:hidden px-3 py-2 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
             <span id="mobile-matrix-btn-label">Question Matrix</span>
           </button>
 
           <!-- Timer -->
-          <div class="flex items-center space-x-2 bg-stone-50 px-3.5 py-1.5 rounded-xl border border-stone-200">
-            <svg class="w-4 h-4 text-amber-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span id="timer-display" class="font-mono text-sm text-stone-900 font-semibold">120:00</span>
+          <div class="flex items-center gap-2 bg-stone-50 px-3.5 py-1.5 rounded-xl border border-stone-200">
+            <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span id="timer-display" role="timer" class="font-mono text-sm text-stone-900 font-semibold">120:00</span>
           </div>
 
           <!-- Flag Button -->
-          <button id="flag-btn" onclick="window.App.toggleFlag()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition">
-            <span>☆</span>
+          <button id="flag-btn" onclick="window.App.toggleFlag()" aria-label="Flag for review" class="px-3 py-2 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center gap-1.5 transition">
+            <span aria-hidden="true">☆</span>
             <span class="hidden sm:inline">Flag for Review</span>
           </button>
         </div>
@@ -189,14 +218,14 @@
 
       <!-- Main Layout: 3 cols Question + 1 col Navigator -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        
+
         <!-- Question Pane -->
         <div class="lg:col-span-3 space-y-6">
-          <div class="p-6 md:p-8 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-6">
-            
+          <div class="p-5 md:p-8 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-6">
+
             <!-- Question Metadata Tags -->
             <div class="flex flex-wrap items-center gap-2">
-              <span id="domain-badge" class="px-2.5 py-0.5 rounded-md text-xs font-mono font-semibold bg-amber-100 text-amber-900 border border-amber-200">
+              <span id="domain-badge" class="px-2.5 py-0.5 rounded-md text-xs font-mono font-semibold bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">
                 D1: Applications & Integration
               </span>
               <span id="topic-badge" class="px-2.5 py-0.5 rounded-md text-xs font-mono text-stone-600 bg-stone-100 border border-stone-200">
@@ -228,13 +257,13 @@
                 &larr; Previous
               </button>
 
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center gap-3">
                 <button onclick="window.App.clearCurrentAnswer()" class="px-3.5 py-2 rounded-lg text-xs text-stone-500 hover:text-stone-800 transition">
                   Clear
                 </button>
-                <button id="next-q-btn" onclick="window.App.nextQuestion()" class="px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5">
+                <button id="next-q-btn" onclick="window.App.nextQuestion()" class="px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5">
                   <span>Next Question</span>
-                  <span>&rarr;</span>
+                  <span aria-hidden="true">&rarr;</span>
                 </button>
               </div>
             </div>
@@ -246,7 +275,7 @@
           <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-stone-800">Question Matrix</h4>
-              <span id="matrix-summary-text" class="text-[11px] font-mono text-stone-500">0 of 53 answered</span>
+              <span id="matrix-summary-text" class="text-xs font-mono text-stone-500">0 of 53 answered</span>
             </div>
 
             <!-- 53 Item Grid -->
@@ -255,22 +284,22 @@
             </div>
 
             <div class="pt-3 border-t border-stone-100 text-xs font-mono text-stone-500 space-y-1.5">
-              <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded bg-stone-800"></span>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded bg-stone-800" aria-hidden="true"></span>
                 <span>Answered</span>
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded border border-amber-500 bg-amber-100"></span>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded border border-amber-500 bg-amber-100" aria-hidden="true"></span>
                 <span>Flagged for Review</span>
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded bg-stone-100 border border-stone-200"></span>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded bg-stone-100 border border-stone-200" aria-hidden="true"></span>
                 <span>Unvisited</span>
               </div>
             </div>
 
-            <button onclick="window.App.openSubmitModal()" class="w-full mt-4 py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition">
-              Submit & Finish Exam
+            <button onclick="window.App.openSubmitModal()" class="w-full mt-4 py-2.5 rounded-xl bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition">
+              Submit &amp; Finish Exam
             </button>
           </div>
         </div>
@@ -309,53 +338,53 @@
   </main>
 
   <!-- Mobile Question Matrix Bottom Sheet / Modal -->
-  <div id="mobile-matrix-modal" onclick="if(event.target === this) window.App.toggleMobileMatrix(false);" role="dialog" aria-modal="true" aria-labelledby="mobile-matrix-title" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+  <div id="mobile-matrix-modal" onclick="if(event.target === this) window.App.toggleMobileMatrix(false);" role="dialog" aria-modal="true" aria-labelledby="mobile-matrix-title" class="hidden fixed inset-0 z-50 bg-stone-900/60 flex items-end sm:items-center justify-center p-0 sm:p-4">
     <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-5 border border-stone-200 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
         <div>
           <h3 id="mobile-matrix-title" class="text-base font-editorial font-bold text-stone-900">Question Matrix</h3>
-          <p id="mobile-matrix-summary-text" class="text-[11px] font-mono text-stone-500">0 of 53 answered</p>
+          <p id="mobile-matrix-summary-text" class="text-xs font-mono text-stone-500">0 of 53 answered</p>
         </div>
-        <button onclick="window.App.toggleMobileMatrix(false)" aria-label="Close matrix" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600 font-bold text-base transition">
+        <button onclick="window.App.toggleMobileMatrix(false)" data-matrix-close aria-label="Close matrix" class="w-11 h-11 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-600 font-bold text-base transition">
           &times;
         </button>
       </div>
 
       <!-- 53 Item Grid (scrollable) -->
-      <div id="mobile-question-matrix-grid" class="grid grid-cols-6 sm:grid-cols-5 gap-2 custom-scroll overflow-y-auto p-1 flex-1">
+      <div id="mobile-question-matrix-grid" class="grid grid-cols-5 sm:grid-cols-5 gap-2 custom-scroll overflow-y-auto p-1 flex-1 justify-items-center">
         <!-- Rendered dynamically -->
       </div>
 
       <!-- Legend -->
       <div class="pt-3 border-t border-stone-100 text-xs font-mono text-stone-500 flex flex-wrap gap-x-4 gap-y-1">
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded bg-stone-800"></span>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-stone-800" aria-hidden="true"></span>
           <span>Answered</span>
         </div>
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded border border-amber-500 bg-amber-100"></span>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded border border-amber-500 bg-amber-100" aria-hidden="true"></span>
           <span>Flagged</span>
         </div>
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded bg-stone-100 border border-stone-200"></span>
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-stone-100 border border-stone-200" aria-hidden="true"></span>
           <span>Unvisited</span>
         </div>
       </div>
 
       <div class="pt-2">
-        <button onclick="window.App.toggleMobileMatrix(false); window.App.openSubmitModal();" class="w-full py-2.5 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition">
-          Submit & Finish Exam
+        <button onclick="window.App.toggleMobileMatrix(false); window.App.openSubmitModal();" class="w-full py-2.5 rounded-xl bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition">
+          Submit &amp; Finish Exam
         </button>
       </div>
     </div>
   </div>
 
   <!-- Submit Confirmation Modal -->
-  <div id="submit-modal" onclick="if(event.target === this) window.App.closeSubmitModal();" role="dialog" aria-modal="true" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div id="submit-modal" onclick="if(event.target === this) window.App.closeSubmitModal();" role="dialog" aria-modal="true" aria-labelledby="submit-modal-title" class="hidden fixed inset-0 z-50 bg-stone-900/60 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-stone-200 shadow-2xl space-y-5">
       <div class="space-y-2">
-        <h3 class="text-xl font-editorial text-stone-900 font-semibold">Finish and Score Exam?</h3>
-        <p class="text-xs text-stone-600 leading-relaxed font-sans">
+        <h3 id="submit-modal-title" class="text-xl font-editorial text-stone-900 font-semibold">Finish and Score Exam?</h3>
+        <p class="text-sm text-stone-600 leading-relaxed font-sans">
           Review your progress before final evaluation. Once submitted, your score will be computed against the 720/1000 scaled passing mark and missed questions will be saved to your vault.
         </p>
       </div>
@@ -377,11 +406,11 @@
 
       <div id="modal-unanswered-warning" class="hidden p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-900 font-medium"></div>
 
-      <div class="flex items-center justify-end space-x-3 pt-2">
-        <button onclick="window.App.closeSubmitModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-stone-700 hover:bg-stone-100 transition">
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button data-autofocus onclick="window.App.closeSubmitModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-stone-700 hover:bg-stone-100 transition">
           Return to Exam
         </button>
-        <button onclick="window.App.finishExam()" class="px-5 py-2 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition">
+        <button onclick="window.App.finishExam()" class="px-5 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition">
           Submit Exam
         </button>
       </div>

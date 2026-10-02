@@ -1,12 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C2410C"/>
-      <stop offset="100%" stop-color="#9A3412"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="220" fill="none" stroke="#FAF7F2" stroke-opacity="0.15" stroke-width="4"/>
+  <rect width="512" height="512" rx="112" fill="#9A3412"/>
   <text x="256" y="340" font-family="Georgia, Newsreader, serif" font-size="280" font-weight="bold" fill="#FAF7F2" text-anchor="middle">C</text>
-  <path d="M 370 140 Q 385 155 370 170 Q 355 155 370 140 Z" fill="#FDE68A"/>
 </svg>

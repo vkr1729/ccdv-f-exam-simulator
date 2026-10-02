@@ -100,14 +100,14 @@ function initPWA() {
     const hasActiveController = Boolean(navigator.serviceWorker && navigator.serviceWorker.controller);
 
     if (isOffline) {
-      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-amber-300 bg-amber-50 text-amber-800 flex items-center space-x-1";
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span><span id="connection-text">Offline Mode</span>';
+      badge.className = "px-2 py-0.5 rounded-full text-xs font-mono border border-amber-300 bg-amber-50 text-amber-800 flex items-center gap-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true"></span><span id="connection-text">Offline Mode</span>';
     } else if (hasActiveController) {
-      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-emerald-200 bg-emerald-50 text-emerald-700 flex items-center space-x-1";
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span id="connection-text">Offline Ready</span>';
+      badge.className = "px-2 py-0.5 rounded-full text-xs font-mono border border-emerald-200 bg-emerald-50 text-emerald-700 flex items-center gap-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span><span id="connection-text">Offline Ready</span>';
     } else {
-      badge.className = "px-2 py-0.5 rounded-full text-[11px] font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center space-x-1";
-      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-stone-400"></span><span id="connection-text">Online</span>';
+      badge.className = "px-2 py-0.5 rounded-full text-xs font-mono border border-stone-200 bg-stone-100 text-stone-600 flex items-center gap-1";
+      badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-stone-400" aria-hidden="true"></span><span id="connection-text">Online</span>';
     }
   }
 
@@ -184,16 +184,19 @@ function handleRouting() {
       renderDashboard();
   }
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
 }
 
 function updateNavUI(activeRoute) {
   document.querySelectorAll('.nav-link').forEach(link => {
     const route = link.dataset.route;
     if (route === activeRoute) {
-      link.className = "nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium bg-amber-100 text-stone-900 border border-amber-200 transition shadow-xs";
+      link.setAttribute('aria-current', 'page');
+      link.className = "nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line";
     } else {
-      link.className = "nav-link px-3.5 py-1.5 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition";
+      link.removeAttribute('aria-current');
+      link.className = "nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition";
     }
   });
 
@@ -235,21 +238,21 @@ function renderDashboard() {
     const answeredCount = Object.values(savedActive.userAnswers || {}).filter(a => Array.isArray(a) && a.length > 0).length;
     const totalQ = savedActive.drillQuestions ? savedActive.drillQuestions.length : 53;
     resumeContainer.innerHTML = `
-      <div class="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center space-x-3">
-          <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
+      <div class="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-amber-500 shrink-0" aria-hidden="true"></span>
           <div>
             <h3 class="text-sm font-semibold text-stone-900">Active Exam in Progress: ${escapeHtml(savedActive.exam_title || 'Mock Exam')}</h3>
             <p class="text-xs text-stone-600 font-sans">${answeredCount} of ${totalQ} answered · ${Math.floor(savedActive.timerSecondsRemaining / 60)} minutes remaining</p>
           </div>
         </div>
-        <div class="flex items-center space-x-2">
-          <button onclick="window.App.discardActiveExam()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 hover:bg-stone-200 transition">
+        <div class="flex items-center gap-2">
+          <button onclick="window.App.discardActiveExam()" class="px-3 py-2 rounded-lg text-xs font-medium text-stone-600 hover:bg-stone-200 transition">
             Discard
           </button>
-          <a href="#exam" class="px-4 py-2 rounded-lg bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5">
+          <a href="#exam" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5">
             <span>Resume Exam</span>
-            <span>&rarr;</span>
+            <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>
@@ -264,16 +267,16 @@ function renderDashboard() {
   if (diagContainer) {
     if (diagnostic.total_attempts > 0) {
       diagContainer.innerHTML = `
-        <div class="p-3.5 px-4 rounded-xl bg-white border border-stone-200 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-          <div class="flex items-center space-x-3 text-stone-700">
+        <div class="px-4 py-3.5 rounded-xl bg-white border border-stone-200 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div class="flex items-center gap-3 text-stone-700">
             <span class="font-semibold text-stone-900">${diagnostic.full_attempts || 0}/10 Completed</span>
-            <span class="text-stone-300">·</span>
+            <span class="text-stone-300" aria-hidden="true">·</span>
             <span>Avg: <strong class="text-stone-900">${diagnostic.average_score}%</strong></span>
-            <span class="text-stone-300">·</span>
+            <span class="text-stone-300" aria-hidden="true">·</span>
             <span class="${diagnostic.average_score >= 72 ? 'text-emerald-700 font-semibold' : 'text-amber-800 font-semibold'}">${diagnostic.readiness_level}</span>
-            ${missedVault.length > 0 ? `<span class="text-stone-300">·</span><span class="text-amber-800 font-medium">${missedVault.length} in Vault</span>` : ''}
+            ${missedVault.length > 0 ? `<span class="text-stone-300" aria-hidden="true">·</span><span class="text-amber-800 font-medium">${missedVault.length} in Vault</span>` : ''}
           </div>
-          <a href="#gaps" class="text-amber-800 hover:text-amber-900 font-medium transition">
+          <a href="#gaps" class="text-brand-terracotta hover:text-brand-terracotta-deep font-medium transition">
             Diagnostics &rarr;
           </a>
         </div>
@@ -285,46 +288,45 @@ function renderDashboard() {
     }
   }
 
-  // 10 Mock Exam Cards Grid (Compact & Minimal)
-  const gridContainer = document.getElementById('exam-cards-grid');
-  gridContainer.innerHTML = '';
+  // Form Register: one ledger row per mock exam
+  const registerContainer = document.getElementById('exam-register');
+  if (!registerContainer) return;
+  registerContainer.innerHTML = '';
 
   State.allExams.forEach(exam => {
     const bestAttempt = Storage.getExamBestScore(exam.exam_id);
-    const card = document.createElement('div');
-    card.className = "p-4 sm:p-5 rounded-2xl bg-white border border-stone-200 shadow-2xs hover:border-amber-400 hover:shadow-xs transition duration-150 flex flex-col justify-between space-y-4";
+    const formNum = String(exam.exam_id).padStart(2, '0');
 
-    let statusBadge = `<span class="text-[11px] font-mono text-stone-400">Untested</span>`;
+    let statusBadge = `<span class="text-xs font-mono text-stone-500">Untested</span>`;
     if (bestAttempt) {
       if (bestAttempt.is_passing) {
-        statusBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">${bestAttempt.percentage}% Passed</span>`;
+        statusBadge = `<span class="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 whitespace-nowrap">${bestAttempt.percentage}% passed</span>`;
       } else {
-        statusBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-50 text-amber-800 border border-amber-200">${bestAttempt.percentage}%</span>`;
+        statusBadge = `<span class="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-amber-50 text-amber-800 border border-amber-200 whitespace-nowrap">${bestAttempt.percentage}% best</span>`;
       }
     }
 
-    card.innerHTML = `
-      <div class="space-y-1">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-mono font-bold text-amber-800 tracking-wider">Form #${String(exam.exam_id).padStart(2, '0')}</span>
-          ${statusBadge}
-        </div>
-        <h3 class="text-base font-editorial text-stone-900 font-normal leading-snug">Mock Exam #${exam.exam_id}</h3>
-        <p class="text-[11px] font-mono text-stone-500">53 Qs · 120 mins</p>
-      </div>
+    const row = document.createElement('li');
+    row.className = "px-4 sm:px-6 py-4 flex flex-wrap sm:flex-nowrap sm:items-center gap-x-4 gap-y-3 hover:bg-stone-50/80 transition";
 
-      <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+    row.innerHTML = `
+      <span class="hidden sm:block font-editorial text-2xl leading-none text-stone-400 w-9 text-right shrink-0" aria-hidden="true">${formNum}</span>
+      <div class="flex-1 min-w-[10rem]">
+        <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
+        <p class="text-xs font-mono text-stone-500 mt-0.5">Form ${formNum} · 53 questions · 120 minutes</p>
+      </div>
+      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3">
         ${bestAttempt ? `
-          <button onclick="window.App.viewPreviousResult('${bestAttempt.id}')" class="text-xs font-mono text-stone-500 hover:text-stone-900 transition">
+          <button type="button" onclick="window.App.viewPreviousResult('${bestAttempt.id}')" class="text-xs font-mono text-stone-500 hover:text-stone-900 underline-offset-2 hover:underline transition">
             Score
           </button>
-        ` : '<div></div>'}
-        <button onclick="window.App.startExam(${exam.exam_id})" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium transition shadow-xs">
-          ${bestAttempt ? 'Retake' : 'Start'} &rarr;
+        ` : '<span aria-hidden="true"></span>'}
+        <button type="button" onclick="window.App.startExam(${exam.exam_id})" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition shrink-0">
+          ${bestAttempt ? 'Retake' : 'Start'} <span aria-hidden="true">&rarr;</span>
         </button>
       </div>
     `;
-    gridContainer.appendChild(card);
+    registerContainer.appendChild(row);
   });
 }
 
@@ -459,12 +461,14 @@ function renderCurrentQuestion() {
   } else {
     flagBtn.classList.remove('hidden');
     const isFlagged = State.flaggedQuestions.has(q.id);
+    flagBtn.setAttribute('aria-pressed', String(isFlagged));
+    flagBtn.setAttribute('aria-label', isFlagged ? 'Flagged for review' : 'Flag for review');
     if (isFlagged) {
-      flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-100 text-amber-900 border border-amber-300 flex items-center space-x-1.5";
-      flagBtn.innerHTML = `<span>★</span><span class="hidden sm:inline">Flagged</span>`;
+      flagBtn.className = "px-3 py-2 rounded-lg text-xs font-medium bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1.5";
+      flagBtn.innerHTML = `<span aria-hidden="true">★</span><span class="hidden sm:inline">Flagged</span>`;
     } else {
-      flagBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center space-x-1.5 transition";
-      flagBtn.innerHTML = `<span>☆</span><span class="hidden sm:inline">Flag for Review</span>`;
+      flagBtn.className = "px-3 py-2 rounded-lg text-xs font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 border border-stone-200 flex items-center gap-1.5 transition";
+      flagBtn.innerHTML = `<span aria-hidden="true">☆</span><span class="hidden sm:inline">Flag for Review</span>`;
     }
   }
 
@@ -493,25 +497,26 @@ function renderCurrentQuestion() {
     const isUserChoice = userSelected.includes(opt.key);
     const isCorrectChoice = q.correct_answers.includes(opt.key);
     const card = document.createElement('div');
+    const inputId = `opt-${q.id}-${opt.key}`;
 
-    let cardClasses = "p-4 rounded-xl border transition flex items-start space-x-4 ";
+    let cardClasses = "p-4 rounded-xl border transition flex items-start gap-4 ";
     let radioDisabled = "";
 
     if (State.isReviewMode) {
       radioDisabled = "disabled";
       if (isCorrectChoice) {
         // High visual contrast for correct choice
-        cardClasses += "border-2 border-emerald-600 bg-emerald-50/80 shadow-xs";
+        cardClasses += "border-2 border-emerald-600 bg-emerald-50/80";
       } else if (isUserChoice && !isCorrectChoice) {
         // High visual contrast for wrong user choice
-        cardClasses += "border-2 border-rose-500 bg-rose-50/80 shadow-xs";
+        cardClasses += "border-2 border-rose-500 bg-rose-50/80";
       } else {
         cardClasses += "border-stone-200 bg-white opacity-70";
       }
     } else {
       card.onclick = () => handleOptionClick(q, opt.key, isMultiple);
       if (isUserChoice) {
-        cardClasses += "border-2 border-amber-700 bg-amber-50/70 shadow-xs cursor-pointer";
+        cardClasses += "border-2 border-brand-terracotta bg-brand-terracotta-tint/60 cursor-pointer";
       } else {
         cardClasses += "border-stone-200 bg-white hover:bg-stone-50 hover:border-stone-300 cursor-pointer";
       }
@@ -522,19 +527,21 @@ function renderCurrentQuestion() {
     let markerBadge = '';
     if (State.isReviewMode) {
       if (isCorrectChoice) {
-        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">✓ Correct</span>`;
+        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded whitespace-nowrap">✓ Correct</span>`;
       } else if (isUserChoice) {
-        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded">✕ Your Choice</span>`;
+        markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded whitespace-nowrap">✕ Your Choice</span>`;
       }
     }
 
     card.innerHTML = `
-      <div class="mt-0.5">
-        <input type="${isMultiple ? 'checkbox' : 'radio'}" name="question_opt" ${isUserChoice ? 'checked' : ''} ${radioDisabled} class="h-4 w-4 text-amber-700 focus:ring-amber-500 border-stone-300 rounded${isMultiple ? '' : '-full'}">
+      <div class="mt-0.5 shrink-0">
+        <input type="${isMultiple ? 'checkbox' : 'radio'}" id="${inputId}" name="question_opt" ${isUserChoice ? 'checked' : ''} ${radioDisabled} class="cursor-pointer">
       </div>
       <div class="flex-1">
-        <span class="font-serif font-bold text-sm ${isUserChoice ? 'text-amber-900' : 'text-stone-700'} mr-2">${opt.key}.</span>
-        <span class="text-sm ${isUserChoice ? 'text-stone-900 font-medium' : 'text-stone-800'} leading-relaxed font-sans">${escapeHtml(opt.text)}</span>
+        <label for="${inputId}" class="cursor-pointer">
+          <span class="font-editorial font-bold text-base ${isUserChoice ? 'text-brand-terracotta' : 'text-stone-700'} mr-2">${opt.key}.</span>
+          <span class="text-base ${isUserChoice ? 'text-stone-900 font-medium' : 'text-stone-800'} leading-relaxed font-sans">${escapeHtml(opt.text)}</span>
+        </label>
       </div>
       ${markerBadge}
     `;
@@ -546,14 +553,14 @@ function renderCurrentQuestion() {
   if (State.isReviewMode) {
     explanationBox.classList.remove('hidden');
     explanationBox.innerHTML = `
-      <div class="p-5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-900">Answer Key & Official Rationale</span>
+      <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Answer Key &amp; Official Rationale</span>
           <span class="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">Official Correct: ${q.correct_answers.join(', ')}</span>
         </div>
         <p class="text-sm text-stone-800 leading-relaxed font-sans">${escapeHtml(q.explanation)}</p>
         ${q.distractor_explanations && Object.keys(q.distractor_explanations).length > 0 ? `
-          <div class="pt-2 border-t border-amber-200/60 text-xs text-stone-600 space-y-1">
+          <div class="pt-2 border-t border-stone-200 text-xs text-stone-600 space-y-1">
             <span class="font-semibold text-stone-800">Distractor Analysis:</span>
             ${Object.entries(q.distractor_explanations).map(([k, exp]) => `
               <div><strong>Option ${k}:</strong> ${escapeHtml(exp)}</div>
@@ -571,21 +578,21 @@ function renderCurrentQuestion() {
   const nextBtn = document.getElementById('next-q-btn');
 
   prevBtn.disabled = State.currentQuestionIndex === 0;
-  prevBtn.className = State.currentQuestionIndex === 0 
-    ? "px-4 py-2 rounded-lg text-xs font-medium text-stone-400 bg-stone-100 cursor-not-allowed"
+  prevBtn.className = State.currentQuestionIndex === 0
+    ? "px-4 py-2 rounded-lg text-xs font-medium text-stone-500 bg-stone-100 cursor-not-allowed"
     : "px-4 py-2 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition";
 
   if (State.currentQuestionIndex === totalQ - 1) {
     if (State.isReviewMode) {
-      nextBtn.innerHTML = `<span>Back to Results</span> <span>&rarr;</span>`;
-      nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+      nextBtn.innerHTML = `<span>Back to Results</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
     } else {
-      nextBtn.innerHTML = `<span>Finish & Review</span> <span>&rarr;</span>`;
-      nextBtn.className = "px-5 py-2 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+      nextBtn.innerHTML = `<span>Finish &amp; Review</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.className = "px-5 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5";
     }
   } else {
-    nextBtn.innerHTML = `<span>Next Question</span> <span>&rarr;</span>`;
-    nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition flex items-center space-x-1.5";
+    nextBtn.innerHTML = `<span>Next Question</span> <span aria-hidden="true">&rarr;</span>`;
+    nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
   }
 
   // Hide submit button in sidebar during review
@@ -729,7 +736,7 @@ function renderQuestionMatrix() {
       }
     } else {
       if (isCurrent) {
-        baseClasses += "ring-2 ring-amber-700 font-bold bg-amber-100 text-amber-900 ";
+        baseClasses += "ring-2 ring-brand-terracotta font-bold bg-brand-terracotta-tint text-brand-terracotta ";
       } else if (isAnswered) {
         baseClasses += "bg-stone-800 text-white font-medium ";
       } else {
@@ -746,7 +753,7 @@ function renderQuestionMatrix() {
     if (matrixContainer) {
       const btn = document.createElement('button');
       btn.onclick = () => goToQuestion(idx);
-      btn.className = "w-8 h-8 " + baseClasses;
+      btn.className = "w-9 h-9 " + baseClasses;
       btn.innerHTML = `${idx + 1}${flagBadge}`;
       matrixContainer.appendChild(btn);
     }
@@ -757,7 +764,7 @@ function renderQuestionMatrix() {
         goToQuestion(idx);
         toggleMobileMatrix(false);
       };
-      mobBtn.className = "w-10 h-10 min-h-[40px] text-sm " + baseClasses;
+      mobBtn.className = "w-11 h-11 min-h-[44px] text-sm " + baseClasses;
       mobBtn.innerHTML = `${idx + 1}${flagBadge}`;
       mobileContainer.appendChild(mobBtn);
     }
@@ -770,13 +777,26 @@ function toggleMobileMatrix(forceState) {
   const isHidden = modal.classList.contains('hidden');
   const shouldOpen = forceState !== undefined ? forceState : isHidden;
   if (shouldOpen) {
-    modal.classList.remove('hidden');
+    showModal(modal, modal.querySelector('[data-matrix-close]'));
     document.body.style.overflow = 'hidden';
     renderQuestionMatrix();
   } else {
-    modal.classList.add('hidden');
+    hideModal(modal);
     document.body.style.overflow = '';
   }
+}
+
+// Modal focus management: move focus in on open, restore it on close
+let lastFocusedEl = null;
+function showModal(modal, focusTarget) {
+  lastFocusedEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  modal.classList.remove('hidden');
+  if (focusTarget) focusTarget.focus();
+}
+function hideModal(modal) {
+  modal.classList.add('hidden');
+  if (lastFocusedEl && document.contains(lastFocusedEl)) lastFocusedEl.focus();
+  lastFocusedEl = null;
 }
 
 // Timer Logic
@@ -849,7 +869,7 @@ function openSubmitModal() {
   const flagged = State.flaggedQuestions.size;
 
   const modal = document.getElementById('submit-modal');
-  modal.classList.remove('hidden');
+  showModal(modal, modal.querySelector('[data-autofocus]'));
 
   document.getElementById('modal-answered-count').textContent = answered;
   document.getElementById('modal-unanswered-count').textContent = unanswered;
@@ -865,7 +885,7 @@ function openSubmitModal() {
 }
 
 function closeSubmitModal() {
-  document.getElementById('submit-modal').classList.add('hidden');
+  hideModal(document.getElementById('submit-modal'));
 }
 
 function finishExam() {
@@ -934,15 +954,15 @@ function renderResults(attemptId) {
   const scoreCard = document.getElementById('results-score-card');
   const isPass = attempt.is_passing;
 
-  scoreCard.className = `p-8 rounded-2xl border ${isPass ? 'bg-emerald-50/50 border-emerald-300' : 'bg-amber-50/50 border-amber-300'} shadow-sm space-y-6`;
+  scoreCard.className = `p-5 sm:p-8 rounded-2xl border ${isPass ? 'bg-emerald-50/50 border-emerald-300' : 'bg-amber-50/50 border-amber-300'} shadow-sm space-y-6`;
   scoreCard.innerHTML = `
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <span class="text-xs font-serif uppercase tracking-widest ${isPass ? 'text-emerald-800' : 'text-amber-800'} font-semibold">Official Score Report</span>
+        <span class="text-xs font-editorial uppercase tracking-widest ${isPass ? 'text-emerald-800' : 'text-amber-800'} font-semibold">Official Score Report</span>
         <h2 class="text-3xl font-editorial text-stone-900">${escapeHtml(attempt.exam_title)}</h2>
         <p class="text-xs text-stone-600 mt-1">Completed on ${new Date(attempt.date).toLocaleString()} · Duration: ${Math.floor((attempt.time_spent_seconds || 0) / 60)} minutes</p>
       </div>
-      <div class="px-5 py-2.5 rounded-xl font-mono text-center ${isPass ? 'bg-emerald-600 text-white shadow-md' : 'bg-amber-700 text-white shadow-md'}">
+      <div class="px-5 py-2.5 rounded-xl font-mono text-center ${isPass ? 'bg-emerald-700 text-white shadow-md' : 'bg-amber-700 text-white shadow-md'}">
         <div class="text-xs uppercase tracking-wider font-sans font-bold">${isPass ? 'PASSED' : 'NEEDS IMPROVEMENT'}</div>
         <div class="text-2xl font-bold">${attempt.scaled_score} / 1000</div>
         <div class="text-xs opacity-90">${attempt.percentage}% · Pass bar: 720</div>
@@ -954,10 +974,10 @@ function renderResults(attemptId) {
       <h3 class="text-sm font-semibold text-stone-900 font-sans">Domain-by-Domain Proficiency:</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         ${Object.values(attempt.domain_stats).map(d => `
-          <div class="p-3.5 rounded-xl bg-white border border-stone-200/90 shadow-2xs space-y-2">
-            <div class="flex items-center justify-between text-xs">
+          <div class="p-3.5 rounded-xl bg-white border border-stone-200/90 space-y-2">
+            <div class="flex items-center justify-between text-xs gap-2">
               <span class="font-medium text-stone-900">[${d.id}] ${escapeHtml(d.name)} (${d.weight}%)</span>
-              <span class="font-mono ${d.total === 0 ? 'text-stone-400' : (d.percentage >= 72 ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold')}">
+              <span class="font-mono ${d.total === 0 ? 'text-stone-500' : (d.percentage >= 72 ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold')}">
                 ${d.total === 0 ? 'Untested' : `${d.correct}/${d.total} (${d.percentage}%)`}
               </span>
             </div>
@@ -970,16 +990,16 @@ function renderResults(attemptId) {
     </div>
 
     <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex space-x-3">
-        <button data-action="review-attempt" data-attempt-id="${escapeHtml(attempt.id)}" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition">
-          Review Question Explanations &rarr;
+      <div class="flex flex-wrap gap-3">
+        <button data-action="review-attempt" data-attempt-id="${escapeHtml(attempt.id)}" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition">
+          Review Question Explanations <span aria-hidden="true">&rarr;</span>
         </button>
         <a href="#vault" class="px-4 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
           View Missed Questions Vault (${attempt.missed_questions.length})
         </a>
       </div>
       <a href="#dashboard" class="text-xs text-stone-600 hover:text-stone-900 font-medium">
-        &larr; Back to All Exams
+        <span aria-hidden="true">&larr;</span> Back to All Exams
       </a>
     </div>
   `;
@@ -999,15 +1019,15 @@ function renderGapsView() {
   const content = document.getElementById('gaps-content');
   content.innerHTML = `
     <!-- Top Summary Banner -->
-    <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <span class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">Diagnostic Engine</span>
-          <h2 class="text-2xl font-editorial text-stone-900">Lagging Areas & Misconception Analysis</h2>
+          <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Diagnostic Engine</span>
+          <h2 class="text-2xl font-editorial text-stone-900">Lagging Areas &amp; Misconception Analysis</h2>
           <p class="text-xs text-stone-600 mt-1">Identifies specific technical blindspots across your practice exams so you can study with surgical precision.</p>
         </div>
-        <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-1.5 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium shadow-2xs transition flex items-center space-x-1.5">
-          <span>📋</span>
+        <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
           <span>Copy mistakes.md</span>
         </button>
       </div>
@@ -1016,25 +1036,25 @@ function renderGapsView() {
       <div class="pt-4 border-t border-stone-200">
         <h3 class="text-sm font-semibold text-stone-900 mb-3">Domain Performance vs. 72% Passing Threshold:</h3>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs font-sans">
+          <table class="w-full text-left text-sm font-sans">
             <thead>
-              <tr class="border-b border-stone-200 text-stone-500 font-medium">
-                <th class="py-2">Domain</th>
-                <th class="py-2">Weight</th>
-                <th class="py-2">Questions Seen</th>
-                <th class="py-2">Accuracy</th>
+              <tr class="border-b border-stone-200 text-stone-600 font-medium text-xs uppercase tracking-wide">
+                <th class="py-2 pr-4">Domain</th>
+                <th class="py-2 pr-4">Weight</th>
+                <th class="py-2 pr-4">Questions Seen</th>
+                <th class="py-2 pr-4">Accuracy</th>
                 <th class="py-2">Status</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-stone-100">
               ${diagnostic.domain_rankings.map(d => `
                 <tr class="${d.is_lagging && d.total > 0 ? 'bg-amber-50/50' : ''}">
-                  <td class="py-2.5 font-medium text-stone-900">[${d.id}] ${escapeHtml(d.name)}</td>
-                  <td class="py-2.5 text-stone-600 font-mono">${d.weight}%</td>
-                  <td class="py-2.5 text-stone-600 font-mono">${d.total}</td>
-                  <td class="py-2.5 font-mono ${d.percentage >= 72 ? 'text-emerald-700 font-bold' : (d.total === 0 ? 'text-stone-400' : 'text-amber-800 font-bold')}">${d.total > 0 ? d.percentage + '%' : '–'}</td>
+                  <td class="py-2.5 pr-4 font-medium text-stone-900">[${d.id}] ${escapeHtml(d.name)}</td>
+                  <td class="py-2.5 pr-4 text-stone-600 font-mono">${d.weight}%</td>
+                  <td class="py-2.5 pr-4 text-stone-600 font-mono">${d.total}</td>
+                  <td class="py-2.5 pr-4 font-mono ${d.percentage >= 72 ? 'text-emerald-700 font-bold' : (d.total === 0 ? 'text-stone-500' : 'text-amber-800 font-bold')}">${d.total > 0 ? d.percentage + '%' : '–'}</td>
                   <td class="py-2.5">
-                    ${d.total === 0 ? '<span class="text-stone-400">Untested</span>' : (d.percentage >= 72 ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">Pass</span>' : '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-medium">Lagging Focus</span>')}
+                    ${d.total === 0 ? '<span class="text-stone-500">Untested</span>' : (d.percentage >= 72 ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">Pass</span>' : '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-medium">Lagging Focus</span>')}
                   </td>
                 </tr>
               `).join('')}
@@ -1050,19 +1070,19 @@ function renderGapsView() {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         ${diagnostic.top_topic_gaps.map(item => `
           <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-2">
               <h4 class="text-base font-semibold text-stone-900">${escapeHtml(item.topic)}</h4>
-              <span class="px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-100 text-amber-900 border border-amber-200">${item.count} misses</span>
+              <span class="px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-100 text-amber-900 border border-amber-200 whitespace-nowrap">${item.count} misses</span>
             </div>
             ${item.guide ? `
-              <p class="text-xs text-stone-700 leading-relaxed font-sans">${escapeHtml(item.guide.summary)}</p>
+              <p class="text-sm text-stone-700 leading-relaxed font-sans">${escapeHtml(item.guide.summary)}</p>
               <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-amber-900">
                 <strong>Watch out for:</strong> ${escapeHtml(item.guide.traps)}
               </div>
-            ` : '<p class="text-xs text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
+            ` : '<p class="text-sm text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
             <div class="pt-2 flex justify-end">
-              <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-amber-800 hover:text-amber-900">
-                Drill Missed Questions in this Topic &rarr;
+              <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep">
+                Drill Missed Questions in this Topic <span aria-hidden="true">&rarr;</span>
               </button>
             </div>
           </div>
@@ -1084,20 +1104,20 @@ function renderVaultView() {
 
   content.innerHTML = `
     <!-- Top Header -->
-    <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <span class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">Spaced Repetition & Revision</span>
+          <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Spaced Repetition &amp; Revision</span>
           <h2 class="text-2xl font-editorial text-stone-900">Missed Questions Vault</h2>
           <p class="text-xs text-stone-600 mt-1">Every question you missed across all exam attempts is preserved here for focused revision.</p>
         </div>
         <div class="flex flex-wrap gap-2">
           ${missedVault.length > 0 ? `
-            <button onclick="window.App.startRemediationQuiz()" class="px-4 py-2 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold shadow transition">
-              🎯 Start Remediation Quiz (${missedVault.length}) &rarr;
+            <button onclick="window.App.startRemediationQuiz()" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition">
+              Start Remediation Quiz (${missedVault.length}) <span aria-hidden="true">&rarr;</span>
             </button>
           ` : ''}
-          <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-1.5 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
+          <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
             Export to mistakes.md
           </button>
         </div>
@@ -1107,31 +1127,30 @@ function renderVaultView() {
     <!-- Questions List -->
     <div class="space-y-4">
       ${missedVault.length === 0 ? `
-        <div class="p-12 text-center rounded-2xl bg-white border border-stone-200 text-stone-500 space-y-3">
-          <div class="text-3xl">🎉</div>
-          <h4 class="text-lg font-editorial text-stone-900">Your Vault is Empty!</h4>
-          <p class="text-xs text-stone-600 max-w-md mx-auto">Take a mock exam from the dashboard. Any questions you answer incorrectly will automatically appear here for targeted review.</p>
-          <div class="pt-2">
-            <a href="#dashboard" class="px-4 py-2 rounded-lg bg-stone-900 text-white text-xs font-semibold shadow">Go to Mock Exams &rarr;</a>
+        <div class="p-6 sm:p-10 rounded-2xl bg-white border border-stone-200 space-y-3">
+          <h3 class="text-xl font-editorial text-stone-900">Nothing in the vault yet.</h3>
+          <p class="text-sm text-stone-600 leading-relaxed max-w-xl">Take a mock exam from the dashboard. Any question you answer incorrectly is filed here automatically, so your revision time goes to exactly the items you got wrong.</p>
+          <div class="pt-1">
+            <a href="#dashboard" class="inline-block px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition">Browse Mock Exams <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       ` : missedVault.map(q => `
-        <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
-          <div class="flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-2">
-              <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold bg-amber-100 text-amber-900 border border-amber-200">[${q.domain_id}] ${escapeHtml(q.domain_name)}</span>
+        <div class="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md font-mono font-semibold bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">[${q.domain_id}] ${escapeHtml(q.domain_name)}</span>
               <span class="text-stone-500 font-mono">${escapeHtml(q.topic || 'General')}</span>
             </div>
-            <div class="flex items-center space-x-2">
-              <span class="text-xs text-stone-400 font-mono">Missed ${q.miss_count || 1} time${(q.miss_count || 1) > 1 ? 's' : ''}</span>
-              <button data-action="remove-vault" data-question-id="${escapeHtml(q.id)}" class="text-stone-400 hover:text-stone-600 text-xs font-mono" title="Remove from vault">✕</button>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-stone-500 font-mono">Missed ${q.miss_count || 1} time${(q.miss_count || 1) > 1 ? 's' : ''}</span>
+              <button data-action="remove-vault" data-question-id="${escapeHtml(q.id)}" class="text-stone-500 hover:text-stone-800 text-xs font-mono" aria-label="Remove question from vault" title="Remove from vault">✕</button>
             </div>
           </div>
 
           <p class="text-base font-editorial text-stone-900 leading-relaxed font-normal">${escapeHtml(q.prompt)}</p>
 
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80 text-xs space-y-2">
-            <div class="flex items-center space-x-2">
+          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80 text-sm space-y-2">
+            <div class="flex items-center gap-2">
               <span class="font-bold text-emerald-800">Correct Answer:</span>
               <span class="font-mono bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded font-semibold">${q.correct_answers.join(', ')}</span>
             </div>
@@ -1154,10 +1173,10 @@ function renderSourcesView() {
   const content = document.getElementById('sources-content');
 
   content.innerHTML = `
-    <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
-      <span class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">Attribution & Open Source Provenance</span>
-      <h2 class="text-2xl font-editorial text-stone-900">Question Bank Provenance & Attribution</h2>
-      <p class="text-xs text-stone-600 leading-relaxed max-w-3xl">
+    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+      <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Open Source Provenance</span>
+      <h2 class="text-2xl font-editorial text-stone-900">Question Bank Provenance &amp; Attribution</h2>
+      <p class="text-sm text-stone-600 leading-relaxed max-w-3xl">
         This platform synthesizes 530 authentic scenario questions balanced into 10 full 53-question exams. All questions are sourced from open developer study repositories, mapped to the official CCDV-F domain blueprint weights, and verified for accuracy.
       </p>
 
@@ -1166,15 +1185,15 @@ function renderSourcesView() {
           const safeUrl = (src.url && (src.url.startsWith('https://') || src.url.startsWith('http://'))) ? src.url : '#';
           return `
           <div class="p-5 rounded-xl bg-stone-50 border border-stone-200/90 space-y-2">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-2">
               <h4 class="text-sm font-semibold text-stone-900 font-mono">${escapeHtml(src.name)}</h4>
-              <span class="px-2 py-0.5 rounded-full text-xs font-mono bg-stone-200 text-stone-700 font-medium">${src.contributed_questions} questions</span>
+              <span class="px-2 py-0.5 rounded-full text-xs font-mono bg-stone-200 text-stone-700 font-medium whitespace-nowrap">${src.contributed_questions} questions</span>
             </div>
-            <p class="text-xs text-stone-600 font-sans leading-relaxed">${escapeHtml(src.description)}</p>
+            <p class="text-sm text-stone-600 font-sans leading-relaxed">${escapeHtml(src.description)}</p>
             <div class="pt-2">
-              <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-amber-800 hover:text-amber-900 underline flex items-center space-x-1">
+              <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-brand-terracotta hover:text-brand-terracotta-deep underline underline-offset-2 flex items-center gap-1">
                 <span>View on GitHub</span>
-                <span>&rarr;</span>
+                <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>
@@ -1200,7 +1219,7 @@ function escapeHtml(str) {
 function formatPromptText(text) {
   if (!text) return '';
   let formatted = escapeHtml(text);
-  formatted = formatted.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-stone-100 text-amber-900 text-xs font-mono font-medium">$1</code>');
+  formatted = formatted.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-stone-100 text-stone-900 text-xs font-mono font-medium">$1</code>');
   return formatted;
 }
 
