@@ -81,13 +81,51 @@ def bundle():
         all_questions.extend(questions)
         print(f"  • Validated & Loaded Exam #{eid}: '{exam_data.get('title')}' (53 questions)")
 
-    # Load or generate sources metadata
+    # Load and synchronize sources metadata
     sources_meta_path = os.path.join(DATA_DIR, "sources_metadata.json")
     if os.path.exists(sources_meta_path):
         with open(sources_meta_path, "r", encoding="utf-8") as f:
             sources_meta = json.load(f)
     else:
         sources_meta = {}
+
+    sources_meta["total_questions"] = len(all_questions)
+    sources_meta["exams_count"] = len(all_exams)
+    sources_meta["questions_per_exam"] = 53
+
+    # Ensure Hard Tier source is registered if exams 11/12 exist
+    hard_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) >= 11)
+    if hard_tier_count > 0:
+        sources_list = sources_meta.get("sources", [])
+        hard_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)"
+        existing_hard = next((s for s in sources_list if s.get("name") == hard_source_name), None)
+        if existing_hard:
+            existing_hard["contributed_questions"] = hard_tier_count
+        else:
+            sources_list.append({
+                "name": hard_source_name,
+                "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
+                "description": "Authored from scratch specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
+                "contributed_questions": hard_tier_count
+            })
+        sources_meta["sources"] = sources_list
+
+    # Update complete provenance array for all questions
+    provenance = []
+    for q in all_questions:
+        provenance.append({
+            "id": q.get("id"),
+            "exam": q.get("exam_id"),
+            "domain": q.get("domain_id"),
+            "source_repo": q.get("source_repo"),
+            "source_file": q.get("source_file"),
+            "source_id": str(q.get("source_id", ""))
+        })
+    sources_meta["provenance"] = provenance
+
+    with open(sources_meta_path, "w", encoding="utf-8") as f:
+        json.dump(sources_meta, f, indent=2, ensure_ascii=False)
+    print(f"✔ Synchronized sources metadata: {sources_meta_path}")
 
     # Write data/all_questions.json
     all_q_path = os.path.join(DATA_DIR, "all_questions.json")

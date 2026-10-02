@@ -361,6 +361,7 @@ function renderDashboard() {
   State.allExams.forEach(exam => {
     const bestAttempt = Storage.getExamBestScore(exam.exam_id);
     const formNum = String(exam.exam_id).padStart(2, '0');
+    const isHardTier = exam.exam_id >= 11;
 
     let statusBadge = `<span class="text-xs font-mono text-stone-500">Untested</span>`;
     if (bestAttempt) {
@@ -377,8 +378,11 @@ function renderDashboard() {
     row.innerHTML = `
       <span class="hidden sm:block font-editorial text-2xl leading-none text-stone-400 w-9 text-right shrink-0" aria-hidden="true">${formNum}</span>
       <div class="flex-1 min-w-[10rem]">
-        <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
-        <p class="text-xs font-mono text-stone-500 mt-0.5">53 questions · 120 minutes</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
+          ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier · Scratch Authored</span>' : ''}
+        </div>
+        <p class="text-xs font-mono text-stone-500 mt-0.5">${isHardTier ? '53 questions · 120 min · High-difficulty subtle distractors (not from external mock dumps)' : '53 questions · 120 minutes'}</p>
       </div>
       <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-2.5">
         ${bestAttempt ? `
@@ -523,8 +527,18 @@ function renderCurrentQuestion() {
 
   // Header info
   const modeSuffix = State.isReviewMode ? ' (Review Mode)' : (State.isStudyMode ? ' (Study Mode)' : '');
+  const isHardTier = exam.exam_id >= 11;
   document.getElementById('exam-title-header').textContent = exam.title + modeSuffix;
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
+
+  const hardBanner = document.getElementById('hard-tier-banner');
+  if (hardBanner) {
+    if (isHardTier) {
+      hardBanner.classList.remove('hidden');
+    } else {
+      hardBanner.classList.add('hidden');
+    }
+  }
   
   // Question Metadata Tags (Domain & Topic): visible in Study Mode and Review Mode, hidden during timed Exam Mode
   const tagsContainer = document.getElementById('question-tags-container');

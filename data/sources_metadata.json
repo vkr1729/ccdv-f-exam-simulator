@@ -1,6 +1,6 @@
 {
-  "total_questions": 530,
-  "exams_count": 10,
+  "total_questions": 636,
+  "exams_count": 12,
   "questions_per_exam": 53,
   "sources": [
     {
@@ -32,6 +32,12 @@
       "url": "https://github.com/srinipusuluri/CCDV-F-SET1",
       "description": "9 full practice exams with detailed explanations and distractor reasoning.",
       "contributed_questions": 149
+    },
+    {
+      "name": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
+      "description": "Authored from scratch specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
+      "contributed_questions": 106
     }
   ],
   "provenance": [
@@ -4274,6 +4280,854 @@
       "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
       "source_file": "question-bank.json",
       "source_id": "developer-foundations-practice-10"
+    },
+    {
+      "id": "CCDV-E11-Q01",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "1"
+    },
+    {
+      "id": "CCDV-E11-Q02",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "2"
+    },
+    {
+      "id": "CCDV-E11-Q03",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "3"
+    },
+    {
+      "id": "CCDV-E11-Q04",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "4"
+    },
+    {
+      "id": "CCDV-E11-Q05",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "5"
+    },
+    {
+      "id": "CCDV-E11-Q06",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "6"
+    },
+    {
+      "id": "CCDV-E11-Q07",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "7"
+    },
+    {
+      "id": "CCDV-E11-Q08",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "8"
+    },
+    {
+      "id": "CCDV-E11-Q09",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "9"
+    },
+    {
+      "id": "CCDV-E11-Q10",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "10"
+    },
+    {
+      "id": "CCDV-E11-Q11",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "11"
+    },
+    {
+      "id": "CCDV-E11-Q12",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "12"
+    },
+    {
+      "id": "CCDV-E11-Q13",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "13"
+    },
+    {
+      "id": "CCDV-E11-Q14",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "14"
+    },
+    {
+      "id": "CCDV-E11-Q15",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "15"
+    },
+    {
+      "id": "CCDV-E11-Q16",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "16"
+    },
+    {
+      "id": "CCDV-E11-Q17",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "17"
+    },
+    {
+      "id": "CCDV-E11-Q18",
+      "exam": 11,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "18"
+    },
+    {
+      "id": "CCDV-E11-Q19",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "19"
+    },
+    {
+      "id": "CCDV-E11-Q20",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "20"
+    },
+    {
+      "id": "CCDV-E11-Q21",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "21"
+    },
+    {
+      "id": "CCDV-E11-Q22",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "22"
+    },
+    {
+      "id": "CCDV-E11-Q23",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "23"
+    },
+    {
+      "id": "CCDV-E11-Q24",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "24"
+    },
+    {
+      "id": "CCDV-E11-Q25",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "25"
+    },
+    {
+      "id": "CCDV-E11-Q26",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "26"
+    },
+    {
+      "id": "CCDV-E11-Q27",
+      "exam": 11,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "27"
+    },
+    {
+      "id": "CCDV-E11-Q28",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "28"
+    },
+    {
+      "id": "CCDV-E11-Q29",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "29"
+    },
+    {
+      "id": "CCDV-E11-Q30",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "30"
+    },
+    {
+      "id": "CCDV-E11-Q31",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "31"
+    },
+    {
+      "id": "CCDV-E11-Q32",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "32"
+    },
+    {
+      "id": "CCDV-E11-Q33",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "33"
+    },
+    {
+      "id": "CCDV-E11-Q34",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "34"
+    },
+    {
+      "id": "CCDV-E11-Q35",
+      "exam": 11,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "35"
+    },
+    {
+      "id": "CCDV-E11-Q36",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "36"
+    },
+    {
+      "id": "CCDV-E11-Q37",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "37"
+    },
+    {
+      "id": "CCDV-E11-Q38",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "38"
+    },
+    {
+      "id": "CCDV-E11-Q39",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "39"
+    },
+    {
+      "id": "CCDV-E11-Q40",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "40"
+    },
+    {
+      "id": "CCDV-E11-Q41",
+      "exam": 11,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "41"
+    },
+    {
+      "id": "CCDV-E11-Q42",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "42"
+    },
+    {
+      "id": "CCDV-E11-Q43",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "43"
+    },
+    {
+      "id": "CCDV-E11-Q44",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "44"
+    },
+    {
+      "id": "CCDV-E11-Q45",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "45"
+    },
+    {
+      "id": "CCDV-E11-Q46",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "46"
+    },
+    {
+      "id": "CCDV-E11-Q47",
+      "exam": 11,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "47"
+    },
+    {
+      "id": "CCDV-E11-Q48",
+      "exam": 11,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "48"
+    },
+    {
+      "id": "CCDV-E11-Q49",
+      "exam": 11,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "49"
+    },
+    {
+      "id": "CCDV-E11-Q50",
+      "exam": 11,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "50"
+    },
+    {
+      "id": "CCDV-E11-Q51",
+      "exam": 11,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "51"
+    },
+    {
+      "id": "CCDV-E11-Q52",
+      "exam": 11,
+      "domain": "D7",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "52"
+    },
+    {
+      "id": "CCDV-E11-Q53",
+      "exam": 11,
+      "domain": "D8",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-11.json",
+      "source_id": "53"
+    },
+    {
+      "id": "CCDV-E12-Q01",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "1"
+    },
+    {
+      "id": "CCDV-E12-Q02",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "2"
+    },
+    {
+      "id": "CCDV-E12-Q03",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "3"
+    },
+    {
+      "id": "CCDV-E12-Q04",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "4"
+    },
+    {
+      "id": "CCDV-E12-Q05",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "5"
+    },
+    {
+      "id": "CCDV-E12-Q06",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "6"
+    },
+    {
+      "id": "CCDV-E12-Q07",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "7"
+    },
+    {
+      "id": "CCDV-E12-Q08",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "8"
+    },
+    {
+      "id": "CCDV-E12-Q09",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "9"
+    },
+    {
+      "id": "CCDV-E12-Q10",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "10"
+    },
+    {
+      "id": "CCDV-E12-Q11",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "11"
+    },
+    {
+      "id": "CCDV-E12-Q12",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "12"
+    },
+    {
+      "id": "CCDV-E12-Q13",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "13"
+    },
+    {
+      "id": "CCDV-E12-Q14",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "14"
+    },
+    {
+      "id": "CCDV-E12-Q15",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "15"
+    },
+    {
+      "id": "CCDV-E12-Q16",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "16"
+    },
+    {
+      "id": "CCDV-E12-Q17",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "17"
+    },
+    {
+      "id": "CCDV-E12-Q18",
+      "exam": 12,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "18"
+    },
+    {
+      "id": "CCDV-E12-Q19",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "19"
+    },
+    {
+      "id": "CCDV-E12-Q20",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "20"
+    },
+    {
+      "id": "CCDV-E12-Q21",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "21"
+    },
+    {
+      "id": "CCDV-E12-Q22",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "22"
+    },
+    {
+      "id": "CCDV-E12-Q23",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "23"
+    },
+    {
+      "id": "CCDV-E12-Q24",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "24"
+    },
+    {
+      "id": "CCDV-E12-Q25",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "25"
+    },
+    {
+      "id": "CCDV-E12-Q26",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "26"
+    },
+    {
+      "id": "CCDV-E12-Q27",
+      "exam": 12,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "27"
+    },
+    {
+      "id": "CCDV-E12-Q28",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "28"
+    },
+    {
+      "id": "CCDV-E12-Q29",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "29"
+    },
+    {
+      "id": "CCDV-E12-Q30",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "30"
+    },
+    {
+      "id": "CCDV-E12-Q31",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "31"
+    },
+    {
+      "id": "CCDV-E12-Q32",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "32"
+    },
+    {
+      "id": "CCDV-E12-Q33",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "33"
+    },
+    {
+      "id": "CCDV-E12-Q34",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "34"
+    },
+    {
+      "id": "CCDV-E12-Q35",
+      "exam": 12,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "35"
+    },
+    {
+      "id": "CCDV-E12-Q36",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "36"
+    },
+    {
+      "id": "CCDV-E12-Q37",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "37"
+    },
+    {
+      "id": "CCDV-E12-Q38",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "38"
+    },
+    {
+      "id": "CCDV-E12-Q39",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "39"
+    },
+    {
+      "id": "CCDV-E12-Q40",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "40"
+    },
+    {
+      "id": "CCDV-E12-Q41",
+      "exam": 12,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "41"
+    },
+    {
+      "id": "CCDV-E12-Q42",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "42"
+    },
+    {
+      "id": "CCDV-E12-Q43",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "43"
+    },
+    {
+      "id": "CCDV-E12-Q44",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "44"
+    },
+    {
+      "id": "CCDV-E12-Q45",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "45"
+    },
+    {
+      "id": "CCDV-E12-Q46",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "46"
+    },
+    {
+      "id": "CCDV-E12-Q47",
+      "exam": 12,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "47"
+    },
+    {
+      "id": "CCDV-E12-Q48",
+      "exam": 12,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "48"
+    },
+    {
+      "id": "CCDV-E12-Q49",
+      "exam": 12,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "49"
+    },
+    {
+      "id": "CCDV-E12-Q50",
+      "exam": 12,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "50"
+    },
+    {
+      "id": "CCDV-E12-Q51",
+      "exam": 12,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "51"
+    },
+    {
+      "id": "CCDV-E12-Q52",
+      "exam": 12,
+      "domain": "D7",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "52"
+    },
+    {
+      "id": "CCDV-E12-Q53",
+      "exam": 12,
+      "domain": "D8",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
+      "source_file": "hard-tier-exam-12.json",
+      "source_id": "53"
     }
   ]
 }

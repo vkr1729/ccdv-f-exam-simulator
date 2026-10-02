@@ -120,7 +120,7 @@
       <!-- Primary Nav Tabs (own scrollable row on small screens) -->
       <nav aria-label="Primary" class="order-last sm:order-none w-full sm:w-auto flex items-center flex-nowrap gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200 overflow-x-auto no-scrollbar">
         <a href="#dashboard" data-route="dashboard" aria-current="page" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">
-          Exams (10)
+          Exams (12)
         </a>
         <a href="#gaps" data-route="gaps" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
           Diagnostics
@@ -216,6 +216,12 @@
             <span class="hidden sm:inline">Save &amp; Exit</span>
           </button>
         </div>
+      </div>
+
+      <!-- Hard Tier Notice Banner (visible only for Exam 11 and 12) -->
+      <div id="hard-tier-banner" class="hidden p-4 rounded-xl bg-amber-50/80 border border-amber-300 text-amber-950 text-xs flex items-center gap-3">
+        <span class="px-2 py-0.5 rounded font-mono font-bold bg-amber-200 text-amber-900 shrink-0">Hard Tier</span>
+        <p>This exam is authored from scratch against official Anthropic blueprints with elevated distractor plausibility and subtle edge cases. It is not part of external public mock dumps.</p>
       </div>
 
       <!-- Main Layout: 3 cols Question + 1 col Navigator -->
