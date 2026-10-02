@@ -378,7 +378,7 @@ function renderDashboard() {
       <span class="hidden sm:block font-editorial text-2xl leading-none text-stone-400 w-9 text-right shrink-0" aria-hidden="true">${formNum}</span>
       <div class="flex-1 min-w-[10rem]">
         <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
-        <p class="text-xs font-mono text-stone-500 mt-0.5">Form ${formNum} · 53 questions · 120 minutes</p>
+        <p class="text-xs font-mono text-stone-500 mt-0.5">53 questions · 120 minutes</p>
       </div>
       <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-2.5">
         ${bestAttempt ? `
