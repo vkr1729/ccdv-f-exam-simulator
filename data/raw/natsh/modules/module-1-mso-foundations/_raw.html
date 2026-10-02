@@ -1,0 +1,995 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSO Foundations: Developer Module 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+/* ---- Brand tokens ---- */
+:root {
+  --c-bg: #faf9f5; --c-surface: #e8e6dc; --c-mid-gray: #b0aea5;
+  --c-ink: #141413; --c-ink-muted: #b0aea5; --c-white: #ffffff;
+  --c-primary: #d97757; --c-primary-hover: #bd5d3a;
+  --c-accent-blue: #6a9bcc; --c-accent-green: #788c5d;
+  --c-danger: #c60f13;
+  --font-heading: "Poppins", Arial, sans-serif;
+  --font-body: "Lora", Georgia, serif;
+  --c-ink-mid: #5C5147;
+  --c-primary-tint: #F4DDD2; --c-blue-tint: #E0EAF1;
+  --c-green-tint: #E3ECDE; --c-danger-tint: #F4DAD6;
+  --c-border: rgba(0,0,0,0.1);
+  --font-mono: 'JetBrains Mono','SF Mono',Consolas,monospace;
+  --content-max: 760px; --sidebar-w: 280px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow:hidden;height:100%;}
+body{background:var(--c-bg);color:var(--c-ink);font-family:var(--font-body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+
+/* ---- SIDEBAR ---- */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--c-surface);border-right:1px solid rgba(0,0,0,0.08);display:flex;flex-direction:column;z-index:40;}
+.sidebar-head{padding:22px 22px 14px;border-bottom:1px solid rgba(0,0,0,0.08);}
+.sidebar-eyebrow{font-family:var(--font-heading);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--c-primary);margin:0 0 6px;}
+.sidebar-title{font-family:var(--font-body);font-weight:600;font-size:18px;line-height:1.25;margin:0;color:var(--c-ink);}
+.sidebar-nav{flex:1;overflow-y:auto;padding:12px 0;}
+.nav-section{padding:0 12px;margin-bottom:2px;}
+.nav-section-btn{display:flex;align-items:baseline;gap:8px;width:100%;background:none;border:none;text-align:left;cursor:pointer;padding:8px 10px;border-radius:8px;color:var(--c-ink);font-family:var(--font-heading);font-size:13px;font-weight:500;}
+.nav-section-btn:hover{background:rgba(0,0,0,0.05);}
+.nav-section-btn .num{font-family:var(--font-heading);font-size:10px;color:var(--c-ink-muted);}
+.nav-section-btn.locked{opacity:0.4;cursor:not-allowed;}
+.sub-list{list-style:none;margin:2px 0 6px;padding:0 0 0 30px;}
+.sub-item{display:flex;align-items:center;gap:7px;cursor:pointer;padding:5px 8px;border-radius:6px;font-size:12px;font-family:var(--font-heading);color:var(--c-ink-mid);}
+.sub-item:hover{background:rgba(0,0,0,0.05);}
+.sub-item.active{background:var(--c-primary-tint);color:var(--c-primary-hover);font-weight:600;}
+.sub-item.locked{opacity:0.4;cursor:not-allowed;pointer-events:none;}
+.sub-item .dot{width:7px;height:7px;border-radius:50%;flex:none;border:1.5px solid var(--c-ink-muted);background:transparent;}
+.sub-item.done .dot{background:var(--c-accent-green);border-color:var(--c-accent-green);}
+.sub-item.skipped .dot{background:transparent;border-color:#d97706;border-style:dashed;}
+.sub-item.active .dot{border-color:var(--c-primary);}
+.sidebar-foot{padding:14px 18px;border-top:1px solid rgba(0,0,0,0.08);}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--font-heading);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-ink-mid);margin-bottom:6px;}
+.progress-track{height:6px;border-radius:3px;background:rgba(0,0,0,0.1);overflow:hidden;}
+.progress-fill{height:100%;width:0;background:var(--c-primary);transition:width 0.4s ease;}
+.reset-btn{margin-top:12px;width:100%;background:none;border:1px solid rgba(0,0,0,0.15);border-radius:8px;padding:7px;cursor:pointer;font-family:var(--font-heading);font-size:11px;color:var(--c-ink-mid);}
+.reset-btn:hover{background:rgba(0,0,0,0.05);}
+
+/* ---- TOPBAR (mobile) ---- */
+.topbar{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:var(--c-surface);border-bottom:1px solid rgba(0,0,0,0.08);align-items:center;padding:0 16px;z-index:50;gap:12px;}
+.topbar-title{font-family:var(--font-body);font-weight:600;font-size:14px;}
+.menu-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--c-ink);}
+
+/* ---- MAIN ---- */
+main{margin-left:var(--sidebar-w);padding:56px 28px 120px;height:100vh;overflow-y:auto;box-sizing:border-box;}
+.screen{display:none;max-width:var(--content-max);margin:0 auto;}
+.screen.active{display:block;animation:fade 0.35s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.screen-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--c-ink-mid);margin-bottom:18px;}
+.screen-title{font-family:var(--font-body);font-weight:500;font-size:44px;line-height:1.1;letter-spacing:-0.01em;margin:0 0 18px;}
+.section-h{font-family:var(--font-body);font-weight:600;font-size:25px;line-height:1.2;margin:38px 0 14px;}
+.sub-h{font-family:var(--font-heading);font-weight:600;font-size:16px;margin:26px 0 10px;color:var(--c-ink);}
+.lede{font-family:var(--font-body);font-style:italic;font-weight:400;font-size:22px;line-height:1.4;color:var(--c-ink-mid);margin:0 0 24px;}
+p{margin:0 0 16px;}
+
+/* ---- TAGS ---- */
+.tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-heading);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500;padding:4px 9px;border-radius:20px;}
+.tag-teaching{color:var(--c-accent-green);background:var(--c-green-tint);}
+.tag-checkpoint{color:var(--c-accent-blue);background:var(--c-blue-tint);}
+.tag-exercise{color:var(--c-primary-hover);background:var(--c-primary-tint);}
+.tag-quiz{color:#a15c00;background:#fbe9cf;}
+.tag-module{color:var(--c-ink-mid);background:rgba(0,0,0,0.06);}
+.tag-scenario{color:var(--c-accent-green);background:var(--c-green-tint);}
+.tag-failure{color:#a1341c;background:#f3ddd6;}
+.tag-cumulative{color:var(--c-primary-hover);background:var(--c-primary-tint);}
+
+/* ---- TOOLTIP TERM ---- */
+.term{position:relative;border-bottom:1.5px dotted var(--c-primary);cursor:help;color:inherit;font-style:inherit;}
+.term:focus{outline:2px solid var(--c-primary);outline-offset:2px;border-radius:2px;}
+.term::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:var(--c-ink);color:var(--c-bg);font-family:var(--font-body);font-style:normal;font-weight:400;font-size:13px;line-height:1.45;letter-spacing:0;padding:10px 13px;border-radius:8px;width:max-content;max-width:320px;white-space:normal;text-align:left;box-shadow:0 6px 20px rgba(0,0,0,0.22);opacity:0;visibility:hidden;transition:opacity 0.16s ease;z-index:60;pointer-events:none;}
+.term::before{content:'';position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--c-ink);opacity:0;visibility:hidden;transition:opacity 0.16s ease;z-index:60;}
+.term:hover::after,.term:focus::after,.term:hover::before,.term:focus::before{opacity:1;visibility:visible;}
+
+/* ---- OBJECTIVE LIST ---- */
+.objective-list{list-style:none;margin:0 0 10px;padding:0;}
+.objective-list li{position:relative;padding:14px 16px 14px 50px;margin-bottom:10px;background:var(--c-white);border:1px solid rgba(0,0,0,0.08);border-radius:12px;line-height:1.45;}
+.objective-list li .lo-num{position:absolute;left:14px;top:14px;width:24px;height:24px;border-radius:6px;background:var(--c-primary-tint);color:var(--c-primary-hover);font-family:var(--font-heading);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;}
+
+/* ---- SCENARIO / CALLOUT / PANEL ---- */
+.scenario{background:var(--c-blue-tint);border:1px solid var(--c-accent-blue);border-radius:12px;padding:18px 22px;margin:22px 0;}
+.scenario .scenario-label{font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--c-ink-mid);margin-bottom:8px;font-weight:500;}
+.callout{background:var(--c-green-tint);border:1px solid var(--c-accent-green);border-radius:12px;padding:16px 20px;margin:20px 0;}
+.callout.callout-neutral{background:var(--c-surface);border-color:var(--c-mid-gray);}
+.callout.callout-failure{background:var(--c-danger-tint);border-color:var(--c-danger);}
+.callout>p,.scenario>p,.panel>p{margin:0;}
+.callout>p+p,.scenario>p+p,.panel>p+p{margin-top:10px;}
+.callout-label{font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;color:var(--c-accent-green);}
+.callout.callout-neutral .callout-label{color:var(--c-ink-mid);}
+.callout.callout-failure .callout-label{color:#a1341c;}
+.panel{background:var(--c-white);border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:22px;margin:20px 0;}
+
+/* ---- TABLES ---- */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0;}
+.dtable{width:100%;border-collapse:collapse;margin:0;font-size:14.5px;}
+.dtable th,.dtable td{text-align:left;padding:11px 13px;border:1px solid rgba(0,0,0,0.1);vertical-align:top;}
+.dtable th{font-family:var(--font-heading);font-weight:600;font-size:12px;letter-spacing:0.03em;background:var(--c-surface);}
+
+/* ---- CODE BLOCKS (elearning-code-block skill) ---- */
+.codeblock{font-family:'Lora',Georgia,serif;font-size:14px;line-height:1.7;background:#D9D9D9;color:#000000;padding:16px 20px;border-radius:6px;margin:16px 0;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;-webkit-overflow-scrolling:touch;}
+.codeblock .kw{color:#7030A0;}
+.codeblock .fn{color:#0070C0;}
+.codeblock .str{color:#3A7C22;}
+.codeblock .tf{color:#008374;}
+.codeblock .cm{color:#747474;}
+.codeblock .er{color:#80340D;}
+.codeblock .lbl{color:#7030A0;}
+.code-caption{font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--c-ink-mid);margin:16px 0 -4px;}
+
+/* ---- TABS (USI) ---- */
+.tabs{margin:20px 0;}
+.tab-strip{display:flex;flex-wrap:wrap;gap:6px;border-bottom:2px solid var(--c-mid-gray);margin-bottom:0;}
+.tab-btn{font-family:var(--font-heading);font-size:13px;font-weight:500;padding:10px 16px;border:none;background:none;cursor:pointer;color:var(--c-ink-mid);border-bottom:2px solid transparent;margin-bottom:-2px;border-radius:8px 8px 0 0;}
+.tab-btn:hover{background:rgba(0,0,0,0.04);}
+.tab-btn.active{color:var(--c-primary-hover);border-bottom-color:var(--c-primary);font-weight:600;}
+.tab-panel{display:none;background:var(--c-white);border:1px solid rgba(0,0,0,0.1);border-top:none;border-radius:0 0 12px 12px;padding:18px 20px;}
+.tab-panel.active{display:block;animation:fade 0.3s ease;}
+.tab-panel p:last-child{margin-bottom:0;}
+
+/* ---- ROLLOVER (USI, cause -> consequence) ---- */
+.rollover-list{display:flex;flex-direction:column;gap:10px;margin:20px 0;}
+.rollover{background:var(--c-white);border:1.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:14px 18px;cursor:default;transition:all 0.2s ease;}
+.rollover:hover,.rollover:focus-within{border-color:var(--c-primary);box-shadow:0 6px 18px rgba(20,20,19,0.07);}
+.rollover .ro-cause{font-family:var(--font-body);font-weight:600;font-size:16px;color:var(--c-ink);display:flex;align-items:center;gap:8px;}
+.rollover .ro-cause::after{content:'\2192 hover for effect';margin-left:auto;font-family:var(--font-mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:var(--c-ink-muted);font-weight:400;}
+.rollover .ro-effect{max-height:0;overflow:hidden;opacity:0;transition:max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;font-size:14.5px;line-height:1.55;color:var(--c-ink-mid);margin:0;}
+.rollover:hover .ro-effect,.rollover:focus-within .ro-effect{max-height:300px;opacity:1;margin-top:10px;}
+.rollover:hover .ro-cause::after,.rollover:focus-within .ro-cause::after{content:'';}
+
+/* ---- MCQ / QUIZ ---- */
+.quiz-q{background:var(--c-white);border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:18px 20px;margin-bottom:16px;}
+.quiz-q-text{font-size:15px;font-weight:500;margin-bottom:14px;line-height:1.5;}
+.quiz-q-num{font-family:var(--font-heading);font-size:10px;color:var(--c-primary);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.mc-opts{display:flex;flex-direction:column;gap:10px;margin:14px 0;}
+.mc-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;cursor:pointer;transition:all .15s;background:var(--c-white);}
+.mc-opt:hover{border-color:var(--c-primary);background:var(--c-primary-tint);}
+.mc-opt.selected{border-color:var(--c-primary);background:var(--c-primary-tint);}
+.mc-opt.correct{border-color:var(--c-accent-green);background:var(--c-green-tint);}
+.mc-opt.wrong{border-color:var(--c-danger);background:var(--c-danger-tint);}
+.mc-opt-label{font-size:14px;color:var(--c-ink-mid);line-height:1.5;}
+.mc-opt-letter{font-family:var(--font-heading);font-weight:700;color:var(--c-primary);min-width:20px;font-size:14px;}
+.quiz-q .rationale{font-size:13px;margin-top:10px;padding:10px 12px;background:var(--c-surface);border-radius:8px;display:none;}
+.quiz-q .rationale.show{display:block;}
+
+/* ---- RECAP ---- */
+.recap-item{display:flex;gap:16px;align-items:flex-start;background:var(--c-white);border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:18px 20px;margin-bottom:14px;}
+.recap-item .rn{font-family:var(--font-heading);font-size:20px;color:var(--c-primary);font-weight:500;flex:none;line-height:1;}
+.recap-item h4{font-family:var(--font-heading);font-size:15px;margin:0 0 6px;}
+.recap-item p{margin:0;font-size:15px;}
+
+/* ---- FEEDBACK ---- */
+.feedback{display:none;border-radius:12px;padding:16px 20px;margin:18px 0;line-height:1.5;border:1px solid var(--c-accent-blue);background:var(--c-blue-tint);}
+.feedback.show{display:block;animation:fade 0.3s ease;}
+.feedback.correct{border-color:var(--c-accent-green);background:var(--c-green-tint);}
+.feedback.incorrect{border-color:var(--c-danger);background:var(--c-danger-tint);}
+.feedback-label{font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:7px;}
+
+/* ---- BUTTONS ---- */
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;}
+.submit-btn,.skip-btn,.selfgrade button{font-family:var(--font-heading);font-size:14px;font-weight:500;padding:11px 22px;border-radius:10px;cursor:pointer;border:none;}
+.submit-btn{background:var(--c-primary);color:var(--c-white);}
+.submit-btn:hover{background:var(--c-primary-hover);}
+.submit-btn:disabled{opacity:0.45;cursor:not-allowed;}
+.skip-btn{background:none;border:1.5px solid rgba(0,0,0,0.18);color:var(--c-ink-mid);}
+.skip-btn:hover{background:rgba(0,0,0,0.05);}
+.selfgrade button{border:1.5px solid rgba(0,0,0,0.18);background:var(--c-white);color:var(--c-ink);}
+.selfgrade button.pass:hover{background:var(--c-green-tint);border-color:var(--c-accent-green);}
+.selfgrade button.retry:hover{background:var(--c-danger-tint);border-color:var(--c-danger);}
+
+/* ---- FOOTER NAV ---- */
+.finish-banner{background:var(--c-primary-tint);border:1px solid var(--c-primary);border-radius:16px;padding:32px;text-align:center;margin:36px 0 0;}
+.finish-banner h2{font-family:var(--font-heading);font-size:28px;font-weight:700;margin:0 0 12px;color:var(--c-primary-hover);}
+.finish-banner p{margin:0;font-size:16px;color:var(--c-ink-mid);}
+.footer{position:fixed;bottom:0;left:var(--sidebar-w);right:0;height:72px;background:var(--c-bg);border-top:1px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:30;}
+.nav-btn{font-family:var(--font-heading);font-size:14px;font-weight:500;padding:11px 24px;border-radius:10px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;}
+.nav-btn.next{background:var(--c-primary);color:var(--c-white);}
+.nav-btn.next:hover{background:var(--c-primary-hover);}
+.nav-btn.next:disabled{opacity:0.4;cursor:not-allowed;}
+.nav-btn.prev{background:none;border:1.5px solid rgba(0,0,0,0.18);color:var(--c-ink-mid);}
+.nav-btn.prev:hover{background:rgba(0,0,0,0.05);}
+.nav-btn.prev:disabled{opacity:0.3;cursor:not-allowed;}
+.footer-pos{font-family:var(--font-heading);font-size:11px;color:var(--c-ink-mid);letter-spacing:0.08em;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+
+/* ---- RESPONSIVE ---- */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform 0.25s ease;box-shadow:4px 0 24px rgba(0,0,0,0.18);}
+  .sidebar.open{transform:none;}
+  .topbar{display:flex;}
+  main{margin-left:0;padding:78px 18px 110px;}
+  .footer{left:0;padding:0 18px;}
+  .screen-title{font-size:32px;}
+}
+@media(max-width:700px){
+  .dtable{display:block;}
+}
+html,body{overflow-x:clip;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:45;}
+.overlay.show{display:block;}
+@media(min-width:901px){.overlay{display:none !important;}}
+.mc-opt:focus-visible,.nav-section-btn:focus-visible,button:focus-visible,textarea:focus-visible,.tab-btn:focus-visible,.rollover:focus-visible{outline:2.5px solid var(--c-primary);outline-offset:2px;border-radius:8px;}
+
+/* ---- CONTENTS LINK ---- */
+.contents-link{background:none;border:none;cursor:pointer;font-family:var(--font-heading);font-size:11px;color:var(--c-ink-mid);letter-spacing:0.08em;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;}
+.contents-link:hover{background:rgba(0,0,0,0.06);color:var(--c-ink);}
+.footer-center{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.toc-btn{background:none;border:none;font-family:var(--font-heading);font-size:11px;letter-spacing:0.08em;color:var(--c-ink-muted);cursor:pointer;padding:6px 10px;border-radius:6px;text-transform:uppercase;}
+.toc-btn:hover{color:var(--c-primary-hover);background:rgba(0,0,0,0.04);}
+
+/* ---- SPLASH / INTRO ---- */
+body.splash-open{overflow:hidden;}
+.splash{position:fixed;inset:0;z-index:200;background:var(--c-bg);display:flex;align-items:flex-start;justify-content:center;padding:48px 48px 40px;overflow-y:auto;}
+.splash.hide{display:none;}
+.splash-card{max-width:960px;width:100%;}
+.splash-eyebrow{font-family:var(--font-heading);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--c-primary-hover);margin:0 0 14px;}
+.splash-title{font-family:var(--font-body,'Lora'),Georgia,serif;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-0.01em;margin:0 0 16px;}
+.splash-sub{font-size:17px;line-height:1.55;color:var(--c-ink-mid);margin:0 0 28px;max-width:none;}
+.splash-toc-label{font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--c-ink-muted);margin-bottom:10px;}
+.splash-toc{list-style:none;counter-reset:toc;margin:0 0 30px;padding:0;border-top:1px solid rgba(0,0,0,0.1);}
+.splash-toc>li{counter-increment:toc;display:flex;flex-direction:column;padding:0;border-bottom:1px solid rgba(0,0,0,0.1);font-size:16px;cursor:pointer;}
+.splash-toc>li>div{display:flex;gap:12px;align-items:baseline;padding:11px 4px;}
+.splash-toc>li>div::before{content:counter(toc,decimal-leading-zero);font-family:var(--font-heading);font-size:12px;color:var(--c-ink-muted);min-width:22px;flex-shrink:0;}
+.splash-toc>li>div:hover{color:var(--c-primary-hover);}
+.splash-toc>li>ul{list-style:none;padding:0 4px 10px 34px;margin:0;display:none;}
+.splash-toc>li>ul>li{font-size:13px;color:var(--c-ink-mid);padding:3px 0;cursor:default;display:flex;align-items:baseline;gap:6px;}
+.splash-toc>li>ul>li::before{content:'▶';font-size:8px;color:var(--c-primary);flex-shrink:0;position:relative;top:-1px;}
+.splash-toc li .toc-sub{margin-left:auto;font-family:var(--font-heading);font-size:11px;color:var(--c-ink-muted);}
+.splash-begin{background:var(--c-primary);color:var(--c-white);border:none;border-radius:10px;padding:13px 26px;font-family:var(--font-heading);font-size:15px;font-weight:600;cursor:pointer;}
+.splash-begin:hover{background:var(--c-primary-hover);}
+.splash-meta{font-family:var(--font-heading);font-size:11px;color:var(--c-ink-muted);margin:16px 0 0;}
+</style>
+</head>
+<body class="splash-open">
+
+<!-- ============ SPLASH / INTRO ============ -->
+<div id="splash" class="splash">
+  <div class="splash-card">
+    <p class="splash-eyebrow">Developer · Module 1</p>
+    <h1 class="splash-title">MSO Foundations</h1>
+    <p class="splash-sub">Before you write a line of code against Claude, it helps to know what the words mean. This module introduces the model fundamentals and the technical foundations that the rest of the Developer course assumes you already have.</p>
+    <div class="splash-toc-label">Table of contents</div>
+    <ol class="splash-toc" id="splashToc"><li><div><span>Orientation</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Orientation</li></ul></li><li><div><span>How LLMs Behave</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Teaching</li></ul></li><li><div><span>Models &amp; Reasoning</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Teaching</li></ul></li><li><div><span>Prompting Modes</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Teaching</li></ul></li><li><div><span>Technical Substrate</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Teaching</li></ul></li><li><div><span>Module Wrap-up</span><span class="toc-sub">4 screens</span></div><ul style="display: none;"><li>Module Quiz</li><li>Exercise</li><li>Recap</li><li>Module Complete</li></ul></li></ol>
+    <button class="splash-begin" id="splashBegin">Begin module →</button>
+    <p class="splash-meta" id="splashMeta">9 screens · 6 sections · 59 minutes · 2 checkpoints</p>
+  </div>
+</div>
+
+<!-- MOBILE TOPBAR -->
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  <span class="topbar-title">Module 1 · MSO Foundations</span>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <p class="sidebar-eyebrow">Developer · Module 1</p>
+    <h1 class="sidebar-title">MSO Foundations</h1>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav"><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">01</span><span>Orientation</span></button></div><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">02</span><span>How LLMs Behave</span></button><ul class="sub-list"><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Teaching</span></li></ul></div><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">03</span><span>Models &amp; Reasoning</span></button><ul class="sub-list"><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Teaching</span></li></ul></div><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">04</span><span>Prompting Modes</span></button><ul class="sub-list"><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Teaching</span></li></ul></div><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">05</span><span>Technical Substrate</span></button><ul class="sub-list"><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Teaching</span></li></ul></div><div class="nav-section"><button class="nav-section-btn" tabindex="0" role="button"><span class="num">06</span><span>Module Wrap-up</span></button><ul class="sub-list"><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Module Quiz</span></li><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Exercise</span></li><li class="sub-item" tabindex="0" role="button"><span class="dot"></span><span>Recap</span></li><li class="sub-item active" tabindex="0" role="button"><span class="dot"></span><span>Module Complete</span></li></ul></div></nav>
+  <div class="sidebar-foot">
+    <div class="progress-label"><span>Progress</span><span id="progressPct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+    <button class="reset-btn" id="resetBtn">Reset progress</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+<!-- ============ S01 · ORIENTATION ============ -->
+<section class="screen" id="S01">
+  <div class="screen-meta"><span class="tag tag-module">Module 1</span><span>Orientation</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">What you will be able to do by the end</h1>
+  <p class="lede">Before you write a line of code against Claude, it helps to know what the words mean.</p>
+  <p>This module introduces the model fundamentals and the technical foundations that the rest of the Developer course assumes you already have.</p>
+
+  <h2 class="section-h">By the end of this module, you will be able to:</h2>
+  <ul class="objective-list">
+    <li><span class="lo-num">1</span>Explain what a token is, how the context window works as a fixed budget, why sampling makes outputs vary, and what non-determinism means for testing and evals.</li>
+    <li><span class="lo-num">2</span>Describe the Claude model family and its capability tiers, and distinguish choosing a model from enabling a reasoning mode such as extended thinking.</li>
+    <li><span class="lo-num">3</span>Choose between zero-shot, one-shot, and multi-shot prompting, and weigh the cost and quality trade-off of adding examples.</li>
+    <li><span class="lo-num">4</span>Describe how a developer accesses Claude: SDK versus raw REST, synchronous versus streaming responses, and asynchronous patterns for high-volume work.</li>
+  </ul>
+
+  <div class="callout callout-neutral">
+    <div class="callout-label">Disclaimer / Notice for Educational Content</div>
+    <p>We built this Developer course Module 1: MSO Foundations to help you get real work done with Claude. Treat it as educational content. It doesn't constitute legal, financial, or other professional advice, so adapt what you learn to your own situation. Our products and services evolve quickly, so certain content may contain errors or be outdated; remember to verify on Anthropic’s website or docs. Examples and scenarios used in the course are illustrative and often fictitious. If the course material mentions a company or product, it doesn't mean Anthropic endorses them, they endorse Anthropic, or that we're affiliated. Also note your use of Anthropic products and services is covered by our terms, policies and documentation; if anything in this course conflicts with them, they control.</p>
+  </div>
+</section>
+
+<!-- ============ S02 · TOKENS, CONTEXT, SAMPLING, NON-DETERMINISM ============ -->
+<section class="screen" id="S02">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>How LLMs Behave</span><span>·</span><span>12 min</span></div>
+  <h1 class="screen-title">How LLMs behave: tokens, context, sampling, non-determinism</h1>
+
+  <div class="tabs" id="tabsS02">
+    <div class="tab-strip">
+      <button class="tab-btn active" data-tab="s02-1" tabindex="0" role="button">Tokens</button>
+      <button class="tab-btn" data-tab="s02-2" tabindex="0" role="button">Context Window</button>
+      <button class="tab-btn" data-tab="s02-3" tabindex="0" role="button">Sampling</button>
+      <button class="tab-btn" data-tab="s02-4" tabindex="0" role="button">Non-determinism</button>
+    </div>
+    <div class="tab-panel active" id="s02-1">
+      <h3 class="sub-h" style="margin-top:0;">Tokens: the unit of input, output, and cost</h3>
+      <p>Claude does not read characters or words directly. It reads <strong>tokens</strong>, and the characters-per-token average depends on the tokenizer of the model at hand and differs between model generations. Treat any chars-per-token rule of thumb as model-dependent and confirm current tokenizer behavior at build time. Everything the model processes is counted in tokens: your prompt, the conversation history, tool definitions, tool results, and the response the model generates. Tokens are the unit of both pricing and budget, so when you estimate what a feature costs or whether an input fits, you are counting tokens, not words. A useful habit is to think in tokens, since that is the unit the API bills in and the context window measures.</p>
+    </div>
+    <div class="tab-panel" id="s02-2">
+      <h3 class="sub-h" style="margin-top:0;">The context window: a fixed budget</h3>
+      <p>The <strong>context window</strong> is the total number of tokens the model can take in for a single request. It holds everything at once: the system prompt, the full conversation so far, any documents you inject, every tool result, and the model output. It is a fixed budget with two distinct edge behaviors. A request whose input is already larger than the window is rejected with a validation error before generation begins. A request that fits on input can still reach the ceiling during generation. Current models then stop and return the output generated so far with a model_context_window_exceeded stop reason rather than raising an error. Either way, keeping a long session running requires the application to trim or summarize history before each call. In development, the window rarely fills because test inputs are short. In production, on the other hand, longer inputs and more turns fill the window faster. This is the failure Module 2 explores in detail.</p>
+    </div>
+    <div class="tab-panel" id="s02-3">
+      <h3 class="sub-h" style="margin-top:0;">Sampling: why the same prompt can give different answers</h3>
+      <p>A language model does not pick one fixed next token. At each step it produces a probability distribution over possible next tokens and then <strong>samples</strong> from it. Settings, such as <span class="term" tabindex="0" data-tip="A setting that shapes the probability distribution the model samples from. A lower temperature concentrates probability on the most likely tokens and makes output more repeatable; a higher temperature spreads it out and makes output more varied.">temperature</span>, shape that distribution: a lower temperature concentrates probability on the most likely tokens and makes output more repeatable, while a higher temperature spreads it out and makes output more varied. Because the choice is sampled rather than fixed, the same prompt run twice can return different wording even when both answers are correct. This is a property of how the model generates. Note that sampling controls are model-dependent: the newest Claude models do not accept non-default sampling parameters. Setting temperature, top_p, or top_k returns a 400 error, and behavior on those models is steered through prompting instead. Even where temperature is accepted, temperature 0 makes outputs more repeatable but does not guarantee identical outputs across calls. Confirm current parameter support in the API reference at build time.</p>
+    </div>
+    <div class="tab-panel" id="s02-4">
+      <h3 class="sub-h" style="margin-top:0;">Non-determinism: what it means for testing and evals</h3>
+      <p><strong>Non-determinism</strong> is the primary consequence of sampling: identical inputs do not guarantee identical outputs. That changes how you test a Claude feature. A test that asserts the exact text of a response will be inconsistent, because the model can express the same correct answer many ways. Instead, assert on the property that must hold: a required field is present, a value is in range, the structure parses. When you need to judge meaning rather than structure, use an <span class="term" tabindex="0" data-tip="An evaluation that uses a model to judge whether a response's meaning meets a rubric, used when you need to judge meaning rather than structure.">eval with a model-graded judge</span>. This is why the course treats evals as the standard for knowing a feature is correct, and why Module 3 builds that capability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S03 · MODEL OPTIONS AND REASONING MODES ============ -->
+<section class="screen" id="S03">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Models &amp; Reasoning</span><span>·</span><span>10 min</span></div>
+  <h1 class="screen-title">Model options and reasoning modes</h1>
+
+  <div class="tabs" id="tabsS03">
+    <div class="tab-strip">
+      <button class="tab-btn active" data-tab="s03-1" tabindex="0" role="button">The Model Family</button>
+      <button class="tab-btn" data-tab="s03-2" tabindex="0" role="button">Reasoning Modes</button>
+      <button class="tab-btn" data-tab="s03-3" tabindex="0" role="button">How They Work Together</button>
+    </div>
+    <div class="tab-panel active" id="s03-1">
+      <h3 class="sub-h" style="margin-top:0;">The Claude model family</h3>
+      <p>Claude is a family of models that currently spans four tiers: Fable, Opus, Sonnet, and Haiku. Each model represents a different tradeoff across cost, latency, and capability. Sonnet is the balanced default for most production workloads. Haiku is built for speed and cost efficiency on tasks that fit its capability envelope. Opus handles demanding work above the Sonnet envelope, and Fable is the most capable tier, built for the most demanding reasoning, coding, and agentic work where maximum intelligence is the priority. The practical default is to start with Sonnet, move up a tier only when an eval shows the current tier missing your quality bar, and move down to Haiku only when an eval shows the quality drop is acceptable for the task. Confirm the current model lineup and identifiers against platform.claude.com/docs at build time, since the Claude family is evolving.</p>
+    </div>
+    <div class="tab-panel" id="s03-2">
+      <h3 class="sub-h" style="margin-top:0;">Reasoning modes are a separate setting from model choice</h3>
+      <p>Choosing which model to run is one decision. Whether the model reasons before answering is a separate decision you make per call. On current models the reasoning mode is adaptive thinking: the model decides when and how much to think, and you tune depth with an effort setting rather than a fixed token budget (the older budget_tokens control is deprecated and, on the newest model generations, returns a 400 error). Thinking content is omitted from responses by default on the newest models. Request summarized display when you need to show it. Reasoning earns its cost on hard, multi-step problems and is wasted on lookups and classification. The key point for this module is that the two levers compose: model choice picks the family member, while the reasoning mode is configured per request. Per-model defaults differ (some of the newest models think adaptively by default or always), so confirm the current thinking defaults for your model at build time.</p>
+    </div>
+    <div class="tab-panel" id="s03-3">
+      <h3 class="sub-h" style="margin-top:0;">How the two work together</h3>
+      <p>Because model choice and reasoning mode are independent, each can be set separately. A capable model with reasoning off is fast and direct, while a smaller model with reasoning on spends more tokens to think. The most demanding tasks pair a capable model with a higher effort setting. Module 2 teaches the mechanics of enabling reasoning and handling the thinking blocks it returns. The decision of which model to run, weighed against cost, latency, and quality, is taken up in Module 4.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S04 · PROMPTING MODES ============ -->
+<section class="screen" id="S04">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Prompting Modes</span><span>·</span><span>8 min</span></div>
+  <h1 class="screen-title">Prompting modes: zero-shot, one-shot, multi-shot</h1>
+
+  <div class="tabs" id="tabsS04">
+    <div class="tab-strip">
+      <button class="tab-btn active" data-tab="s04-1" tabindex="0" role="button">The Three Modes</button>
+      <button class="tab-btn" data-tab="s04-2" tabindex="0" role="button">Cost &amp; Quality Trade-off</button>
+      <button class="tab-btn" data-tab="s04-3" tabindex="0" role="button">Mode &amp; Model Choice</button>
+    </div>
+    <div class="tab-panel active" id="s04-1">
+      <h3 class="sub-h" style="margin-top:0;">The three modes</h3>
+      <p>Separate from how you word a prompt is how many worked examples you give the model inside it. <strong>Zero-shot</strong> gives the instruction and no examples: you describe the task and ask for the result. <strong>One-shot</strong> adds one example of the input paired with the desired output. <strong>Multi-shot</strong>, also called few-shot, includes several such examples. The examples are not training data; they sit in the prompt and show the model the exact shape of the answer you want, which a description alone often fails to pin down.</p>
+    </div>
+    <div class="tab-panel" id="s04-2">
+      <h3 class="sub-h" style="margin-top:0;">The cost and quality trade-off</h3>
+      <p>Each example you add costs tokens on every call and consumes context budget, so the choice trades quality against cost. Reach for zero-shot when the task is simple and the output shape is obvious. Move to one-shot or multi-shot when the output has a specific structure, casing, or edge case that a description keeps missing. Often one or two correct examples usually fix the issue faster than another paragraph of instructions. The general discipline, which Module 2 reinforces, is to add the smallest amount of prompt that produces a reliable result.</p>
+    </div>
+    <div class="tab-panel" id="s04-3">
+      <h3 class="sub-h" style="margin-top:0;">Mode choice interacts with model choice</h3>
+      <p>Prompting mode and model choice are related levers. A more capable model often succeeds zero-shot on a task where a smaller model needs a few examples to match the structure, so adding examples can let a cheaper model do the job. The two decisions are worth making together: try the simplest model and the fewest examples that meet your eval, and add capability or examples only where the eval says you need them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S05 · TECHNICAL SUBSTRATE ============ -->
+<section class="screen" id="S05">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Technical Substrate</span><span>·</span><span>12 min</span></div>
+  <h1 class="screen-title">The technical substrate: SDKs, REST, streaming, async</h1>
+
+  <div class="tabs" id="tabsS05">
+    <div class="tab-strip">
+      <button class="tab-btn active" data-tab="s05-1" tabindex="0" role="button">SDK vs. REST</button>
+      <button class="tab-btn" data-tab="s05-2" tabindex="0" role="button">Sync, Streaming &amp; Real-time</button>
+      <button class="tab-btn" data-tab="s05-3" tabindex="0" role="button">Async for High-Volume Work</button>
+    </div>
+    <div class="tab-panel active" id="s05-1">
+      <h3 class="sub-h" style="margin-top:0;">How a developer reaches Claude: SDK versus raw REST</h3>
+      <p>At its core, Claude is reached over an HTTP REST API: your code sends a request to an endpoint with your API key and a JSON body, and reads a JSON response back. You can call that endpoint directly with any HTTP client. More commonly you use an official SDK, available for Python and TypeScript among others, which is a thin convenience layer over the same REST API. It handles authentication, request construction, retries, and response parsing so you write less boilerplate. The SDK and raw REST reach the same API and the same model. The SDK saves you from assembling requests by hand. Module 2 builds against the SDK and the Messages API, which sits on this same foundation.</p>
+    </div>
+    <div class="tab-panel" id="s05-2">
+      <h3 class="sub-h" style="margin-top:0;">Synchronous, streaming, and real-time responses</h3>
+      <p>A <strong>synchronous</strong> request is the simplest pattern: you send the request and wait for the complete response to come back in one piece, then act on it. That is fine for short responses and backend jobs where no one is waiting. When a response is long or a user is watching, <strong>streaming</strong> sends the response in pieces as the model generates it. Output appears immediately rather than after a blank-screen wait, and your code reassembles the pieces into the final message. Claude exposes streaming over the same HTTP connection using server-sent events. Module 2 teaches how to consume a stream safely and recover when it is interrupted.</p>
+    </div>
+    <div class="tab-panel" id="s05-3">
+      <h3 class="sub-h" style="margin-top:0;">Asynchronous patterns for high-volume work</h3>
+      <p>Two patterns address high-volume work, and they solve different problems.</p>
+      <p>The Python SDK exposes an async client (<span class="term" tabindex="0" data-tip="The async client exposed by the Python SDK. Uses non-blocking async/await to make API calls without tying up your application thread while the request returns in real time.">AsyncAnthropic</span>) that uses non-blocking async/await to make API calls without tying up your application thread. In the TypeScript SDK the standard Anthropic client is Promise-based, so you await calls directly. There is no separate async client class. Either way the request still returns in real time, but your application can handle other work while it waits. This is the right pattern when you need concurrency without blocking.</p>
+      <p>The <span class="term" tabindex="0" data-tip="A separate pattern for bulk offline workloads: submit a large set of requests in one call, receive an identifier, and poll for completion. Can take up to 24 hours and runs at a lower per-token cost.">Message Batches API</span> is a separate pattern for bulk offline workloads. You submit a large set of requests in one call, receive an identifier, and poll for completion. Batch jobs can take up to 24 hours to complete and run at a lower per-token cost in exchange for that latency. This suits offline pipelines, evaluation runs, and bulk jobs where no user is waiting on each result and cost matters more than turnaround time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S06 · MODULE QUIZ ============ -->
+<section class="screen" id="S06">
+  <div class="screen-meta"><span class="tag tag-checkpoint tag-quiz">Quiz</span><span>Module 1</span><span>·</span><span>5 min</span></div>
+  <h1 class="screen-title">Module quiz</h1>
+  <p>Try it now. Here are some multiple-choice questions to test your understanding of the course so far.</p>
+  <div id="s06Quiz"><div class="quiz-q"><div class="quiz-q-num">Question 1</div><div class="quiz-q-text">A teammate says two identical prompts must return identical text. What is the most accurate response?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="0" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">That is true, the model is deterministic.</span></div><div class="mc-opt" data-qi="0" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Not necessarily, the model samples each next token from a probability distribution, so wording can vary even when both answers are correct.</span></div><div class="mc-opt" data-qi="0" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">That is only true if streaming is off.</span></div><div class="mc-opt" data-qi="0" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">That is only true on the largest model.</span></div></div>
+      <div class="rationale" id="ratS060"></div></div><div class="quiz-q"><div class="quiz-q-num">Question 2</div><div class="quiz-q-text">Which statement best separates model choice from reasoning mode?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="1" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">They are the same setting.</span></div><div class="mc-opt" data-qi="1" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Extended thinking is a different model.</span></div><div class="mc-opt" data-qi="1" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Model choice picks which member of the family runs; extended thinking is a per-call setting that any supporting model can run with on or off.</span></div><div class="mc-opt" data-qi="1" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">Reasoning mode is fixed per account.</span></div></div>
+      <div class="rationale" id="ratS061"></div></div><div class="quiz-q"><div class="quiz-q-num">Question 3</div><div class="quiz-q-text">A short, well-specified classification task returns the right answer zero-shot. What does adding three examples most likely do?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="2" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">Improves accuracy substantially.</span></div><div class="mc-opt" data-qi="2" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Adds token cost on every call for little or no gain.</span></div><div class="mc-opt" data-qi="2" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Changes the model being used.</span></div><div class="mc-opt" data-qi="2" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">Disables sampling.</span></div></div>
+      <div class="rationale" id="ratS062"></div></div><div class="quiz-q"><div class="quiz-q-num">Question 4</div><div class="quiz-q-text">You must process thousands of inputs offline at the lowest cost. Which shape fits?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="3" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">Synchronous calls in a loop.</span></div><div class="mc-opt" data-qi="3" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Streaming.</span></div><div class="mc-opt" data-qi="3" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Batch submission with polling.</span></div><div class="mc-opt" data-qi="3" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">A larger context window.</span></div></div>
+      <div class="rationale" id="ratS063"></div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS06" disabled="">Submit quiz</button>
+    <button class="skip-btn" id="skipS06">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS06" aria-live="polite"></div>
+</section>
+
+<!-- ============ S07 · EXERCISE: PREDICT THE BEHAVIOR ============ -->
+<section class="screen" id="S07">
+  <div class="screen-meta"><span class="tag tag-checkpoint tag-exercise">Exercise</span><span>Predict the Behavior</span><span>·</span><span>6 min</span></div>
+  <h1 class="screen-title">Exercise: predict the behavior</h1>
+  <p>Try it now. Each scenario below presents a configuration drawn from one of this module’s four foundations, sampling, prompting mode, request shape, and the context budget. For each one, select the answer that predicts the correct behavior and identifies the reason why. Partial credit is available when you answer three of four correctly.</p>
+  <div id="s07Quiz"><div class="quiz-q"><div class="quiz-q-num">Scenario 1</div><div class="quiz-q-text">Consider a classification task run at temperature 0 versus the same task run at a high temperature. Predict how the outputs differ across repeated runs.</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="0" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">At a low temperature, the model concentrates probability on the most likely tokens, so repeated runs return the same label far more consistently, though never with guaranteed determinism, even at temperature 0. At a high temperature, the distribution spreads out, so wording and even the chosen label can vary. For a classifier you want the low-temperature, repeatable behavior.</span></div><div class="mc-opt" data-qi="0" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Both configurations return identical output every run, because temperature only affects response length, not which tokens are chosen.</span></div><div class="mc-opt" data-qi="0" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">The high-temperature run is more accurate, because spreading the distribution lets the model consider more of the correct answers.</span></div><div class="mc-opt" data-qi="0" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">Temperature has no effect on a classification task, because classification always returns a fixed label regardless of sampling.</span></div></div>
+      <div class="rationale" id="ratS070"></div></div><div class="quiz-q"><div class="quiz-q-num">Scenario 2</div><div class="quiz-q-text">Consider a task that keeps returning output in the wrong structure under a zero-shot prompt. Predict what changes if you switch to multi-shot.</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="1" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">Switching to multi-shot retrains the model on the new structure, so the change is permanent across every future call once the examples are sent.</span></div><div class="mc-opt" data-qi="1" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Adding two or three correct input-output examples shows the model the exact structure to match, which usually fixes a structure problem that more instruction text did not. The cost is extra tokens on every call, so add the fewest examples that make the output reliable.</span></div><div class="mc-opt" data-qi="1" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Multi-shot will not help a structure problem; only raising the temperature changes the shape of the output.</span></div><div class="mc-opt" data-qi="1" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">Multi-shot lowers the token cost per call, because examples let the model produce shorter responses.</span></div></div>
+      <div class="rationale" id="ratS071"></div></div><div class="quiz-q"><div class="quiz-q-num">Scenario 3</div><div class="quiz-q-text">Consider a pipeline that must process 50,000 documents overnight with no user waiting. Predict which request shape fits and why.</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="2" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">A synchronous loop fits best, because calling the API once per document is the simplest pattern and avoids the overhead of submitting a batch.</span></div><div class="mc-opt" data-qi="2" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Streaming fits best, because sending the response in pieces lets the pipeline start processing each document sooner.</span></div><div class="mc-opt" data-qi="2" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">The batch pattern fits: submit the requests in a batch and poll for completion, accepting longer latency for a lower per-token cost. A synchronous loop would hit rate limits and tie up the application, and streaming buys nothing because no user is watching.</span></div><div class="mc-opt" data-qi="2" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">A larger context window fits best, because fitting all 50,000 documents into one request avoids making repeated calls.</span></div></div>
+      <div class="rationale" id="ratS072"></div></div><div class="quiz-q"><div class="quiz-q-num">Scenario 4</div><div class="quiz-q-text">Consider a long multi-turn agent session whose context window keeps filling. Predict the symptoms and name the budget at fault.</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="3" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">The model silently drops the oldest turns to make room, so the session continues but quietly loses early context without any error.</span></div><div class="mc-opt" data-qi="3" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">The context window is a fixed token budget; as history and tool results accumulate it fills. An input that is already oversized is rejected with an error before generation, while a request that fits on input but reaches the ceiling mid-generation comes back with truncated output and a model_context_window_exceeded stop reason. The symptom is a session that ran fine in testing failing once inputs grow, which is why the application must trim or summarize history.</span></div><div class="mc-opt" data-qi="3" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">The symptom is slower sampling, and the budget at fault is the temperature setting, which must be lowered as the session grows.</span></div><div class="mc-opt" data-qi="3" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">There is no fixed budget; the window expands automatically to hold whatever history accumulates, so a long session never fails for this reason.</span></div></div>
+      <div class="rationale" id="ratS073"></div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS07" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS07">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS07" aria-live="polite"></div>
+</section>
+
+<!-- ============ S08 · RECAP ============ -->
+<section class="screen" id="S08">
+  <div class="screen-meta"><span class="tag tag-module">Recap</span><span>Five Takeaways</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">Recap: five takeaways</h1>
+
+  <div class="recap-item">
+    <span class="rn">1</span>
+    <div><h4>Tokens are the unit of input, output, and cost.</h4><p>Think and budget in tokens rather than words, since that is what the API meters and the context window measures.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">2</span>
+    <div><h4>The context window is a fixed token budget that holds the whole request at once.</h4><p>An oversized input errors before generation, while hitting the ceiling mid-generation returns truncated output with a model_context_window_exceeded stop reason, so managing history is the application's job.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">3</span>
+    <div><h4>Sampling makes generation non-deterministic.</h4><p>The same prompt can return different wording on each run, so testing on exact text is unreliable. This is what evals are built for.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">4</span>
+    <div><h4>Model choice and reasoning mode are separate, composable levers.</h4><p>Pick the smallest model and the simplest reasoning and prompting that meet your eval and add capability only where the eval says you need it.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">5</span>
+    <div><h4>A developer reaches Claude over a REST API, usually through an SDK.</h4><p>Choose between synchronous, streaming, async/await, or batch based on whether a user is waiting and whether the workload is real-time or bulk offline.</p></div>
+  </div>
+
+  <p style="margin-top:24px;"><strong>What comes next:</strong> Module 2 puts these foundations to work across prompting craft, tool schemas, streaming, context engineering, and agent construction.</p>
+
+  <div class="panel" style="margin-top:28px;">
+    <p style="font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--c-ink-mid);margin:0 0 10px;">Sources</p>
+    <p style="margin:0;font-size:14px;color:var(--c-ink-mid);">Claude 101 (Skilljar), Building with the Claude API (Skilljar), AI Fluency: Framework &amp; Foundations (Skilljar), <a href="https://platform.claude.com/docs" target="_blank" rel="noopener" style="color:var(--c-primary);text-decoration:underline;">platform.claude.com/docs</a>. Verify product specifics at publish time.</p>
+  </div>
+
+  <div class="finish-banner">
+    <h2>You can now speak the shared vocabulary of the Developer course.</h2>
+    <p>Tokens, context, sampling, model tiers, prompting modes, and the transport mechanics of the API now have names, so the rest of the course can build on them directly.</p>
+  </div>
+</section>
+
+<!-- ============ CERT · MODULE COMPLETE ============ -->
+<section class="screen active" id="CERT">
+  <div class="screen-meta"><span class="tag tag-module">Module Complete</span><span>Developer Path</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">Congrats! You’ve successfully completed this module.</h1>
+  <p style="font-size:16px;color:var(--c-ink-mid);margin:0 0 24px;max-width:600px;">You can now explain tokens, the context window, sampling, and non-determinism, distinguish model choice from reasoning mode, choose the right prompting mode for the job, and describe how a developer reaches Claude over SDKs, REST, streaming, and async patterns. <strong>These foundations are the shared vocabulary the rest of the Developer course builds on.</strong></p>
+
+  <!-- checkpoint counter badge -->
+  <div id="certBadge" style="display:inline-flex;align-items:center;gap:12px;background:var(--c-primary-tint);border:1px solid var(--c-primary);border-radius:999px;padding:10px 20px;margin:0 0 32px;">
+    <span id="certCount" style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--c-primary-hover);line-height:1;">0</span>
+    <span style="font-size:14px;color:var(--c-ink-mid);" id="certCountLabel">of 2 checkpoints passed</span>
+  </div>
+
+  <!-- Developer module journey list -->
+  <div style="border:1px solid var(--c-border);border-radius:12px;overflow:hidden;margin:0 0 32px;">
+    <div id="cert-row-m1" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--c-primary-tint);border-bottom:1px solid var(--c-border);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m1" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:#fff;">M1</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink);">MSO Foundations</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Tokens, context, sampling, model tiers, prompting modes, and the technical substrate.</p>
+      </div>
+      <span style="flex-shrink:0;font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid var(--c-primary-hover);color:var(--c-primary-hover);border-radius:999px;padding:3px 10px;white-space:nowrap;">You Are Here</span>
+    </div>
+    <div id="cert-row-m2" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--c-border);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m2" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M2</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Production-Grade Prompting, Agents &amp; Tool-use</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Prompting craft, extended thinking, tool schemas, streaming, context engineering, and agent construction.</p>
+      </div>
+      <span style="flex-shrink:0;font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:var(--c-primary);color:#fff;border-radius:999px;padding:3px 10px;white-space:nowrap;">Up Next</span>
+    </div>
+    <div id="cert-row-m3" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--c-border);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m3" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M3</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Claude Code, MCP &amp; Integration</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Permission modes, durable project context, plugin packaging, and MCP integration without leaking credentials.</p>
+      </div>
+    </div>
+    <div id="cert-row-m4" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--c-border);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m4" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M4</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Production Engineering, Evals, and Security</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Evals, tracing, failure handling, cost and orchestration budgets, and security boundaries that hold in production.</p>
+      </div>
+    </div>
+    <div id="cert-row-m5" style="display:flex;align-items:center;gap:16px;padding:14px 20px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m5" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M5</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Accelerators and IP Contribution</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Package accelerators, prepare verifiable contributions, choose deployment platforms, and mark trust boundaries.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- action buttons -->
+  <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 24px;">
+    <button class="submit-btn" onclick="goTo(0)">Review module</button>
+    <button class="skip-btn" id="certStartOver">Start over</button>
+    <a id="certNextModule" href="" style="display:none;font-family:var(--font-heading);font-size:14px;font-weight:600;background:var(--c-accent-blue);color:#fff;text-decoration:none;border-radius:8px;padding:12px 24px;">Start Module 2 →</a>
+    <a id="certReturnHome" href="" style="display:none;font-family:var(--font-heading);font-size:14px;font-weight:600;color:var(--c-ink-mid);text-decoration:underline;padding:12px 4px;font-size:13px;">Return to course home</a>
+  </div>
+
+  <!-- SCORM completion trigger (hidden) -->
+  <div class="finish-banner" style="display:none" aria-hidden="true">
+    <h2>Module 1 complete.</h2>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <button class="nav-btn prev" id="prevBtn">← Previous</button>
+  <div class="footer-center">
+    <span class="footer-pos" id="footerPos">Screen 9 of 9</span>
+    <button class="toc-btn" id="tocBtn">☰ Contents</button>
+  </div>
+  <button class="nav-btn next" id="nextBtn">Finish</button>
+</footer>
+<script>
+/* ===== SCREEN MODEL ===== */
+const SCREENS = [
+  { id:'S01', section:0, title:'Orientation' },
+  { id:'S02', section:1, title:'Teaching' },
+  { id:'S03', section:2, title:'Teaching' },
+  { id:'S04', section:3, title:'Teaching' },
+  { id:'S05', section:4, title:'Teaching' },
+  { id:'S06', section:5, title:'Module Quiz', checkpoint:true },
+  { id:'S07', section:5, title:'Exercise', checkpoint:true },
+  { id:'S08', section:5, title:'Recap' },
+  { id:'CERT', section:5, title:'Module Complete' },
+];
+const SECTIONS = [
+  { label:'Orientation', sub:[] },
+  { label:'How LLMs Behave', sub:['Teaching'] },
+  { label:'Models &amp; Reasoning', sub:['Teaching'] },
+  { label:'Prompting Modes', sub:['Teaching'] },
+  { label:'Technical Substrate', sub:['Teaching'] },
+  { label:'Module Wrap-up', sub:['Module Quiz','Exercise','Recap','Module Complete'] },
+];
+const STORE_KEY = 'dev-m1-vF2';
+const MODULE_N = 1;
+const RETURN_URL = '';
+const NEXT_MODULE_URL = '';
+
+let state = { completed:[], current:0, skipped:[] };
+try { const s=JSON.parse(localStorage.getItem(STORE_KEY)); if(s&&Array.isArray(s.completed))state=s; state.skipped=state.skipped||[]; } catch(e){}
+
+function save(){ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }
+function canVisit(i){ return true; } /* free nav: sidebar reaches any screen; checkpoint gate lives on Next button only */
+function markComplete(i){ if(!state.completed.includes(i))state.completed.push(i); const si=(state.skipped||[]).indexOf(i); if(si>-1) state.skipped.splice(si,1); save(); }
+
+function buildSidebar(){
+  const nav=document.getElementById('sidebarNav'); nav.innerHTML='';
+  SECTIONS.forEach((sec,si)=>{
+    const wrap=document.createElement('div'); wrap.className='nav-section';
+    const firstIdx=SCREENS.findIndex(s=>s.section===si);
+    const btn=document.createElement('button');
+    btn.className='nav-section-btn';
+    btn.innerHTML=`<span class="num">${String(si+1).padStart(2,'0')}</span><span>${sec.label}</span>`;
+    btn.onclick=()=>goTo(firstIdx);
+    wrap.appendChild(btn);
+    if(sec.sub.length){
+      const ul=document.createElement('ul'); ul.className='sub-list';
+      const idxs=SCREENS.map((s,i)=>({s,i})).filter(o=>o.s.section===si);
+      idxs.forEach((o,k)=>{
+        const li=document.createElement('li');
+        const done=state.completed.includes(o.i);
+        const skipped=!done&&(state.skipped||[]).includes(o.i);
+        const active=state.current===o.i;
+        li.className='sub-item'+(done?' done':'')+(skipped?' skipped':'')+(active?' active':'');
+        li.innerHTML=`<span class="dot"></span><span>${sec.sub[k]}</span>`;
+        li.onclick=()=>goTo(o.i);
+        ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+    }
+    nav.appendChild(wrap);
+  });
+  const pct=Math.round(state.completed.length/SCREENS.length*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+}
+
+function isCheckpointDone(i){ return !SCREENS[i].checkpoint || state.completed.includes(i) || (state.skipped||[]).includes(i); }
+
+function goTo(i){
+  if(!canVisit(i)) return;
+  state.current=i; save();
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById(SCREENS[i].id);
+  if(el) el.classList.add('active');
+  document.getElementById('footerPos').textContent=`Screen ${i+1} of ${SCREENS.length}`;
+  const prev=document.getElementById('prevBtn'),next=document.getElementById('nextBtn');
+  prev.disabled=i===0;
+  next.textContent=i===SCREENS.length-1?'Finish':'Next →';
+  next.disabled=!isCheckpointDone(i);
+  buildSidebar();
+  var _sm=document.querySelector('main');if(_sm)_sm.scrollTop=0;window.scrollTo(0,0);
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  if(typeof window.scormSaveLocation==='function') window.scormSaveLocation(i);
+  if(SCREENS[i].id==='CERT') initCert();
+}
+
+function advance(){
+  const i=state.current;
+  if(!SCREENS[i].checkpoint || !(state.skipped||[]).includes(i)) markComplete(i);
+  if(i<SCREENS.length-1){
+    goTo(i+1);
+  } else {
+    buildSidebar();
+    localStorage.setItem('dev-module-completions',(()=>{const c=JSON.parse(localStorage.getItem('dev-module-completions')||'[]');if(!c.includes(MODULE_N))c.push(MODULE_N);return JSON.stringify(c);})());
+    if(typeof window.scormComplete==='function') window.scormComplete();
+    if(RETURN_URL) window.location.href=RETURN_URL;
+  }
+}
+
+document.getElementById('nextBtn').onclick=advance;
+document.getElementById('prevBtn').onclick=()=>{ if(state.current>0) goTo(state.current-1); };
+document.getElementById('resetBtn').onclick=()=>{ localStorage.removeItem(STORE_KEY); state={completed:[],current:0,skipped:[]}; resetCheckpointUI(); goTo(0); };
+
+function fb(id,cls,a,b){
+  const el=document.getElementById(id); if(!el) return;
+  let label,msg;
+  if(arguments.length>=4){ label=a; msg=b; } else { label=cls==='correct'?'Correct':cls==='incorrect'?'Revisit':'Feedback'; msg=a; }
+  el.className='feedback show'+(cls?(' '+cls):'');
+  el.innerHTML=`<div class="feedback-label">${label}</div><div>${msg}</div>`;
+}
+function checkpointPassed(){ markComplete(state.current); buildSidebar(); document.getElementById('nextBtn').disabled=false; }
+function skipCP(fbId,msg){
+  const i=state.current;
+  if(!(state.skipped||[]).includes(i)) state.skipped.push(i);
+  save();
+  document.getElementById('nextBtn').disabled=false;
+  buildSidebar();
+  if(fbId) fb(fbId,'','Skipped',msg||'You can come back to this checkpoint any time before the recap using the sidebar.');
+}
+function toggleReveal(id){ document.getElementById(id).classList.toggle('show'); }
+
+function menuToggle(){ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+document.getElementById('menuBtn').onclick=menuToggle;
+document.getElementById('overlay').onclick=menuToggle;
+
+function initCert(){
+  const total=SCREENS.filter(s=>s.checkpoint).length;
+  const passed=SCREENS.filter((s,i)=>s.checkpoint&&state.completed.includes(i)&&!(state.skipped||[]).includes(i)).length;
+  const cc=document.getElementById('certCount'); if(cc) cc.textContent=total===0?'✓':passed;
+  const cl=document.getElementById('certCountLabel'); if(cl) cl.textContent=total===0?'Module complete':'of '+total+' checkpoint'+(total===1?'':'s')+' passed';
+  const cnm=document.getElementById('certNextModule'); if(cnm) cnm.style.display='none';
+  const crh=document.getElementById('certReturnHome'); if(crh) crh.style.display='none';
+  const nb=document.getElementById('nextBtn');
+  if(NEXT_MODULE_URL){
+    nb.textContent='Start Module 2 →';
+    nb.onclick=()=>{ markComplete(state.current); if(typeof window.scormComplete==='function') window.scormComplete(); window.location.href=NEXT_MODULE_URL; };
+    nb.disabled=false;
+  }
+  if(!document.getElementById('footer-center-cert')&&RETURN_URL){
+    const a=document.createElement('a');
+    a.id='footer-center-cert'; a.href=RETURN_URL; a.textContent='Course Home';
+    a.style.cssText='font-family:var(--font-heading);font-size:12px;color:var(--c-ink-mid);text-decoration:underline;display:block;margin-top:4px;';
+    document.getElementById('footerPos').insertAdjacentElement('afterend',a);
+  }
+  const completions=JSON.parse(localStorage.getItem('dev-module-completions')||'[]');
+  completions.forEach(n=>{
+    if(n===MODULE_N) return;
+    const rowEl=document.getElementById('cert-row-m'+n);
+    const badgeEl=document.getElementById('cert-badge-m'+n);
+    if(!rowEl||!badgeEl) return;
+    rowEl.style.background='#f0fdf4';
+    badgeEl.parentElement.style.background='#16a34a';
+    badgeEl.style.color='#fff';
+    if(!rowEl.querySelector('.cert-done-pill')){var pill=document.createElement('span');pill.className='cert-done-pill';pill.textContent='✓ Completed';pill.style.cssText='flex-shrink:0;font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:#16a34a;color:#fff;border-radius:999px;padding:3px 10px;white-space:nowrap;margin-left:auto;';rowEl.appendChild(pill);}
+  });
+}
+
+document.getElementById('certStartOver').onclick=()=>{
+  localStorage.removeItem(STORE_KEY);
+  state={completed:[],current:0,skipped:[]};
+  resetCheckpointUI();
+  goTo(0);
+  document.body.classList.add('splash-open');
+  document.getElementById('splash').classList.remove('hide');
+};
+
+/* ---- SPLASH ---- */
+function computeModuleStats(){
+  const screens=SCREENS.length, sections=SECTIONS.length;
+  const checkpoints=SCREENS.filter(s=>s.checkpoint).length;
+  let minutes=0;
+  document.querySelectorAll('.screen .screen-meta').forEach(m=>{
+    const match=m.textContent.match(/(\d+)\s*min/);
+    if(match) minutes+=parseInt(match[1],10);
+  });
+  return {screens,sections,checkpoints,minutes};
+}
+function buildSplash(){
+  const ol=document.getElementById('splashToc'); if(!ol) return; ol.innerHTML='';
+  const stats=computeModuleStats();
+  const metaEl=document.getElementById('splashMeta');
+  if(metaEl) metaEl.textContent=`${stats.screens} screens · ${stats.sections} sections · ${stats.minutes} minutes · ${stats.checkpoints} checkpoint${stats.checkpoints===1?'':'s'}`;
+  SECTIONS.forEach((sec,si)=>{ const li=document.createElement('li');
+    const n=SCREENS.filter(s=>s.section===si).length;
+    const header=document.createElement('div');
+    header.innerHTML=`<span>${sec.label}</span><span class="toc-sub">${n} screen${n>1?'s':''}</span>`;
+    const sub=document.createElement('ul');
+    sub.style.display='none';
+    SCREENS.filter(s=>s.section===si).forEach(scr=>{
+      const sli=document.createElement('li');
+      sli.textContent=scr.title;
+      sub.appendChild(sli);
+    });
+    header.onclick=()=>{ const open=sub.style.display!=='none'; sub.style.display=open?'none':'block'; };
+    li.appendChild(header); li.appendChild(sub);
+    ol.appendChild(li); });
+}
+document.getElementById('splashBegin').onclick=()=>{ document.getElementById('splash').classList.add('hide'); document.body.classList.remove('splash-open'); goTo(state.current||0); };
+document.getElementById('tocBtn').onclick=()=>{ document.getElementById('splash').classList.remove('hide'); document.body.classList.add('splash-open'); };
+
+/* ---- KEYBOARD A11Y ---- */
+const KBD_SEL = '.mc-opt,.tab-btn,.nav-section-btn,.sub-item';
+function applyKbd(){ document.querySelectorAll(KBD_SEL).forEach(el=>{ if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0'); if(!el.hasAttribute('role')) el.setAttribute('role','button'); }); }
+document.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' ') && e.target.matches && e.target.matches(KBD_SEL)){ e.preventDefault(); e.target.click(); } });
+
+window.addEventListener('DOMContentLoaded', ()=>{ buildSidebar(); buildSplash(); goTo(state.current||0); document.body.classList.add('splash-open'); applyKbd(); });
+const _mo=new MutationObserver(()=>applyKbd()); _mo.observe(document.body,{childList:true,subtree:true});
+</script>
+<script>
+/* =====================================================================
+   TAB-STRIP BUILDER (USI pattern, S02–S05 parallel-concept teaching)
+   ===================================================================== */
+function buildTabs(containerId){
+  const wrap=document.getElementById(containerId); if(!wrap) return;
+  const btns=wrap.querySelectorAll('.tab-btn');
+  btns.forEach(btn=>{
+    btn.onclick=()=>{
+      wrap.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      wrap.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel=document.getElementById(btn.dataset.tab);
+      if(panel) panel.classList.add('active');
+    };
+  });
+}
+buildTabs('tabsS02'); buildTabs('tabsS03'); buildTabs('tabsS04'); buildTabs('tabsS05');
+
+/* =====================================================================
+   CHECKPOINT 1 · S06 · MODULE QUIZ (4 MCQs, all rendered at once)
+   ===================================================================== */
+const S06_QS = [
+  { n:'Question 1', s:'A teammate says two identical prompts must return identical text. What is the most accurate response?', opts:['That is true, the model is deterministic.','Not necessarily, the model samples each next token from a probability distribution, so wording can vary even when both answers are correct.','That is only true if streaming is off.','That is only true on the largest model.'], ans:1, rat:'B. Sampling makes generation non-deterministic, which is why tests assert on properties and meaning rather than exact text.' },
+  { n:'Question 2', s:'Which statement best separates model choice from reasoning mode?', opts:['They are the same setting.','Extended thinking is a different model.','Model choice picks which member of the family runs; extended thinking is a per-call setting that any supporting model can run with on or off.','Reasoning mode is fixed per account.'], ans:2, rat:'C. The two levers are independent but can work together.' },
+  { n:'Question 3', s:'A short, well-specified classification task returns the right answer zero-shot. What does adding three examples most likely do?', opts:['Improves accuracy substantially.','Adds token cost on every call for little or no gain.','Changes the model being used.','Disables sampling.'], ans:1, rat:'B. Add examples when the output shape is wrong, not when zero-shot already works.' },
+  { n:'Question 4', s:'You must process thousands of inputs offline at the lowest cost. Which shape fits?', opts:['Synchronous calls in a loop.','Streaming.','Batch submission with polling.','A larger context window.'], ans:2, rat:'C. Batch trades latency for lower per-token cost and avoids the rate limits a synchronous loop hits.' },
+];
+let s06Ans = {};
+function s06Build(){
+  s06Ans = {};
+  const wrap = document.getElementById('s06Quiz'); wrap.innerHTML='';
+  S06_QS.forEach((q,qi)=>{
+    const div = document.createElement('div'); div.className='quiz-q';
+    div.innerHTML = `<div class="quiz-q-num">${q.n}</div><div class="quiz-q-text">${q.s}</div>
+      <div class="mc-opts">${q.opts.map((o,oi)=>`<div class="mc-opt" data-qi="${qi}" data-oi="${oi}"><span class="mc-opt-letter">${String.fromCharCode(65+oi)}</span><span class="mc-opt-label">${o}</span></div>`).join('')}</div>
+      <div class="rationale" id="ratS06${qi}"></div>`;
+    div.querySelectorAll('.mc-opt').forEach(opt=>{
+      opt.onclick = ()=>{ div.querySelectorAll('.mc-opt').forEach(x=>x.classList.remove('selected')); opt.classList.add('selected'); s06Ans[qi]=parseInt(opt.dataset.oi);
+        document.getElementById('submitS06').disabled = Object.keys(s06Ans).length < S06_QS.length; };
+    });
+    wrap.appendChild(div);
+  });
+  document.getElementById('submitS06').disabled = true;
+}
+document.getElementById('submitS06').onclick = ()=>{
+  let correct=0;
+  S06_QS.forEach((q,qi)=>{
+    const chosen = s06Ans[qi];
+    if(chosen===q.ans) correct++;
+  });
+  const pass = correct>=4;
+  fb('fbS06', pass?'correct':(correct>=1?'':'incorrect'), pass?'Correct':(correct>=1?'Partial':'Revisit'), pass?`${correct}/${S06_QS.length} correct. Review the rationale above each question.`:`${correct}/${S06_QS.length} correct. This quiz requires all 4 correct to pass. Review your answers and try again.`);
+  if(pass){
+    S06_QS.forEach((q,qi)=>{
+      const chosen = s06Ans[qi];
+      document.querySelectorAll(`#s06Quiz .mc-opt[data-qi="${qi}"]`).forEach(opt=>{ const oi=parseInt(opt.dataset.oi); if(oi===q.ans) opt.classList.add('correct'); else if(oi===chosen) opt.classList.add('wrong'); });
+      const rat = document.getElementById('ratS06'+qi); rat.textContent = q.rat; rat.classList.add('show');
+    });
+    document.querySelectorAll('#s06Quiz .mc-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; }); document.getElementById('submitS06').disabled=true; checkpointPassed();
+  }
+};
+document.getElementById('skipS06').onclick = ()=>{ skipCP('fbS06','Move on if you need to, but return before the cumulative task.'); };
+
+/* =====================================================================
+   CHECKPOINT 2 · S07 · EXERCISE: PREDICT THE BEHAVIOR (4 scenarios, partial credit at 3/4)
+   ===================================================================== */
+const S07_QS = [
+  { n:'Scenario 1', s:'Consider a classification task run at temperature 0 versus the same task run at a high temperature. Predict how the outputs differ across repeated runs.', opts:['At a low temperature, the model concentrates probability on the most likely tokens, so repeated runs return the same label far more consistently, though never with guaranteed determinism, even at temperature 0. At a high temperature, the distribution spreads out, so wording and even the chosen label can vary. For a classifier you want the low-temperature, repeatable behavior.','Both configurations return identical output every run, because temperature only affects response length, not which tokens are chosen.','The high-temperature run is more accurate, because spreading the distribution lets the model consider more of the correct answers.','Temperature has no effect on a classification task, because classification always returns a fixed label regardless of sampling.'], ans:0, rat:'Temperature shapes the probability distribution the model samples from, it does not fix or disable the output. Lower temperature concentrates probability on the most likely tokens, making repeated runs far more consistent (identical outputs are never guaranteed, even at temperature 0), which is what a classifier needs. On the newest models, sampling parameters are omitted entirely. Non-default values return an error, and repeatability is managed through prompt design. Higher temperature spreads the distribution and lets the label and wording vary.' },
+  { n:'Scenario 2', s:'Consider a task that keeps returning output in the wrong structure under a zero-shot prompt. Predict what changes if you switch to multi-shot.', opts:['Switching to multi-shot retrains the model on the new structure, so the change is permanent across every future call once the examples are sent.','Adding two or three correct input-output examples shows the model the exact structure to match, which usually fixes a structure problem that more instruction text did not. The cost is extra tokens on every call, so add the fewest examples that make the output reliable.','Multi-shot will not help a structure problem; only raising the temperature changes the shape of the output.','Multi-shot lowers the token cost per call, because examples let the model produce shorter responses.'], ans:1, rat:'Examples in a prompt are not training and do not lower cost. They sit in the prompt, demonstrate the exact output shape, and add tokens on every call. Reach for multi-shot when the structure is wrong, and add the fewest examples that make the output reliable.' },
+  { n:'Scenario 3', s:'Consider a pipeline that must process 50,000 documents overnight with no user waiting. Predict which request shape fits and why.', opts:['A synchronous loop fits best, because calling the API once per document is the simplest pattern and avoids the overhead of submitting a batch.','Streaming fits best, because sending the response in pieces lets the pipeline start processing each document sooner.','The batch pattern fits: submit the requests in a batch and poll for completion, accepting longer latency for a lower per-token cost. A synchronous loop would hit rate limits and tie up the application, and streaming buys nothing because no user is watching.','A larger context window fits best, because fitting all 50,000 documents into one request avoids making repeated calls.'], ans:2, rat:'Match the request shape to whether a user is waiting. With no user watching and tens of thousands of inputs, the Message Batches API is the right fit: submit the requests in one call, poll for completion, and accept longer latency in exchange for a lower per-token cost. A synchronous loop hits rate limits at this volume. Streaming only helps when someone is watching the output arrive.' },
+  { n:'Scenario 4', s:'Consider a long multi-turn agent session whose context window keeps filling. Predict the symptoms and name the budget at fault.', opts:['The model silently drops the oldest turns to make room, so the session continues but quietly loses early context without any error.','The context window is a fixed token budget; as history and tool results accumulate it fills. An input that is already oversized is rejected with an error before generation, while a request that fits on input but reaches the ceiling mid-generation comes back with truncated output and a model_context_window_exceeded stop reason. The symptom is a session that ran fine in testing failing once inputs grow, which is why the application must trim or summarize history.','The symptom is slower sampling, and the budget at fault is the temperature setting, which must be lowered as the session grows.','There is no fixed budget; the window expands automatically to hold whatever history accumulates, so a long session never fails for this reason.'], ans:1, rat:'The context window is a fixed budget. An oversized input is rejected with an error before generation; a request that reaches the ceiling mid-generation instead comes back truncated with a model_context_window_exceeded stop reason. The oldest content is never silently dropped. The symptom is a session that passed in testing failing once inputs and turns grow, which is why trimming or summarizing history is the application\'s job.' },
+];
+let s07Ans = {};
+function s07Build(){
+  s07Ans = {};
+  const wrap = document.getElementById('s07Quiz'); wrap.innerHTML='';
+  S07_QS.forEach((q,qi)=>{
+    const div = document.createElement('div'); div.className='quiz-q';
+    div.innerHTML = `<div class="quiz-q-num">${q.n}</div><div class="quiz-q-text">${q.s}</div>
+      <div class="mc-opts">${q.opts.map((o,oi)=>`<div class="mc-opt" data-qi="${qi}" data-oi="${oi}"><span class="mc-opt-letter">${String.fromCharCode(65+oi)}</span><span class="mc-opt-label">${o}</span></div>`).join('')}</div>
+      <div class="rationale" id="ratS07${qi}"></div>`;
+    div.querySelectorAll('.mc-opt').forEach(opt=>{
+      opt.onclick = ()=>{ div.querySelectorAll('.mc-opt').forEach(x=>x.classList.remove('selected')); opt.classList.add('selected'); s07Ans[qi]=parseInt(opt.dataset.oi);
+        document.getElementById('submitS07').disabled = Object.keys(s07Ans).length < S07_QS.length; };
+    });
+    wrap.appendChild(div);
+  });
+  document.getElementById('submitS07').disabled = true;
+}
+document.getElementById('submitS07').onclick = ()=>{
+  let correct=0;
+  S07_QS.forEach((q,qi)=>{
+    const chosen = s07Ans[qi];
+    if(chosen===q.ans) correct++;
+  });
+  if(correct>=3){
+    S07_QS.forEach((q,qi)=>{
+      const chosen = s07Ans[qi];
+      document.querySelectorAll(`#s07Quiz .mc-opt[data-qi="${qi}"]`).forEach(opt=>{ const oi=parseInt(opt.dataset.oi); if(oi===q.ans) opt.classList.add('correct'); else if(oi===chosen) opt.classList.add('wrong'); });
+      const rat = document.getElementById('ratS07'+qi); rat.textContent = q.rat; rat.classList.add('show');
+    });
+  }
+  let label, msg;
+  if(correct===4){ label='All four correct'; msg='Scenario 1: sampling is the lever. A low temperature concentrates probability on the most likely tokens and makes a classifier much more repeatable (never perfectly deterministic), while a high temperature spreads the distribution and allows the label to vary. Scenario 2: prompting mode is the lever. A few correct examples show the exact output shape that more instruction text kept missing. This comes at the cost of tokens on every call, so add the fewest that make it reliable. Scenario 3: request shape is the lever. The Message Batches API trades latency for a lower per-token cost and suits bulk offline workloads where no user is waiting. A synchronous loop hits rate limits at this volume, and streaming earns nothing with no one watching the output arrive. Scenario 4: the context window is a fixed token budget. An oversized input is rejected with an error before generation, while a request that reaches the ceiling mid-generation comes back truncated with a model_context_window_exceeded stop reason. Either way the application must trim or summarize history.'; }
+  else if(correct===3){ label='Partial credit'; msg='Partial credit applies. Review the missed scenario through the lens of its foundation: Scenario 1 is sampling and temperature, Scenario 2 is prompting mode and the cost of examples, Scenario 3 is matching request shape to whether a user is waiting, and Scenario 4 is the context window as a fixed budget.'; }
+  else {
+    const misses=[];
+    if(s07Ans[0]!==S07_QS[0].ans) misses.push('Scenario 1 incorrect: Temperature shapes the probability distribution the model samples from, it does not fix or disable the output. Lower temperature concentrates probability on the most likely tokens, making repeated runs far more consistent (identical outputs are never guaranteed, even at temperature 0), which is what a classifier needs. On the newest models, sampling parameters are omitted entirely. Non-default values return an error, and repeatability is managed through prompt design. Higher temperature spreads the distribution and lets the label and wording vary.');
+    if(s07Ans[1]!==S07_QS[1].ans) misses.push('Scenario 2 incorrect: Examples in a prompt are not training and do not lower cost. They sit in the prompt, demonstrate the exact output shape, and add tokens on every call. Reach for multi-shot when the structure is wrong, and add the fewest examples that make the output reliable.');
+    if(s07Ans[2]!==S07_QS[2].ans) misses.push('Scenario 3 incorrect: Match the request shape to whether a user is waiting. With no user watching and tens of thousands of inputs, the Message Batches API is the right fit: submit the requests in one call, poll for completion, and accept longer latency in exchange for a lower per-token cost. A synchronous loop hits rate limits at this volume. Streaming only helps when someone is watching the output arrive.');
+    if(s07Ans[3]!==S07_QS[3].ans) misses.push('Scenario 4 incorrect: The context window is a fixed budget. An oversized input is rejected with an error before generation; a request that reaches the ceiling mid-generation instead comes back truncated with a model_context_window_exceeded stop reason. The oldest content is never silently dropped. The symptom is a session that passed in testing failing once inputs and turns grow, which is why trimming or summarizing history is the application\'s job.');
+    label='Revisit'; msg=misses.join(' ');
+  }
+  fb('fbS07', correct>=3?'correct':(correct>=1?'':'incorrect'), label, msg);
+  if(correct>=3){ document.querySelectorAll('#s07Quiz .mc-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; }); document.getElementById('submitS07').disabled=true; checkpointPassed(); }
+};
+document.getElementById('skipS07').onclick = ()=>{ skipCP('fbS07'); };
+
+/* =====================================================================
+   RESET, rebuilds every checkpoint's DOM from cleared state
+   ===================================================================== */
+function resetCheckpointUI(){
+  s06Ans={}; document.getElementById('fbS06').className='feedback'; document.getElementById('fbS06').innerHTML='';
+  document.getElementById('submitS06').disabled=true; s06Build();
+
+  s07Ans={}; document.getElementById('fbS07').className='feedback'; document.getElementById('fbS07').innerHTML='';
+  document.getElementById('submitS07').disabled=true; s07Build();
+}
+
+s06Build();
+s07Build();
+</script>
+<script>
+// SCORM 1.2 bridge, completion, scoring, bookmarking, session time, suspend/resume
+(function(){
+  function getAPI(){
+    var w=window;
+    for(var i=0;i<10;i++){ if(w.API) return w.API; if(w.parent&&w.parent!==w) w=w.parent; else break; }
+    return null;
+  }
+  var api=null, initialized=false, sessionStart=Date.now(), completed=false,finished=false;
+
+  function toScormTime(ms){
+    var s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+    return (h<10?"0"+h:h)+":"+(m<10?"0"+m:m)+":"+(sec<10?"0"+sec:sec)+".0";
+  }
+
+  function init(){
+    api=getAPI();
+    if(!api) return;
+    api.LMSInitialize("");
+    initialized=true;
+    var loc=api.LMSGetValue("cmi.core.lesson_location");
+    if(loc && !isNaN(parseInt(loc,10))){
+      var idx=parseInt(loc,10);
+      if(idx>0 && idx<SCREENS.length){ state.current=idx; goTo(idx); }
+    }
+    var status=api.LMSGetValue("cmi.core.lesson_status");
+    if(status!=="completed" && status!=="passed"){
+      api.LMSSetValue("cmi.core.lesson_status","incomplete");
+      api.LMSCommit("");
+    }
+  }
+
+  window.scormSaveLocation=function(idx){
+    if(!initialized) return;
+    api.LMSSetValue("cmi.core.lesson_location", String(idx));
+    api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+    api.LMSCommit("");
+  };
+
+  window.scormComplete=function(){
+    if(!initialized) init();
+    if(!api) return;
+    completed=true;
+    api.LMSSetValue("cmi.core.lesson_status","completed");
+    api.LMSSetValue("cmi.core.score.raw","100");
+    api.LMSSetValue("cmi.core.score.min","0");
+    api.LMSSetValue("cmi.core.score.max","100");
+    api.LMSSetValue("cmi.core.exit","");
+    api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+    api.LMSCommit("");api.LMSFinish('');finished=true;
+  };
+
+  window.addEventListener("load", init);
+  window.addEventListener("beforeunload", function(){
+    if(!api||!initialized||finished) return;
+    if(!completed){
+      api.LMSSetValue("cmi.core.exit","suspend");
+      api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+      api.LMSCommit("");
+    }
+    api.LMSFinish("");
+  });
+})();
+</script>
+
+
+</body></html>

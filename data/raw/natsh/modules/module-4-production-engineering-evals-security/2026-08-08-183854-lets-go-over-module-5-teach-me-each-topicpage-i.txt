@@ -1,0 +1,494 @@
+╭─── Claude Code v2.1.226 ─────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                  Welcome back Nat!                 │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ What's new              │
+│                        ▘▘ ▝▝                       │ Bug fixes and reliabil… │
+│  Sonnet 5 · Claude Max · natalieerel@gmail.com's   │ Added gateway spend-li… │
+│  Organization                                      │ Added a workspace trus… │
+│ ~/…/module-4-production-engineering-evals-security │ /release-notes for more │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+ ▎ Fable 5 is now a standard part of your Max plan
+ ▎ You can use up to 50% of your weekly usage limit on Fable 5. If you hit your limit, you can continue on Fable 5 with usage credits. Fable 5 draws down usage faster than Opus 5. Run /model and select Fable to use it. Learn more: https://support.claude.com/en/articles/15424964-claude-fable-5-promotional-access
+
+❯ lets go over module 5, teach me each topic/page in a concice way (I'm an      
+  experienced developer). I don't have much time to study, the exam is          
+  tomorrow! I'm at module 5.                                                    
+
+⏺ I don't have any context on what course or subject "Module 5" refers to —
+  there's nothing in this working directory that looks like course material. Let
+  me check for any files first.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Found it — there's a claude-developer-foundations-prep folder plus module 4
+  files, so this looks like Claude developer certification prep. Let me check
+  for module 5 material.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ There's a whole prep structure — module 5 is "Accelerators, IP &
+  Contribution." Let me look at what's inside.
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ Good — 9 sections, 25 screens. Let me pull the module 5 README and each
+  section's content to build a concise study guide.
+
+  Read 11 files, ran 1 shell command (ctrl+o to expand)
+
+⏺ Good progress. Let me pull the remaining sections.
+
+  Read 14 files (ctrl+o to expand)
+
+⏺ Read all 25 screens of Module 5 (Accelerators & IP Contribution). Here's the
+  condensed version — 9 sections, exam-relevant facts bolded, checkpoint answers
+  included so you can self-check.
+
+  1. Packaging for Reuse
+
+  An accelerator = a working build packaged so the next engagement configures it
+  instead of rebuilding from scratch. Three asset types, each packaged
+  differently:
+  - Agent template — pull customer-specific values (prompts, paths, scopes,
+  thresholds) into parameters w/ documented defaults
+  - MCP server package — document each tool's inputs, let installer set scope
+  - Eval suite — ship dataset + rubric together; also doubles as the deployment
+  gate
+
+  Must also: document assumptions (env, inputs, failure modes) — code shows
+  behavior, not assumptions. Bundle the audit log (data touched, identity acted
+  under) or it dies at first security review.
+
+  Failure mode: hardcoding customer values "just for the demo" and never
+  revisiting — next team can't configure it, has no eval to confirm it still
+  works, rewrites from scratch.
+
+  Checkpoint 1 answer: repo_path was hardcoded. Fix: def 
+  build_review_agent(repo_path): ... repo_path=repo_path.
+
+  2. Contributing Back
+
+  Move a packaged asset into shared infra via the channel built for it:
+  - Cookbook = focused, single/multi-pattern reference implementations (not full
+  apps)
+  - Tools/MCP servers = their own repos
+
+  4 things a maintainer needs to verify a contribution: (1) it does one thing,
+  (2) a runnable example, (3) a test proving behavior, (4) a stated assumption.
+  Missing these = PR sits at the back of the queue (maintainer won't
+  reverse-engineer your intent).
+
+  Rights/attribution gate comes before technical review — engagement code may
+  carry licensing constraints; confirm you can contribute it.
+
+  Checkpoint 2 answers:
+  - Case A (focused single-function tool) → tool's own repo; missing = a test
+  - Case B (full app w/ UI) → Cookbook, but only after stripping to a focused
+  example; missing = reduction to one pattern
+  - Case C (one-line fix from customer engagement) → Cookbook example's own
+  repo; missing = rights check
+
+  3. Requirements & Lifecycle
+
+  Functional requirement = checkable statement of behavior ("classify ticket
+  into 1 of 4 queues"), not a vague goal ("be fast").
+  Infrastructure requirements = derived by asking: latency (measured where?),
+  scale (peak?), residency (where/under what regulation?), identity (who acts,
+  what's auditable?).
+
+  Checkpoint 3 answers: Q1 → B ("agent produces summary a human approves before
+  storage" — checkable behavior). Q2 → C ("transcript data processed in the EU"
+  — residency constraint).
+
+  Systems lifecycle: Requirements → Design → Build → Test → Deploy → Operate →
+  Iterate. Gates between phases (e.g., don't leave Design until platform
+  satisfies residency; don't promote past Deploy until eval clears baseline) are
+  what keep it reviewable.
+
+  Checkpoint 4 answers: (a) pin model ID + keep prior = deploy; (b) gate
+  promotion on eval = deploy; (c) decide data processed in region =
+  requirements; (d) instrument cost/latency in prod = operate; (e) choose
+  Bedrock for compliance posture = design.
+
+  4. Deployment & Versioning
+
+  6 deployment platforms: first-party Claude API, Claude Platform on AWS, Claude
+  in Amazon Bedrock (Messages API), Claude on Amazon Bedrock legacy
+  (InvokeModel/Converse, ARN-versioned), Google Vertex AI, third-party (e.g.,
+  Microsoft Foundry — hosted-on-Azure vs hosted-on-Anthropic, residency differs
+  per model).
+  Customer's existing cloud/compliance posture usually decides the platform, not
+  technical merit.
+
+  Versioning: aliases (opus, sonnet) move over time and can resolve differently
+  per platform. Pin the full model ID (fixed snapshot). Keep the prior pinned
+  version for rollback. Gate promotion through the eval suite against the pinned
+  baseline.
+
+  Checkpoint 5 (AWS + residency + rollback) answer: Platform = Amazon Bedrock;
+  Identity = AWS identity reference; Model ref = pinned full model ID; Rollback
+  = retain prior pinned version.
+
+  5. Comparing Platforms
+
+  Three dimensions a procurement/security team needs, each measured, not 
+  assumed:
+  - Latency — from the customer's actual region/payload (not your laptop);
+  in-region cloud wins round-trip, first-party API wins earliest feature access
+  - Compliance — pass/fail for regulated customers; match their existing
+  certified cloud to avoid re-certification; EU residency typically needs
+  Bedrock/Vertex, not first-party API
+  - Cost — total per call (egress + platform fees + integration), not just token
+  price
+
+  Failure mode: picking the platform your team is familiar with, discovering at
+  security review that it fails residency → full rebuild.
+
+  Checkpoint 6 answer: Option B — remeasure latency from EU-west and pick the
+  platform whose region satisfies EU-only residency.
+
+  6. Trust Boundaries (multi-component apps)
+
+  A trust boundary = every seam where data/instructions cross between deployment
+  environments (API → Claude Code task → MCP server). Content fetched by one
+  component is untrusted the moment it reaches the next — treat it as data, not 
+  instructions (same principle as the security module).
+
+  Least privilege applies to the whole app — it's only as contained as its
+  most-privileged component/seam, even if every other piece is scoped correctly.
+
+  Failure mode: each component passes its own tests in isolation → team assumes
+  the wiring is safe → nobody marks the seam as a boundary → fetched content
+  flows straight into the next prompt as instructions.
+
+  Checkpoint 7 answers: Blank 1 (seam control) = treat_as_data; Blank 2 (MCP
+  server identity scope) = least_privilege_read_only.
+
+  Cumulative task — 3 planted defects (this is the exam-style pattern)
+
+  1. Packaging: hardcoded repo_path → parameterize
+  2. Deployment/versioning: moving alias "opus" → pin full Bedrock ID
+  (us.anthropic.claude-opus-4-8) + retain_previous_pinned_version=True
+  3. Trust boundary: next_call(input=fetched) passes untrusted fetched content
+  raw → wrap in treat_as_data(fetched)
+  Plus: gate promotion with assert eval_suite.run(...) >= baseline_score.
+
+  Key takeaways (memorize these 5 lines)
+
+  1. Package while the build is fresh (knowledge decays fast).
+  2. A maintainer accepts only what they can verify
+  (code+example+test+assumptions+rights).
+  3. Pin what ships (full model ID, not alias; keep rollback version).
+  4. Measure the dimension that decides placement (latency/compliance/cost —
+  don't guess).
+  5. Mark every seam as a boundary (trust doesn't carry over from a component
+  that worked alone).
+
+  Glossary terms likely to be tested
+
+  - Accelerator — packaged reusable build (params + docs + eval)
+  - Contribution readiness — focused code + example + test + assumptions +
+  rights
+  - Deployment platform — the 6 listed above; differ on
+  identity/residency/latency/cost
+  - Alias vs pinned ID — alias = moving target; pinned = fixed snapshot
+  - Trust boundary — seam between deployment environments; fetched content =
+  data, not instructions
+
+  ---That's all 25 screens. Given only 4/9 checkpoints were marked passed in
+  your progress — if you want, I can quiz you rapid-fire on the checkpoint
+  scenarios (5), (6), (7), and the cumulative task since those test the same
+  "spot the defect" pattern the exam likely uses.
+
+✻ Churned for 1m 29s
+
+※ recap: You're studying Module 5 (Accelerators & IP Contribution) for tomorrow's exam; I've given you a full condensed recap of all 9 sections. Next: want me to quiz you on the checkpoint scenarios to test retention? (disable recaps in /config)
+
+❯ now lets do it for module 4                                                   
+
+⏺ Let me pull all of Module 4's content the same way.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ 23 files this time. Reading them all now.
+
+  Read 12 files (ctrl+o to expand)
+
+⏺ Now the remaining sections: cost & orchestration, security, cumulative tasks,
+  and takeaways/glossary.
+
+  Read 11 files (ctrl+o to expand)
+
+⏺ Let me check the raw HTML for hidden checkpoint model-answers that didn't
+  render in the markdown extracts, especially the cumulative task ones.
+
+  Ran 6 shell commands (ctrl+o to expand)
+
+⏺ Confirms my earlier answers exactly. Now the security checkpoint and
+  cumulative task A/B model answers.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ All checkpoint answers verified against the embedded model-answer key (not
+  just inferred). Here's the Module 4 study guide.
+
+  1. Evals & Judges
+
+  An eval = dataset of input cases + expected behavior + grader, run and
+  averaged, so "done" is a tracked score, not a feeling. Write it before the 
+  feature — forces you to define success up front.
+
+  3 grading methods, pick by output shape:
+  - Exact/string match — one correct form (classifier label). Cheap, brittle,
+  fails valid paraphrases.
+  - Code-graded check — structural (valid JSON, parseable code, field present).
+  Catches format, not quality.
+  - LLM-as-judge — open-ended quality (faithfulness, instruction-following).
+  Most expensive/noisy; only method that scales subjective quality.
+
+  Judge construction: ask for strengths/weaknesses/reasoning before the score
+  (anchors it — otherwise models drift to a safe ~6). Must calibrate against
+  human-labeled cases and measure agreement before trusting it. Coverage
+  (volume, incl. edge cases) beats a small perfect rubric. Change one lever at a
+  time (prompt/tools/model) so you know what moved the score; read per-case
+  results, not just the average.
+
+  Failure mode: judged "done" from a dozen manual tries that all shared the same
+  input shape (e.g., single-date messages) → untested edge case (two dates in
+  one sentence) passed validation but extracted the wrong value. Fix: have the
+  model enumerate edge cases, turn them into graded cases.
+
+  Design document (do this first, before any production code): 4 decisions —
+  success criteria (checkable), failure handling (retriable/terminal +
+  user-facing fallback), cost/latency budget (ceiling + reliability floor),
+  trust boundary (untrusted inputs + least-privilege action scope). Everything
+  else in the module derives from this doc.
+
+  Checkpoint answer (S04): meeting-transcript expected output = "lists all three
+  action items with their owners"; bug-report expected output = "summary of the
+  bug and repro steps that omits the unrelated aside." Score bands: 1–3 misses
+  required content, 4–7 partial, 8–10 complete and faithful.
+
+  2. Testing & Tracing
+
+  4 test levels, each catches a different break:
+  - Unit — one function alone (parser, tool wrapper)
+  - Functional — one Claude call returns expected shape
+  - Integration — the handoff between two components — most silent failures live
+  here, because each side passes alone while the seam is broken
+  - End-to-end — full flow as a user runs it; slowest, hardest to localize
+
+  Trace = timeline of a run (prompt, tool calls, intermediate outputs, timing) —
+  turns "case failed" into "step 4 raised X," localizing the fix instead of
+  hand-tracing for a day.
+
+  Retrieval routing: cheap classifier picks fetch_once (single-fact lookup,
+  stable corpus) vs agentic_search (multi-step, changing corpus) — only worth it
+  if traffic is mixed.
+
+  Failure mode: unit test on parser passes, functional test on model call
+  passes, end-to-end fails — because retrieve() returns [{"content": ...}] but
+  build_prompt() expected a plain string. Neither isolated test could catch it;
+  only an integration test on the exact handoff does.
+
+  Checkpoint answer (S07): C — align the handoff (c["content"]) + add an
+  integration test on retrieve() → build_prompt(). (A and B "fix" pieces that
+  already pass in isolation and aren't the break.)
+
+  3. Failure Handling & Model Selection
+
+  First question for any failure: retriable or terminal? (Would retrying the
+  identical request plausibly work?)
+  - Retriable: 429 (rate limit), 529 (overloaded), 500/502/503/504 (server-side)
+  → exponential backoff, capped attempts, honor retry-after header when present
+  - Terminal: 400 (bad request), 401 (auth), 403, 404 → fail fast, never retry
+  (identical failure every time)
+  - Refusal (HTTP 200, stop_reason: "refusal") → terminal; it's a content
+  decision, not a transient error — the retriable classifier won't catch it
+  since it's a 200.
+  - When unsure, default to terminal — a wrongly-terminal failure fails loudly
+  and gets fixed; a wrongly-retriable one hammers the service.
+
+  SDK already retries transient failures — don't stack your own retry loop on
+  top of it (multiplies attempts against the same limit). Pick one owner.
+
+  Tool errors: return to Claude with is_error: true, never a silent empty result
+  — otherwise the model treats the empty result as valid data and reasons on a
+  false premise.
+
+  Checkpoint answer (S10) — the broken retry code's defect: time.sleep(0) = zero
+  backoff, retries fire instantly; it also retries every exception including
+  terminal statuses (400) that can't be fixed by retrying. Against a rate limit,
+  instant retries deepen it. Fix: honor retry-after → else exponential backoff
+  with cap+jitter (min(cap, 2**attempt) + jitter); fail fast (raise) on terminal
+  statuses; only retry retriable ones.
+
+  Model selection: Fable (top reasoning/coding/agentic) > Opus (above Sonnet
+  envelope) > Sonnet (balanced default) > Haiku (speed/cost). Default to Sonnet;
+  step up to Opus only when an eval shows Sonnet missing the bar; step down to
+  Haiku only when an eval shows the cheaper model still holds the bar. Route
+  (cheap classifier picks the model per-request) when traffic is mixed shape;
+  pin one model when it's uniform.
+
+  Checkpoint answers (S10B): Scenario 1 (high-volume classification, eval
+  confirms Haiku holds) → C, Haiku/cost-at-volume. Scenario 2 (dependent
+  refactor, Sonnet misses the bar) → B, Opus/quality on hard reasoning. Scenario
+  3 (mixed simple+complex traffic) → D, route Sonnet/Haiku default with Opus
+  override.
+
+  4. Cost & Orchestration
+
+  Instrument every call from day one: token usage (in/out), latency, error rate
+  — otherwise a cost spike is "why is the bill high?" instead of "which step,
+  which request type."
+
+  Cost/latency levers: model selection, prompt/context size, number of tool
+  calls, streaming (perceived latency, not total time), prompt caching, Batches
+  API.
+
+  Streaming + tool use: tool_use blocks arrive as accumulating deltas across
+  events — not safe to act on until the stream closes and input_json is fully
+  assembled. A broken stream mid-response = retriable, retry the whole request.
+
+  Prompt caching: caches processing work for a stable prefix. Writes cost more
+  (1.25x for 5-min TTL, 2x for 1-hour), reads cost far less (0.1x) — only pays
+  off when reads >> writes. Needs: (1) identical content before the breakpoint
+  (any change invalidates), (2) content recurs soon (default TTL 5 min,
+  refreshed on hit), (3) prefix long enough to clear the per-model minimum. Best
+  candidates: long system prompt, large tool schema.
+
+  Batches API: async processing, ~50% cheaper, trades latency for cost — only
+  for non-urgent work (overnight jobs, backfills), never user-facing. Compounds
+  with caching on repeated-context batch jobs.
+
+  Orchestrator-worker (multi-agent): lead plans → subagents run in parallel,
+  each with own context → lead synthesizes. ~15x token cost of a single chat
+  (Anthropic's reported figure) — only worth it when the task genuinely
+  decomposes into independent parallel parts (e.g., research across separate
+  sources). Tightly coupled work (e.g., coding, where steps depend on prior
+  steps) gets worse ROI — single agent wins. Use a cheaper model for subagents,
+  stronger model for the lead, to blunt the multiplier. Orchestration also
+  multiplies failure surface — every subagent needs the same retry/backoff
+  discipline independently.
+
+  Reliability floor: set the retry budget + latency ceiling first, optimize cost
+  above that floor, never below it — cost pressure is "louder" (visible on a
+  dashboard) than reliability pressure (occasional failures dismissed as noise),
+  so if you optimize cost first you discover the floor only after crossing it.
+  The eval's pinned baseline score is what makes the floor
+  enforceable/gate-able.
+
+  Checkpoint answer (S13): single-fact lookup, stable corpus → C (fetch_once,
+  model choice lever). Broad research splitting into independent parts → A
+  (orchestrator_worker, parallel split). User-facing, reply should feel instant
+  → D (streaming). Cost-sensitive non-urgent batch → B (Batches API + caching,
+  ~50% reduction).
+
+  5. Security
+
+  Prompt injection: the model reads its whole context as one undifferentiated
+  token stream — no structural boundary between your instructions and content it
+  fetched. Hidden instructions in a fetched page/doc/tool result are read as
+  commands. Trusting your own user doesn't help — the injection typically
+  arrives via content the agent retrieves, not the user's own prompt. Defense:
+  treat all fetched/untrusted content as data, never instructions. Delimiters
+  help but are a soft boundary (content can mimic them or argue against them) —
+  the reliable boundary is what the agent is allowed to do, not how the prompt
+  is worded.
+
+  Jailbreak vs. injection: jailbreak = get the model to break its own safety
+  rules; injection = hijack your app's instructions. Different targets, same
+  layered defense: constrain input + constrain action.
+
+  Identity & access: least privilege (narrowest permission set that still
+  works), secrets in env vars/secret manager (never committed — a committed
+  secret lives in git history forever even after removal), explicit deny lists.
+  Protect the auth config itself — anything that can widen the agent's
+  permissions can act with that identity.
+
+  Hooks = enforcement, not convention. A rule in a prompt is not a control; a
+  PreToolUse hook that blocks/logs before the tool executes is. Precedence when
+  multiple rules apply: deny > ask > allow.
+
+  Regulated-review scoping — 3 questions asked early: (1) where is data
+  processed (residency), (2) how is access logged (audit trail = the hook's
+  log), (3) can an admin control config centrally (managed configuration, not
+  per-developer). Also confirm ZDR (zero data retention) eligibility per
+  model/platform at scoping time — not all models/platforms qualify.
+
+  OS-level sandboxing = the residual control beneath hooks — filesystem/network
+  isolation enforced by the OS, holds even if a hook is
+  missing/misconfigured/bypassed (a hook only covers what it explicitly checks;
+  sandboxing doesn't need to know the specific path/endpoint in advance).
+
+  Checkpoint answer (S16) — all four pieces belong, none is a distractor:
+  PreToolUse hook (blocks write outside /workspace/output, enforced before
+  execution), deny rule (/etc,/secrets,~/.aws — bounds blast radius), env-var
+  secret reference (not committed, rotatable), audit log (evidence trail for
+  review).
+
+  Cumulative task — verified model answer
+
+  def answer(question, page_url):
+      page = fetch(page_url)
+      notes = read_file("/workspace/input/notes")
+      write_file(page.suggested_path, summarize(page))   # DEFECT
+      resp = None
+      for i in range(5):
+          try:
+              resp = client.messages.create(model=MODEL, max_tokens=MAX_TOKENS,
+  messages=msg(question))
+              break
+          except Exception:
+              time.sleep(0)                                # DEFECT
+      return resp.content[0].text
+  3 defects, one per layer:
+  1. Eval layer — no eval exists at all; "done" was judged by manual demo runs,
+  nothing to regression-test against.
+  2. Failure-handling layer — time.sleep(0) = no real backoff, and except 
+  Exception retries terminal statuses (400s) too, deepening a rate limit instead
+  of waiting it out.
+  3. Security layer — write_file(page.suggested_path, ...) writes to a path
+  dictated by untrusted fetched content, with no PreToolUse hook enforcing a
+  write boundary.
+
+  Fix: pin the write to a fixed path (/workspace/output/summary.txt) behind a
+  hook that denies anything else; replace the retry loop with call_with_retry
+  (backoff + terminal fail-fast, from the S10 checkpoint); cover answer() with a
+  graded holdout eval run on every change.
+
+  Key takeaways (memorize these 5)
+
+  1. Set the standard before you build — eval turns "done" into a score; match
+  grader to output shape.
+  2. Match test to failure, trace to localize — integration seams hide most
+  silent breaks.
+  3. Sort every failure retriable/terminal before deciding what to do with it;
+  never let a tool error return silently.
+  4. Measure cost/latency per call; fan out to multiple agents only when the
+  task truly splits in parallel (15x cost otherwise).
+  5. Treat fetched content as data, enforce the boundary with a hook — not a
+  prompt instruction.
+
+  Glossary highlights likely tested
+
+  - Retriable vs. terminal — the first failure question
+  - Exponential backoff — growing wait + cap + honors retry-after
+  - Integration test — catches handoff failures unit/functional tests can't see
+  - LLM-as-judge — must be calibrated against human labels before trusted
+  - Orchestrator-worker — ~15x token cost, only for genuinely
+  parallel-decomposable tasks
+  - Hook-based guardrail — enforced control (runs before the action) vs. a
+  prompt instruction (not enforced)
+  - Prompt injection — defense is data-not-instructions + action-boundary
+  enforcement, not prompt wording
+
+  ---That covers all 23 screens with verified checkpoint answers. Want me to do
+  the same for Module 3 next, or quiz you rapid-fire across Modules 4 and 5
+  together since the cumulative-task "spot the defects" format repeats across
+  both?
+
+✻ Churned for 2m 32s

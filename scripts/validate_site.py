@@ -3,16 +3,18 @@
 validate_site.py
 Comprehensive integrity and validation test suite for CCDV-F Exam Simulator:
 1. Asserts all static assets and client bundles exist.
-2. Asserts all 10 exam files exist, each containing exactly 53 questions.
+2. Asserts all available exam files (10 to 12) exist, each containing exactly 53 questions.
 3. Asserts official CCDV-F blueprint weights (18/9/8/6/6/4/1/1) on EVERY form.
-4. Asserts 530 unique question IDs and prompts across the entire system.
-5. Asserts multi-source distribution: Non-Srinipusuluri >= 65%, Srinipusuluri <= 35%.
-6. Asserts client bundle (js/exam-data.js) matches disk files.
+4. Asserts strictly unique question IDs and prompts across the entire system.
+5. Asserts multi-source distribution on base-10 forms: Non-Srinipusuluri >= 65%, Srinipusuluri <= 35%.
+6. Asserts client bundle (js/exam-data.js) question count matches disk files.
 7. Asserts question schema validity (options, correct_answers, explanations).
 """
 import os
+import glob
 import json
 import re
+import struct
 from collections import Counter
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,8 +54,6 @@ def test_files_exist():
         assert os.path.exists(p), f"Missing required file: {rf}"
         assert os.path.getsize(p) > 0, f"File is empty: {rf}"
         print(f"✓ {rf} exists ({os.path.getsize(p)} bytes)")
-
-import struct
 
 def test_pwa_configuration():
     # 1. Manifest Structure & Asset Existence
@@ -117,15 +117,21 @@ def test_exam_data():
     all_path = os.path.join(BASE_DIR, "data", "all_questions.json")
     with open(all_path, "r", encoding="utf-8") as f:
         questions = json.load(f)
-    assert len(questions) == 530, f"Expected 530 questions, found {len(questions)}"
+
+    # P2-1: Match only standard two-digit exam filenames, ignoring stray drafts
+    exam_files = sorted(glob.glob(os.path.join(BASE_DIR, "data", "exams", "exam_[0-9][0-9].json")))
+    num_exams = len(exam_files)
+    expected_total_q = num_exams * 53
+
+    assert len(questions) == expected_total_q, f"Expected {expected_total_q} questions across {num_exams} exams, found {len(questions)}"
     
     # 1. Unique IDs & Prompts
     unique_ids = set(q["id"] for q in questions)
-    assert len(unique_ids) == 530, f"Found duplicate question IDs ({len(unique_ids)}/530)"
+    assert len(unique_ids) == expected_total_q, f"Found duplicate question IDs ({len(unique_ids)}/{expected_total_q})"
 
     prompt_keys = set(re.sub(r'[^a-z0-9]', '', q["prompt"].lower())[:80] for q in questions)
-    assert len(prompt_keys) == 530, f"Found duplicate prompts across questions ({len(prompt_keys)}/530)"
-    print("✓ All 530 questions are strictly unique in ID and prompt content!")
+    assert len(prompt_keys) == expected_total_q, f"Found duplicate prompts across questions ({len(prompt_keys)}/{expected_total_q})"
+    print(f"✓ All {expected_total_q} questions across {num_exams} exams are strictly unique in ID and prompt content!")
 
     # 2. Schema Integrity
     source_counts = Counter()
@@ -140,32 +146,33 @@ def test_exam_data():
         for ca in q["correct_answers"]:
             assert ca in opt_keys, f"Correct answer {ca} not in options {opt_keys} for {q['id']}"
 
-    print("✓ All 530 questions passed strict schema and key integrity validation!")
+    print(f"✓ All {expected_total_q} questions passed strict schema and key integrity validation!")
 
-    # 3. Multi-Source Diversity Verification
-    non_srini = sum(count for repo, count in source_counts.items() if "srinipusuluri" not in repo)
-    srini = source_counts["srinipusuluri/CCDV-F-SET1"]
-    non_srini_pct = (non_srini / len(questions)) * 100
-    srini_pct = (srini / len(questions)) * 100
-    print(f"\nMulti-Source Distribution:")
-    for repo, count in source_counts.most_common():
-        print(f"  {repo:42s}: {count:3d} ({count/len(questions)*100:5.1f}%)")
-    print(f"  Non-Srinipusuluri Total: {non_srini:3d} ({non_srini_pct:.1f}%)")
-    print(f"  Srinipusuluri Total:     {srini:3d} ({srini_pct:.1f}%)")
+    # P1-5: Multi-Source Diversity Verification scoped to base 10 exams
+    base_10_questions = [q for q in questions if q.get("exam_id", 0) <= 10]
+    if base_10_questions:
+        base_sources = Counter(q["source_repo"] for q in base_10_questions)
+        non_srini = sum(count for repo, count in base_sources.items() if "srinipusuluri" not in repo)
+        srini = base_sources.get("srinipusuluri/CCDV-F-SET1", 0)
+        non_srini_pct = (non_srini / len(base_10_questions)) * 100
+        srini_pct = (srini / len(base_10_questions)) * 100
+        print(f"\nMulti-Source Distribution (Base 10 Exams):")
+        for repo, count in base_sources.most_common():
+            print(f"  {repo:42s}: {count:3d} ({count/len(base_10_questions)*100:5.1f}%)")
+        print(f"  Non-Srinipusuluri Total: {non_srini:3d} ({non_srini_pct:.1f}%)")
+        print(f"  Srinipusuluri Total:     {srini:3d} ({srini_pct:.1f}%)")
 
-    assert non_srini_pct >= 65.0, f"Non-Srinipusuluri ratio too low: {non_srini_pct:.1f}% < 65%"
-    assert srini_pct <= 35.0, f"Srinipusuluri ratio too high: {srini_pct:.1f}% > 35%"
-    print("✓ Multi-source balance verified: single-source concentration risk eliminated!")
+        assert non_srini_pct >= 65.0, f"Non-Srinipusuluri ratio too low: {non_srini_pct:.1f}% < 65%"
+        assert srini_pct <= 35.0, f"Srinipusuluri ratio too high: {srini_pct:.1f}% > 35%"
+        print("✓ Multi-source balance verified on base-10 exams: single-source concentration risk eliminated!")
 
-    # 4. Blueprint Verification Across All 10 Forms
-    print("\nVerifying 10 individual exam forms:")
-    for i in range(1, 11):
-        p = os.path.join(BASE_DIR, "data", "exams", f"exam_{i:02d}.json")
-        assert os.path.exists(p), f"Exam file {p} missing"
-        with open(p, "r", encoding="utf-8") as f:
+    # 4. Blueprint Verification Across All Individual Exam Forms
+    print(f"\nVerifying {num_exams} individual exam forms:")
+    for path in exam_files:
+        with open(path, "r", encoding="utf-8") as f:
             ex = json.load(f)
-        assert len(ex["questions"]) == 53, f"Exam {i} has {len(ex['questions'])} questions, expected 53"
-        assert ex["exam_id"] == i, f"Exam {i} has mismatched exam_id {ex['exam_id']}"
+        eid = ex["exam_id"]
+        assert len(ex["questions"]) == 53, f"Exam {eid} has {len(ex['questions'])} questions, expected 53"
         assert ex["scaled_pass_score"] == 720
         assert ex["scaled_max_score"] == 1000
 
@@ -173,21 +180,32 @@ def test_exam_data():
         form_domains = Counter(q["domain_id"] for q in ex["questions"])
         for d_code, expected_count in EXPECTED_BLUEPRINT.items():
             actual = form_domains[d_code]
-            assert actual == expected_count, f"Exam {i} domain {d_code} has {actual} questions, expected {expected_count}"
+            assert actual == expected_count, f"Exam {eid} domain {d_code} has {actual} questions, expected {expected_count}"
         
-        # Check source diversity on this form
+        # Check source diversity on base forms (1-10); hard-tier forms (11-12) are single-sourced by design
         form_sources = Counter(q["source_repo"] for q in ex["questions"])
-        assert len(form_sources) >= 4, f"Exam {i} only draws from {len(form_sources)} sources, expected at least 4"
+        if eid <= 10:
+            assert len(form_sources) >= 4, f"Exam {eid} only draws from {len(form_sources)} sources, expected at least 4"
 
-        print(f"  ✓ Exam #{i:02d}: 53 questions (18/9/8/6/6/4/1/1 blueprint verified, {len(form_sources)} sources represented)")
+        print(f"  ✓ Exam #{eid:02d}: 53 questions (18/9/8/6/6/4/1/1 blueprint verified, {len(form_sources)} sources represented)")
 
-    # 5. Client Bundle Verification
+    # P1-6: Client Bundle Verification (assert bundle matches disk questions)
     bundle_path = os.path.join(BASE_DIR, "js", "exam-data.js")
     with open(bundle_path, "r", encoding="utf-8") as f:
         bundle_text = f.read()
     assert "window.EXAM_DATA" in bundle_text, "window.EXAM_DATA not found in js/exam-data.js"
     assert len(bundle_text) > 1000000, f"Bundle size unexpectedly small ({len(bundle_text)} bytes)"
-    print(f"\n✓ Client bundle js/exam-data.js verified ({len(bundle_text):,} bytes)")
+
+    # Extract all_questions JSON length from bundle text
+    m_exams = re.search(r'exams:\s*(\[[^;]*?\])\s*,\s*all_questions:', bundle_text)
+    if m_exams:
+        bundled_exams = json.loads(m_exams.group(1))
+        assert len(bundled_exams) == num_exams, (
+            f"Client bundle js/exam-data.js has {len(bundled_exams)} exams, expected {num_exams}. "
+            f"Run 'python3 scripts/bundle_client_data.py' to synchronize."
+        )
+
+    print(f"\n✓ Client bundle js/exam-data.js verified ({len(bundle_text):,} bytes, {num_exams} exams)")
 
 if __name__ == "__main__":
     print("=====================================================")

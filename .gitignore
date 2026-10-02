@@ -13,7 +13,8 @@ node_modules/
 .playwright-mcp/
 .active_page.md
 .active_page.json
-data/raw/
+data/raw/*
+!data/raw/natsh/
 
 # Personal study coaching & scratch tracking files
 AGENTS.md

@@ -1,0 +1,1772 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accelerators and IP Contribution: Developer Module 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BASE BRAND TOKENS (inlined from anthropic-brand.css so the
+   module stays a single self-contained file, no external CSS dep).
+   ============================================================ */
+:root {
+  --c-bg: #faf9f5;
+  --c-surface: #e8e6dc;
+  --c-mid-gray: #b0aea5;
+  --c-ink: #141413;
+  --c-ink-muted: #b0aea5;
+  --c-white: #ffffff;
+  --c-primary: #d97757;
+  --c-primary-hover: #bd5d3a;
+  --c-link: #bd5d3a;
+  --c-accent-blue: #6a9bcc;
+  --c-accent-green: #788c5d;
+  --c-danger: #c60f13;
+  --c-line: #b0aea5;
+  --c-line-strong: #6b6a62;
+  --font-heading: "Poppins", Arial, sans-serif;
+  --font-body: "Lora", Georgia, serif;
+}
+/* ============================================================
+   MODULE SHELL: reusable across personas & modules.
+   Custom tokens layer on top of the base brand tokens above.
+   ============================================================ */
+:root {
+  --c-ink-mid: #5C5147;
+  --c-primary-tint: #F4DDD2;
+  --c-blue-tint: #E0EAF1;
+  --c-green-tint: #E3ECDE;
+  --c-danger-tint: #F4DAD6;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --content-max: 760px;
+  --sidebar-w: 280px;
+  --navbar-h: 0px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; overflow-x: clip; overflow: hidden; height: 100%; }
+body {
+  background: var(--c-bg, #faf9f5); color: var(--c-ink, #141413);
+  font-family: var(--font-body, 'Lora');
+  font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar { position: fixed; top: var(--navbar-h); left:0; bottom:0; width: var(--sidebar-w);
+  background: var(--c-surface, #e8e6dc); border-right: 1px solid rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; z-index: 40; }
+.sidebar-head { padding: 22px 22px 14px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.sidebar-eyebrow { font-family: var(--font-heading, 'Poppins'); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--c-primary, #d97757); margin: 0 0 6px; }
+.sidebar-title { font-family: var(--font-body, 'Lora'); font-weight: 600; font-size: 18px;
+  line-height: 1.25; margin: 0; color: var(--c-ink); }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-section { padding: 0 12px; margin-bottom: 2px; }
+.nav-section-btn { display: flex; align-items: baseline; gap: 8px; width: 100%; background: none;
+  border: none; text-align: left; cursor: pointer; padding: 8px 10px; border-radius: 8px;
+  color: var(--c-ink); font-family: var(--font-heading, 'Poppins'), sans-serif; font-size: 13px; font-weight: 500; }
+.nav-section-btn:hover { background: rgba(0,0,0,0.05); }
+.nav-section-btn .num { font-family: var(--font-heading, 'Poppins'); font-size: 10px; color: var(--c-ink-muted, #b0aea5); }
+.nav-section-btn.locked { opacity: 0.4; cursor: not-allowed; }
+.sub-list { list-style: none; margin: 2px 0 6px; padding: 0 0 0 30px; }
+.sub-item { display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 5px 8px;
+  border-radius: 6px; font-size: 12px; font-family: var(--font-heading, 'Poppins'), sans-serif; color: var(--c-ink-mid); }
+.sub-item:hover { background: rgba(0,0,0,0.05); }
+.sub-item.active { background: var(--c-primary-tint); color: var(--c-primary-hover, #bd5d3a); font-weight: 600; }
+.sub-item.locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.sub-item .dot { width: 7px; height: 7px; border-radius: 50%; flex: none;
+  border: 1.5px solid var(--c-ink-muted, #b0aea5); background: transparent; }
+.sub-item.done .dot { background: var(--c-accent-green, #788c5d); border-color: var(--c-accent-green, #788c5d); }
+.sub-item.active .dot { border-color: var(--c-primary, #d97757); }
+.sidebar-foot { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,0.08); }
+.progress-label { display: flex; justify-content: space-between; font-family: var(--font-heading, 'Poppins');
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-ink-mid); margin-bottom: 6px; }
+.progress-track { height: 6px; border-radius: 3px; background: rgba(0,0,0,0.1); overflow: hidden; }
+.progress-fill { height: 100%; width: 0; background: var(--c-primary, #d97757); transition: width 0.4s ease; }
+.reset-btn { margin-top: 12px; width: 100%; background: none; border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 8px; padding: 7px; cursor: pointer; font-family: var(--font-heading, 'Poppins'), sans-serif;
+  font-size: 11px; color: var(--c-ink-mid); }
+.reset-btn:hover { background: rgba(0,0,0,0.05); }
+
+/* ---------- TOPBAR (mobile) ---------- */
+.topbar { display: none; position: fixed; top: var(--navbar-h); left:0; right:0; height: 56px;
+  background: var(--c-surface, #e8e6dc); border-bottom: 1px solid rgba(0,0,0,0.08);
+  align-items: center; padding: 0 16px; z-index: 50; gap: 12px; }
+.topbar-title { font-family: var(--font-body, 'Lora'); font-weight: 600; font-size: 14px; }
+.menu-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--c-ink); }
+
+/* ---------- MAIN + SCREENS ---------- */
+main { margin-left: var(--sidebar-w); padding: calc(56px + var(--navbar-h)) 28px 120px;
+  height: 100vh; overflow-y: auto; box-sizing: border-box; }
+.screen { display: none; max-width: var(--content-max); margin: 0 auto; }
+.screen.active { display: block; animation: fade 0.35s ease; }
+@keyframes fade { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+.screen-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--font-heading);
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-ink-mid); margin-bottom: 18px; }
+.screen-title { font-family: var(--font-body, 'Lora'); font-weight: 500; font-size: 44px;
+  line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 18px; }
+.section-h { font-family: var(--font-body, 'Lora'); font-weight: 600; font-size: 25px; line-height: 1.2; margin: 38px 0 14px; }
+.sub-h { font-family: var(--font-heading, 'Poppins'), sans-serif; font-weight: 600; font-size: 16px; margin: 26px 0 10px; color: var(--c-ink); }
+.lede { font-family: var(--font-body, 'Lora'); font-style: italic; font-weight: 400; font-size: 22px;
+  line-height: 1.4; color: var(--c-ink-mid); margin: 0 0 24px; }
+p { margin: 0 0 16px; }
+
+/* ---------- TAGS ---------- */
+.tag { display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-heading);
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; padding: 4px 9px; border-radius: 20px; }
+.tag-teaching   { color: var(--c-accent-green, #788c5d); background: var(--c-green-tint); }
+.tag-failure    { color: var(--c-danger, #c60f13);       background: var(--c-danger-tint); }
+.tag-checkpoint { color: var(--c-accent-blue, #6a9bcc);  background: var(--c-blue-tint); }
+.tag-cumulative { color: var(--c-primary-hover, #bd5d3a); background: var(--c-primary-tint); }
+.tag-module     { color: var(--c-ink-mid);               background: rgba(0,0,0,0.06); }
+.tag-quiz       { color: var(--c-accent-blue, #6a9bcc);  background: var(--c-blue-tint); }
+
+/* ---------- TOOLTIP TERM ----------
+   Use ONLY where a term is used but NOT defined on that screen. */
+.term { position: relative; border-bottom: 1.5px dotted var(--c-primary, #d97757); cursor: help; color: inherit; font-style: inherit; }
+.term:focus { outline: 2px solid var(--c-primary, #d97757); outline-offset: 2px; border-radius: 2px; }
+.term::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  background: var(--c-ink, #141413); color: #faf9f5; font-family: var(--font-body, 'Lora'); font-style: normal; font-weight: 400;
+  font-size: 13px; line-height: 1.45; letter-spacing: 0; padding: 10px 13px; border-radius: 8px; width: max-content; max-width: 320px;
+  white-space: normal; text-align: left; box-shadow: 0 6px 20px rgba(0,0,0,0.22); opacity: 0; visibility: hidden;
+  transition: opacity 0.16s ease; z-index: 60; pointer-events: none; }
+.term::before { content: ''; position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--c-ink, #141413); opacity: 0; visibility: hidden; transition: opacity 0.16s ease; z-index: 60; }
+.term:hover::after, .term:focus::after, .term:hover::before, .term:focus::before { opacity: 1; visibility: visible; }
+
+/* ---------- OBJECTIVE LIST ---------- */
+.objective-list { list-style: none; margin: 0 0 10px; padding: 0; }
+.objective-list li { position: relative; padding: 14px 16px 14px 50px; margin-bottom: 10px;
+  background: var(--c-white, #fff); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; line-height: 1.45; }
+.objective-list li .lo-num { position: absolute; left: 14px; top: 14px; width: 24px; height: 24px; border-radius: 6px;
+  background: var(--c-primary-tint); color: var(--c-primary-hover, #bd5d3a); font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center; }
+
+/* ---------- SCENARIO / CALLOUT / PANEL (full borders, NO side-stripes) ---------- */
+.scenario { background: var(--c-blue-tint); border: 1px solid var(--c-accent-blue, #6a9bcc); border-radius: 12px; padding: 18px 22px; margin: 22px 0; }
+.scenario .scenario-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--c-accent-blue, #6a9bcc); margin-bottom: 8px; font-weight: 500; }
+.callout { background: var(--c-green-tint); border: 1px solid var(--c-accent-green, #788c5d); border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+.callout-failure { background: var(--c-danger-tint); border-color: var(--c-danger, #c60f13); }
+.callout-neutral { background: var(--c-surface, #e8e6dc); border-color: rgba(0,0,0,0.15); }
+.callout-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; color: var(--c-accent-green, #788c5d); }
+.callout-failure .callout-label { color: var(--c-danger, #c60f13); }
+.callout-neutral .callout-label { color: var(--c-ink-mid); }
+.panel { background: var(--c-white, #fff); border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 22px; margin: 20px 0; }
+
+/* ---------- GENERIC TABLES ---------- */
+.dtable-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 18px 0; }
+.dtable { width: 100%; border-collapse: collapse; margin: 0; font-size: 15px; }
+.dtable th, .dtable td { text-align: left; padding: 11px 13px; border: 1px solid rgba(0,0,0,0.1); vertical-align: top; }
+.dtable th { font-family: var(--font-heading, 'Poppins'), sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 0.03em; background: var(--c-surface, #e8e6dc); }
+.zone-strong th { background: var(--c-green-tint); color: var(--c-accent-green, #788c5d); }
+.zone-verify th { background: var(--c-blue-tint); color: var(--c-accent-blue, #6a9bcc); }
+.zone-notfit th { background: var(--c-danger-tint); color: var(--c-danger, #c60f13); }
+
+/* ---------- CODE BLOCK (from elearning-code-block skill) ---------- */
+.codeblock { font-family: 'Lora', Georgia, serif; font-size: 14px; line-height: 1.7;
+  background: #D9D9D9; color: #000000; padding: 16px 20px; border-radius: 6px;
+  margin: 16px 0; white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; -webkit-overflow-scrolling: touch; }
+.codeblock .kw  { color: #7030A0; }
+.codeblock .fn  { color: #0070C0; }
+.codeblock .str { color: #3A7C22; }
+.codeblock .tf  { color: #008374; }
+.codeblock .cm  { color: #747474; font-style: italic; }
+.codeblock .er  { color: #80340D; }
+.codeblock .lbl { color: #7030A0; }
+.code-caption { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--c-ink-mid); margin: 16px 0 -4px; }
+
+/* ---------- INTERACTION PRIMITIVES ---------- */
+/* card sort */
+.bucket-pool { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.bucket-chip { background: var(--c-white,#fff); border: 1.5px solid rgba(0,0,0,0.15); border-radius: 10px; padding: 10px 14px; font-size: 14px; cursor: pointer; line-height: 1.35; font-family: var(--font-body,'Lora'); max-width: 340px; }
+.bucket-chip:hover { border-color: var(--c-primary,#d97757); }
+.bucket-chip.selected { border-color: var(--c-primary,#d97757); background: var(--c-primary-tint); }
+.bucket-chip.placed { opacity: 0.5; pointer-events: none; }
+.bucket-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+.bucket { min-height: 120px; border: 2px dashed rgba(0,0,0,0.18); border-radius: 12px; padding: 12px; background: var(--c-white,#fff); }
+.bucket.b-strong { border-color: var(--c-accent-green,#788c5d); }
+.bucket.b-verify { border-color: var(--c-accent-blue,#6a9bcc); }
+.bucket.b-notfit { border-color: var(--c-danger,#c60f13); }
+.bucket-h { font-family: var(--font-heading,'Poppins'),sans-serif; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; text-align: center; }
+.bucket.b-strong .bucket-h { color: var(--c-accent-green,#788c5d); }
+.bucket.b-verify .bucket-h { color: var(--c-accent-blue,#6a9bcc); }
+.bucket.b-notfit .bucket-h { color: var(--c-danger,#c60f13); }
+.bucket .dropped { display: block; background: var(--c-surface,#e8e6dc); border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-bottom: 7px; cursor: pointer; line-height: 1.3; }
+.bucket .dropped.correct { background: var(--c-green-tint); }
+.bucket .dropped.wrong { background: var(--c-danger-tint); }
+/* match */
+.match-row { background: var(--c-white,#fff); border:1px solid rgba(0,0,0,0.08); border-radius:12px; padding:16px 18px; margin-bottom:14px; }
+.match-stmt { font-size:15px; margin-bottom:12px; }
+.match-options { display:flex; flex-wrap:wrap; gap:8px; }
+.match-opt { border:1.5px solid rgba(0,0,0,0.2); border-radius:20px; padding:10px 18px; cursor:pointer; font-family: var(--font-heading,'Poppins'),sans-serif; font-size:13px; background:var(--c-white,#fff); transition: all 0.15s ease; }
+.match-opt:hover { border-color: var(--c-primary,#d97757); }
+.match-opt.selected { background: var(--c-primary-tint); border-color: var(--c-primary,#d97757); color: var(--c-primary-hover,#bd5d3a); }
+.match-row.correct { border-color: var(--c-accent-green,#788c5d); background: var(--c-green-tint); }
+.match-row.wrong { border-color: var(--c-danger,#c60f13); background: var(--c-danger-tint); }
+/* textarea (role-play / rewrite / code repair) */
+.roleplay-wrap textarea, .rewrite-wrap textarea { width:100%; min-height:130px; border:1.5px solid rgba(0,0,0,0.15); border-radius:12px; padding:14px; font-family: var(--font-mono); font-size:14px; line-height:1.55; resize:vertical; background: var(--c-white,#fff); color: var(--c-ink); }
+.roleplay-wrap textarea:focus, .rewrite-wrap textarea:focus { outline:none; border-color: var(--c-primary,#d97757); }
+.selfgrade { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+/* multi-select / single-select signal item */
+.signal-item { display:flex; align-items:flex-start; gap:12px; background:var(--c-white,#fff); border:1.5px solid rgba(0,0,0,0.12); border-radius:12px; padding:14px 16px; margin-bottom:10px; cursor:pointer; }
+.signal-item:hover { border-color: var(--c-primary,#d97757); }
+.signal-item.selected { border-color: var(--c-primary,#d97757); background: var(--c-primary-tint); }
+.signal-item .box { width:20px; height:20px; border-radius:5px; border:2px solid var(--c-ink-muted,#b0aea5); flex:none; margin-top:2px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff; }
+.signal-item.selected .box { background: var(--c-primary,#d97757); border-color: var(--c-primary,#d97757); }
+.signal-item.correct { border-color: var(--c-accent-green,#788c5d); background: var(--c-green-tint); }
+.signal-item.missed { border-color: var(--c-accent-green,#788c5d); border-style:dashed; }
+.signal-item.wrong { border-color: var(--c-danger,#c60f13); background: var(--c-danger-tint); }
+/* rewrite criteria */
+.criterion-row { display:flex; align-items:center; gap:10px; padding:8px 0; font-size:14px; }
+.criterion-row .ci { width:22px; height:22px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; background: rgba(0,0,0,0.08); }
+.criterion-row.met .ci { background: var(--c-accent-green,#788c5d); color:#fff; }
+.criterion-row.unmet .ci { background: var(--c-danger-tint); color: var(--c-danger,#c60f13); }
+/* decision builder */
+.decision-block { background: var(--c-white,#fff); border:1px solid rgba(0,0,0,0.1); border-radius:14px; padding:20px; margin:16px 0; }
+.decision-block.locked { opacity:0.45; pointer-events:none; }
+.decision-num { font-family: var(--font-mono); font-size:11px; color: var(--c-primary,#d97757); letter-spacing:0.1em; }
+/* recap */
+.recap-item { display:flex; gap:16px; align-items:flex-start; background:var(--c-white,#fff); border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+.recap-item .rn { font-family: var(--font-mono); font-size:20px; color: var(--c-primary,#d97757); font-weight:500; flex:none; line-height:1; }
+.recap-item h4 { font-family: var(--font-heading,'Poppins'),sans-serif; font-size:15px; margin:0 0 6px; }
+.recap-item p { margin:0; font-size:15px; }
+/* honor-reveal */
+.honor-reveal { display: none; background: var(--c-surface); border-radius: 10px; padding: 14px 16px; margin-top: 12px; font-size: 14px; line-height: 1.6; }
+.honor-reveal.show { display: block; }
+/* drag-token gap fill */
+.token-bank { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; }
+.gap-token { background: var(--c-white,#fff); border:1.5px solid rgba(0,0,0,0.15); border-radius:20px; padding:8px 16px; font-family: var(--font-mono); font-size:13px; cursor:grab; }
+.gap-token:hover { border-color: var(--c-primary,#d97757); }
+.gap-token.selected { border-color: var(--c-primary,#d97757); background: var(--c-primary-tint); }
+.gap-token.used { opacity:0.4; pointer-events:none; }
+.gap-blank { display:inline-flex; align-items:center; justify-content:center; min-width:180px; border:2px dashed var(--c-ink-muted,#b0aea5); border-radius:8px; padding:4px 10px; font-family: var(--font-mono); font-size:13px; color: var(--c-ink-mid); background: var(--c-white,#fff); cursor:pointer; vertical-align:middle; }
+.gap-blank.filled { border-style:solid; border-color: var(--c-primary,#d97757); color: var(--c-ink); background: var(--c-primary-tint); }
+.gap-blank.correct { border-color: var(--c-accent-green,#788c5d); background: var(--c-green-tint); color: var(--c-ink); }
+.gap-blank.wrong { border-color: var(--c-danger,#c60f13); background: var(--c-danger-tint); color: var(--c-ink); }
+.gap-blank.drag-over { background: var(--c-blue-tint); }
+
+/* ---------- MC-OPT (quiz / single-select) ---------- */
+.mc-opts{display:flex;flex-direction:column;gap:10px;margin:14px 0;}
+.mc-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;cursor:pointer;transition:all .15s;background:var(--c-white);}
+.mc-opt:hover{border-color:var(--c-primary);background:var(--c-primary-tint);}
+.mc-opt.selected{border-color:var(--c-primary);background:var(--c-primary-tint);}
+.mc-opt.correct{border-color:var(--c-accent-green);background:var(--c-green-tint);}
+.mc-opt.wrong{border-color:var(--c-danger);background:var(--c-danger-tint);}
+.mc-opt-label{font-size:14px;color:var(--c-ink-mid);line-height:1.5;}
+.mc-opt-letter{font-family:var(--font-heading);font-weight:700;color:var(--c-primary);min-width:20px;font-size:14px;}
+.quiz-q{margin-bottom:22px;}
+.quiz-q-num{font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-ink-mid);margin-bottom:6px;}
+.quiz-q-text{font-size:16px;font-weight:600;font-family:var(--font-heading,'Poppins'),sans-serif;margin-bottom:4px;}
+.rationale{display:none;font-size:13px;line-height:1.5;background:var(--c-surface);border-radius:8px;padding:10px 14px;margin-top:8px;}
+.rationale.show{display:block;}
+
+/* ---------- FEEDBACK ---------- */
+.feedback { display:none; border-radius:12px; padding:16px 20px; margin:18px 0; line-height:1.5; border:1px solid var(--c-accent-blue,#6a9bcc); background: var(--c-blue-tint); }
+.feedback.show { display:block; animation: fade 0.3s ease; }
+.feedback.correct { border-color: var(--c-accent-green,#788c5d); background: var(--c-green-tint); }
+.feedback.incorrect { border-color: var(--c-danger,#c60f13); background: var(--c-danger-tint); }
+.feedback-label { font-family: var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:7px; }
+
+/* ---------- BUTTONS ---------- */
+.btn-row { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0; }
+.submit-btn, .skip-btn, .selfgrade button { font-family: var(--font-heading,'Poppins'); font-size:14px; font-weight:500; padding:11px 22px; border-radius:10px; cursor:pointer; border:none; }
+.submit-btn { background: var(--c-primary,#d97757); color:#fff; }
+.submit-btn:hover { background: var(--c-primary-hover,#bd5d3a); }
+.submit-btn:disabled { opacity:0.45; cursor:not-allowed; }
+.skip-btn { background:none; border:1.5px solid rgba(0,0,0,0.18); color: var(--c-ink-mid); }
+.skip-btn:hover { background: rgba(0,0,0,0.05); }
+.selfgrade button { border:1.5px solid rgba(0,0,0,0.18); background:var(--c-white,#fff); color:var(--c-ink); }
+.selfgrade button.pass:hover { background: var(--c-green-tint); border-color: var(--c-accent-green,#788c5d); }
+.selfgrade button.retry:hover { background: var(--c-danger-tint); border-color: var(--c-danger,#c60f13); }
+
+/* ---------- FOOTER NAV ---------- */
+.footer { position: fixed; bottom:0; left: var(--sidebar-w); right:0; height:72px; background: var(--c-bg,#faf9f5);
+  border-top:1px solid rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:space-between; padding:0 32px; z-index:30; }
+.nav-btn { font-family: var(--font-heading,'Poppins'),sans-serif; font-size:14px; font-weight:500; padding:11px 24px; border-radius:10px; cursor:pointer; border:none; display:inline-flex; align-items:center; gap:8px; }
+.nav-btn.next { background: var(--c-primary,#d97757); color:#fff; }
+.nav-btn.next:hover { background: var(--c-primary-hover,#bd5d3a); }
+.nav-btn.next:disabled { opacity:0.4; cursor:not-allowed; }
+.nav-btn.prev { background:none; border:1.5px solid rgba(0,0,0,0.18); color: var(--c-ink-mid); }
+.nav-btn.prev:hover { background: rgba(0,0,0,0.05); }
+.nav-btn.prev:disabled { opacity:0.3; cursor:not-allowed; }
+.footer-pos { font-family: var(--font-mono); font-size:11px; color: var(--c-ink-mid); letter-spacing:0.08em; }
+.footer-center { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.contents-link{background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:11px;color:var(--c-ink-mid);letter-spacing:0.08em;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;}
+.contents-link:hover{background:rgba(0,0,0,0.06);color:var(--c-ink);}
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+/* focus-visible for all interactive surfaces */
+.bucket-chip:focus-visible, .bucket:focus-visible, .match-opt:focus-visible, .signal-item:focus-visible,
+.gap-token:focus-visible, .gap-blank:focus-visible, .mc-opt:focus-visible,
+.sub-item:focus-visible, .nav-section-btn:focus-visible, button:focus-visible, textarea:focus-visible {
+  outline: 2.5px solid var(--c-primary, #d97757); outline-offset: 2px; border-radius: 8px; }
+
+/* ---------- SPLASH ---------- */
+.splash{position:fixed;inset:0;top:var(--navbar-h);background:var(--c-bg);z-index:80;overflow-y:auto;display:none;}
+.splash.show{display:block;}
+.splash-card{max-width:820px;margin:0 auto;padding:64px 40px 80px;}
+.splash-eyebrow{font-family:var(--font-heading);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--c-primary);margin:0 0 14px;}
+.splash-title{font-family:var(--font-heading);font-size:52px;font-weight:700;line-height:1.1;margin:0 0 22px;color:var(--c-ink);}
+.splash-sub{font-size:17px;line-height:1.7;color:var(--c-ink-mid);margin:0 0 36px;max-width:740px;}
+.splash-toc-label{font-family:var(--font-heading);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--c-ink-muted,#b0aea5);margin-bottom:10px;}
+.splash-toc{list-style:none;counter-reset:toc;margin:0 0 30px;padding:0;border-top:1px solid rgba(0,0,0,0.1);}
+.splash-toc>li{counter-increment:toc;display:flex;flex-direction:column;padding:0;border-bottom:1px solid rgba(0,0,0,0.1);font-size:16px;cursor:pointer;}
+.splash-toc>li>div{display:flex;gap:12px;align-items:baseline;padding:11px 4px;}
+.splash-toc>li>div::before{content:counter(toc,decimal-leading-zero);font-family:var(--font-heading);font-size:12px;color:var(--c-ink-muted,#b0aea5);min-width:22px;flex-shrink:0;}
+.splash-toc>li>div:hover{color:var(--c-primary-hover);}
+.splash-toc>li>ul{list-style:none;padding:0 4px 10px 34px;margin:0;display:none;}
+.splash-toc>li>ul>li{font-size:13px;color:var(--c-ink-mid);padding:3px 0;cursor:default;display:flex;align-items:baseline;gap:6px;}
+.splash-toc>li>ul>li::before{content:'▶';font-size:8px;color:var(--c-primary);flex-shrink:0;position:relative;top:-1px;}
+.splash-toc li .toc-sub{margin-left:auto;font-family:var(--font-heading);font-size:11px;color:var(--c-ink-muted,#b0aea5);}
+.splash-begin{display:inline-flex;background:var(--c-primary);color:#fff;font-family:var(--font-heading);font-size:16px;font-weight:600;padding:15px 32px;border-radius:12px;border:none;cursor:pointer;margin-bottom:16px;}
+.splash-begin:hover{background:var(--c-primary-hover);}
+.splash-meta{font-family:var(--font-heading);font-size:11px;color:var(--c-ink-mid);letter-spacing:0.08em;margin:0;}
+
+/* ---------- FINISH BANNER ---------- */
+.finish-banner{background:var(--c-primary-tint);border:1px solid var(--c-primary);border-radius:16px;padding:32px;text-align:center;margin:36px 0 0;}
+.finish-banner h2{font-family:var(--font-heading);font-size:28px;font-weight:700;margin:0 0 12px;color:var(--c-primary-hover);}
+.finish-banner p{margin:0;font-size:16px;color:var(--c-ink-mid);}
+
+/* ---------- MODULE COMPLETE (CERT) SCREEN ---------- */
+.cert-journey { display:flex; flex-direction:column; gap:10px; margin:22px 0; }
+.cert-row { display:flex; align-items:center; gap:14px; background:var(--c-white,#fff); border:1px solid rgba(0,0,0,0.08); border-radius:12px; padding:14px 18px; }
+.cert-row .cert-badge { width:32px; height:32px; border-radius:8px; background:var(--c-surface); color:var(--c-ink-mid); font-family:var(--font-mono); font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; flex:none; }
+.cert-row.here .cert-badge { background: var(--c-primary); color:#fff; }
+.cert-row-title { font-family: var(--font-heading,'Poppins'),sans-serif; font-size:14px; font-weight:500; color: var(--c-ink); }
+.cert-pill { font-family: var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; padding:4px 10px; border-radius:20px; margin-left:auto; }
+.cert-pill.here { background: var(--c-primary-tint); color: var(--c-primary-hover); }
+.cert-pill.next { background: var(--c-surface); color: var(--c-ink-mid); }
+.cert-done-pill { background: var(--c-green-tint); color: var(--c-accent-green,#788c5d); font-family: var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; padding:4px 10px; border-radius:20px; margin-left:auto; }
+.cert-count-badge { display:inline-flex; align-items:center; gap:10px; background: var(--c-white,#fff); border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px 20px; margin: 8px 0 26px; }
+.cert-count-num { font-family: var(--font-body,'Lora'); font-size:32px; font-weight:600; color: var(--c-primary,#d97757); }
+.cert-count-label { font-family: var(--font-mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color: var(--c-ink-mid); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; box-shadow: 4px 0 24px rgba(0,0,0,0.18); }
+  .sidebar.open { transform: none; }
+  .topbar { display: flex; }
+  main { margin-left: 0; padding: calc(78px + var(--navbar-h)) 18px 110px; }
+  .footer { left: 0; padding: 0 18px; }
+  .screen-title { font-size: 32px; }
+  .bucket-cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .bucket-chip { max-width:100%; }
+}
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:45; }
+.overlay.show { display:block; }
+@media (min-width:901px){ .overlay { display:none !important; } }
+
+/* ---- EXPANDABLE ROWS (glossary) ---- */
+.exrow{border:1px solid rgba(0,0,0,0.12);border-radius:10px;margin:0 0 10px;background:var(--c-white);overflow:hidden;}
+.exrow>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:600;display:flex;align-items:center;gap:10px;font-size:15px;font-family:var(--font-body);}
+.exrow>summary::-webkit-details-marker{display:none;}
+.exrow>summary::after{content:'+';margin-left:auto;font-family:var(--font-mono);color:var(--c-ink-muted);font-size:18px;}
+.exrow[open]>summary::after{content:'\2212';}
+.exrow>summary::before{content:'';width:9px;height:9px;border-radius:2px;background:var(--c-accent-green);flex:none;}
+.exrow .ex-body{padding:0 16px 15px 35px;font-size:14.5px;line-height:1.55;color:var(--c-ink-mid);}
+.exrow .ex-body p:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+
+<div class="splash show" id="introOverlay">
+  <div class="splash-card">
+    <p class="splash-eyebrow">Developer Certification · Module 5</p>
+    <h1 class="splash-title">Accelerators and IP Contribution</h1>
+    <p class="splash-sub">This module picks up the moment your code runs correctly and asks the harder question: can someone else reuse it, can a maintainer accept it, can it survive a model update, and can a security or procurement team sign off on where it runs. The work here is less about writing code and more about the decisions that make finished code reusable, deployable, and defensible to people who did not write it.</p>
+    <div class="splash-toc-label">Table of contents</div>
+    <ol class="splash-toc" id="splashToc"><li><div><span>Module Introduction</span><span class="toc-sub">1 screen</span></div><ul style="display: none;"><li>Orientation</li></ul></li><li><div><span>Packaging for Reuse</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Watch Out</li><li>Checkpoint</li></ul></li><li><div><span>Contributing Back</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Watch Out</li><li>Checkpoint</li></ul></li><li><div><span>Requirements &amp; Lifecycle</span><span class="toc-sub">4 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Checkpoint</li><li>Teaching</li><li>Checkpoint</li></ul></li><li><div><span>Deployment &amp; Versioning</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Watch Out</li><li>Checkpoint</li></ul></li><li><div><span>Comparing Platforms</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Watch Out</li><li>Checkpoint</li></ul></li><li><div><span>Trust Boundaries</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Teaching</li><li>Watch Out</li><li>Checkpoint</li></ul></li><li><div><span>Cumulative Task</span><span class="toc-sub">2 screens</span></div><ul style="display: none;"><li>Diagnose</li><li>Assemble</li></ul></li><li><div><span>Key Takeaways</span><span class="toc-sub">3 screens</span></div><ul style="display: none;"><li>Recap</li><li>Glossary</li><li>Module Complete</li></ul></li></ol>
+    <button class="splash-begin" id="beginModuleBtn">Begin module →</button>
+    <p class="splash-meta" id="introStats">25 screens · 9 sections · 139 minutes · 9 checkpoints</p>
+  </div>
+</div>
+
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+  <span class="topbar-title">Accelerators and IP Contribution</span>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <p class="sidebar-eyebrow">Developer · Module 5</p>
+    <h1 class="sidebar-title">Accelerators and IP Contribution</h1>
+  </div>
+  <nav class="sidebar-nav" id="sidebarNav"><div class="nav-section"><button class="nav-section-btn"><span class="num">01</span><span>Module Introduction</span></button><ul class="sub-list"><li class="sub-item active"><span class="dot"></span><span>Orientation</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">02</span><span>Packaging for Reuse</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Watch Out</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">03</span><span>Contributing Back</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Watch Out</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">04</span><span>Requirements &amp; Lifecycle</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">05</span><span>Deployment &amp; Versioning</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Watch Out</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">06</span><span>Comparing Platforms</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Watch Out</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">07</span><span>Trust Boundaries</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Teaching</span></li><li class="sub-item"><span class="dot"></span><span>Watch Out</span></li><li class="sub-item"><span class="dot"></span><span>Checkpoint</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">08</span><span>Cumulative Task</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Diagnose</span></li><li class="sub-item"><span class="dot"></span><span>Assemble</span></li></ul></div><div class="nav-section"><button class="nav-section-btn"><span class="num">09</span><span>Key Takeaways</span></button><ul class="sub-list"><li class="sub-item"><span class="dot"></span><span>Recap</span></li><li class="sub-item"><span class="dot"></span><span>Glossary</span></li><li class="sub-item"><span class="dot"></span><span>Module Complete</span></li></ul></div></nav>
+  <div class="sidebar-foot">
+    <div class="progress-label"><span>Progress</span><span id="progressPct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+    <button class="reset-btn" id="resetBtn">Reset progress</button>
+  </div>
+</aside>
+
+<main id="main">
+<section class="screen active" id="S01">
+  <div class="screen-meta"><span class="tag tag-module">Orientation</span><span>Developer Module 5</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">What you will be able to do by the end</h1>
+  <p class="lede">Document the build well and the next engagement builds from it instead of from scratch.</p>
+  <p>In the last three modules you built a production agent, wired it into Claude Code with the right permission and context controls, and set up the MCP connections that pass a security review. Each of those was a working build.</p>
+  <p>This module covers what happens to a build after it works. You either rebuild it from scratch on the next engagement, or you package it once, so the next team just configures it. The second path is what frees your time for new work instead of repeated rebuilding.</p>
+  <p>By the end of this module, you will be able to:</p>
+  <ul class="objective-list">
+    <li><span class="lo-num">1</span>Package a working solution as a reusable <span class="term" tabindex="0" data-tip="A working solution packaged so the next engagement configures it rather than rebuilding it. Customer-specific parts are exposed as documented parameters, the assumptions are written down, and an eval is bundled to prove the asset still works in a new context.">accelerator</span>, whether that is a parameterized agent template, a configurable MCP server, or a portable eval suite, so the next engagement configures an asset rather than fully rebuilding it.</li>
+    <li><span class="lo-num">2</span>Contribute a tool, pattern, or fix back through the documented channels and prepare it so a maintainer can accept it, turning a private asset into shared infrastructure.</li>
+    <li><span class="lo-num">3</span>Choose where a Claude workload runs across the first-party API, Amazon Bedrock, Google Vertex AI, and third-party platforms, and version what ships so a model or prompt change does not silently break production.</li>
+    <li><span class="lo-num">4</span>Compare those platforms on latency, compliance, and cost so the choice is one a procurement and security team can sign off on, rather than a default your team reached for.</li>
+    <li><span class="lo-num">5</span>Build an application that coordinates several Claude deployments into one workflow and scope it so the data and identity boundaries are held under a security or compliance review.</li>
+  </ul>
+  <p><em>This module is for the Developer who has a build that works and now must make it last. You are practical, code-forward, and pattern-oriented, and the earlier modules assumed and built on that. By this point you can write a production agent, configure it in Claude Code, wire up MCP connections that pass a security review, and prove it all with evals. This module does not re-teach any of that. It picks up the moment your code runs correctly and asks the harder question: can someone else reuse it, can a maintainer accept it, can it survive a model update, and can a security or procurement team sign off on where it runs. The work here is less about writing code and more about the decisions that make finished code reusable, deployable, and defensible to people who did not write it.</em></p>
+  <div class="callout">
+    <div class="callout-label">"The build" in this module</div>
+    <p style="margin:0">Everything in this module hinges on one recurring gap: a build that works is not yet a build that survives reuse, review, or deployment. In development, the template ran, the contribution solved your problem, the model responded, the platform was easy to build on, and each platform passed its own tests. None of that is the finished state. The same template must be configured for a team that never spoke to you. The same contribution must be verifiable by a maintainer who must reconstruct nothing. The same model must be pinned so an upstream change is a decision rather than a surprise. The same platform must clear a customer's residency and compliance review. The same connected platforms must hold their trust boundaries under audit. Each topic in this module is a different version of the same lesson: the point where code starts working is where this module's work begins. More of these decisions than you might expect are driven by the customer's existing cloud, compliance posture, and review process.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Disclaimer / Notice for Educational Content</div>
+    <p>We built this Developer course Module 5: Accelerators and IP Contribution to help you get real work done with Claude. Treat it as educational content. It doesn't constitute legal, financial, or other professional advice, so adapt what you learn to your own situation. Our products and services evolve quickly, so certain content may contain errors or be outdated; remember to verify on Anthropic’s website or docs. Examples and scenarios used in the course are illustrative and often fictitious. If the course material mentions a company or product, it doesn't mean Anthropic endorses them, they endorse Anthropic, or that we're affiliated. Also note your use of Anthropic products and services is covered by our terms, policies and documentation; if anything in this course conflicts with them, they control.</p>
+  </div>
+</section>
+
+<section class="screen" id="S02">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Packaging for Reuse</span><span>·</span><span>16 min</span></div>
+  <h1 class="screen-title">Packaging a working build so the next engagement starts from an asset</h1>
+  <p>You finished the prior modules with a build that runs: an agent loop, a configured MCP server, an eval that proves that the prompt works. The most time-consuming and expensive thing on a team is the engineering time that gets spent rebuilding the same thing for the next customer.</p>
+  <h2 class="section-h">What an accelerator does: keep the reusable parts and separate out the rest</h2>
+  <p>An <strong>accelerator</strong> is a solution packaged so future engagements start from a working foundation rather than from a blank repository. In blueprint terms, this is packaging for reuse: separating engagement-specific code from the reusable core and parameterizing the rest. Take a working build, separate the parts that are customer-specific, and expose them as parameters with documented defaults. The asset then configures rather than gets entirely rewritten. Packaging for reuse while the build is fresh is cheaper than reconstructing the intent months later, when the person who knew why a value was hardcoded has moved on.</p>
+  <h3 class="sub-h">Most reusable work falls into different asset types, and each one packages differently</h3>
+  <p>Most reusable work falls into one of three categories used throughout this module: a template, a configurable server, or a portable eval. Each type holds a different kind of work and needs to be packaged in its own way. Reaching for the wrong type can make an asset look reusable while still making it difficult to apply.</p>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>Asset type</th><th>What it bundles</th><th>What correct packaging requires</th></tr>
+    <tr><td>Agent Template</td><td>The system prompt, the tool schemas, and the loop structure from a working agent.</td><td>Pull the domain-specific values into configuration with documented defaults, so a new team sets the values rather than editing the loop.</td></tr>
+    <tr><td>MCP Server Package</td><td>The tools the server exposes, with their inputs and the scope the installing team controls.</td><td>Document each tool input and let the installing team set the scope, so the server installs into a new environment without code edits.</td></tr>
+    <tr><td>Eval Suite</td><td>The graded test set and the judge rubric that prove the asset works.</td><td>Ship the dataset and rubric together so a new team can run them in their own context and confirm the asset still works there. The same eval suite also acts as the gate at deployment. When you promote a new model version to production, run it against a pinned baseline score before the version goes live.</td></tr>
+  </tbody></table></div>
+  <p>Shipping an agent as a set of loose scripts instead of a template is the most common version of the wrong approach. The scripts run, so they look reusable, but every customer-specific value is buried in a different file, and the next team copies and diverges them instead of configuring one asset.</p>
+  <h3 class="sub-h">Document both the code and the assumptions</h3>
+  <p>Code describes behavior. Documentation covers what a future builder cannot reliably infer from reading the source: the assumptions the asset makes about its environment, the inputs it expects, the failure modes it already handles, and the eval that defines whether it still works. Without this, the next team treats the asset as a black box and rebuilds it.</p>
+  <h3 class="sub-h">Bundle the audit log as part of the package</h3>
+  <p>A regulated customer's reviewer asks what data the asset touches, what identity it acts under, and what log it leaves. An accelerator without these passes a demo and stalls at the first security review. Treat the audit log as part of the package.</p>
+  <h3 class="sub-h">The packaging checklist</h3>
+  <p>Keep this checklist next to the build while you package it. Each column is a decision you make once per asset.</p>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>Asset type</th><th>What to parameterize</th><th>What to document</th><th>What to bundle for audit</th></tr>
+    <tr><td>Agent template</td><td>Every value that changes per customer: prompts, paths, scopes, credentials by reference, and thresholds.</td><td>Environment assumptions, expected inputs, handled failure modes, and the eval that defines working.</td><td>The data touched, the identity acted under, and the log of what the asset did.</td></tr>
+    <tr><td>MCP Server</td><td>Scopes, credentials by reference, and per-customer paths.</td><td>Expected inputs per tool, scope boundaries, and handled failure modes.</td><td>The data touched, the identity acted under, and the log of what the asset did.</td></tr>
+    <tr><td>Eval Suite</td><td>Thresholds and dataset paths that change per customer or environment.</td><td>The rubric logic, what the scores mean, and the baseline the asset is pinned to.</td><td>The data touched, the identity acted under, and the log of what the asset did.</td></tr>
+  </tbody></table></div>
+  <div class="callout">
+    <div class="callout-label">Handles well</div>
+    <p style="margin:0">Parameterizing while the build is fresh turns one delivery into an asset the next engagement configures in hours.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Adds cost or complexity</div>
+    <p style="margin:0">Separating generalizable from customer-specific parts and documenting assumptions adds real time to the first build.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Use a different approach</div>
+    <p style="margin:0">For a one-off a customer will never reuse, packaging overhead is not worth it: ship the build and move on.</p>
+  </div>
+</section>
+
+<section class="screen" id="S03">
+  <div class="screen-meta"><span class="tag tag-failure">Watch Out</span><span>Packaging for Reuse</span><span>·</span><span>2 min</span></div>
+  <h2 class="screen-title">The template that shipped fast and could not be reused</h2>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Setup</div>
+    <p style="margin:0">Hardcoding ships faster and you were working under a deadline, so you hardcoded the values that made the demo. The template worked. That is exactly why nobody looked at it again until the next team tried to reuse it.</p>
+  </div>
+  <p>This is a postmortem, written the way a team writes one after the reuse attempt fails, so you can see the failure form before anyone labels it as a mistake.</p>
+  <h3 class="sub-h">What happened</h3>
+  <p>A team built an agent template for a customer engagement and shipped it on time. To hit the due date, the customer-specific values went straight into the code: the repository path, the model name, the review thresholds, and a handful of prompt fragments specific to that customer's domain. The template ran, the engagement closed, and the build went into the shared repository labeled as reusable.</p>
+  <p>Months later a second team picked it up for a similar engagement. They could not configure it, because there was nothing to configure. Every value that needed to change was baked into the loop where the second team could not see it without reading the whole file. There was no document saying which values were customer-specific and which were load-bearing. There was also no bundled eval, so even after they guessed at the edits, nothing confirmed the template still worked in the new context. They had to rewrite it from scratch.</p>
+  <div class="callout callout-failure">
+    <div class="callout-label">Why it broke</div>
+    <p style="margin:0">The build was treated as finished the moment it ran rather than at the moment it could be reused. Hardcoding was the reasonable call under a deadline, and it was never revisited. A working template does not announce that it cannot be reused. The cost appeared only when a second team paid for the rebuild that packaging was supposed to prevent, along with the time they lost discovering the template was a dead end.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">What to Watch Out for</div>
+    <p style="margin:0">A template that runs has not been packaged for reuse. These are different finishing states. The warning signs are the absence of three things: no parameters where customer-specific values belong, no documentation describing the assumptions, and no bundled eval proving the asset still works in a different context. Package the asset while the build is fresh. The knowledge of what is customer-specific is most expensive to reconstruct after the people who had it have moved on.</p>
+  </div>
+</section>
+
+<section class="screen" id="S04">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Packaging a reusable accelerator</span><span>·</span><span>4 min</span></div>
+  <h1 class="screen-title">Checkpoint 1: Fix the broken accelerator template</h1>
+  <p>Try it now. Below is an agent template another team is supposed to reuse. It has one defect: a customer-specific value is hardcoded where a parameter belongs.</p>
+  <p class="code-caption">The template as shipped</p>
+  <div class="codeblock"><span class="cm"># agent_template.py  : "reusable" code-review agent</span>
+<span class="kw">def</span> <span class="fn">build_review_agent</span>():
+    <span class="kw">return</span> <span class="fn">Agent</span>(
+        model=<span class="str">"claude-opus-4-8"</span>,
+        system_prompt=SYSTEM_PROMPT,
+        tools=[read_file, run_linter],
+        repo_path=<span class="str">"/home/acme/checkout-service"</span>,   <span class="cm"># customer repo</span>
+    )</div>
+  <p style="font-size:14px;color:var(--c-ink-mid)">(Confirm current model ID at platform.claude.com/docs/en/about-claude/models at build time.)</p>
+  <p>Identify the hardcoded value, then write the corrected function signature and the parameterized line that replaces it.</p>
+  <div class="roleplay-wrap"><textarea id="taS04" placeholder="Your corrected function signature and parameterized line…"></textarea></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS04" disabled="">Compare with model answer</button>
+    <button class="skip-btn" id="skipS04">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS04" aria-live="polite"><div class="feedback-label">Skipped</div><p style="margin:0">Move on if you need to but come back before the cumulative task. A later checkpoint plants a version of this same hardcoding defect among two others and is harder to spot under multi-layer load.</p></div>
+</section>
+<section class="screen" id="S05">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Contributing Back</span><span>·</span><span>12 min</span></div>
+  <h1 class="screen-title">Moving an asset from private reuse into shared infrastructure a maintainer accepts</h1>
+  <p>You have already done most of the work that makes an asset shareable. When you packaged it for your own team to reuse, you pulled out the parameters, wrote down the assumptions, and bundled the eval. The parameters show the asset can be configured rather than rewritten. The documented assumptions tell the maintainer what environment the asset expects. The bundled eval gives them a way to confirm it still works. An asset packaged for internal reuse is already close to what a maintainer needs to accept it.</p>
+  <p>The contribution channel is designed to receive that packaged asset. It carries the version, the installation steps, and the components as a single unit, so a team that never spoke to you can install it and get the same working setup.</p>
+  <h2 class="section-h">Match the contribution to the channel built for it</h2>
+  <p>Contributing back means moving an asset from private reuse to shared infrastructure through a documented channel. Each channel is built for a specific kind of contribution. The <span class="term" tabindex="0" data-tip="A GitHub repository of focused reference implementations, designed for self-contained single- or multi-pattern implementations demonstrated clearly and working end to end.">Claude Cookbook</span> is a GitHub repository of focused reference implementations. It is designed for self-contained single- or multi-pattern implementations demonstrated clearly and working end to end. Open-source MCP servers and tools each live in their own repository with their own contribution conventions. Sending a full multi-component application to the Cookbook is a mismatch. The repository is set up to review one focused pattern rather than an entire application, so a submission that large does not fit what reviewers are looking for and will stall. The first step is matching the contribution to the channel built for it. Putting a full application where a focused example belongs is one of the most common reasons a contribution never gets reviewed.</p>
+  <h3 class="sub-h">What makes verifying a contribution possible</h3>
+  <p>A maintainer accepts a contribution they can verify. The bar is set by what they need to check, not by how clever the code is. Four things make that verification possible:</p>
+  <ul class="objective-list">
+    <li><span class="lo-num">1</span>The code does one thing. A sprawling contribution forces a reviewer to reconstruct your intent before evaluating it.</li>
+    <li><span class="lo-num">2</span>An example shows it running. A reviewer should not have to build a harness to see the behavior.</li>
+    <li><span class="lo-num">3</span>A test proves it works. A test lets a maintainer verify the result without reproducing the reasoning themselves.</li>
+    <li><span class="lo-num">4</span>A short statement names the assumptions. Otherwise, the first failure becomes the maintainer's problem.</li>
+  </ul>
+  <h3 class="sub-h">Rights and attribution come before technical review</h3>
+  <p>Licensing and attribution decide whether a contribution can be accepted at all, which is why they come before the technical review. Code carried in from a customer engagement may have constraints on where it can go. Confirming you have the right to contribute it, and attributing anything you built on, is a gate the contribution must pass first. Skipping this is what turns a contribution into a problem the legal team must unwind later.</p>
+  <p>The example worked here is the customer service agent case. A reusable conversation-handling pattern, built during an engagement, gets stripped of customer specifics and prepared as a general example for the Cookbook. The contribution-back motion is shared across all three roles in this curriculum. Your job as the Developer is technical readiness: the focused code, the example, the test, the assumptions, and the rights check. The engagement context comes from the broader team.</p>
+  <h3 class="sub-h">The contribution-readiness reference</h3>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>Channel</th><th>What a maintainer checks</th><th>Licensing and attribution</th><th>The example and test bar to clear</th></tr>
+    <tr><td>Cookbook for a focused example, or the tool or server's own repository for a tool or fix.</td><td>That the code does one thing and that they can read it in full.</td><td>Confirm that you have the right to contribute code from an engagement, with prior work attributed.</td><td>A runnable example plus a test that proves the behavior, not just a description of it.</td></tr>
+  </tbody></table></div>
+  <div class="callout">
+    <div class="callout-label">Handles well</div>
+    <p style="margin:0">A packaged asset needs only the example, test, and rights check to become shared infrastructure others build on.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Adds cost or complexity</div>
+    <p style="margin:0">Clearing the maintainer bar and the licensing gate is real work on top of making the code run for you.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Use a different approach</div>
+    <p style="margin:0">When code carries an engagement licensing constraint you cannot clear, do not contribute it: escalate to the owner instead.</p>
+  </div>
+</section>
+
+<section class="screen" id="S06">
+  <div class="screen-meta"><span class="tag tag-failure">Watch Out</span><span>Contributing Back</span><span>·</span><span>2 min</span></div>
+  <h2 class="screen-title">The pull request a maintainer could not verify</h2>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Setup</div>
+    <p style="margin:0">You opened the contribution with the exact code that solved your problem. This was the natural choice because it worked in your case and it was accessible. It worked for you, but that is precisely why it was missing everything a stranger needs to trust it.</p>
+  </div>
+  <p>This is an exchange from an internal channel so you can hear how a maintainer explains the silence on a pull request.</p>
+  <h3 class="sub-h">The exchange</h3>
+  <div class="codeblock"><span class="lbl">Developer:</span> My PR has been open three weeks with no review. The code works, I use it every day. What is the holdup?
+<span class="lbl">Maintainer:</span> It probably works for you. The problem is I can’t tell. There is no test I can run, no example that proves the behavior, and nothing saying what it assumes about the environment.
+<span class="lbl">Developer:</span> So, you want me to add a test and an example?
+<span class="lbl">Maintainer:</span> Yes. A contribution a reviewer cannot verify sits at the back of the queue until someone has time to reconstruct what it does. A focused PR with a test and an example gets reviewed fast because there is nothing left for me to reverse-engineer.</div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Why it broke</div>
+    <p style="margin:0">The code was correct. The contribution stalled because the maintainer could not verify it without reconstructing the developer's work. That gap is easy to overlook because the author already has the missing context. The example, the test, and the assumptions statement all seem obvious to the person who created the code. To the maintainer, however, they are not, and a reviewer who must reconstruct intent will always do it last.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">What to Watch Out for</div>
+    <p style="margin:0">A pull request stalls on what the reviewer cannot verify. Before opening a contribution, add the example that shows it running, the test that proves the behavior, and the short statement naming what it assumes. Those three features are what move a contribution from the back of the queue to a fast review, because they leave the maintainer nothing to reverse-engineer.</p>
+  </div>
+</section>
+
+<section class="screen" id="S07">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Contributing back to the ecosystem</span><span>·</span><span>3 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Checkpoint 2: Choose the contribution channel and the readiness fix</h1>
+  <p spellcheck="false">Try it now. Read the three cases below. Match each case to the channel built for it and match each case to the one readiness item the snippet is missing.</p>
+  <div class="panel">
+    <p style="margin:0 0 10px" spellcheck="false"><strong>Case A:</strong> A focused tool that wraps a single API into a clean function. The snippet is the function and nothing else.</p>
+    <p style="margin:0 0 10px" spellcheck="false"><strong>Case B:</strong> A full customer-service application a developer wants to share whole, including its UI and deployment scripts.</p>
+    <p style="margin:0" spellcheck="false"><strong>Case C:</strong> A one-line fix to an existing Cookbook example. The snippet is the corrected line, carried in from a customer engagement.</p>
+  </div>
+  <h3 class="sub-h" spellcheck="false">Match 1: case to channel</h3>
+  <div id="matchS07a"><div class="match-row" data-i="0"><div class="match-stmt">Case A: A focused tool that wraps a single API into a clean function. The snippet is the function and nothing else.</div><div class="match-options"><span class="match-opt" data-o="The tool's own repository" tabindex="0" role="button">The tool's own repository</span><span class="match-opt" data-o="The Cookbook, but only after the reusable pattern is stripped out as a focused example" tabindex="0" role="button">The Cookbook, but only after the reusable pattern is stripped out as a focused example</span><span class="match-opt" data-o="The Cookbook example's own repository" tabindex="0" role="button">The Cookbook example's own repository</span></div></div><div class="match-row" data-i="1"><div class="match-stmt">Case B: A full customer-service application shared whole, including its UI and deployment scripts.</div><div class="match-options"><span class="match-opt" data-o="The tool's own repository" tabindex="0" role="button">The tool's own repository</span><span class="match-opt" data-o="The Cookbook, but only after the reusable pattern is stripped out as a focused example" tabindex="0" role="button">The Cookbook, but only after the reusable pattern is stripped out as a focused example</span><span class="match-opt" data-o="The Cookbook example's own repository" tabindex="0" role="button">The Cookbook example's own repository</span></div></div><div class="match-row" data-i="2"><div class="match-stmt">Case C: A one-line fix to an existing Cookbook example. The snippet is the corrected line, carried in from a customer engagement.</div><div class="match-options"><span class="match-opt" data-o="The tool's own repository" tabindex="0" role="button">The tool's own repository</span><span class="match-opt" data-o="The Cookbook, but only after the reusable pattern is stripped out as a focused example" tabindex="0" role="button">The Cookbook, but only after the reusable pattern is stripped out as a focused example</span><span class="match-opt" data-o="The Cookbook example's own repository" tabindex="0" role="button">The Cookbook example's own repository</span></div></div></div>
+  <h3 class="sub-h" spellcheck="false">Match 2: case to the missing readiness item</h3>
+  <div id="matchS07b"><div class="match-row" data-i="0"><div class="match-stmt">Case A: A focused tool that wraps a single API into a clean function. The snippet is the function and nothing else.</div><div class="match-options"><span class="match-opt" data-o="A test that proves the wrapper behaves" tabindex="0" role="button">A test that proves the wrapper behaves</span><span class="match-opt" data-o="Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern" tabindex="0" role="button">Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern</span><span class="match-opt" data-o="The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review" tabindex="0" role="button">The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review</span></div></div><div class="match-row" data-i="1"><div class="match-stmt">Case B: A full customer-service application shared whole, including its UI and deployment scripts.</div><div class="match-options"><span class="match-opt" data-o="A test that proves the wrapper behaves" tabindex="0" role="button">A test that proves the wrapper behaves</span><span class="match-opt" data-o="Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern" tabindex="0" role="button">Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern</span><span class="match-opt" data-o="The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review" tabindex="0" role="button">The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review</span></div></div><div class="match-row" data-i="2"><div class="match-stmt">Case C: A one-line fix to an existing Cookbook example. The snippet is the corrected line, carried in from a customer engagement.</div><div class="match-options"><span class="match-opt" data-o="A test that proves the wrapper behaves" tabindex="0" role="button">A test that proves the wrapper behaves</span><span class="match-opt" data-o="Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern" tabindex="0" role="button">Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern</span><span class="match-opt" data-o="The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review" tabindex="0" role="button">The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review</span></div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS07" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS07">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS07" aria-live="polite"></div>
+</section>
+<section class="screen" id="S07A">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Requirements &amp; Lifecycle</span><span>·</span><span>8 min</span></div>
+  <h1 class="screen-title" spellcheck="false">From business requirements to functional and infrastructure requirements</h1>
+  <p spellcheck="false">The deployment-platform decisions that follow all assume the requirements already exist: the residency rule, the latency target, the identity model. This screen is where those requirements come from: turning a business problem into the functional and infrastructure requirements a deployment decision can be defended against.</p>
+  <h2 class="section-h" spellcheck="false">Capturing functional requirements from a business problem</h2>
+  <p spellcheck="false">A functional requirement names what the system must do, stated with enough detail to check. A business problem (e.g. "help support agents answer faster") is not yet a requirement; the functional requirements derive from it (e.g. "classify each ticket into one of four queues; draft a reply citing the relevant policy; never auto-send without human approval"). The discipline is to write each as a checkable statement of behavior. A vague goal cannot be designed against or verified, while a specific one becomes a line in an eval and a criterion at review.</p>
+  <h2 class="section-h" spellcheck="false">Deriving infrastructure requirements</h2>
+  <p spellcheck="false">Infrastructure requirements are the non-functional constraints the deployment must satisfy. Most of them are not stated in the business problem; instead, you derive them by asking the questions the business problem implies. Latency: how fast does a response need to be, measured where the user is? Scale: how many requests, and at what peak? Residency: where must the data be processed, and under which regulation? Identity: who acts, under what credentials, and what must be auditable? Latency, scale, residency, and identity are the infrastructure requirements that most often decide the deployment platform, and they are easiest to capture at the start, before a platform is chosen for other reasons.</p>
+  <h2 class="section-h" spellcheck="false">Documenting requirements so a decision can be defended</h2>
+  <p spellcheck="false">Requirements are written down because the deployment decision will be reviewed by people who did not gather them. A short requirements record covering the functional behaviors, the infrastructure constraints, and the regulation each constraint comes from lets you defend a platform choice as following from the requirements rather than from familiarity. This record is the input the next screen's deployment decision reads from.</p>
+  <div class="callout">
+    <div class="callout-label" spellcheck="false">Handles well</div>
+    <p style="margin:0" spellcheck="false">Turning a business problem into checkable functional and infrastructure requirements before any platform is chosen.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label" spellcheck="false">Adds cost or complexity</div>
+    <p style="margin:0" spellcheck="false">Eliciting infrastructure constraints up front takes a scoping conversation the team is tempted to skip.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label" spellcheck="false">Use a different approach</div>
+    <p style="margin:0" spellcheck="false">For a throwaway prototype with no review and no regulated data, lightweight notes are enough.</p>
+  </div>
+</section>
+
+<section class="screen" id="S07B">
+  <div class="screen-meta"><span class="tag tag-checkpoint tag-quiz">Checkpoint</span><span>Requirements &amp; Lifecycle</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">Checkpoint 3: extract the requirements</h1>
+  <p>Try it now. A regulated EU bank wants an agent that summarizes customer call transcripts for its support team, with summaries reviewed before they are stored in the EU.</p>
+  <div id="s07bQuiz"><div class="quiz-q"><div class="quiz-q-num">Question 1</div><div class="quiz-q-text">A regulated EU bank wants an agent that summarizes customer call transcripts for its support team. Which of the following is a valid functional requirement?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="0" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">The agent should be fast and accurate.</span></div><div class="mc-opt" data-qi="0" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">The agent produces a summary that a human approves before it is stored.</span></div><div class="mc-opt" data-qi="0" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">The system must be built using an approved cloud provider.</span></div><div class="mc-opt" data-qi="0" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">Transcript data must not leave the EU.</span></div></div>
+      <div class="rationale" id="ratS07B0"></div></div><div class="quiz-q"><div class="quiz-q-num">Question 2</div><div class="quiz-q-text">From the same scenario, which of the following is a valid infrastructure requirement?</div>
+      <div class="mc-opts"><div class="mc-opt" data-qi="1" data-oi="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">The agent must produce summaries quickly enough for support staff to act on them.</span></div><div class="mc-opt" data-qi="1" data-oi="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">The agent summarizes transcripts using a pre-approved prompt template.</span></div><div class="mc-opt" data-qi="1" data-oi="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Transcript data is processed in the EU.</span></div><div class="mc-opt" data-qi="1" data-oi="3" tabindex="0" role="button"><span class="mc-opt-letter">D</span><span class="mc-opt-label">A human reviews each summary before it is stored.</span></div></div>
+      <div class="rationale" id="ratS07B1"></div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS07B" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS07B">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS07B" aria-live="polite"></div>
+</section>
+
+<section class="screen" id="S07C">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Requirements &amp; Lifecycle</span><span>·</span><span>8 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Systems lifecycle for Claude applications</h1>
+  <p spellcheck="false">The requirements you just captured are the first phase of a longer arc. This screen names that arc as the systems lifecycle, so the deployment, versioning, and boundary work in the rest of this module sits in the right phase rather than arriving as unrelated tasks.</p>
+  <h2 class="section-h" spellcheck="false">The lifecycle phases applied to a Claude application</h2>
+  <p spellcheck="false">A Claude application moves through the same lifecycle as any engineered system, with the model work mapped onto it:</p>
+  <ul class="objective-list">
+    <li spellcheck="false"><span class="lo-num">1</span><strong>Requirements:</strong> capture functional and infrastructure needs</li>
+    <li spellcheck="false"><span class="lo-num">2</span><strong>Design:</strong> choose the platform, the model, and the trust boundaries</li>
+    <li spellcheck="false"><span class="lo-num">3</span><strong>Build:</strong> write the agent, tools, and prompts</li>
+    <li spellcheck="false"><span class="lo-num">4</span><strong>Test:</strong> evals, unit, integration, and end-to-end checks</li>
+    <li spellcheck="false"><span class="lo-num">5</span><strong>Deploy:</strong> pin the version, gate promotion on the eval</li>
+    <li spellcheck="false"><span class="lo-num">6</span><strong>Operate:</strong> instrument cost, latency, and errors; enforce guardrails</li>
+    <li spellcheck="false"><span class="lo-num">7</span><b>Iterate:</b> feed production findings back into requirements</li>
+  </ul>
+  <p spellcheck="false">The phases are the same ones the earlier modules taught one at a time. Identifying them as a lifecycle is what shows how they connect.</p>
+  <h2 class="section-h" spellcheck="false">Gating between phases</h2>
+  <p spellcheck="false">A gate is a decision to move from one phase to the next, and it is where a regulated engagement keeps control. You do not move from design to build until the platform satisfies the residency requirement; you do not move from deploy toward full production until the new version clears the eval against the pinned baseline. Placing engineering work in the right phase, and refusing to skip a gate, is what keeps a Claude application reviewable.</p>
+  <div class="callout">
+    <div class="callout-label" spellcheck="false">Handles well</div>
+    <p style="margin:0" spellcheck="false">Placing each piece of engineering work in the lifecycle phase it belongs to, with a defined artifact and gate.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label" spellcheck="false">Adds cost or complexity</div>
+    <p style="margin:0" spellcheck="false">Gating between phases adds checkpoints a team under deadline is tempted to skip.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label" spellcheck="false">Use a different approach</div>
+    <p style="margin:0" spellcheck="false">A one-off experiment may collapse phases, but a regulated deployment cannot.</p>
+  </div>
+</section>
+
+<section class="screen" id="S07D">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Requirements &amp; Lifecycle</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Checkpoint 4: place the work in the right phase</h1>
+  <p spellcheck="false">Try it now. Place each activity in the lifecycle phase it belongs to: requirements, design, test, deploy, operate.</p>
+  <div id="matchS07D"><div class="match-row" data-i="0"><div class="match-stmt">(a) pinning the full model ID and keeping the prior version</div><div class="match-options"><span class="match-opt" data-o="requirements" tabindex="0" role="button">requirements</span><span class="match-opt" data-o="design" tabindex="0" role="button">design</span><span class="match-opt" data-o="test" tabindex="0" role="button">test</span><span class="match-opt" data-o="deploy" tabindex="0" role="button">deploy</span><span class="match-opt" data-o="operate" tabindex="0" role="button">operate</span></div></div><div class="match-row" data-i="1"><div class="match-stmt">(b) gating promotion on the eval result before a version goes to production</div><div class="match-options"><span class="match-opt" data-o="requirements" tabindex="0" role="button">requirements</span><span class="match-opt" data-o="design" tabindex="0" role="button">design</span><span class="match-opt" data-o="test" tabindex="0" role="button">test</span><span class="match-opt" data-o="deploy" tabindex="0" role="button">deploy</span><span class="match-opt" data-o="operate" tabindex="0" role="button">operate</span></div></div><div class="match-row" data-i="2"><div class="match-stmt">(c) deciding data must be processed in a specific region</div><div class="match-options"><span class="match-opt" data-o="requirements" tabindex="0" role="button">requirements</span><span class="match-opt" data-o="design" tabindex="0" role="button">design</span><span class="match-opt" data-o="test" tabindex="0" role="button">test</span><span class="match-opt" data-o="deploy" tabindex="0" role="button">deploy</span><span class="match-opt" data-o="operate" tabindex="0" role="button">operate</span></div></div><div class="match-row" data-i="3"><div class="match-stmt">(d) instrumenting token cost and latency per call in production</div><div class="match-options"><span class="match-opt" data-o="requirements" tabindex="0" role="button">requirements</span><span class="match-opt" data-o="design" tabindex="0" role="button">design</span><span class="match-opt" data-o="test" tabindex="0" role="button">test</span><span class="match-opt" data-o="deploy" tabindex="0" role="button">deploy</span><span class="match-opt" data-o="operate" tabindex="0" role="button">operate</span></div></div><div class="match-row" data-i="4"><div class="match-stmt">(e) choosing Amazon Bedrock because the customer holds its compliance posture there</div><div class="match-options"><span class="match-opt" data-o="requirements" tabindex="0" role="button">requirements</span><span class="match-opt" data-o="design" tabindex="0" role="button">design</span><span class="match-opt" data-o="test" tabindex="0" role="button">test</span><span class="match-opt" data-o="deploy" tabindex="0" role="button">deploy</span><span class="match-opt" data-o="operate" tabindex="0" role="button">operate</span></div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS07D" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS07D">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS07D" aria-live="polite"></div>
+</section>
+<section class="screen" id="S08">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Deployment &amp; Versioning</span><span>·</span><span>15 min</span></div>
+  <h1 class="screen-title">Choosing where a Claude workload runs and versioning what ships</h1>
+  <p>A packaged asset and a contributed one are both merely code until something runs them. The asset now faces a different question: where it runs and how to lock its version, so an upstream change does not become an untracked change in production. That platform decision is rarely about technical merit alone. In practice, it is usually shaped by where the customer already has cloud infrastructure, identity management, and compliance agreements in place. The first question is usually about which platform the customer already trusts and operates on.</p>
+  <h2 class="section-h">The customer's cloud usually determines the platform</h2>
+  <p>The <span class="term" tabindex="0" data-tip="Where a Claude workload runs. The six are: the first-party Claude API, Claude Platform on AWS, Claude in Amazon Bedrock, Claude on Amazon Bedrock (legacy), Google Vertex AI, and third-party platforms. The same model can differ by platform on identity, data residency, latency, and cost.">deployment platform</span> is the environment where the Claude workload runs. The same model can run in several deployment environments, and the customer's existing cloud usually determines which one. The first-party Claude API is Anthropic's own environment and typically receives new features first. Claude Platform on AWS is accessed through the customer's AWS account using Anthropic's own model IDs and lifecycle; inference is Anthropic-operated, outside the AWS boundary. Amazon Bedrock offers two integrations: Claude in Amazon Bedrock uses the Messages API at /anthropic/v1/messages with broad feature parity; confirm any feature-specific requirements against the Bedrock documentation, as a features-not-supported list exists, while Claude on Amazon Bedrock (legacy) uses the InvokeModel/Converse APIs with ARN-versioned identifiers. Google Vertex AI does the same inside Google Cloud. Third-party platforms, such as Microsoft Foundry, embed Claude inside a product the customer already uses. Microsoft Foundry offers Claude in two hosting forms: Hosted on Azure (currently Claude Opus 4.8, Claude Sonnet 5, and Claude Haiku 4.5, with inference running end-to-end on Azure infrastructure, generally available) and Hosted on Anthropic (all other Foundry Claude models, with inference on Anthropic-operated infrastructure). Residency assumptions for regulated customers depend on the hosting form of the specific model. Confirm the hosting form and the current model split with Microsoft at build time.</p>
+  <h3 class="sub-h">Identity and data residency are important for security</h3>
+  <p>Identity and data location are answered by the platform, not your code. Bedrock uses AWS identity and keeps data inside the customer's AWS boundary; Vertex uses Google Cloud identity and boundary. Both offer regional routing when residency is a constraint. Matching the platform to the customer's existing compliance agreement avoids a data-residency review from scratch.</p>
+  <h3 class="sub-h">Pin the version so an upstream model change is not a silent production change</h3>
+  <p>Versioning is what keeps a model or prompt change from becoming a silent change in production. Every Claude model ID points to a specific model snapshot. Aliases such as Opus and Sonnet are convenient, but they evolve over time and may resolve to different versions across deployment platforms. A pinned full model ID resolves to a fixed snapshot. Pin the specific model version rather than the alias, so an upstream model update is a deliberate choice rather than a silent production change. Then version the prompt and the asset alongside the code. Finally, keep the prior version available so the regression can be rolled back. An unpinned deployment makes every upstream model update an untracked change to your output.</p>
+  <p class="code-caption">The first line follows a moving alias. The second pins the snapshot.</p>
+  <div class="codeblock"><span class="cm"># Pre-4.6 example: a convenience alias can resolve to a new</span>
+<span class="cm"># version without you knowing</span>
+model = <span class="str">"claude-haiku-4-5"</span>
+
+<span class="cm"># Pre-4.6 pinned snapshot: the version is fixed until you change this line</span>
+model = <span class="str">"claude-haiku-4-5-20251001"</span></div>
+  <p>For Claude 4.6 and later, the model ID alone pins to a specific snapshot; for earlier models, the ID plus a date suffix is required. Verify the current convention at platform.claude.com at build time.</p>
+  <h3 class="sub-h">Promote a version through the eval</h3>
+  <p>Gate promotion on the eval suite. Send a new version to a portion of traffic, compare against the pinned baseline, and promote or roll back on the result. This is where the eval stops being a one-time test and becomes the deployment gate.</p>
+  <h3 class="sub-h">The deployment-platform decision table</h3>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>Platform</th><th>Identity and data model</th><th>When to choose it</th><th>How versioning is pinned</th></tr>
+    <tr><td>First-party Claude API</td><td>Anthropic identity and terms.</td><td>The customer has no binding cloud or residency constraint and wants the newest capabilities.</td><td>Pin the full model ID and keep the prior snapshot.</td></tr>
+    <tr><td>Claude Platform on AWS</td><td>Anthropic identity and terms, accessed through the customer's AWS account; inference is Anthropic-operated outside the AWS boundary. Model lifecycle follows Anthropic's deprecation schedule.</td><td>The customer is on AWS but wants Anthropic model IDs, lifecycle, and feature parity with the first-party API.</td><td>Pin using the same model ID format as the Claude API (for example, claude-opus-4-8). Lifecycle follows Anthropic's schedule. (Confirm at publish time.)</td></tr>
+    <tr><td>Claude in Amazon Bedrock</td><td>Messages API at /anthropic/v1/messages, broad feature parity with the first-party API; confirm feature-specific requirements against the Bedrock documentation. Data stays inside the customer's configured AWS boundary.</td><td>The customer is on AWS, wants broad feature parity with the first-party API (confirm feature-specific requirements), and holds a compliance posture there.</td><td>Pin the full model ID using the anthropic. prefix format. Partner retirement dates differ from Anthropic's schedule. Confirm at publish time.</td></tr>
+    <tr><td>Claude on Amazon Bedrock (legacy)</td><td>AWS identity and billing, InvokeModel/Converse APIs with ARN-versioned model identifiers.</td><td>The customer is on an existing Bedrock integration using InvokeModel or Converse and has not migrated to the Messages API.</td><td>Pin via ARN-versioned model identifiers per Bedrock's versioning controls.</td></tr>
+    <tr><td>Google Vertex AI</td><td>Google Cloud identity, Identity and Access Management (IAM), and billing, with regional or global endpoints for residency.</td><td>The customer is on Google Cloud and holds a compliance posture there.</td><td>Pin the full model ID before rollout using Vertex's model ID format. Partner retirement dates differ from Anthropic's schedule.</td></tr>
+    <tr><td>Third-party platform</td><td>The wrapping product's identity and billing model. Note: Claude in Microsoft Foundry offers two hosting forms: Hosted on Azure (currently Opus 4.8, Sonnet 5, and Haiku 4.5; inference end-to-end on Azure) and Hosted on Anthropic (all other Foundry Claude models). Confirm residency and compliance terms with Microsoft before selecting this path for a regulated customer.</td><td>The customer already runs the platform that embeds Claude.</td><td>Pin per the platform's versioning controls.</td></tr>
+  </tbody></table></div>
+  <div class="callout">
+    <div class="callout-label">Handles well</div>
+    <p style="margin:0">Matching the platform to the customer cloud and pinning the version keeps a migration reviewable and a rollback possible.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Adds cost or complexity</div>
+    <p style="margin:0">Pinning, retaining prior versions, and gating promotion on the eval add release-process overhead to every deployment.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Use a different approach</div>
+    <p style="margin:0">For a throwaway prototype that never touches production, a moving alias is fine: pinning is for what ships.</p>
+  </div>
+</section>
+
+<section class="screen" id="S09">
+  <div class="screen-meta"><span class="tag tag-failure">Watch Out</span><span>Deployment &amp; Versioning</span><span>·</span><span>3 min</span></div>
+  <h2 class="screen-title">The deployment that broke when the model alias moved</h2>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Setup</div>
+    <p style="margin:0">You shipped against the alias that pointed at the recommended version, because that was the convenient default and it gave you the latest model for free. It worked. Then the alias advanced, and what was free turned out to have a price.</p>
+  </div>
+  <p>This is a trace excerpt from a production log, the kind you would scroll back through after an incident. It shows the day the output shape changed and why there was nothing to roll back to.</p>
+  <p class="code-caption">The log</p>
+  <div class="codeblock">--:  deploy: model=<span class="str">"opus"</span>  status=ok
+--:  alias advanced -&gt; new opus version (no app change)
+--:  parser: <span class="er">KeyError "summary" in response payload</span>
+--:  <span class="er">Error: output shape changed; downstream parse failed</span>
+--:  rollback attempted -&gt; <span class="er">no pinned prior version retained</span>
+--:  incident: hotfix parser; root cause = unpinned deployment</div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Why it broke</div>
+    <p style="margin:0">The application never changed, but the alias did. No pinned prior version had been retained, so there was nothing to roll back to. The hotfix repaired the parser but left the unpinned deployment in place.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">What to Watch Out for</div>
+    <p style="margin:0">An alias resolves to a moving target; a pinned full model ID is a fixed snapshot. Pin the full model ID so an upstream update is something you adopt on purpose. Keep the prior pinned version available so a regression is a rollback rather than a hotfix. Gate the new version through your eval before you promote it, so the output-shape change shows up in a test run instead of in production.</p>
+  </div>
+</section>
+
+<section class="screen" id="S10">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Deployment platform and versioning</span><span>·</span><span>4 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Checkpoint 5: Match the deployment platform and version pin to each scenario</h1>
+  <p spellcheck="false">Try it now. A customer runs AWS with a data-residency requirement and needs to be able to roll back a model update. Select the one correct piece in each group below to assemble the minimal deployment configuration that satisfies both. Leave out what does not belong.</p>
+  <div id="assembleS10"><h4 class="sub-h" style="margin: 18px 0px 8px;">Platform Group</h4><div class="signal-item" data-group="platform" data-oi="0" tabindex="0" role="button"><span class="box"></span><div>First-party API</div></div><div class="signal-item" data-group="platform" data-oi="1" tabindex="0" role="button"><span class="box"></span><div>Amazon Bedrock</div></div><div class="signal-item" data-group="platform" data-oi="2" tabindex="0" role="button"><span class="box"></span><div>Google Vertex AI</div></div><h4 class="sub-h" style="margin: 18px 0px 8px;">Identity Group</h4><div class="signal-item" data-group="identity" data-oi="0" tabindex="0" role="button"><span class="box"></span><div>AWS identity reference</div></div><div class="signal-item" data-group="identity" data-oi="1" tabindex="0" role="button"><span class="box"></span><div>Anthropic API key</div></div><h4 class="sub-h" style="margin: 18px 0px 8px;">Model reference group</h4><div class="signal-item" data-group="model" data-oi="0" tabindex="0" role="button"><span class="box"></span><div>A pinned full model ID</div></div><div class="signal-item" data-group="model" data-oi="1" tabindex="0" role="button"><span class="box"></span><div>A moving alias</div></div><h4 class="sub-h" style="margin: 18px 0px 8px;">Rollback Group</h4><div class="signal-item" data-group="rollback" data-oi="0" tabindex="0" role="button"><span class="box"></span><div>Retain the prior pinned version</div></div><div class="signal-item" data-group="rollback" data-oi="1" tabindex="0" role="button"><span class="box"></span><div>No retention</div></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS10" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS10">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS10" aria-live="polite"></div>
+</section>
+<section class="screen" id="S11">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Comparing Platforms</span><span>·</span><span>12 min</span></div>
+  <h1 class="screen-title">Comparing platforms on latency, compliance, and cost so the choice survives review</h1>
+  <p>In the last two screens you chose a platform and pinned its version. That choice was right for the customer's cloud, but "right for their cloud" is not yet an argument a procurement and security team will sign off on.</p>
+  <h2 class="section-h">Measure latency from the customer's region</h2>
+  <p>Latency depends on where the platform runs relative to the customer and on how access to new features is routed. A platform running in the customer's own cloud region can reduce round-trip time compared to a first-party endpoint located farther away. The trade-off is timing of access: the first-party API typically receives new capabilities before they reach other platforms. The number is only accurate when you measure it from the customer's actual region against their actual payload. A measurement from your laptop hides the round-trip penalty that appears once the workload runs where the customer is. Within Bedrock specifically, the choice between global and regional endpoints is also the primary residency control and can affect cost. You should measure from the customer's actual region against both options before committing.</p>
+  <h2 class="section-h">Compliance often determines the platform</h2>
+  <p>Compliance is often the dimension that ends the debate. A customer who already holds a certification on one cloud is unlikely to re-certify on another. <span class="term" tabindex="0" data-tip="A rule that a customer's data must be processed in a specific country or region.">Data residency</span> is a rule that a customer's data must be processed in a specific country or region. Available compliance certifications and who can audit access differ by platform, and a regulated financial or healthcare customer treats these as pass-or-fail rather than as tradeoffs to balance. The first-party Claude API may not offer EU data residency; confirm current regional coverage at platform.claude.com, since EU-only residency typically requires Bedrock or Vertex AI; on third-party platforms such as Microsoft Foundry, hosting is per-model: Azure-hosted Foundry models run inference end-to-end on Azure infrastructure, while Anthropic-hosted Foundry models do not satisfy EU regional residency requirements. Residency must be confirmed per model and deployment with Microsoft. Raise the compliance constraint during scoping, or it surfaces at contract review after the work is done.</p>
+  <h2 class="section-h">What drives total cost beyond the per-token rate</h2>
+  <p>Per-token rates are broadly aligned across platforms; total cost moves on egress, platform fees, and integration effort. A lower token price can cost more in total once data transfer and integration are factored in. Instrument cost per call for each platform. Confirm the current pricing pages at scoping.</p>
+  <h3 class="sub-h">The cross-platform comparison reference</h3>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>Dimension</th><th>How it differs by platform</th><th>How to measure it</th><th>Where each platform wins</th></tr>
+    <tr><td>Latency</td><td>A platform in the customer's region shortens the round trip, while the first-party API may reach new features first.</td><td>From the customer's actual region against their actual payload.</td><td>An in-region cloud platform wins on round-trip latency, while the first-party API is advantaged on earliest feature access.</td></tr>
+    <tr><td>Compliance</td><td>Data residency, certifications, and audit controls are determined by the deployment platform.</td><td>Against the customer's existing certification and residency requirements during scoping.</td><td>The cloud platform the customer has already certified wins, because it needs no re-certification.</td></tr>
+    <tr><td>Cost</td><td>Token price, data egress, platform fees, and integration effort all vary.</td><td>Total cost per call per platform, including egress and integration, rather than token price alone.</td><td>The platform with the lowest total cost for the actual workload wins, which is not always the cheapest token.</td></tr>
+  </tbody></table></div>
+  <div class="callout">
+    <div class="callout-label">Handles well</div>
+    <p style="margin:0">Measuring all three dimensions per platform turns a placement into one a procurement team will sign off on.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Adds cost or complexity</div>
+    <p style="margin:0">Instrumenting latency, compliance, and cost across platforms requires real measurement work before any code ships.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Use a different approach</div>
+    <p style="margin:0">When the customer's compliance requirement is already pass-or-fail, skip the full comparison. That constraint determines the placement on its own.</p>
+  </div>
+</section>
+
+<section class="screen" id="S12">
+  <div class="screen-meta"><span class="tag tag-failure">Watch Out</span><span>Comparing Platforms</span><span>·</span><span>2 min</span></div>
+  <h2 class="screen-title">The platform picked on familiarity that failed residency</h2>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Setup</div>
+    <p style="margin:0">You picked the platform your team was already familiar with, because the migration looked easy and the deadline was approaching rapidly. It built just fine; the trouble was that easy-to-build and allowed-to-ship are different criteria.</p>
+  </div>
+  <p>The following anecdote is the kind a developer tells a teammate after a review goes sideways. It lets you see the familiar platform trap before anyone calls it a mistake.</p>
+  <h3 class="sub-h">What happened</h3>
+  <p>A developer building for a regulated customer chose the platform the team had shipped on before. The integration came together quickly because the team knew the tools and resources. The build passed its functional tests. At the customer's security review, the reviewer asked where data was being processed. The selected platform did not satisfy the customer's residency requirements. A different platform, one the team knew less well, would have satisfied the requirement through regional deployment options the customer had already cleared. The placement was rejected, and the integration had to be rebuilt on the platform that met the residency constraint.</p>
+  <div class="callout callout-failure">
+    <div class="callout-label">Why it broke</div>
+    <p style="margin:0">Familiarity optimized for the wrong test. The easy migration answered whether the team could build quickly. It never answered whether the deployment would pass the customer's residency review, which was the test that determined whether it could ship. Because the compliance requirement was not fulfilled during scoping, it arrived at the go-no-go review instead. This is the most expensive place to discover it, because the build was already complete.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">What to Watch Out for</div>
+    <p style="margin:0">A platform that is easy for your team to build on is not necessarily a platform the customer is allowed to run. When the customer is regulated, the residency and compliance constraint is often pass-or-fail, rather than tradeoffs. Identify them early during scoping and let them influence the placement before familiarity does. Checking early costs a scoping conversation, while checking late costs an entire rebuild.</p>
+  </div>
+</section>
+
+<section class="screen" id="S13">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Comparing platforms on latency, compliance, and cost</span><span>·</span><span>3 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Checkpoint 6: Diagnose the platform mismatch from a comparison trace</h1>
+  <p spellcheck="false">Try it now. The comparison trace below shows a deployment platform selected on familiarity failing a customer requirement. Identify the mechanism, then pick the targeted fix from the three options.</p>
+  <p class="code-caption" spellcheck="false">The trace</p>
+  <div class="codeblock" spellcheck="false">platform_selected = <span class="str">"team_default"</span>   <span class="cm"># chosen on familiarity</span>
+latency_test: measured from dev laptop -&gt; 180ms (looked fine)
+customer_region: eu-west, payload 12 KB
+compliance_check: data residency = EU-only required
+result: <span class="er">REJECTED  reason="data processed outside EU on selected platform"</span></div>
+  <div id="mcqS13"><div class="mc-opt" data-i="0" tabindex="0" role="button"><span class="mc-opt-letter">A</span><span class="mc-opt-label">Option 1: Optimize the parser to cut the 180ms latency measured on the laptop.</span></div><div class="mc-opt" data-i="1" tabindex="0" role="button"><span class="mc-opt-letter">B</span><span class="mc-opt-label">Option 2: Remeasure latency from EU-west and select the platform whose region satisfies EU-only residency.</span></div><div class="mc-opt" data-i="2" tabindex="0" role="button"><span class="mc-opt-letter">C</span><span class="mc-opt-label">Option 3: Add a caching layer to reduce per call cost on the selected platform.</span></div></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS13" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS13">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS13" aria-live="polite"></div>
+</section>
+<section class="screen" id="S14">
+  <div class="screen-meta"><span class="tag tag-teaching">Teaching</span><span>Trust Boundaries</span><span>·</span><span>14 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Coordinating several Claude deployments with the trust boundaries holding under review</h1>
+  <p spellcheck="false">The accelerators, deployments, and tradeoffs now come together in a single application. Connecting components multiplies the places where identity, secrets, and untrusted input can cross. The discipline is to identify every boundary before connecting anything.</p>
+  <h2 class="section-h" spellcheck="false">Map which component does what before you connect them</h2>
+  <p spellcheck="false">A multi-component app coordinates more than one Claude capability into a single workflow. An API request might trigger a Claude Code task, which then reaches a customer system through an MCP server. Each component contributes a capability the others do not have. The challenge is that every connection between them creates a place where identity, secrets, and untrusted input can cross. Map which component does what before connecting anything.</p>
+  <h2 class="section-h" spellcheck="false">The trust boundary is where data moves</h2>
+  <p spellcheck="false">The <span class="term" tabindex="0" data-tip="The seam where data or instructions move from one deployment environment to another in a multi-component app. Content fetched by one component is untrusted when it reaches the next, so the receiving component treats it as data, not instructions.">trust boundary</span> is the point where data or instructions move from one deployment environment to another. It is exactly where the injection and access controls from the prior module apply. Content fetched by a Claude Code task is untrusted when it reaches the next component. The receiving component should treat it as data, rather than as instructions, following the same principle used throughout the security module. The core discipline here is to identify every seam as a boundary. Don't assume a component is trusted simply because it worked correctly on its own.</p>
+  <h2 class="section-h" spellcheck="false">Least privilege applies to the whole application</h2>
+  <p spellcheck="false">Identity and least privilege, which means giving each component only the access its task needs and nothing more, apply to the application as a whole. Each component operates under an identity. The application is only as contained as its most privileged seam, which means a single component scoped too broadly becomes the weak point even when every other component is properly scoped. You scope each component to the least privilege its role in the workflow requires. This is what keeps a steered component from reaching beyond its intended task.</p>
+  <h2 class="section-h" spellcheck="false">Scoping for a regulated review pulls the module together</h2>
+  <p spellcheck="false">A regulated review requires justifying audit logging, data-residency decisions, and permission controls across the full application. For regulated deployments, Bedrock and Vertex AI are typically the platforms that satisfy regional residency constraints. Confirm ZDR and HIPAA BAA eligibility for each component against the Anthropic Trust Center and platform.claude.com before scoping.</p>
+  <h3 class="sub-h" spellcheck="false">The multi-component integration map</h3>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th spellcheck="false">Component</th><th spellcheck="false">What it contributes</th><th spellcheck="false">The trust boundary at its seam</th><th spellcheck="false">The control that enforces it</th></tr>
+    <tr><td spellcheck="false">First-party API</td><td spellcheck="false">Orchestrates the workflow and holds the entry point.</td><td spellcheck="false">The request entering the app from outside.</td><td spellcheck="false">Input validation and the identity the call runs under.</td></tr>
+    <tr><td spellcheck="false">Claude Code task</td><td spellcheck="false">Runs the agentic work and may fetch external content.</td><td spellcheck="false">Content it fetched, which is untrusted downstream.</td><td spellcheck="false">Treat fetched content as data at the next seam.</td></tr>
+    <tr><td spellcheck="false">MCP server</td><td spellcheck="false">Reaches a customer system to read or act.</td><td spellcheck="false">The system access it holds on the app's behalf.</td><td spellcheck="false">Scope the server to least privilege and log the access.</td></tr>
+  </tbody></table></div>
+  <div class="callout">
+    <div class="callout-label" spellcheck="false">Handles well</div>
+    <p style="margin:0" spellcheck="false">Naming every seam as a boundary and scoping each component to least privilege makes a multi-component app deployable under review.</p>
+  </div>
+  <div class="callout callout-neutral">
+    <div class="callout-label" spellcheck="false">Adds cost or complexity</div>
+    <p style="margin:0" spellcheck="false">Mapping seams, enforcing controls at each, and logging boundary crossings adds design and audit work to every integration.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label" spellcheck="false">Use a different approach</div>
+    <p style="margin:0" spellcheck="false">When a seam cannot be secured, do not ship around it: escalate to a human owner.</p>
+  </div>
+</section>
+
+<section class="screen" id="S15">
+  <div class="screen-meta"><span class="tag tag-failure">Watch Out</span><span>Trust Boundaries</span><span>·</span><span>2 min</span></div>
+  <h2 class="screen-title">The seam nobody marked as a boundary</h2>
+  <div class="callout callout-neutral">
+    <div class="callout-label">Setup</div>
+    <p style="margin:0">You connected the components that each passed their own tests. The parts were already checked and connecting verified parts feels safe. Each one was trusted in isolation. The gap was that a seam between two trusted parts cannot automatically be trusted itself.</p>
+  </div>
+  <p>This is a short transcript from a pairing session, the kind of back-and-forth that ends at the moment the unmarked seam gets identified.</p>
+  <h3 class="sub-h">The session</h3>
+  <div class="codeblock"><span class="lbl">Dev A:</span> All three components pass their own tests. I just wired them up.
+<span class="lbl">Dev B:</span> Where does the Claude Code task send what it fetched?
+<span class="lbl">Dev A:</span> Straight into the next call as part of the prompt. It is just the content we pulled from the customer page.
+<span class="lbl">Dev B:</span> That content is untrusted. If it carries instructions, the next component runs them, because we never mark that seam as a boundary.
+<span class="lbl">Dev A:</span> But each component was trusted on its own.
+<span class="lbl">Dev B:</span> Right, and the seam between them was not. That is the one nobody treated as a boundary, so fetched content crosses as instructions.</div>
+  <div class="callout callout-failure">
+    <div class="callout-label">Why it broke</div>
+    <p style="margin:0">Each component having passed its own tests said nothing about the seam between them. The fetched content was untrusted the moment it left the Claude Code task. It arrived from a component that worked in isolation and it was passed into the next call as if it were trusted instructions. The boundary existed in the data flow. It just was not marked, so no control checked it. A component that passes its own tests has no seam-level controls. Every point where data crosses between deployment environments requires an explicit boundary control regardless of how each component behaves independently.</p>
+  </div>
+  <div class="callout callout-failure">
+    <div class="callout-label">What to Watch Out for</div>
+    <p style="margin:0">A component that is trusted in isolation does not automatically make the seam leaving it trustworthy. Mark every place data or instructions cross from one deployment environment to another as a boundary. Put a control there that treats fetched content as data rather than instructions, exactly as the security work taught. The seam nobody identifies is the one a steered action crosses.</p>
+  </div>
+</section>
+
+<section class="screen" id="S16">
+  <div class="screen-meta"><span class="tag tag-checkpoint">Checkpoint</span><span>Multi-component app and trust boundaries</span><span>·</span><span>3 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Checkpoint 7: Complete the multi-component boundary configuration</h1>
+  <p spellcheck="false">Try it now. The multi-component app below is wired, with two blanks left. Drag the correct control onto the seam that receives untrusted fetched content and drag the correct identity scope onto the most privileged component.</p>
+  <p class="code-caption" spellcheck="false">The partial app</p>
+  <div class="codeblock"><span class="cm"># components wired: API -&gt; Claude Code task -&gt; MCP server</span>
+fetched = code_task.run(fetch_url=customer_page)
+
+<span class="cm"># BLANK 1: control on the seam receiving untrusted fetched content</span>
+next_call(input=<span id="gapDisplay1" class="gap-blank" tabindex="0" role="button" data-slot="1" data-wired="1">drop here</span>(fetched))
+
+<span class="cm"># MCP server reaches the customer system (most privileged component)</span>
+mcp_server = <span class="fn">MCPServer</span>(
+    system=customer_db,
+    scope=<span id="gapDisplay2" class="gap-blank" tabindex="0" role="button" data-slot="2" data-wired="1">drop here</span>,   <span class="cm"># BLANK 2: identity scope</span>
+)</div>
+  <p class="code-caption" spellcheck="false">Drag tokens (shared bank, two are distractors)</p>
+  <div class="token-bank" id="tokenBankS16"><span class="gap-token" data-i="0" draggable="true" tabindex="0" role="button">treat_as_data</span><span class="gap-token" data-i="1" draggable="true" tabindex="0" role="button">least_privilege_read_only</span><span class="gap-token" data-i="2" draggable="true" tabindex="0" role="button">run_as_instructions</span><span class="gap-token" data-i="3" draggable="true" tabindex="0" role="button">full_access</span></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS16" disabled="">Submit</button>
+    <button class="skip-btn" id="skipS16">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS16" aria-live="polite"></div>
+</section>
+<section class="screen" id="S17">
+  <div class="screen-meta"><span class="tag tag-cumulative">Cumulative</span><span>All topics</span><span>·</span><span>6 min</span></div>
+  <h1 class="screen-title" spellcheck="false">Cumulative task: Find all three, explain each, write the correction</h1>
+  <p spellcheck="false">Below is a runnable packaged accelerator deployed across platforms. There are three planted defects: one in the packaging layer, one in the deployment-and-versioning layer, and one in the multi-component boundary layer. Your task is to find all three.</p>
+  <p class="code-caption" spellcheck="false">The deployment as shipped</p>
+  <div class="codeblock" spellcheck="false"><span class="cm"># Packaged code-review accelerator, deployed for a regulated AWS customer</span>
+<span class="kw">def</span> <span class="fn">build_agent</span>():
+    <span class="kw">return</span> <span class="fn">Agent</span>(
+        model=<span class="str">"opus"</span>,
+        system_prompt=SYSTEM_PROMPT,
+        repo_path=<span class="str">"/home/acme/checkout"</span>,
+        tools=[read_file, run_linter],
+    )
+
+deploy(platform=<span class="str">"amazon_bedrock"</span>, identity=aws_role_arn)
+
+<span class="cm"># multi-component step: Claude Code task fetches a customer page</span>
+fetched = code_task.run(fetch_url=customer_page)
+next_call(input=fetched)</div>
+  <p spellcheck="false"><em>Carry your three corrected lines into the next screen, where you assemble and verify the fixed deployment.</em></p>
+  <p spellcheck="false">In your own words, identify all three defects.</p>
+  <div class="roleplay-wrap"><textarea id="taS17" placeholder="Defect 1 (packaging): …
+Defect 2 (deployment/versioning): …
+Defect 3 (multi-component boundary): …"></textarea></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS17" disabled="">Reveal model answer</button>
+    <button class="skip-btn" id="skipS17">Skip for now</button>
+  </div>
+  <div class="feedback" id="fbS17" aria-live="polite"></div>
+</section>
+
+<section class="screen" id="S18">
+  <div class="screen-meta"><span class="tag tag-cumulative">Cumulative</span><span>All topics</span><span>·</span><span>6 min</span></div>
+  <h1 class="screen-title">Cumulative task: assemble and verify the corrected deployment</h1>
+  <p>You have identified three defects across this module. Now assemble the fix: in your own words, describe what each defect was, what you changed, and why the corrected version is deployable. Then review the corrected code below and confirm your reasoning holds.</p>
+  <p>When you are ready, reveal the model answer.</p>
+  <div class="roleplay-wrap"><textarea id="taS18" placeholder="What each defect was, what you changed, and why the corrected version is deployable…"></textarea></div>
+  <div class="btn-row">
+    <button class="submit-btn" id="submitS18" disabled="">Reveal model answer</button>
+    <button class="skip-btn" id="skipS18">Skip for now</button>
+  </div>
+  <div id="s18reveal" class="honor-reveal">
+    <p class="code-caption" style="margin-top:0">The corrected deployment</p>
+    <div class="codeblock"><span class="kw">def</span> <span class="fn">build_agent</span>(repo_path):                   <span class="cm"># parameterized for reuse</span>
+    <span class="kw">return</span> <span class="fn">Agent</span>(
+        model=<span class="str">"us.anthropic.claude-opus-4-8"</span>,              <span class="cm"># pinned full Bedrock model ID</span>
+        system_prompt=SYSTEM_PROMPT,
+        repo_path=repo_path,                  <span class="cm"># set per engagement</span>
+        tools=[read_file, run_linter],
+    )
+
+deploy(platform=<span class="str">"amazon_bedrock"</span>, identity=aws_role_arn,
+       retain_previous_pinned_version=<span class="tf">True</span>)   <span class="cm"># rollback target kept</span>
+
+fetched = code_task.run(fetch_url=customer_page)
+next_call(input=treat_as_data(fetched))       <span class="cm"># untrusted -&gt; data, not instructions</span>
+
+<span class="cm"># verify before promoting: gate the version through the bundled eval</span>
+<span class="kw">assert</span> eval_suite.run(model=<span class="str">"us.anthropic.claude-opus-4-8"</span>) &gt;= baseline_score</div>
+    <p style="margin:16px 0 0"><strong>Model answer:</strong> The first defect was a hardcoded repository path. Parameterizing it restores reuse: a new engagement sets the value rather than editing the loop. The second defect was a moving model alias. Pinning the full Bedrock model ID (with the anthropic. prefix) with a retained previous version restores controlled rollout and gives a rollback target if the new version regresses. The third defect was fetched content passed directly as instructions. Wrapping it in treat_as_data() closes the trust boundary: content from an untrusted source is treated as data, not as something the agent should act on. The eval assertion gates promotion on a proven baseline score before the version ships.</p>
+    <div class="selfgrade" style="margin-top:16px">
+      <button class="pass">All three defects landed · pass</button>
+      <button class="retry">I missed one or more · retry</button>
+    </div>
+  </div>
+  <div class="feedback" id="fbS18" aria-live="polite"></div>
+</section>
+
+<section class="screen" id="S19">
+  <div class="screen-meta"><span class="tag tag-module">Recap</span><span>All topics</span><span>·</span><span>3 min</span></div>
+  <h1 class="screen-title">Key takeaways</h1>
+  <div class="recap-item">
+    <span class="rn">01</span>
+    <div><h4>Package while the build is fresh.</h4><p>An accelerator keeps the reusable logic, exposes the customer-specific parts as documented parameters, and bundles the eval and the audit log alongside the asset. Correct packaging produces an asset teams configure. The knowledge of what is customer-specific is most expensive to reconstruct after the people who held it have moved on.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">02</span>
+    <div><h4>A maintainer accepts what they can verify.</h4><p>Moving an asset into shared infrastructure means matching it to the channel built for its shape, then clearing the review bar: focused code, a runnable example, a test, and a statement of assumptions, with licensing rights confirmed before the technical review. A contribution a reviewer cannot verify sits at the back of the queue. Readiness moves a private asset into shared infrastructure others build on.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">03</span>
+    <div><h4>Pin what ships.</h4><p>Choose the deployment platform based on the customer's cloud and compliance posture, then pin the specific model version rather than the moving alias and keep the prior version available. An alias is like asking for the current edition of a book: convenient, but the text can change. Pinning cites a fixed edition, so an upstream model change is something you adopt deliberately rather than something that arrives overnight with no rollback path.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">04</span>
+    <div><h4>Measure the dimension that decides the placement.</h4><p>A platform choice is defensible only when latency, compliance, and cost are measured: latency from the customer's region, compliance against their existing certification, and cost as the total per call rather than the token price alone. For regulated customers, compliance is usually pass-or-fail. Raising compliance as a constraint during scoping prevents it from rejecting the build later at contract review.</p></div>
+  </div>
+  <div class="recap-item">
+    <span class="rn">05</span>
+    <div><h4>Mark every seam as a boundary.</h4><p>A multi-component application is only as contained as its most privileged seam. Scope each component to the minimum access its role requires and treat every point where data crosses as a trust boundary. Fetched content is treated as data, not instructions. Trust at a component boundary must be explicitly established. It does not carry over from the component that sent the data. When a seam cannot be secured, it goes to a human owner rather than being shipped.</p></div>
+  </div>
+  <div class="callout">
+    <div class="callout-label">What comes next</div>
+    <p>You can now package a build into a reusable asset, contribute it back, place and version it on the right platform, defend that placement, and connect components together so the boundaries hold. That completes the build-to-deploy arc for this persona: from writing production code in the earlier modules to shipping assets a regulated customer can audit and a team can reuse.</p>
+  </div>
+  <h3 class="sub-h">Anthropic public references (time-sensitive)</h3>
+  <div class="dtable-wrap"><table class="dtable">
+    <tbody><tr><th>ID</th><th>Source</th><th>Type</th><th>Used for</th></tr>
+    <tr><td>S1</td><td>platform.claude.com (Claude in Amazon Bedrock, Claude on Vertex AI)</td><td>Product documentation</td><td>Deployment platforms, identity and data models, residency routing, regional and global endpoints.</td></tr>
+    <tr><td>S2</td><td>platform.claude.com (Model IDs and versioning, Model deprecations)</td><td>Product documentation</td><td>Pinned model IDs, alias resolution, lifecycle and retirement, partner-set schedules.</td></tr>
+    <tr><td>S3</td><td>anthropic.com and the Anthropic GitHub organization (Cookbook)</td><td>Product and repository</td><td>Contribution channels, the Cookbook as a home for focused examples, contribution conventions.</td></tr>
+    <tr><td>S4</td><td>Building with the Claude API (Skilljar)</td><td>Course source</td><td>Eval datasets, graders, and the evaluation pipeline used as the deployment gate.</td></tr>
+    <tr><td>S5</td><td>Claude Code 101 In Action (Skilljar)</td><td>Course source</td><td>Claude Code agentic tasks and MCP server roles in a multi-component workflow.</td></tr>
+  </tbody></table></div>
+  <div class="finish-banner">
+    <h2>You can now take a working build all the way to a deployable, auditable asset.</h2>
+    <p>Package it, contribute it, place and version it, defend that placement, and hold the boundaries together under review.</p>
+  </div>
+</section>
+
+<section class="screen" id="S19B">
+  <div class="screen-meta"><span class="tag tag-module">Glossary</span><span>Key Terms</span><span>·</span><span>3 min</span></div>
+  <h1 class="screen-title">Key terms from this module</h1>
+  <p class="lede">Alphabetical. Click a term to expand its definition.</p>
+
+  <details class="exrow"><summary>Accelerator</summary><div class="ex-body"><p>A working solution packaged so the next engagement configures it rather than rebuilding it. Customer-specific parts are exposed as documented parameters, the assumptions are written down, and an eval is bundled to prove the asset still works in a new context.</p></div></details>
+  <details class="exrow"><summary>Contribution readiness</summary><div class="ex-body"><p>What a maintainer needs to verify a contribution: focused code, a runnable example, a test that proves the behavior, a statement of environment assumptions, and confirmed rights to contribute the code.</p></div></details>
+  <details class="exrow"><summary>Deployment platform</summary><div class="ex-body"><p>Where a Claude workload runs. The six are: the first-party Claude API, Claude Platform on AWS, Claude in Amazon Bedrock, Claude on Amazon Bedrock (legacy), Google Vertex AI, and third-party platforms. The same model can differ by platform on identity, data residency, latency, and cost.</p></div></details>
+  <details class="exrow"><summary>Model alias versus pinned ID</summary><div class="ex-body"><p>An alias such as opus or sonnet resolves to a recommended version that updates over time and can differ by platform. A pinned full model ID is a fixed snapshot. Pinning is what keeps an upstream model change from being a silent production change.</p></div></details>
+  <details class="exrow"><summary>Trust boundary</summary><div class="ex-body"><p>The seam where data or instructions move from one deployment environment to another in a multi-component app. Content fetched by one component is untrusted when it reaches the next, so the receiving component treats it as data, not instructions.</p></div></details>
+</section>
+
+<section class="screen" id="CERT">
+  <div class="screen-meta"><span class="tag tag-module">Module Complete</span><span>Developer Path</span><span>·</span><span>2 min</span></div>
+  <h1 class="screen-title">Congrats! You’ve successfully completed this module.</h1>
+  <p style="font-size:16px;color:var(--c-ink-mid);margin:0 0 24px;max-width:600px;">You can now take a working build all the way to a deployable, auditable asset: a reusable accelerator, a contribution a maintainer can verify, a deployment platform chosen and versioned on purpose, and every seam in a multi-component app marked as a trust boundary. <strong>The throughline: the point where code starts working is where this module's work begins.</strong></p>
+
+  <!-- checkpoint counter badge -->
+  <div id="certBadge" style="display:inline-flex;align-items:center;gap:12px;background:var(--c-primary-tint);border:1px solid var(--c-primary);border-radius:999px;padding:10px 20px;margin:0 0 32px;">
+    <span id="certCount" style="font-family:var(--font-heading);font-size:28px;font-weight:700;color:var(--c-primary-hover);line-height:1;">4</span>
+    <span style="font-size:14px;color:var(--c-ink-mid);" id="certCountLabel">of 9 checkpoints passed</span>
+  </div>
+
+  <!-- Developer module journey list -->
+  <div style="border:1px solid rgba(0,0,0,0.1);border-radius:12px;overflow:hidden;margin:0 0 32px;">
+    <div id="cert-row-m1" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.1);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m1" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M1</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">MSO Foundations</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Tokens, context windows, sampling, model tiers, prompting modes, and the API transport mechanics.</p>
+      </div>
+    </div>
+    <div id="cert-row-m2" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.1);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m2" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M2</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Production-Grade Prompting, Agents &amp; Tool-use</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Production-ready prompts, tool-use loops, streaming, context and memory management, and checkpointed agent loops.</p>
+      </div>
+    </div>
+    <div id="cert-row-m3" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.1);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m3" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M3</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Claude Code, MCP &amp; Integration</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Permission modes, durable project context, plugin packaging, and MCP integration without leaking credentials.</p>
+      </div>
+    </div>
+    <div id="cert-row-m4" style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,0.1);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m4" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--c-ink-mid);">M4</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink-mid);">Production Engineering, Evals, and Security</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Prove the system holds under production traffic and survives a security review.</p>
+      </div>
+    </div>
+    <div id="cert-row-m5" style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--c-primary-tint);">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--c-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="cert-badge-m5" style="font-family:var(--font-heading);font-size:13px;font-weight:700;color:#fff;">M5</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 2px;font-weight:600;font-size:14px;color:var(--c-ink);">Accelerators and IP Contribution</p>
+        <p style="margin:0;font-size:12px;color:var(--c-ink-mid);">Package accelerators, prepare verifiable contributions, choose deployment platforms, and mark trust boundaries.</p>
+      </div>
+      <span style="flex-shrink:0;font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:1.5px solid var(--c-primary-hover);color:var(--c-primary-hover);border-radius:999px;padding:3px 10px;white-space:nowrap;">You Are Here</span>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="submit-btn" id="certReviewModule" onclick="goTo(0)">Review module</button>
+    <button class="skip-btn" id="certStartOver">Start over</button>
+  </div>
+
+  <div id="scormFinishBanner" style="display:none;margin-top:24px;padding:16px 20px;background:var(--c-green-tint);border:1px solid var(--c-accent-green);border-radius:12px;font-size:14px;">Module completion recorded.</div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <button class="nav-btn prev" id="prevBtn" disabled="">← Previous</button>
+  <div class="footer-center">
+    <span class="footer-pos" id="footerPos">Screen 1 of 25</span>
+    <button class="contents-link" id="contentsBtn">≡ CONTENTS</button>
+  </div>
+  <button class="nav-btn next" id="nextBtn">Next →</button>
+</footer>
+
+
+<script>
+/* ===== SCREEN MODEL ===== */
+const SCREENS = [
+  { id:'S01', section:0, title:'Orientation' },
+  { id:'S02', section:1, title:'Packaging a working build' },
+  { id:'S03', section:1, title:'Watch Out: the template that could not be reused' },
+  { id:'S04', section:1, title:'Checkpoint 1', checkpoint:true },
+  { id:'S05', section:2, title:'Moving an asset into shared infrastructure' },
+  { id:'S06', section:2, title:'Watch Out: the PR a maintainer could not verify' },
+  { id:'S07', section:2, title:'Checkpoint 2', checkpoint:true },
+  { id:'S07A', section:3, title:'From business requirements to requirements' },
+  { id:'S07B', section:3, title:'Checkpoint 3: extract the requirements', checkpoint:true },
+  { id:'S07C', section:3, title:'Systems lifecycle for Claude applications' },
+  { id:'S07D', section:3, title:'Checkpoint 4: place the work in the right phase', checkpoint:true },
+  { id:'S08', section:4, title:'Choosing where a workload runs' },
+  { id:'S09', section:4, title:'Watch Out: the deployment that broke' },
+  { id:'S10', section:4, title:'Checkpoint 5', checkpoint:true },
+  { id:'S11', section:5, title:'Comparing platforms' },
+  { id:'S12', section:5, title:'Watch Out: the platform picked on familiarity' },
+  { id:'S13', section:5, title:'Checkpoint 6', checkpoint:true },
+  { id:'S14', section:6, title:'Coordinating several Claude deployments' },
+  { id:'S15', section:6, title:'Watch Out: the seam nobody marked as a boundary' },
+  { id:'S16', section:6, title:'Checkpoint 7', checkpoint:true },
+  { id:'S17', section:7, title:'Cumulative: find all three', checkpoint:true },
+  { id:'S18', section:7, title:'Cumulative: assemble and verify', checkpoint:true },
+  { id:'S19', section:8, title:'Key Takeaways' },
+  { id:'S19B', section:8, title:'Glossary' },
+  { id:'CERT', section:8, title:'Module Complete' }
+];
+const SECTIONS = [
+  { label:'Module Introduction', sub:['Orientation'] },
+  { label:'Packaging for Reuse', sub:['Teaching','Watch Out','Checkpoint'] },
+  { label:'Contributing Back', sub:['Teaching','Watch Out','Checkpoint'] },
+  { label:'Requirements & Lifecycle', sub:['Teaching','Checkpoint','Teaching','Checkpoint'] },
+  { label:'Deployment & Versioning', sub:['Teaching','Watch Out','Checkpoint'] },
+  { label:'Comparing Platforms', sub:['Teaching','Watch Out','Checkpoint'] },
+  { label:'Trust Boundaries', sub:['Teaching','Watch Out','Checkpoint'] },
+  { label:'Cumulative Task', sub:['Diagnose','Assemble'] },
+  { label:'Key Takeaways', sub:['Recap','Glossary','Module Complete'] }
+];
+const STORE_KEY = 'dev-m5-vF2';
+const MODULE_N = 5;
+const NEXT_MODULE_URL = '';
+const RETURN_URL = '';
+
+let state = { completed: [], current: 0, skipped: [], introShown: false };
+try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); if (s && Array.isArray(s.completed)) state = s; } catch(e){}
+state.skipped = state.skipped || [];
+function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function maxReachable(){ return SCREENS.length; } /* free-roam: canVisit always true per project standing spec */
+function canVisit(i){ return true; }
+function markComplete(i){ if(!state.completed.includes(i)){ state.completed.push(i); } save(); }
+function isCheckpointDone(i){ return !SCREENS[i].checkpoint || state.completed.includes(i) || state.skipped.includes(i); }
+
+function buildSidebar(){
+  const nav = document.getElementById('sidebarNav'); nav.innerHTML = '';
+  SECTIONS.forEach((sec, si) => {
+    const wrap = document.createElement('div'); wrap.className='nav-section';
+    const firstIdx = SCREENS.findIndex(s=>s.section===si);
+    const btn = document.createElement('button');
+    btn.className = 'nav-section-btn';
+    btn.innerHTML = `<span class="num">${String(si+1).padStart(2,'0')}</span><span>${sec.label}</span>`;
+    btn.onclick = ()=>goTo(firstIdx);
+    wrap.appendChild(btn);
+    if(sec.sub.length){
+      const ul = document.createElement('ul'); ul.className='sub-list';
+      const idxs = SCREENS.map((s,i)=>({s,i})).filter(o=>o.s.section===si);
+      idxs.forEach((o,k)=>{
+        const li=document.createElement('li');
+        const done = state.completed.includes(o.i) || state.skipped.includes(o.i), active = state.current===o.i;
+        li.className='sub-item'+(done?' done':'')+(active?' active':'');
+        li.innerHTML=`<span class="dot"></span><span>${sec.sub[k]||o.s.title}</span>`;
+        li.onclick=()=>goTo(o.i);
+        ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+    }
+    nav.appendChild(wrap);
+  });
+  const pct = Math.round(state.completed.length/SCREENS.length*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+}
+function goTo(i){
+  if(!canVisit(i)) return;
+  state.current = i; save();
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  const el = document.getElementById(SCREENS[i].id); if(el) el.classList.add('active');
+  document.getElementById('footerPos').textContent = `Screen ${i+1} of ${SCREENS.length}`;
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').textContent = i===SCREENS.length-1 ? 'Finish' : 'Next →';
+  document.getElementById('nextBtn').disabled = !isCheckpointDone(i);
+  buildSidebar();
+  var _sm=document.querySelector('main');if(_sm)_sm.scrollTop=0;window.scrollTo(0,0);
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  if(i===SCREENS.length-1) initCert();
+}
+function advance(){
+  const i = state.current;
+  markComplete(i);
+  if(i < SCREENS.length-1){ goTo(i+1); }
+  else {
+    /* Finish: write cross-module completion tracking before SCORM complete */
+    try {
+      const key = 'dev-module-completions';
+      let comps = [];
+      try { comps = JSON.parse(localStorage.getItem(key)) || []; } catch(e){}
+      if(!comps.includes(MODULE_N)) comps.push(MODULE_N);
+      localStorage.setItem(key, JSON.stringify(comps));
+    } catch(e){}
+    if (typeof scormComplete === 'function') scormComplete();
+    buildSidebar();
+  }
+}
+document.getElementById('nextBtn').onclick = advance;
+document.getElementById('prevBtn').onclick = ()=>{ if(state.current>0) goTo(state.current-1); };
+function resetCheckpointUI(){
+  /* Rebuild every checkpoint's markup from cleared data + remove stale marks. Called by BOTH reset entry points. */
+  s04ClearUI(); s07Build(); s07bBuild(); s07dBuild(); s10Build(); s13Build(); s16Build(); s17ClearUI(); s18ClearUI();
+  document.querySelectorAll('.feedback').forEach(f=>{ f.className='feedback'; f.innerHTML=''; });
+}
+document.getElementById('resetBtn').onclick = ()=>{ localStorage.removeItem(STORE_KEY); state={completed:[],current:0,skipped:[],introShown:true}; resetCheckpointUI(); goTo(0); };
+document.getElementById('menuBtn').onclick = ()=>{ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); };
+document.getElementById('overlay').onclick = ()=>{ document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); };
+
+function checkpointPassed(){ markComplete(state.current); buildSidebar(); document.getElementById('nextBtn').disabled=false; }
+function skipCP(fbId, msg){ if(!state.skipped.includes(state.current)) state.skipped.push(state.current); save(); buildSidebar(); document.getElementById('nextBtn').disabled = false; if(fbId) fb(fbId,'','Skipped', msg || 'You can return to this checkpoint at any time.'); }
+function fb(id, cls, label, msg){ const el = document.getElementById(id); if(!el) return; el.className = 'feedback show ' + (cls||''); el.innerHTML = `<div class="feedback-label">${label}</div><p style="margin:0">${msg}</p>`; }
+function toggleReveal(id){ document.getElementById(id).classList.toggle('show'); }
+
+/* ===== SPLASH / TOC ===== */
+function computeModuleStats(){
+  const screens=SCREENS.length, sections=SECTIONS.length;
+  const checkpoints=SCREENS.filter(s=>s.checkpoint).length;
+  let minutes=0;
+  document.querySelectorAll('.screen .screen-meta').forEach(m=>{
+    const match=m.textContent.match(/(\d+)\s*min/);
+    if(match) minutes+=parseInt(match[1],10);
+  });
+  return {screens,sections,checkpoints,minutes};
+}
+function buildIntroTOC(){
+  const ol=document.getElementById('splashToc'); if(!ol) return; ol.innerHTML='';
+  SECTIONS.forEach((sec,si)=>{
+    const li=document.createElement('li');
+    const n=SCREENS.filter(s=>s.section===si).length;
+    const header=document.createElement('div');
+    header.innerHTML=`<span>${sec.label}</span><span class="toc-sub">${n} screen${n===1?'':'s'}</span>`;
+    const sub=document.createElement('ul');
+    sub.style.display='none';
+    sec.sub.forEach(label=>{
+      const sli=document.createElement('li');
+      sli.textContent=label;
+      sub.appendChild(sli);
+    });
+    header.onclick=()=>{ const open=sub.style.display!=='none'; sub.style.display=open?'none':'block'; };
+    li.appendChild(header); li.appendChild(sub);
+    ol.appendChild(li);
+  });
+  const stats=computeModuleStats();
+  const statsEl=document.getElementById('introStats');
+  if(statsEl) statsEl.textContent=`${stats.screens} screens · ${stats.sections} sections · ${stats.minutes} minutes · ${stats.checkpoints} checkpoint${stats.checkpoints===1?'':'s'}`;
+}
+function showIntro(){ document.getElementById('introOverlay').classList.add('show'); }
+function hideIntro(){ document.getElementById('introOverlay').classList.remove('show'); }
+document.getElementById('beginModuleBtn').onclick=()=>{ state.introShown=true; save(); hideIntro(); };
+document.getElementById('contentsBtn').onclick=showIntro;
+
+/* ===== MODULE COMPLETE (CERT) ===== */
+function initCert(){
+  const totalCP = SCREENS.filter(s=>s.checkpoint).length;
+  const passed = SCREENS.filter((s,i)=>s.checkpoint && state.completed.includes(i) && !(state.skipped||[]).includes(i)).length;
+  const cc = document.getElementById('certCount'); if(cc) cc.textContent = totalCP===0?'✓':passed;
+  const cl = document.getElementById('certCountLabel'); if(cl) cl.textContent = totalCP===0?'Module complete':'of '+totalCP+' checkpoint'+(totalCP===1?'':'s')+' passed';
+  const nb = document.getElementById('nextBtn');
+  if (NEXT_MODULE_URL) {
+    nb.textContent = 'Start Module ' + (MODULE_N+1) + ' →';
+    nb.onclick = ()=>{ markComplete(state.current); if (typeof window.scormComplete === 'function') window.scormComplete(); window.location.href = NEXT_MODULE_URL; };
+    nb.disabled = false;
+  }
+  if (!document.getElementById('footer-center-cert') && RETURN_URL) {
+    const a = document.createElement('a');
+    a.id = 'footer-center-cert'; a.href = RETURN_URL; a.textContent = 'Course Home';
+    a.style.cssText = 'font-family:var(--font-heading);font-size:12px;color:var(--c-ink-mid);text-decoration:underline;display:block;margin-top:4px;';
+    document.getElementById('footerPos').insertAdjacentElement('afterend', a);
+  }
+  const completions = JSON.parse(localStorage.getItem('dev-module-completions') || '[]');
+  completions.forEach(n=>{
+    if (n === MODULE_N) return;
+    const rowEl = document.getElementById('cert-row-m'+n);
+    const badgeEl = document.getElementById('cert-badge-m'+n);
+    if (!rowEl || !badgeEl) return;
+    rowEl.style.background = '#f0fdf4';
+    badgeEl.parentElement.style.background = '#16a34a';
+    badgeEl.style.color = '#fff';
+    if (!rowEl.querySelector('.cert-done-pill')) {
+      const pill = document.createElement('span'); pill.className = 'cert-done-pill'; pill.textContent = '✓ Completed';
+      pill.style.cssText = 'flex-shrink:0;font-family:var(--font-heading);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;background:#16a34a;color:#fff;border-radius:999px;padding:3px 10px;white-space:nowrap;margin-left:auto;';
+      rowEl.appendChild(pill);
+    }
+  });
+}
+document.getElementById('certStartOver').onclick = ()=>{
+  localStorage.removeItem(STORE_KEY);
+  state = {completed:[],current:0,skipped:[],introShown:true};
+  resetCheckpointUI();
+  goTo(0);
+  showIntro();
+};
+
+window.addEventListener('DOMContentLoaded',()=>{ buildIntroTOC(); buildSidebar(); goTo(state.current||0); if(!state.introShown) showIntro(); });
+</script>
+
+<script>
+/* ===== CHECKPOINT INTERACTIONS ===== */
+const KBD_SEL = '.bucket-chip,.bucket,.match-opt,.signal-item,.decision-opt,.mc-opt,.gap-token,.gap-blank';
+function applyKbd(){ document.querySelectorAll(KBD_SEL).forEach(el=>{ if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0'); if(!el.hasAttribute('role')) el.setAttribute('role','button'); }); }
+document.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' ') && e.target.matches && e.target.matches(KBD_SEL)){ e.preventDefault(); e.target.click(); } });
+
+/* ---------- S04: Code repair (honor system) ---------- */
+function s04ClearUI(){
+  const ta = document.getElementById('taS04'); if(ta){ ta.value=''; ta.disabled=false; }
+  const sb = document.getElementById('submitS04'); if(sb){ sb.disabled=true; sb.textContent='Compare with model answer'; }
+}
+(function(){
+  const ta = document.getElementById('taS04');
+  ta.oninput = ()=>{ document.getElementById('submitS04').disabled = ta.value.trim().length < 5; };
+  document.getElementById('submitS04').onclick = ()=>{
+    fb('fbS04','','Model answer · self-assess',
+      `<div class="codeblock" style="margin-top:8px"><span class="kw">def</span> <span class="fn">build_review_agent</span>(repo_path):\n\t<span class="kw">return</span> <span class="fn">Agent</span>(\n\t    model=<span class="str">"claude-opus-4-8"</span>,\n\t    system_prompt=SYSTEM_PROMPT,\n\t    tools=[read_file, run_linter],\n\t    repo_path=repo_path,   <span class="cm"># set per engagement</span>\n\t)</div>`+
+      `<p style="margin:12px 0 0">The hardcoded repo_path is the defect. A reusable template takes the customer-specific value as a parameter, so the next team configures the asset instead of editing the code. That is the difference between a template that runs and a template that reuses.</p>`);
+    const div = document.getElementById('fbS04');
+    const g = document.createElement('div'); g.className='selfgrade';
+    g.innerHTML = '<button class="pass">I identified the hardcoded value and parameterized it · pass</button><button class="retry">I missed it · retry</button>';
+    g.querySelector('.pass').onclick = ()=>{ fb('fbS04','correct','Pass','You identified the hardcoded repo_path and moved it to a parameter.'); checkpointPassed(); ta.disabled=true; document.getElementById('submitS04').disabled=true; };
+    g.querySelector('.retry').onclick = ()=>{ fb('fbS04','incorrect','Retry','Re-read the template: the customer-specific value that belongs in a parameter is the repository path.'); };
+    div.appendChild(g);
+  };
+  document.getElementById('skipS04').onclick = ()=>{ skipCP('fbS04', 'Move on if you need to but come back before the cumulative task. A later checkpoint plants a version of this same hardcoding defect among two others and is harder to spot under multi-layer load.'); };
+})();
+
+/* ---------- S07: Matching (case to channel, case to readiness item) ---------- */
+const S07_ROWS_A = [
+  { s:'Case A: A focused tool that wraps a single API into a clean function. The snippet is the function and nothing else.', a:"The tool's own repository", r:"A focused tool lives and is reviewed in its own repository." },
+  { s:'Case B: A full customer-service application shared whole, including its UI and deployment scripts.', a:'The Cookbook, but only after the reusable pattern is stripped out as a focused example', r:'A whole application does not fit a review built for one pattern; only the extracted pattern goes to the Cookbook.' },
+  { s:'Case C: A one-line fix to an existing Cookbook example. The snippet is the corrected line, carried in from a customer engagement.', a:"The Cookbook example's own repository", r:'A fix to an existing example belongs in that example’s own repository.' }
+];
+const S07_OPTS_A = ["The tool's own repository", 'The Cookbook, but only after the reusable pattern is stripped out as a focused example', "The Cookbook example's own repository"];
+const S07_ROWS_B = [
+  { s:'Case A: A focused tool that wraps a single API into a clean function. The snippet is the function and nothing else.', a:'A test that proves the wrapper behaves', r:'A focused tool still needs a test that proves the wrapper behaves.' },
+  { s:'Case B: A full customer-service application shared whole, including its UI and deployment scripts.', a:'Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern', r:'The application must be reduced to the pattern before it fits the review.' },
+  { s:'Case C: A one-line fix to an existing Cookbook example. The snippet is the corrected line, carried in from a customer engagement.', a:'The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review', r:'Engagement code needs the licensing gate cleared before any technical review.' }
+];
+const S07_OPTS_B = ['A test that proves the wrapper behaves', 'Reduction to a single focused pattern, because a whole application does not fit a review built for one pattern', 'The rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review'];
+let s07AnsA = {}, s07AnsB = {};
+function s07BuildMatch(containerId, rows, opts, ansStore){
+  const wrap = document.getElementById(containerId); wrap.innerHTML='';
+  rows.forEach((row,i)=>{
+    const div = document.createElement('div'); div.className='match-row'; div.dataset.i=i;
+    div.innerHTML = `<div class="match-stmt">${row.s}</div><div class="match-options">${opts.map(o=>`<span class="match-opt" data-o="${o.replace(/"/g,'&quot;')}">${o}</span>`).join('')}</div>`;
+    div.querySelectorAll('.match-opt').forEach(b=>{
+      b.onclick = ()=>{ div.querySelectorAll('.match-opt').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); ansStore[i]=b.dataset.o;
+        document.getElementById('submitS07').disabled = Object.keys(s07AnsA).length!==S07_ROWS_A.length || Object.keys(s07AnsB).length!==S07_ROWS_B.length; };
+    });
+    wrap.appendChild(div);
+  });
+}
+function s07Build(){ s07AnsA={}; s07AnsB={}; s07BuildMatch('matchS07a', S07_ROWS_A, S07_OPTS_A, s07AnsA); s07BuildMatch('matchS07b', S07_ROWS_B, S07_OPTS_B, s07AnsB); document.getElementById('submitS07').disabled=true; }
+document.getElementById('submitS07').onclick = ()=>{
+  let scoreA=0, scoreB=0;
+  document.querySelectorAll('#matchS07a .match-row').forEach((div,i)=>{
+    div.classList.remove('correct','wrong');
+    const ok = s07AnsA[i]===S07_ROWS_A[i].a;
+    div.classList.add(ok?'correct':'wrong');
+    if(ok) scoreA++;
+  });
+  document.querySelectorAll('#matchS07b .match-row').forEach((div,i)=>{
+    div.classList.remove('correct','wrong');
+    const ok = s07AnsB[i]===S07_ROWS_B[i].a;
+    div.classList.add(ok?'correct':'wrong');
+    if(ok) scoreB++;
+  });
+  const total = scoreA+scoreB, max = S07_ROWS_A.length+S07_ROWS_B.length;
+  if(total===max){
+    fb('fbS07','correct','Correct','Case A goes to the tool’s own repository and is missing a test that proves the wrapper behaves. Case B does not belong as a whole application, so the reusable pattern inside it goes to the Cookbook as a focused example. Case C goes to the Cookbook example’s repository and is missing the rights check, because engagement code can carry a licensing constraint that blocks the merge before any technical review.');
+    checkpointPassed();
+    document.querySelectorAll('#matchS07a .match-opt, #matchS07b .match-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; });
+    document.getElementById('submitS07').disabled=true;
+  } else if(scoreA===S07_ROWS_A.length || scoreB===S07_ROWS_B.length || total>0){
+    fb('fbS07','','Partial · '+total+'/'+max,'You picked the right channels but missed a readiness item. Re-check each: a focused tool still needs a test, a whole application needs to be reduced to the pattern, and engagement code needs the licensing gate cleared first.');
+  } else {
+    fb('fbS07','incorrect','Revisit','Channel and readiness are coupled. A full application sent whole stalls regardless of code quality, and an engagement fix sent without a rights check can be merged then reverted. Match each case to the channel built for its shape, then name what a maintainer cannot verify yet.');
+  }
+};
+document.getElementById('skipS07').onclick = ()=>{ skipCP('fbS07','Move on if you need to, but come back before the cumulative task, where a contribution-layer defect is one of the three you will have to find.'); };
+
+/* ---------- S07B: 2-question quiz ---------- */
+const S07B_QS = [
+  { n:'Question 1', s:'A regulated EU bank wants an agent that summarizes customer call transcripts for its support team. Which of the following is a valid functional requirement?', opts:['The agent should be fast and accurate.','The agent produces a summary that a human approves before it is stored.','The system must be built using an approved cloud provider.','Transcript data must not leave the EU.'], ans:1, rat:'B is checkable and tied to a specific business process constraint (human-in-the-loop review). A is not checkable. C and D are infrastructure requirements, not functional ones.' },
+  { n:'Question 2', s:'From the same scenario, which of the following is a valid infrastructure requirement?', opts:['The agent must produce summaries quickly enough for support staff to act on them.','The agent summarizes transcripts using a pre-approved prompt template.','Transcript data is processed in the EU.','A human reviews each summary before it is stored.'], ans:2, rat:'C is checkable and tied to a specific regulatory constraint (specific data residency requirement). A is not checkable. B is a design choice, not an infrastructure requirement. D is a functional requirement, not an infrastructure one.' }
+];
+let s07bAns = {};
+function s07bBuild(){
+  s07bAns = {};
+  const wrap = document.getElementById('s07bQuiz'); wrap.innerHTML='';
+  S07B_QS.forEach((q,qi)=>{
+    const div = document.createElement('div'); div.className='quiz-q';
+    div.innerHTML = `<div class="quiz-q-num">${q.n}</div><div class="quiz-q-text">${q.s}</div>
+      <div class="mc-opts">${q.opts.map((o,oi)=>`<div class="mc-opt" data-qi="${qi}" data-oi="${oi}"><span class="mc-opt-letter">${String.fromCharCode(65+oi)}</span><span class="mc-opt-label">${o}</span></div>`).join('')}</div>
+      <div class="rationale" id="ratS07B${qi}"></div>`;
+    div.querySelectorAll('.mc-opt').forEach(opt=>{
+      opt.onclick = ()=>{ div.querySelectorAll('.mc-opt').forEach(x=>x.classList.remove('selected')); opt.classList.add('selected'); s07bAns[qi]=parseInt(opt.dataset.oi);
+        document.getElementById('submitS07B').disabled = Object.keys(s07bAns).length < S07B_QS.length; };
+    });
+    wrap.appendChild(div);
+  });
+  document.getElementById('submitS07B').disabled = true;
+}
+document.getElementById('submitS07B').onclick = ()=>{
+  let correct=0;
+  S07B_QS.forEach((q,qi)=>{ if(s07bAns[qi]===q.ans) correct++; });
+  const pass = correct===S07B_QS.length;
+  if(pass){
+    S07B_QS.forEach((q,qi)=>{
+      const chosen = s07bAns[qi];
+      document.querySelectorAll(`#s07bQuiz .mc-opt[data-qi="${qi}"]`).forEach(opt=>{ const oi=parseInt(opt.dataset.oi); if(oi===q.ans) opt.classList.add('correct'); else if(oi===chosen) opt.classList.add('wrong'); });
+      const rat = document.getElementById('ratS07B'+qi); rat.textContent = q.rat; rat.classList.add('show');
+    });
+    fb('fbS07B','correct','Correct', `${correct}/${S07B_QS.length} correct. Review the rationale above each question.`);
+    document.querySelectorAll('#s07bQuiz .mc-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; }); document.getElementById('submitS07B').disabled=true; checkpointPassed();
+  } else {
+    fb('fbS07B', correct>=1?'':'incorrect', correct>=1?('Partial · '+correct+'/'+S07B_QS.length):'Revisit', `Re-read each question and try again; the options remain open for another attempt.`);
+  }
+};
+document.getElementById('skipS07B').onclick = ()=>{ skipCP('fbS07B'); };
+
+/* ---------- S07D: Matching activities to lifecycle phases ---------- */
+const S07D_ROWS = [
+  { s:'(a) pinning the full model ID and keeping the prior version', a:'deploy', r:'Pinning the version and retaining the prior one is a deploy decision.' },
+  { s:'(b) gating promotion on the eval result before a version goes to production', a:'deploy', r:'Gating promotion on an eval result before production is a deploy decision.' },
+  { s:'(c) deciding data must be processed in a specific region', a:'requirements', r:'The residency rule is a requirement.' },
+  { s:'(d) instrumenting token cost and latency per call in production', a:'operate', r:'Instrumenting cost and latency in production is operate.' },
+  { s:'(e) choosing Amazon Bedrock because the customer holds its compliance posture there', a:'design', r:'The platform that satisfies the requirement is a design choice.' }
+];
+const S07D_OPTS = ['requirements','design','test','deploy','operate'];
+let s07dAns = {};
+function s07dBuild(){
+  s07dAns = {};
+  const wrap = document.getElementById('matchS07D'); wrap.innerHTML='';
+  S07D_ROWS.forEach((row,i)=>{
+    const div = document.createElement('div'); div.className='match-row'; div.dataset.i=i;
+    div.innerHTML = `<div class="match-stmt">${row.s}</div><div class="match-options">${S07D_OPTS.map(o=>`<span class="match-opt" data-o="${o}">${o}</span>`).join('')}</div>`;
+    div.querySelectorAll('.match-opt').forEach(b=>{
+      b.onclick = ()=>{ div.querySelectorAll('.match-opt').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); s07dAns[i]=b.dataset.o;
+        document.getElementById('submitS07D').disabled = Object.keys(s07dAns).length!==S07D_ROWS.length; };
+    });
+    wrap.appendChild(div);
+  });
+  document.getElementById('submitS07D').disabled = true;
+}
+document.getElementById('submitS07D').onclick = ()=>{
+  let score=0;
+  document.querySelectorAll('#matchS07D .match-row').forEach((div,i)=>{ if(s07dAns[i]===S07D_ROWS[i].a) score++; });
+  if(score===S07D_ROWS.length){
+    document.querySelectorAll('#matchS07D .match-row').forEach((div,i)=>{ div.classList.add('correct'); });
+    fb('fbS07D','correct','Correct','The residency rule is a requirement, the platform that satisfies it is a design choice, gating promotion on an eval result is a deploy decision, and instrumenting cost and latency is operate. Writing the eval suite and rubric is test; gating promotion on its result is deploy.');
+    checkpointPassed();
+    document.querySelectorAll('#matchS07D .match-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; });
+    document.getElementById('submitS07D').disabled=true;
+  } else {
+    fb('fbS07D','','Partial · '+score+'/'+S07D_ROWS.length,'Re-check each: the residency rule is a requirement, the platform choice is design, pinning and gating are deploy, and instrumentation is operate.');
+  }
+};
+document.getElementById('skipS07D').onclick = ()=>{ skipCP('fbS07D'); };
+</script>
+<script>
+/* ---------- S10: Configuration assembly (4 single-select groups) ---------- */
+const S10_GROUPS = [
+  { label:'Platform Group', name:'platform', opts:[
+      {t:'First-party API', ok:false},
+      {t:'Amazon Bedrock', ok:true},
+      {t:'Google Vertex AI', ok:false}
+    ] },
+  { label:'Identity Group', name:'identity', opts:[
+      {t:'AWS identity reference', ok:true},
+      {t:'Anthropic API key', ok:false}
+    ] },
+  { label:'Model reference group', name:'model', opts:[
+      {t:'A pinned full model ID', ok:true},
+      {t:'A moving alias', ok:false}
+    ] },
+  { label:'Rollback Group', name:'rollback', opts:[
+      {t:'Retain the prior pinned version', ok:true},
+      {t:'No retention', ok:false}
+    ] }
+];
+let s10Sel = {};
+function s10Build(){
+  s10Sel = {};
+  const wrap = document.getElementById('assembleS10'); wrap.innerHTML='';
+  S10_GROUPS.forEach(g=>{
+    const h = document.createElement('h4'); h.className='sub-h'; h.style.margin='18px 0 8px'; h.textContent = g.label;
+    wrap.appendChild(h);
+    g.opts.forEach((o,oi)=>{
+      const div = document.createElement('div'); div.className='signal-item'; div.dataset.group=g.name; div.dataset.oi=oi;
+      div.innerHTML = `<span class="box"></span><div>${o.t}</div>`;
+      div.onclick = ()=>{
+        wrap.querySelectorAll(`.signal-item[data-group="${g.name}"]`).forEach(x=>x.classList.remove('selected'));
+        div.classList.add('selected'); s10Sel[g.name]=oi;
+        document.getElementById('submitS10').disabled = Object.keys(s10Sel).length !== S10_GROUPS.length;
+      };
+      wrap.appendChild(div);
+    });
+  });
+  document.getElementById('submitS10').disabled = true;
+}
+document.getElementById('submitS10').onclick = ()=>{
+  const allCorrect = S10_GROUPS.every(g=>g.opts[s10Sel[g.name]] && g.opts[s10Sel[g.name]].ok);
+  if(allCorrect){
+    S10_GROUPS.forEach(g=>{
+      const chosenOi = s10Sel[g.name];
+      document.querySelectorAll(`#assembleS10 .signal-item[data-group="${g.name}"]`).forEach(div=>{
+        const oi = parseInt(div.dataset.oi); const ok = g.opts[oi].ok;
+        div.classList.remove('correct','wrong','missed');
+        if(oi===chosenOi){ div.classList.add(ok?'correct':'wrong'); }
+        else if(ok){ div.classList.add('missed'); }
+      });
+    });
+    fb('fbS10','correct','Correct','Bedrock keeps identity and data inside the AWS boundary the customer already cleared, the pinned full Bedrock model ID (with the anthropic. prefix) makes an upstream change something you adopt deliberately, and retaining the prior version gives you a rollback target. That is the minimal set that satisfies both residency and rollback.');
+    checkpointPassed();
+    document.querySelectorAll('#assembleS10 .signal-item').forEach(d=>{ d.onclick=null; d.style.pointerEvents='none'; });
+    document.getElementById('submitS10').disabled=true;
+  } else {
+    const numRight = S10_GROUPS.filter(g=>g.opts[s10Sel[g.name]] && g.opts[s10Sel[g.name]].ok).length;
+    if(numRight>=2){
+      fb('fbS10','','Partial · '+numRight+'/'+S10_GROUPS.length,'You got the platform right but left a gap. A pinned model ID without a retained prior version still cannot roll back, and a retained version behind a moving alias still drifts. Both pieces are needed together.');
+    } else {
+      fb('fbS10','incorrect','Revisit','Check what each wrong piece would have allowed: an Anthropic key or the first-party API moves identity and data outside the AWS boundary the customer requires, and a moving alias plus no retention is exactly the unpinned deployment that has no version to roll back to.');
+    }
+  }
+};
+document.getElementById('skipS10').onclick = ()=>{ skipCP('fbS10','Move on if you need to, but come back before the cumulative task, where a deployment-or-versioning defect is one of the three you will have to find.'); };
+
+/* ---------- S13: Error diagnosis from trace (3-option MCQ) ---------- */
+const S13_OPTS = [
+  { t:'Option 1: Optimize the parser to cut the 180ms latency measured on the laptop.', s:'wrong', e:'The rejection reason names data residency, not speed. Optimizing latency treats a dimension that was never the problem.' },
+  { t:"Option 2: Remeasure latency from EU-west and select the platform whose region satisfies EU-only residency.", s:'primary', e:"The mechanism is a residency mismatch. The latency number hides it because it was measured from the wrong place. The fix is to measure latency from the customer's region and choose the platform that meets EU-only residency, which is the dimension that determines this placement." },
+  { t:'Option 3: Add a caching layer to reduce per call cost on the selected platform.', s:'wrong', e:'The rejection reason names data residency, not cost. Adding caching treats a dimension that was never the problem.' }
+];
+let s13Sel = null;
+function s13Build(){
+  s13Sel = null;
+  const wrap = document.getElementById('mcqS13'); wrap.innerHTML='';
+  S13_OPTS.forEach((o,i)=>{
+    const div = document.createElement('div'); div.className='mc-opt'; div.dataset.i=i;
+    div.innerHTML = `<span class="mc-opt-letter">${String.fromCharCode(65+i)}</span><span class="mc-opt-label">${o.t}</span>`;
+    div.onclick = ()=>{ document.querySelectorAll('#mcqS13 .mc-opt').forEach(x=>x.classList.remove('selected','wrong')); div.classList.add('selected'); s13Sel=i; document.getElementById('submitS13').disabled=false; };
+    wrap.appendChild(div);
+  });
+  document.getElementById('submitS13').disabled = true;
+}
+document.getElementById('submitS13').onclick = ()=>{
+  const chosen = S13_OPTS[s13Sel];
+  if(chosen.s==='primary'){
+    document.querySelectorAll('#mcqS13 .mc-opt').forEach((div,i)=>{ if(S13_OPTS[i].s==='primary') div.classList.add('correct'); });
+    fb('fbS13','correct','Correct', chosen.e);
+    checkpointPassed();
+    document.querySelectorAll('#mcqS13 .mc-opt').forEach(o=>{ o.onclick=null; o.style.pointerEvents='none'; });
+    document.getElementById('submitS13').disabled=true;
+  } else {
+    document.querySelector(`#mcqS13 .mc-opt[data-i="${s13Sel}"]`).classList.add('wrong');
+    if(s13Sel===0){
+      fb('fbS13','','Partial','You saw that the laptop latency measurement was misleading, which is true, but the fix doesn\'t consist merely of re-measuring. The rejection was based on residency, so the platform itself must change to one that processes data in the required region.');
+    } else {
+      fb('fbS13','incorrect','Incorrect','The rejection reason names data residency, as opposed to speed or cost. Optimizing latency or adding caching treats dimensions that were never the problem. The compliance dimension failed, so the fix is to change the platform to one that satisfies residency.');
+    }
+  }
+};
+document.getElementById('skipS13').onclick = ()=>{ skipCP('fbS13','Move on if you need to but come back before the cumulative task. Reading a trace for the dimension that drove the outcome is a skill the final debug leans on.'); };
+
+/* ---------- S16: Code completion (drag/click gap fill) ---------- */
+const S16_TOKENS = [
+  { t:'treat_as_data', slot:1 },
+  { t:'least_privilege_read_only', slot:2 },
+  { t:'run_as_instructions', slot:null },
+  { t:'full_access', slot:null }
+];
+let s16Fill = {}; /* slot -> token text */
+function s16RenderBank(){
+  const bank = document.getElementById('tokenBankS16'); bank.innerHTML='';
+  const usedTexts = Object.values(s16Fill);
+  S16_TOKENS.forEach((tok,ti)=>{
+    const chip = document.createElement('span'); chip.className='gap-token'+(usedTexts.includes(tok.t)?' used':''); chip.textContent = tok.t; chip.dataset.i = ti; chip.draggable = true;
+    chip.onclick = ()=>{ if(usedTexts.includes(tok.t)) return; document.querySelectorAll('.gap-token').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); s16SelToken = tok.t; };
+    chip.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text', tok.t); });
+    bank.appendChild(chip);
+  });
+}
+let s16SelToken = null;
+function s16RenderBlanks(){
+  [1,2].forEach(slot=>{
+    const el = document.getElementById('gapDisplay'+slot);
+    if(!el) return;
+    el.classList.remove('correct','wrong');
+    if(s16Fill[slot]){ el.textContent = s16Fill[slot]; el.classList.add('filled'); }
+    else { el.textContent = 'drop here'; el.classList.remove('filled'); }
+  });
+  document.getElementById('submitS16').disabled = !(s16Fill[1] && s16Fill[2]);
+}
+function s16Build(){
+  s16Fill = {}; s16SelToken = null;
+  s16RenderBank();
+  s16RenderBlanks();
+  [1,2].forEach(slot=>{
+    const el = document.getElementById('gapDisplay'+slot);
+    if(!el) return;
+    el.onclick = ()=>{ if(s16SelToken){ s16Fill[slot]=s16SelToken; s16SelToken=null; s16RenderBank(); s16RenderBlanks(); } };
+    if(el.dataset.wired) return;
+    el.dataset.wired = '1';
+    el.addEventListener('dragover', e=>{ e.preventDefault(); el.classList.add('drag-over'); });
+    el.addEventListener('dragleave', ()=>el.classList.remove('drag-over'));
+    el.addEventListener('drop', e=>{ e.preventDefault(); el.classList.remove('drag-over'); const val = e.dataTransfer.getData('text'); if(val){ s16Fill[slot]=val; s16RenderBank(); s16RenderBlanks(); } });
+  });
+}
+document.getElementById('submitS16').onclick = ()=>{
+  const c1ok = s16Fill[1] === 'treat_as_data';
+  const c2ok = s16Fill[2] === 'least_privilege_read_only';
+  document.getElementById('gapDisplay1').classList.remove('correct','wrong');
+  document.getElementById('gapDisplay2').classList.remove('correct','wrong');
+  if(c1ok && c2ok){
+    document.getElementById('gapDisplay1').classList.add('correct');
+    document.getElementById('gapDisplay2').classList.add('correct');
+    fb('fbS16','correct','Correct','Blank 1 wraps the fetched content, so the next component treats it as data, rather than instructions. This closes the injection seam. Blank 2 scopes the most privileged component to least privilege, so a steered action cannot reach beyond its task. Together they hold both boundaries under review.');
+    checkpointPassed();
+    document.querySelectorAll('.gap-token').forEach(c=>{ c.onclick=null; c.draggable=false; c.style.pointerEvents='none'; });
+    document.getElementById('gapDisplay1').style.pointerEvents='none'; document.getElementById('gapDisplay2').style.pointerEvents='none';
+    document.getElementById('submitS16').disabled=true;
+  } else if(c1ok || c2ok){
+    fb('fbS16','','Partial · one boundary closed','You closed one boundary but left the other open. Treating fetched content as data without scoping the privileged component, or scoping it without guarding the fetched-content seam, still leaves the app only as contained as its weakest seam.');
+  } else {
+    fb('fbS16','incorrect','Incorrect','The blank version lets untrusted fetched content cross as instructions, and an over-broad MCP scope makes that component the weak point for the whole app. Passing fetched content straight through, or scoping the server to full access, is what a review would reject.');
+  }
+};
+document.getElementById('skipS16').onclick = ()=>{ skipCP('fbS16','Move on if you need to, but come back before the cumulative task, where a multi-component boundary defect is one of the three you will have to find.'); };
+
+/* ---------- S17: Cumulative diagnosis (honor system) ---------- */
+function s17ClearUI(){
+  const ta = document.getElementById('taS17'); if(ta){ ta.value=''; ta.disabled=false; }
+  const sb = document.getElementById('submitS17'); if(sb){ sb.disabled=true; sb.textContent='Reveal model answer'; }
+}
+(function(){
+  const ta = document.getElementById('taS17');
+  ta.oninput = ()=>{ document.getElementById('submitS17').disabled = ta.value.trim().length < 10; };
+  document.getElementById('submitS17').onclick = ()=>{
+    fb('fbS17','','Model answer · self-assess',
+      `<p style="margin:0 0 10px"><strong>Defect 1 (packaging):</strong> the repo_path is hardcoded instead of parameterized; a new engagement cannot configure it without editing the loop.</p>
+       <p style="margin:0 0 10px"><strong>Defect 2 (deployment/versioning):</strong> model="opus" is a moving alias, not a pinned full model ID, and there is no retained prior version to roll back to.</p>
+       <p style="margin:0"><strong>Defect 3 (multi-component boundary):</strong> fetched content from the Claude Code task is passed straight into next_call as if it were trusted instructions, instead of being wrapped so the next component treats it as data.</p>`);
+    const div = document.getElementById('fbS17');
+    const g = document.createElement('div'); g.className='selfgrade';
+    g.innerHTML = '<button class="pass">I found all three · pass</button><button class="retry">I missed one or more · retry</button>';
+    g.querySelector('.pass').onclick = ()=>{ fb('fbS17','correct','Pass','All three defects identified: hardcoded repo_path, unpinned moving alias with no retained version, and fetched content passed as instructions.'); checkpointPassed(); ta.disabled=true; document.getElementById('submitS17').disabled=true; };
+    g.querySelector('.retry').onclick = ()=>{ fb('fbS17','incorrect','Retry','Re-check the three layers: packaging (parameterization), deployment/versioning (pinning + rollback), and the multi-component boundary (treating fetched content as data).'); };
+    div.appendChild(g);
+  };
+  document.getElementById('skipS17').onclick = ()=>{ skipCP('fbS17'); };
+})();
+
+/* ---------- S18: Cumulative assembly (honor-reveal) ---------- */
+function s18ClearUI(){
+  const ta = document.getElementById('taS18'); if(ta){ ta.value=''; ta.disabled=false; }
+  const sb = document.getElementById('submitS18'); if(sb){ sb.disabled=true; }
+  const rv = document.getElementById('s18reveal'); if(rv) rv.classList.remove('show');
+}
+(function(){
+  const ta = document.getElementById('taS18');
+  ta.oninput = ()=>{ document.getElementById('submitS18').disabled = ta.value.trim().length < 10; };
+  document.getElementById('submitS18').onclick = ()=>{
+    document.getElementById('s18reveal').classList.add('show');
+    const passBtn = document.querySelector('#s18reveal .selfgrade .pass');
+    const retryBtn = document.querySelector('#s18reveal .selfgrade .retry');
+    passBtn.onclick = ()=>{ fb('fbS18','correct','Pass','Your reasoning holds against the corrected deployment: parameterized repo path, pinned Bedrock model ID with retained rollback version, fetched content wrapped as data, and the eval assertion gating promotion.'); checkpointPassed(); ta.disabled=true; document.getElementById('submitS18').disabled=true; };
+    retryBtn.onclick = ()=>{ s18ClearUI(); fb('fbS18','incorrect','Retry','Compare your three explanations against the model answer line by line: packaging, deployment/versioning, and the trust boundary each map to one corrected line in the code.'); };
+  };
+  document.getElementById('skipS18').onclick = ()=>{ skipCP('fbS18'); };
+})();
+
+/* ===== REGISTER BUILDERS ===== */
+s07Build(); s07bBuild(); s07dBuild(); s10Build(); s13Build(); s16Build();
+applyKbd();
+const _mo = new MutationObserver(()=>applyKbd()); _mo.observe(document.getElementById('main'), {childList:true, subtree:true});
+</script>
+
+<script>
+// SCORM 1.2 bridge, completion, scoring, bookmarking, session time, suspend/resume
+(function(){
+  function getAPI(){
+    var w=window;
+    for(var i=0;i<10;i++){ if(w.API) return w.API; if(w.parent&&w.parent!==w) w=w.parent; else break; }
+    return null;
+  }
+  var api=null, initialized=false, sessionStart=Date.now(), completed=false,finished=false;
+
+  function toScormTime(ms){
+    var s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+    return (h<10?"0"+h:h)+":"+(m<10?"0"+m:m)+":"+(sec<10?"0"+sec:sec)+".0";
+  }
+
+  function init(){
+    api=getAPI();
+    if(!api) return;
+    api.LMSInitialize("");
+    initialized=true;
+    var loc=api.LMSGetValue("cmi.core.lesson_location");
+    if(loc && !isNaN(parseInt(loc,10))){
+      var idx=parseInt(loc,10);
+      if(idx>0 && idx<SCREENS.length){ state.current=idx; goTo(idx); }
+    }
+    var status=api.LMSGetValue("cmi.core.lesson_status");
+    if(status!=="completed" && status!=="passed"){
+      api.LMSSetValue("cmi.core.lesson_status","incomplete");
+      api.LMSCommit("");
+    }
+  }
+
+  window.scormSaveLocation=function(idx){
+    if(!initialized) return;
+    api.LMSSetValue("cmi.core.lesson_location", String(idx));
+    api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+    api.LMSCommit("");
+  };
+
+  window.scormComplete=function(){
+    if(!initialized) init();
+    if(!api) return;
+    completed=true;
+    api.LMSSetValue("cmi.core.lesson_status","completed");
+    api.LMSSetValue("cmi.core.score.raw","100");
+    api.LMSSetValue("cmi.core.score.min","0");
+    api.LMSSetValue("cmi.core.score.max","100");
+    api.LMSSetValue("cmi.core.exit","");
+    api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+    api.LMSCommit("");api.LMSFinish('');finished=true;
+  };
+
+  window.addEventListener("load", init);
+  window.addEventListener("beforeunload", function(){
+    if(!api||!initialized||finished) return;
+    if(!completed){
+      api.LMSSetValue("cmi.core.exit","suspend");
+      api.LMSSetValue("cmi.core.session_time", toScormTime(Date.now()-sessionStart));
+      api.LMSCommit("");
+    }
+    api.LMSFinish("");
+  });
+})();
+</script>
+
+
+</body></html>
