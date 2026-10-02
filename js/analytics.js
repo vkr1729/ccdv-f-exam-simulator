@@ -1,0 +1,286 @@
+/**
+ * analytics.js
+ * Scoring engine, domain performance weighting, gap diagnostic, and export tools.
+ */
+
+export const DOMAIN_METADATA = {
+  D1: { id: "D1", name: "Applications & Integration", weight: 33.1, expected: 18 },
+  D2: { id: "D2", name: "Model Selection & Optimization", weight: 16.8, expected: 9 },
+  D3: { id: "D3", name: "Agents & Workflows", weight: 14.7, expected: 8 },
+  D4: { id: "D4", name: "Prompt & Context Engineering", weight: 11.0, expected: 6 },
+  D5: { id: "D5", name: "Tools & MCPs", weight: 10.6, expected: 6 },
+  D6: { id: "D6", name: "Security & Safety", weight: 8.1, expected: 4 },
+  D7: { id: "D7", name: "Claude Code", weight: 3.1, expected: 1 },
+  D8: { id: "D8", name: "Eval, Testing & Debugging", weight: 2.6, expected: 1 }
+};
+
+export const TOPIC_STUDY_GUIDES = {
+  "Prompt Caching & Cost": {
+    domain: "D1",
+    summary: "Cache breakpoints use cache_control: {'type': 'ephemeral'}. The static prefix must be placed first. Caching cuts TTFT and gives 90% read discounts.",
+    traps: "Placing dynamic turns before cached system prompts breaks prefix alignment. Don't cache rapidly changing text."
+  },
+  "Streaming & Messages API": {
+    domain: "D1",
+    summary: "The Messages API uses SSE (content_block_start, content_block_delta, message_stop). Use AsyncAnthropic for concurrency.",
+    traps: "Refusals or stop_reason 'max_tokens' vs 'end_turn' require distinct handling; stop_reason 'tool_use' means your client must run the tool."
+  },
+  "Batch Processing API": {
+    domain: "D1",
+    summary: "50% discount on inputs and outputs for latency-tolerant jobs with a 24-hour turnaround processing window.",
+    traps: "Do not use Batch API for interactive or synchronous user flows."
+  },
+  "Extended Thinking": {
+    domain: "D2",
+    summary: "Allocates additional reasoning token budget before generating output. Appropriate for complex math, logic, and planning.",
+    traps: "Don't use extended thinking for simple lookups or classifications—it adds unnecessary cost and latency."
+  },
+  "Sampling & Non-Determinism": {
+    domain: "D2",
+    summary: "Temperature controls randomness; temperature 0 for deterministic output. When extended thinking is enabled, sampling defaults must be respected.",
+    traps: "Do not pass custom temperature when thinking budget is high if model constraints prohibit it."
+  },
+  "Model Selection & Tradeoffs": {
+    domain: "D2",
+    summary: "Haiku (speed/cost, simple workflows), Sonnet (balanced frontier, enterprise workhorse), Opus (deepest reasoning).",
+    traps: "Right-sizing saves money: don't default to Opus for simple routing or entity extraction."
+  },
+  "Agent Loops & Multi-Agent": {
+    domain: "D3",
+    summary: "Agent loops (plan -> act -> observe -> decide) are ideal when paths cannot be hardcoded. Deterministic workflows are better when steps are fixed.",
+    traps: "Autonomous agents add unpredictability: use deterministic workflows when the sequence and rules are strictly known."
+  },
+  "Model Context Protocol (MCP)": {
+    domain: "D5",
+    summary: "MCP exposes tools, resources, and prompts over stdio (local CLI) or SSE/HTTP (remote servers). Tools execute on client/host.",
+    traps: "Confusing MCP resources (read-only data) with tools (executable actions). Claude does not run MCP servers—your client coordinates."
+  },
+  "Deterministic Hooks & Controls": {
+    domain: "D6",
+    summary: "Hooks execute deterministically before/after actions (similar to ServiceNow Business Rules) to enforce hard boundaries.",
+    traps: "Relying on system prompts alone for security is vulnerable to prompt injection; deterministic code hooks cannot be jailbroken."
+  },
+  "Claude Code Configuration": {
+    domain: "D7",
+    summary: "CLAUDE.md hierarchy (project root > user global), settings.json, slash commands, headless mode, auto mode.",
+    traps: "Putting secrets in CLAUDE.md. CLAUDE.md is committed; secrets must stay in environment variables or ignored .env."
+  },
+  "Evaluation & Testing": {
+    domain: "D8",
+    summary: "Eval suites should test precision, recall, schema conformance, and guardrail resistance with synthetic & test datasets.",
+    traps: "Evaluating only happy paths; prompt changes must be tested across diverse edge-case benchmark suites."
+  }
+};
+
+export const Analytics = {
+  // Score an exam run
+  evaluateExam(exam, userAnswers) {
+    let rawScore = 0;
+    const totalQuestions = exam.questions.length;
+    const domainStats = {};
+    const missedQuestions = [];
+
+    // Initialize domain stats
+    Object.keys(DOMAIN_METADATA).forEach(dId => {
+      domainStats[dId] = {
+        ...DOMAIN_METADATA[dId],
+        total: 0,
+        correct: 0,
+        percentage: 0,
+        status: "Unset"
+      };
+    });
+
+    exam.questions.forEach((q, idx) => {
+      const dId = q.domain_id || "D1";
+      if (!domainStats[dId]) {
+        domainStats[dId] = { id: dId, name: q.domain_name, weight: 10, expected: 5, total: 0, correct: 0, percentage: 0 };
+      }
+      domainStats[dId].total += 1;
+
+      const userSelection = userAnswers[q.id] || [];
+      const correctAnswers = q.correct_answers || [];
+
+      // Check correctness
+      let isCorrect = false;
+      if (q.type === "multiple") {
+        const sortedUser = [...userSelection].sort().join(",");
+        const sortedCorrect = [...correctAnswers].sort().join(",");
+        isCorrect = sortedUser.length > 0 && sortedUser === sortedCorrect;
+      } else {
+        isCorrect = userSelection.length === 1 && userSelection[0] === correctAnswers[0];
+      }
+
+      if (isCorrect) {
+        rawScore += 1;
+        domainStats[dId].correct += 1;
+      } else {
+        missedQuestions.push({
+          ...q,
+          exam_title: exam.title,
+          exam_id: exam.exam_id,
+          user_selected: userSelection,
+          question_number: idx + 1
+        });
+      }
+    });
+
+    const percentage = totalQuestions > 0 ? (rawScore / totalQuestions) * 100 : 0;
+    // Official Pearson VUE scaled score: 100 to 1000, passing mark is 720 (72%)
+    const scaledScore = Math.min(1000, Math.max(100, Math.round(100 + (percentage / 100) * 900)));
+    const isPassing = percentage >= 72.0;
+
+    // Calculate domain percentages and status
+    Object.keys(domainStats).forEach(dId => {
+      const st = domainStats[dId];
+      st.percentage = st.total > 0 ? (st.correct / st.total) * 100 : 0;
+      if (st.percentage >= 80) st.status = "Strong";
+      else if (st.percentage >= 72) st.status = "Passing";
+      else st.status = "Lagging";
+    });
+
+    return {
+      raw_score: rawScore,
+      total_questions: totalQuestions,
+      percentage: Math.round(percentage * 10) / 10,
+      scaled_score: scaledScore,
+      is_passing: isPassing,
+      domain_stats: domainStats,
+      missed_questions: missedQuestions
+    };
+  },
+
+  // Perform cross-exam diagnostic gap analysis
+  diagnoseGaps(attempts, missedQuestions) {
+    if (!attempts || attempts.length === 0) {
+      return {
+        total_attempts: 0,
+        average_score: 0,
+        readiness_level: "Not Started",
+        lagging_domains: [],
+        strong_domains: [],
+        top_topic_gaps: [],
+        recommendations: ["Take Mock Exam #01 to establish your initial diagnostic baseline."]
+      };
+    }
+
+    // Aggregate domain accuracy across all attempts
+    const domainTotals = {};
+    Object.keys(DOMAIN_METADATA).forEach(dId => {
+      domainTotals[dId] = { total: 0, correct: 0 };
+    });
+
+    let totalPctSum = 0;
+    attempts.forEach(att => {
+      totalPctSum += att.percentage;
+      if (att.domain_stats) {
+        Object.keys(att.domain_stats).forEach(dId => {
+          if (domainTotals[dId]) {
+            domainTotals[dId].total += att.domain_stats[dId].total || 0;
+            domainTotals[dId].correct += att.domain_stats[dId].correct || 0;
+          }
+        });
+      }
+    });
+
+    const avgScore = Math.round((totalPctSum / attempts.length) * 10) / 10;
+    
+    // Compute aggregate domain accuracy
+    const domainRankings = Object.keys(DOMAIN_METADATA).map(dId => {
+      const meta = DOMAIN_METADATA[dId];
+      const stats = domainTotals[dId];
+      const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 1000) / 10 : 0;
+      return {
+        id: dId,
+        name: meta.name,
+        weight: meta.weight,
+        total: stats.total,
+        correct: stats.correct,
+        percentage: pct,
+        is_lagging: pct < 72.0
+      };
+    });
+
+    domainRankings.sort((a, b) => a.percentage - b.percentage);
+
+    const laggingDomains = domainRankings.filter(d => d.total > 0 && d.is_lagging);
+    const strongDomains = domainRankings.filter(d => d.total > 0 && d.percentage >= 80);
+
+    // Identify topic frequency in missed questions
+    const topicFrequency = {};
+    missedQuestions.forEach(q => {
+      const t = q.topic || "General";
+      topicFrequency[t] = (topicFrequency[t] || 0) + 1;
+    });
+
+    const topTopicGaps = Object.entries(topicFrequency)
+      .map(([topic, count]) => ({
+        topic,
+        count,
+        guide: TOPIC_STUDY_GUIDES[topic] || null
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    let readiness = "Needs Work (<70%)";
+    if (avgScore >= 85) readiness = "Exam Ready (Very Strong)";
+    else if (avgScore >= 75) readiness = "Passing Zone (Ready)";
+    else if (avgScore >= 70) readiness = "Borderline Passing (Focus on Gaps)";
+
+    const recommendations = [];
+    if (laggingDomains.length > 0) {
+      laggingDomains.forEach(ld => {
+        recommendations.push(`Prioritize **${ld.name}** (${ld.weight}% exam weight) — currently at ${ld.percentage}%.`);
+      });
+    } else {
+      recommendations.push("All tested domains meet or exceed the 72% pass line! Keep practicing full timed exams to build stamina.");
+    }
+
+    if (topTopicGaps.length > 0) {
+      recommendations.push(`Your most frequent misconception topic is **${topTopicGaps[0].topic}** (${topTopicGaps[0].count} misses). Use the Missed Questions Vault to drill these items.`);
+    }
+
+    return {
+      total_attempts: attempts.length,
+      average_score: avgScore,
+      readiness_level: readiness,
+      domain_rankings: domainRankings,
+      lagging_domains: laggingDomains,
+      strong_domains: strongDomains,
+      top_topic_gaps: topTopicGaps,
+      recommendations: recommendations
+    };
+  },
+
+  // Export missed questions to mistakes.md format
+  generateMistakesMarkdown(missedQuestions) {
+    if (!missedQuestions || missedQuestions.length === 0) {
+      return "# Mistakes Log\n\nNo missed questions recorded yet! Complete a mock exam to populate this log.\n";
+    }
+
+    let md = `# CCDV-F Missed Questions Log & Misconceptions\n\n`;
+    md += `Generated: ${new Date().toLocaleDateString()} · Total Missed Questions: ${missedQuestions.length}\n\n`;
+    md += `Use this log to review recurring traps, understand the underlying technical facts, and reinforce your reasoning before the exam.\n\n`;
+    md += `---\n\n`;
+
+    missedQuestions.forEach((q, i) => {
+      const domainName = DOMAIN_METADATA[q.domain_id]?.name || q.domain_name || "Domain";
+      md += `### ${i + 1}. [${q.domain_id}] ${domainName} &mdash; ${q.topic || 'Core'}\n\n`;
+      md += `**Question:** ${q.prompt}\n\n`;
+      md += `**Your Answer:** ${q.user_selected ? q.user_selected.join(', ') : 'None'}\n`;
+      md += `**Correct Answer:** ${q.correct_answers.join(', ')}\n\n`;
+      md += `> **Why it's correct:**\n> ${q.explanation}\n\n`;
+      
+      if (q.distractor_explanations && Object.keys(q.distractor_explanations).length > 0) {
+        md += `**Distractor Analysis:**\n`;
+        Object.entries(q.distractor_explanations).forEach(([opt, exp]) => {
+          md += `- **Option ${opt}:** ${exp}\n`;
+        });
+        md += `\n`;
+      }
+      md += `---\n\n`;
+    });
+
+    return md;
+  }
+};

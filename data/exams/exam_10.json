@@ -1,0 +1,2027 @@
+{
+  "exam_id": 10,
+  "title": "CCDV-F Mock Exam #10",
+  "description": "Full-length 53-question simulation for Claude Certified Developer - Foundations (120 minutes).",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 10,
+      "prompt": "A long-running autonomous coding agent has been active for hours and needs to retain key facts (for example, 'the build system is Bazel' or 'auth tokens live in vault X') across many separate sessions, not just within the current conversation. Which context-management technique is designed for this specific need?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Compaction, which summarizes older turns within the current conversation when it nears the context window limit, condensing them into a shorter form that still carries the key facts forward within that session."
+        },
+        {
+          "key": "B",
+          "text": "Context editing, which clears stale tool results and thinking blocks from the current transcript, freeing up space in that same ongoing conversation without writing anything to storage outside it."
+        },
+        {
+          "key": "C",
+          "text": "The memory tool, which lets the agent read and write files to a persistent directory that survives across separate sessions, so facts like the build system or vault location remain available later."
+        },
+        {
+          "key": "D",
+          "text": "Raising max_tokens so the conversation never needs to be trimmed, under the assumption that a sufficiently large single context window will keep every fact available for the rest of the agent's run."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The memory tool is specifically designed for persisting information across separate sessions via files on disk. Compaction summarizes and context editing prunes, but both only operate within a single ongoing conversation and lose everything once the session ends. Raising max_tokens only affects a single conversation's output budget and does nothing to persist information between sessions.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Agent Patterns and Frameworks",
+      "id": "CCDV-E10-Q01",
+      "exam_id": 10,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q0163"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 11,
+      "prompt": "A team wants to build a multi-step research agent whose control flow includes conditional branches, retries, and explicit state passed between steps, and they want to visualize and control that flow as an explicit graph of nodes and edges rather than an implicit loop. Which kind of framework are they describing?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A graph-based orchestration framework like LangGraph, which models an agent's or workflow's control flow as an explicit graph of nodes (steps) and edges (transitions), including branches and cycles."
+        },
+        {
+          "key": "B",
+          "text": "The Claude Agent SDK, because it is the only way to add conditional branching to an agent, since its built-in tools and hooks are themselves implemented as an internal graph of nodes and edges."
+        },
+        {
+          "key": "C",
+          "text": "The Message Batches API, because it supports large numbers of parallel branches, letting each conditional path in the research agent run as a separate asynchronous batch request with shared state."
+        },
+        {
+          "key": "D",
+          "text": "A single Messages API call with a much longer, carefully structured system prompt that spells out every conditional branch, retry rule, and piece of state the agent should track as it reasons through the research task."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Explicit graph-based control flow with nodes, edges, branches, and state is the defining feature of frameworks like LangGraph. The Agent SDK provides a harness and built-in tools, not an explicit graph-authoring abstraction, ruling out option 2. The Batches API is for high-volume asynchronous, independent requests, not control-flow orchestration, ruling out option 3. A longer system prompt cannot reliably encode explicit branching and state logic the way a graph structure does, ruling out option 4.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Agent Patterns and Frameworks",
+      "id": "CCDV-E10-Q02",
+      "exam_id": 10,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q0164"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 12,
+      "prompt": "A Python team evaluating agentic abstraction frameworks such as PydanticAI and Strands for a new internal tool wants to understand what these frameworks typically provide beyond calling the Claude API directly. Which two of the following are accurate benefits such frameworks commonly provide?",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Type-safe or schema-validated structured inputs/outputs for tool calls and agent responses, reducing manual parsing and validation code."
+        },
+        {
+          "key": "B",
+          "text": "A pre-built abstraction for defining agents, tools, and (in some frameworks) multi-agent orchestration, so teams don't have to hand-roll the same agent-loop boilerplate for every project."
+        },
+        {
+          "key": "C",
+          "text": "Guaranteed elimination of hallucinated or incorrect tool calls at the framework level, since the schema validation built into frameworks like PydanticAI and Strands catches and prevents any wrong tool call before it executes."
+        },
+        {
+          "key": "D",
+          "text": "Automatic, cost-free scaling of the underlying model's context window beyond its documented limit, since frameworks like PydanticAI and Strands transparently page conversation history in and out to extend how much the model can see."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Frameworks like PydanticAI, built around Pydantic-style validation, and Strands emphasize type-safe or schema-validated outputs and reusable agent/tool/orchestration abstractions, saving teams from reimplementing the same boilerplate — matching options 1 and 2. No framework can guarantee a model never produces an incorrect tool call, only make errors easier to catch and validate, so option 3 is false. No abstraction framework increases a model's actual context window, which is a model-level property, so option 4 is false.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Agent Patterns and Frameworks",
+      "id": "CCDV-E10-Q03",
+      "exam_id": 10,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q0165"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-1",
+      "prompt": "Your service sends the same 6,000-token system prompt and policy text on every request, followed by a short user message. Latency and cost are both climbing. Which change most directly improves both?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Truncate the policy text to its first paragraph"
+        },
+        {
+          "key": "B",
+          "text": "Order the static system prompt and policy first, the variable user content last, and enable prompt caching"
+        },
+        {
+          "key": "C",
+          "text": "Move the policy text into the user turn"
+        },
+        {
+          "key": "D",
+          "text": "Split every request across two smaller calls"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A stable prefix plus caching lets repeated content be reused, cutting both time-to-first-token and per-request cost without losing context. Truncation (A) discards required policy, relocating text (C) changes nothing about reuse, and splitting calls (D) adds overhead.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q04",
+      "exam_id": 10,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q0166"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-2",
+      "prompt": "You must classify 40,000 support tickets by tomorrow morning. No one consumes results before then, and budget is tight. Which approach fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parallel synchronous Messages API calls at maximum concurrency"
+        },
+        {
+          "key": "B",
+          "text": "Synchronous calls with reduced max_tokens"
+        },
+        {
+          "key": "C",
+          "text": "The Message Batches API, submitting all tickets and collecting results within the processing window"
+        },
+        {
+          "key": "D",
+          "text": "One giant request containing all 40,000 tickets"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Latency-tolerant bulk work is exactly what the Batches API is for: 50% of the cost, results within a 24-hour window, correlated by custom_id. Parallel synchronous calls (A) pay full price for speed nobody needs, max_tokens (B) does not change per-token pricing, and a single request (D) exceeds any context window.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q05",
+      "exam_id": 10,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q0167"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-3",
+      "prompt": "Your application parses Claude's reply as JSON, and about one run in fifty crashes on malformed output. What is the sturdiest fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add \"always return valid JSON\" in capital letters to the prompt"
+        },
+        {
+          "key": "B",
+          "text": "Wrap the parse in a try block and silently skip failures"
+        },
+        {
+          "key": "C",
+          "text": "Lower the temperature to zero"
+        },
+        {
+          "key": "D",
+          "text": "Enforce the shape through tool use with a JSON schema, validate the result, and on validation failure retry with the error fed back"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Schema-enforced output plus a validation-retry loop treats model output as untrusted input and gives the model the information to correct itself. Louder instructions (A) reduce but do not eliminate failures, silent skipping (B) hides data loss, and temperature (C) does not guarantee syntax.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q06",
+      "exam_id": 10,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q0168"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-11",
+      "prompt": "A service calls Claude for every request and reuses an identical 12,000-token instruction block each time. Latency and cost are both too high. What is the most direct improvement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Shorten the instructions until the cost is acceptable"
+        },
+        {
+          "key": "B",
+          "text": "Move to a smaller model"
+        },
+        {
+          "key": "C",
+          "text": "Batch requests together and process them hourly"
+        },
+        {
+          "key": "D",
+          "text": "Cache the stable prefix so the repeated block is not reprocessed on every call"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A large, unchanging prefix is exactly what prompt caching exists for, and it cuts both cost and time to first token without changing behavior. Trimming instructions (A) sacrifices capability, a smaller model (B) trades quality for price, and batching (C) breaks a per-request service.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q07",
+      "exam_id": 10,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q0169"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-12",
+      "prompt": "A user-facing feature must show output as it is produced rather than after a long wait. What does this require?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Streaming the response so tokens are delivered as they are generated"
+        },
+        {
+          "key": "B",
+          "text": "A smaller model so the whole response arrives sooner"
+        },
+        {
+          "key": "C",
+          "text": "Splitting the prompt into several shorter calls"
+        },
+        {
+          "key": "D",
+          "text": "Reducing the maximum output tokens"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Streaming is the mechanism for incremental delivery and is what perceived latency depends on. A smaller model (B) and a shorter cap (D) reduce total time without changing when the first token appears, and splitting (C) adds round trips.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q08",
+      "exam_id": 10,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q0170"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-13",
+      "prompt": "Ten thousand documents must be classified overnight, with no interactive requirement. Which approach fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Streaming requests one at a time to show progress"
+        },
+        {
+          "key": "B",
+          "text": "Submitting the work as a batch, accepting higher latency for lower cost"
+        },
+        {
+          "key": "C",
+          "text": "Running them in parallel at maximum concurrency against the standard endpoint"
+        },
+        {
+          "key": "D",
+          "text": "Splitting the job across several API keys"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Work that is large, uniform, and not time-critical is what batch processing is for, and it is materially cheaper. Streaming (A) serves interactive use, maximum concurrency (C) risks rate limits for no benefit here, and splitting keys (D) is an evasion rather than a design.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q09",
+      "exam_id": 10,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q0171"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-14",
+      "prompt": "An integration intermittently receives a rate limit response under load. What is the correct handling?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Retry immediately until the call succeeds"
+        },
+        {
+          "key": "B",
+          "text": "Treat the response as a permanent failure and surface an error"
+        },
+        {
+          "key": "C",
+          "text": "Retry with exponential backoff and a bounded number of attempts"
+        },
+        {
+          "key": "D",
+          "text": "Lower the request size so the limit is never reached"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Backoff with a retry ceiling relieves the pressure that caused the limit and still fails predictably. Immediate retries (A) worsen the condition, treating it as terminal (B) discards recoverable work, and shrinking requests (D) does not address a rate that is measured in calls.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q10",
+      "exam_id": 10,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q0172"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-15",
+      "prompt": "Output must be inserted directly into a typed database record. What is the most reliable way to obtain it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ask for JSON in the prompt and parse whatever comes back"
+        },
+        {
+          "key": "B",
+          "text": "Ask for JSON and retry when parsing fails"
+        },
+        {
+          "key": "C",
+          "text": "Post-process the prose into fields with regular expressions"
+        },
+        {
+          "key": "D",
+          "text": "Define the shape as a tool schema so the response is returned in a validated structure"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A declared schema turns structure into a contract the response must satisfy, which is what a typed insert needs. Asking in prose (A) and retrying on failure (B) both leave the shape to chance, and regular expressions over prose (C) are brittle by construction.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q11",
+      "exam_id": 10,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q0173"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-16",
+      "prompt": "A long-running conversation eventually exceeds the context window. What is the appropriate design response?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Summarise earlier turns into a compact running state and carry that forward"
+        },
+        {
+          "key": "B",
+          "text": "Truncate the oldest turns and continue"
+        },
+        {
+          "key": "C",
+          "text": "Increase the maximum output tokens"
+        },
+        {
+          "key": "D",
+          "text": "Start a new conversation with no history"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Compaction preserves the meaning of earlier exchanges within a much smaller footprint, which is what continuity requires. Blind truncation (B) drops facts silently, the output cap (C) is unrelated, and starting fresh (D) discards the state entirely.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Streaming & Messages API",
+      "id": "CCDV-E10-Q12",
+      "exam_id": 10,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q0174"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-17",
+      "prompt": "Which signal best indicates that a failed request should not be retried?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The response took longer than usual"
+        },
+        {
+          "key": "B",
+          "text": "The error indicates a malformed request rather than a transient condition"
+        },
+        {
+          "key": "C",
+          "text": "The same request failed once before"
+        },
+        {
+          "key": "D",
+          "text": "The account is near its spending limit"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A client error means the request itself is wrong, and repeating it unchanged cannot succeed. Latency (A) and a single prior failure (C) are consistent with transient faults, and a spending limit (D) is an operational matter rather than a property of the request.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q13",
+      "exam_id": 10,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q0175"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-18",
+      "prompt": "A response is truncated mid-sentence. What is the most likely cause?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The input exceeded the context window"
+        },
+        {
+          "key": "B",
+          "text": "The model does not support the requested format"
+        },
+        {
+          "key": "C",
+          "text": "The output reached the maximum token limit set on the request"
+        },
+        {
+          "key": "D",
+          "text": "The network connection dropped"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Hitting the output cap produces exactly this symptom and is reported as such in the stop reason. An oversized input (A) fails before generation, an unsupported format (B) produces wrong shape rather than a cut, and a dropped connection (D) is an error rather than a clean stop.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q14",
+      "exam_id": 10,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q0176"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-2",
+      "prompt": "A nightly job enriches 200,000 product descriptions. Results are consumed the next morning. Which design minimizes cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Synchronous calls fanned out across many workers"
+        },
+        {
+          "key": "B",
+          "text": "The Message Batches API with results collected within its processing window"
+        },
+        {
+          "key": "C",
+          "text": "Synchronous calls with a smaller model and reduced max_tokens"
+        },
+        {
+          "key": "D",
+          "text": "One request containing all descriptions"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Latency-tolerant bulk work is the Batches API's purpose: 50% of the cost within a 24-hour window",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q15",
+      "exam_id": 10,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q0177"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-3",
+      "prompt": "Which change makes a repeated 10,000-token system prompt cheaper and faster without losing content?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Moving the prompt to the end of the request"
+        },
+        {
+          "key": "B",
+          "text": "Compressing the prompt text with abbreviations"
+        },
+        {
+          "key": "C",
+          "text": "Placing the stable prompt first and enabling prompt caching so the prefix is reused"
+        },
+        {
+          "key": "D",
+          "text": "Sending the prompt only on the first request of a session"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Caching reuses a stable prefix, cutting time-to-first-token and per-request cost. Position matters: stable content first",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q16",
+      "exam_id": 10,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q0178"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-13",
+      "prompt": "Which statement about the Message Batches API is correct?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It processes large asynchronous workloads at reduced cost within a processing window, correlating requests by custom_id"
+        },
+        {
+          "key": "B",
+          "text": "It supports multi-turn tool calling within a batch"
+        },
+        {
+          "key": "C",
+          "text": "It guarantees sub-second latency"
+        },
+        {
+          "key": "D",
+          "text": "It requires a dedicated endpoint per request"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Reduced cost, asynchronous window, custom_id correlation, and no multi-turn tool calling inside a batch",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batch Processing API",
+      "id": "CCDV-E10-Q17",
+      "exam_id": 10,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q0179"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-1",
+      "prompt": "A service sends the same 8,000-token system prompt on every request and cost is dominated by input tokens. What is the first change to evaluate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Rewriting the system prompt to be shorter"
+        },
+        {
+          "key": "B",
+          "text": "Switching to a cheaper model"
+        },
+        {
+          "key": "C",
+          "text": "Caching the stable prefix so it is not reprocessed on every call"
+        },
+        {
+          "key": "D",
+          "text": "Reducing the number of requests"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A large unchanging prefix repeated per call is what caching addresses, without losing any instruction. Shortening (A) sacrifices capability, a cheaper model (B) trades quality, and fewer requests (D) changes the product",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Evaluation & Testing",
+      "id": "CCDV-E10-Q18",
+      "exam_id": 10,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q0180"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 13,
+      "prompt": "A retail company's business requirement states that a checkout-assistance chatbot must respond within 2 seconds even during flash-sale traffic surges of 10x normal volume. Which combination of infrastructure decisions best satisfies this functional requirement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use Claude Opus with extended thinking enabled for the highest-quality responses on every checkout message, and rely on the SDK's default retry logic to smooth over any throughput problems during the traffic surge."
+        },
+        {
+          "key": "B",
+          "text": "Select a faster, latency-appropriate model tier for short interactive responses, use streaming to reduce perceived latency, and confirm the organization's rate limits/usage tier can absorb the peak throughput (or request an increase in advance)."
+        },
+        {
+          "key": "C",
+          "text": "Switch to the Message Batches API so checkout requests during the flash sale are queued and processed together as an asynchronous batch, trading immediate responses for efficient bulk throughput."
+        },
+        {
+          "key": "D",
+          "text": "Increase max_tokens substantially so the model has more room to reason through each checkout response, then disable streaming so the client only needs to handle one complete response payload at a time."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A latency-sensitive, high-throughput interactive workload needs an appropriately fast model, streaming for perceived responsiveness, and pre-planned rate-limit capacity. Option A picks a slower model and has no capacity plan; option C uses the Batches API, which is for latency-tolerant asynchronous jobs, not real-time checkout; option D both increases latency (more max_tokens) and removes the responsiveness benefit of streaming.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Understanding Requirements",
+      "id": "CCDV-E10-Q19",
+      "exam_id": 10,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q0262"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 14,
+      "prompt": "A healthcare administration team is building a Claude-powered intake assistant. The business requirement states that patient conversation data must not be retained by the LLM provider beyond what is needed to generate a response, and the deployment must fit within the hospital's existing AWS compliance boundary. Which infrastructure requirement follows most directly from this business requirement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Call Claude through Amazon Bedrock (or Claude Platform on AWS) with the organization's data-retention settings configured for zero/minimal retention, keeping the integration inside the hospital's existing AWS compliance boundary."
+        },
+        {
+          "key": "B",
+          "text": "Use the first-party Claude API directly with 1-hour prompt cache TTLs to reduce cost, since caching is purely a performance optimization and does not change the provider's underlying data-retention commitments."
+        },
+        {
+          "key": "C",
+          "text": "Store full conversation transcripts in a data lake indefinitely so compliance staff can audit them at any time, treating long-term retention itself as the mechanism that satisfies the hospital's compliance obligations."
+        },
+        {
+          "key": "D",
+          "text": "Use the Message Batches API so patient intake data can be processed in bulk overnight, since batching requests together is what keeps the integration inside the hospital's compliance boundary."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Routing through Bedrock/Claude Platform on AWS with retention configured to the required minimum keeps the integration inside the existing AWS compliance boundary and satisfies the retention requirement. Option B focuses on cost, not retention or compliance boundary. Option C directly violates the stated requirement by retaining data indefinitely. Option D addresses latency tolerance, not compliance or retention.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Understanding Requirements",
+      "id": "CCDV-E10-Q20",
+      "exam_id": 10,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q0263"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 15,
+      "prompt": "During requirements gathering for an internal coding-assistant tool, engineering leadership states the business requirement as \"developers should trust the assistant's suggestions.\" Which functional requirement most faithfully operationalizes this vague business requirement into something a development team can build and test against?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The assistant must always respond with confident, reassuring language regardless of the underlying evidence, so developers feel comfortable acting on its suggestions without needing to double-check them."
+        },
+        {
+          "key": "B",
+          "text": "The assistant must cite the specific files, line numbers, or tool outputs that support each non-trivial suggestion, so developers can verify claims before acting on them."
+        },
+        {
+          "key": "C",
+          "text": "The assistant must use the largest available model for every request to maximize output quality, on the assumption that a bigger model's suggestions are inherently trustworthy enough not to need verification."
+        },
+        {
+          "key": "D",
+          "text": "The assistant must limit its responses to very short, one-line answers to avoid overwhelming developers with detail, on the assumption that shorter answers are easier for developers to trust at a glance."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Trust is best operationalized as verifiability: requiring citations to concrete evidence lets developers check claims, which is testable and directly supports trust. Confident language (A) can create false trust without verifiability, which is actively harmful. Model size alone (C) doesn't guarantee trustworthy or verifiable output. Response brevity (D) is unrelated to whether developers can trust the content.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Understanding Requirements",
+      "id": "CCDV-E10-Q21",
+      "exam_id": 10,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q0264"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 16,
+      "prompt": "A team is rolling out a new version of their Claude-powered customer-support agent. Following standard systems life cycle management practices, which sequence of activities is most appropriate before replacing the production model version with a newer one?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Directly swap the production model ID for the new version during business hours, relying on real-time customer support tickets and error-rate dashboards to surface any regressions after the fact, since live traffic is the most realistic test data available."
+        },
+        {
+          "key": "B",
+          "text": "Run the new model version against a held-out evaluation set in a staged or canary environment, compare outputs and cost/latency against the current version, then roll out gradually with monitoring and a rollback plan."
+        },
+        {
+          "key": "C",
+          "text": "Publicly announce the new model version to end users and solicit feedback through a survey, then use that feedback afterward to decide whether an evaluation suite or staged rollout is even necessary before it stays in production."
+        },
+        {
+          "key": "D",
+          "text": "Skip the evaluation and staged rollout steps entirely, since Anthropic guarantees that every new model version is fully backward compatible with existing prompts and will reproduce identical outputs and latency characteristics."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Standard life cycle management calls for testing and staged rollout with rollback capability before a production change. Option A makes an untested change directly in production. Option C reverses the correct sequence by exposing users before any evaluation exists. Option D rests on a false assumption; model version changes can shift behavior and often require prompt re-tuning.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Systems Life Cycle",
+      "id": "CCDV-E10-Q22",
+      "exam_id": 10,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q0265"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 17,
+      "prompt": "Which statement best describes how the \"operate and maintain\" phase of the systems life cycle applies specifically to a production Claude-powered application, as distinct from the initial development phase?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It primarily involves gathering the original business requirements, selecting the initial model version, and writing the first system prompt, tasks that are completed once during the initial build phase before the application goes live."
+        },
+        {
+          "key": "B",
+          "text": "It involves ongoing tasks such as monitoring for model deprecation notices, tracking cost and latency trends, updating prompts as usage patterns drift, and re-validating behavior after any model version change."
+        },
+        {
+          "key": "C",
+          "text": "It is considered complete as soon as the application passes initial user acceptance testing, after which the team can safely stop monitoring it unless a full system rebuild is later planned."
+        },
+        {
+          "key": "D",
+          "text": "It only applies to traditional on-premises software deployments where a team controls the underlying servers, and has no meaningful relevance to API-based LLM integrations that are hosted by the provider."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Operate-and-maintain is an ongoing phase covering monitoring, drift detection, and re-validation after changes such as model deprecations or version upgrades. Option A describes the requirements/design phase. Option C is wrong because production LLM applications require continuous attention, notably due to model deprecations and usage drift. Option D is factually incorrect; API-based systems still require ongoing operations.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Systems Life Cycle",
+      "id": "CCDV-E10-Q23",
+      "exam_id": 10,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q0266"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 18,
+      "prompt": "A developer is building a chat UI that must display Claude's response token-by-token as it's generated, and separately needs the complete final message object (including usage statistics) once generation finishes. Which approach best fits the Messages API?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Repeatedly poll the Messages API by resending the identical request on a short interval and concatenating whatever partial content is returned each time, until the response eventually reports itself as complete."
+        },
+        {
+          "key": "B",
+          "text": "Use the streaming endpoint (or SDK streaming helper) to consume incremental content deltas for the token-by-token display, and use the SDK's helper (e.g., get_final_message()/finalMessage()) to retrieve the complete accumulated message once streaming ends."
+        },
+        {
+          "key": "C",
+          "text": "Route the request through the Message Batches API instead, since it is designed to return both a live stream of incremental token deltas for UI display and a final consolidated message object once the batch job completes."
+        },
+        {
+          "key": "D",
+          "text": "Set max_tokens to a very small value on each call so the response completes quickly enough to feel like streaming, then issue a sequence of follow-up requests that each continue generating from where the previous one stopped."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Streaming is designed exactly for this: incremental deltas for live display, plus a helper to obtain the final accumulated message with usage data. Polling (A) is not how the API works and is wasteful. The Batches API (C) is asynchronous and never streams live tokens. Artificially shrinking max_tokens (D) degrades output quality and doesn't provide real streaming.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Claude API Mechanics",
+      "id": "CCDV-E10-Q24",
+      "exam_id": 10,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q0267"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 19,
+      "prompt": "A team notices that despite adding cache_control: {type: \"ephemeral\"} to their large system prompt, cache_read_input_tokens is consistently 0 across repeated, seemingly identical requests. Investigation shows the system prompt includes a live timestamp string that is regenerated on every call. What is the most likely explanation and fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Prompt caching is only available when requests are submitted through the asynchronous Message Batches API, so it cannot be applied to this synchronous chat feature at all; remove the cache_control field entirely and accept the added token cost."
+        },
+        {
+          "key": "B",
+          "text": "The timestamp changes the exact bytes of the cached prefix on every request, invalidating the cache; move the timestamp after the cache breakpoint or remove it from the cached portion of the prompt."
+        },
+        {
+          "key": "C",
+          "text": "cache_read_input_tokens is a cosmetic field maintained for backward compatibility that does not actually reflect cache behavior, so the caching is most likely already working correctly despite what the usage field reports."
+        },
+        {
+          "key": "D",
+          "text": "Prompt caching requires the temperature parameter to be set to 0 so that the model's sampling becomes deterministic across calls, which is a prerequisite for cache hits to register; add temperature: 0 to every request."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Prompt caching is a strict prefix match; any byte difference before a breakpoint, such as a per-request timestamp, invalidates the cache for everything after it. The fix is to move volatile content after the breakpoint or out of the cached prefix. Option A is false; caching works on the standard Messages API. Option C is false; the usage field is the correct diagnostic signal. Option D is irrelevant to caching mechanics.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Claude API Mechanics",
+      "id": "CCDV-E10-Q25",
+      "exam_id": 10,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q0268"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 20,
+      "prompt": "A company already has its cloud infrastructure and billing consolidated in Google Cloud and wants to call Claude models without managing a separate Anthropic API key or contract. Which approach fits this constraint?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Call the Claude API directly using a dedicated Anthropic API key and contract, then reimburse the resulting Anthropic invoice internally through the company's existing Google Cloud cost-allocation and chargeback process each month."
+        },
+        {
+          "key": "B",
+          "text": "Access Claude through Google Cloud Vertex AI, authenticating with Google Cloud credentials and billing usage through the existing GCP account."
+        },
+        {
+          "key": "C",
+          "text": "Provision access to Claude through Amazon Bedrock instead, since Bedrock is the only third-party cloud platform that offers hosted access to Claude models outside of Anthropic's own API."
+        },
+        {
+          "key": "D",
+          "text": "Build and maintain a custom proxy server that exposes an interface mimicking the Claude Messages API but internally forwards each request to a different vendor's model, avoiding an Anthropic contract altogether."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Vertex AI lets a GCP-based organization call Claude using GCP credentials and existing billing, avoiding a separate Anthropic contract. Option A still requires a separate Anthropic key/contract. Option C is factually wrong; both Bedrock and Vertex AI offer Claude. Option D doesn't call Claude at all and is unrelated to the stated goal.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Claude API Mechanics",
+      "id": "CCDV-E10-Q26",
+      "exam_id": 10,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q0269"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 21,
+      "prompt": "A research team needs to classify sentiment for 2 million historical customer reviews as part of a one-time data-cleaning project. The results are needed within the next two days, no individual result needs to return quickly, and the team wants to minimize API spend. Which approach is best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Submit all 2 million requests synchronously in parallel by opening as many concurrent connections as the client allows, prioritizing the fastest possible wall-clock completion time over cost or rate-limit considerations."
+        },
+        {
+          "key": "B",
+          "text": "Submit the requests through the Message Batches API, which processes large asynchronous workloads within a completion window at a lower price than synchronous calls."
+        },
+        {
+          "key": "C",
+          "text": "Use the streaming API for every request so that partial sentiment results can be saved incrementally as tokens arrive, which reduces the effective per-request cost compared to a full synchronous response."
+        },
+        {
+          "key": "D",
+          "text": "Keep using the synchronous Messages API for all 2 million calls, but reduce max_tokens to 1 on every request so that output token billing is minimized regardless of whether a usable sentiment label is returned."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "This is a latency-tolerant, high-volume, cost-sensitive workload, exactly what the Batches API is built for, and it offers a cost discount. Option A maximizes cost and risks hitting rate limits for no benefit given the relaxed timeline. Option C's streaming doesn't reduce cost. Option D destroys the usefulness of the output and still ignores the batch discount.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Claude API Mechanics",
+      "id": "CCDV-E10-Q27",
+      "exam_id": 10,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q0270"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 39,
+      "prompt": "A solo developer works across a dozen unrelated repositories and wants Claude Code to always apply one personal preference (e.g., prefer functional-style refactors over imperative ones) in every project, without having to edit each repository. No team members share this preference, and there is no enterprise IT function involved. Where should the developer record this preference so it is loaded automatically in every session?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add the preference to the CLAUDE.md file in the root of whichever project they happen to be working in that week, since project-level CLAUDE.md files are loaded for every session in that repository and would need to be duplicated manually into each of the dozen unrelated repos."
+        },
+        {
+          "key": "B",
+          "text": "Create or edit the user-level CLAUDE.md file at ~/.claude/CLAUDE.md, since Claude Code automatically loads this file into context for every session regardless of which project directory the developer happens to be working in that day."
+        },
+        {
+          "key": "C",
+          "text": "Ask an organization administrator to add the preference to the enterprise-managed CLAUDE.md policy file, since that file is loaded ahead of all other CLAUDE.md files and is the correct place to record any instruction meant to apply across every repository a developer touches."
+        },
+        {
+          "key": "D",
+          "text": "Add the preference as a new key inside .claude/settings.local.json for the current project, since settings.local.json is where Claude Code stores free-text memory and behavioral instructions that persist across every session run on that machine."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The user-level CLAUDE.md is loaded for every Claude Code session regardless of which repo is open, making it the right place for personal, cross-project preferences. Editing a single project's CLAUDE.md only affects that repo. Enterprise-managed CLAUDE.md is for org-wide mandatory policy set by administrators, not a solo developer's personal style preference. settings.local.json holds machine-specific tool/permission configuration, not free-text memory instructions.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Claude Code Operation",
+      "id": "CCDV-E10-Q28",
+      "exam_id": 10,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q0343"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 40,
+      "prompt": "A CI pipeline needs to invoke Claude Code as one step of an automated pull-request check: it must run without any human present, exit after producing a single result, and print output that a downstream script can parse programmatically. Which invocation best satisfies these requirements?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Launch the normal interactive `claude` REPL inside the CI job and have the pipeline script pause and wait for a human operator to type a response at the prompt before the step can complete and the job can continue."
+        },
+        {
+          "key": "B",
+          "text": "Run `claude -p \"<prompt>\" --output-format json` so Claude Code executes headlessly in a single pass, prints one structured, machine-readable response, and then exits immediately without waiting for any further interactive input."
+        },
+        {
+          "key": "C",
+          "text": "Run `claude --resume` in the CI job to reattach to and continue a previous interactive session, then parse its resumed transcript afterward, since resuming an existing session is the standard way to obtain a single scripted result inside automation."
+        },
+        {
+          "key": "D",
+          "text": "Enable auto-mode so file edits and tool calls are accepted automatically without prompting, then start the standard interactive session inside the CI job and let it run to completion before the pipeline reads the terminal output."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Headless mode (`-p` with `--output-format json`) runs Claude Code non-interactively for exactly one turn and emits structured output suited to scripting, which is exactly what an unattended CI step needs. The interactive REPL blocks waiting for input, which cannot work in an unattended pipeline. --resume is for continuing a prior interactive session, not for a fresh one-shot scripted call. Auto-mode only changes how permission prompts are handled inside an interactive session; it does not make the session non-interactive or scriptable.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Claude Code Operation",
+      "id": "CCDV-E10-Q29",
+      "exam_id": 10,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q0344"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 41,
+      "prompt": "A platform team wants every engineer who clones a particular repository to have access to a `/deploy-checklist` slash command that walks through the same pre-deployment steps, and they want that command's definition version-controlled and updated alongside the codebase. What should they do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Have each engineer memorize the pre-deployment checklist and manually retype each step into the chat before every deploy, treating this repeated manual entry as an acceptable substitute for a reusable, version-controlled command definition."
+        },
+        {
+          "key": "B",
+          "text": "Add a markdown file at .claude/commands/deploy-checklist.md inside the repository so it is committed to git and exposed as /deploy-checklist to anyone using Claude Code there"
+        },
+        {
+          "key": "C",
+          "text": "Save the checklist as ~/.claude/commands/deploy-checklist.md on the team lead's personal machine, since user-level slash commands stored under the home directory are automatically synced to every other engineer's machine the next time they clone the repository."
+        },
+        {
+          "key": "D",
+          "text": "Add the checklist text as a new field inside the repository's .claude/settings.json file, since settings.json is where Claude Code stores the prompt content and step-by-step body for custom slash commands alongside permissions and hooks."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Custom slash commands defined as markdown files under a project's .claude/commands/ directory are checked into the repo and become available to every user of Claude Code in that project, which is exactly the reusable, version-controlled behavior the team wants. Manual retyping is unreliable and not reusable. The user-level (~) commands directory is local to one person's machine and isn't shared through the repository. settings.json configures permissions, hooks, and environment behavior, not slash command prompt content.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Claude Code Operation",
+      "id": "CCDV-E10-Q30",
+      "exam_id": 10,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q0345"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 42,
+      "prompt": "An enterprise security team is standardizing how Claude Code is configured across thousands of developer laptops using settings.json files at multiple levels. Which two statements about Claude Code's settings files are correct?",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Enterprise-managed settings take precedence over project-level and user-level settings, and exist specifically so administrators can enforce organization-wide policy that individual developers are not able to override locally."
+        },
+        {
+          "key": "B",
+          "text": ".claude/settings.local.json is intended for personal, machine-specific overrides (such as permissions an individual developer has locally granted) and is typically excluded from version control so it doesn't leak into the shared repository."
+        },
+        {
+          "key": "C",
+          "text": "User-level settings at ~/.claude/settings.json always take precedence over a project's shared .claude/settings.json, since personal configuration is intended to override any team-wide defaults a repository's committed settings file might specify."
+        },
+        {
+          "key": "D",
+          "text": "settings.json can only be used to set the active model name for a session; permissions, hooks, and environment variables must each be configured through separate dedicated files rather than through settings.json itself."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Enterprise-managed settings sit at the top of the precedence order specifically so administrators can enforce mandatory policy that developers cannot override, and settings.local.json exists precisely for personal, machine-specific configuration that should stay out of git. The precedence order actually runs enterprise > project local > project shared > user settings, so project settings can override user settings, making that option backwards. settings.json is also used to configure permissions, hooks, environment variables, and more, not just the model name, so that option misstates its scope.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Claude Code Operation",
+      "id": "CCDV-E10-Q31",
+      "exam_id": 10,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q0346"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-4",
+      "prompt": "A pipeline must always run the same four steps in order: fetch a document, extract fields, validate them, and file the record. A teammate proposes an autonomous agent with tools for all four steps. What is the better design and why?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A workflow that calls the model for extraction inside deterministic orchestration, because the path is known in advance and determinism is cheaper and more reliable"
+        },
+        {
+          "key": "B",
+          "text": "The agent, because agents are more capable than fixed code"
+        },
+        {
+          "key": "C",
+          "text": "The agent, because it can skip steps when it decides they are unnecessary"
+        },
+        {
+          "key": "D",
+          "text": "Two agents supervising each other"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "When the sequence is fixed, orchestrate it in code and use the model where the model adds value. Autonomy buys nothing on a known path and adds nondeterminism (B), skipping validation is a defect rather than a feature (C), and supervision hierarchies (D) are for problems that need delegation, not four fixed steps.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E10-Q32",
+      "exam_id": 10,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q0347"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-5",
+      "prompt": "Your agent loop calls the Messages API and receives a response with stop_reason \"tool_use\". What must your code do next?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Treat the turn as finished and show the partial text to the user"
+        },
+        {
+          "key": "B",
+          "text": "Execute the requested tool, append the tool result to the conversation, and call the API again"
+        },
+        {
+          "key": "C",
+          "text": "Retry the same request until stop_reason becomes \"end_turn\""
+        },
+        {
+          "key": "D",
+          "text": "Increase max_tokens and resend"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "That is the agentic loop: \"tool_use\" means the model is waiting for a tool result before it can continue. Ending the turn (A) abandons the model mid-task, re-rolling (C) re-asks the same question while ignoring the request, and max_tokens (D) is unrelated to tool dispatch.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Agent Loops & Multi-Agent",
+      "id": "CCDV-E10-Q33",
+      "exam_id": 10,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q0348"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-23",
+      "prompt": "A process has fixed, known steps in a fixed order, each with a checkable output. What should be built?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "An agent that decides the order at runtime"
+        },
+        {
+          "key": "B",
+          "text": "A multi-agent system with one agent per step"
+        },
+        {
+          "key": "C",
+          "text": "A single prompt containing all the steps"
+        },
+        {
+          "key": "D",
+          "text": "A deterministic workflow that calls the model at defined points"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "When the path is known in advance, encoding it directly is cheaper, faster, and far easier to debug than letting a model rediscover it each run. Runtime decisions (A, B) add nondeterminism with no benefit, and a single prompt (C) removes the checkpoints between steps.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q34",
+      "exam_id": 10,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q0349"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-24",
+      "prompt": "What most reliably distinguishes a task that genuinely needs an agent?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The steps required cannot be known until intermediate results are seen"
+        },
+        {
+          "key": "B",
+          "text": "The task is long"
+        },
+        {
+          "key": "C",
+          "text": "The task involves several different tools"
+        },
+        {
+          "key": "D",
+          "text": "The output must be structured"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Agents earn their cost where the path must be discovered during execution. Length (B), tool count (C), and structured output (D) are all satisfied by a fixed workflow.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q35",
+      "exam_id": 10,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q0350"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 44,
+      "prompt": "A production service calling the Messages API starts intermittently receiving HTTP 529 responses with `error.type: \"overloaded_error\"` during a traffic spike, alongside normal 200 responses for most requests. The service has no custom retry logic and relies on the Anthropic SDK's defaults. Which statement about handling this correctly?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Treat every 529 overloaded_error as a fatal, non-retryable failure and immediately surface an error back to the user-facing request without any retry attempt, since an overloaded_error response means the request body itself was malformed in a way that cannot succeed no matter how many times or when it is resent."
+        },
+        {
+          "key": "B",
+          "text": "Do nothing extra beyond the SDK's built-in handling — the Anthropic SDK already retries 529 (as well as 429 and 5xx) responses with exponential backoff by default, so occasional 529s appearing in logs during a traffic spike are expected and typically self-resolve without any code changes."
+        },
+        {
+          "key": "C",
+          "text": "Switch permanently to a different, less capable model for all future requests, since a 529 overloaded_error indicates that the specific model version being requested has been deprecated and is no longer being served by the API."
+        },
+        {
+          "key": "D",
+          "text": "Immediately resend the exact same request in a tight loop with no delay between attempts, in order to beat other tenants' traffic back to available capacity before the overload condition clears on its own."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "`overloaded_error` (529) is a retryable, transient capacity error, and the Anthropic SDKs automatically retry 429/408/409/5xx and 529 with exponential backoff (default max_retries=2) — so seeing some in logs during a spike is expected, and the default behavior already handles it. Option A is wrong because 529 is about server capacity, not a bad request (that would be 400/invalid_request_error). Option C is wrong because overload is transient and has nothing to do with model deprecation (which returns 404). Option D is wrong because retrying instantly with no backoff worsens congestion and ignores the `retry-after` guidance the API provides.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Debugging and Error Handling",
+      "id": "CCDV-E10-Q36",
+      "exam_id": 10,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q0405"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 45,
+      "prompt": "A support-ticket summarization app appends the full ticket thread to `messages` on every turn. After many turns, a request that previously succeeded now returns a response with `stop_reason: \"model_context_window_exceeded\"`, even though `max_tokens` was left unchanged from earlier successful calls. What is the correct fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Increase the `max_tokens` parameter on the request, since a `model_context_window_exceeded` stop reason means the model ran out of room to generate its response and simply needs a larger output budget configured for the call."
+        },
+        {
+          "key": "B",
+          "text": "Retry the identical request unchanged with exponential backoff, since `model_context_window_exceeded` is a transient server-side condition similar to a 529 overload error that typically clears on its own after a short delay."
+        },
+        {
+          "key": "C",
+          "text": "Reduce the size of the conversation sent as input — for example via compaction, summarization, or trimming older turns — since the model's total input has exceeded the context window, which is a different limit than the output cap"
+        },
+        {
+          "key": "D",
+          "text": "Switch to the Message Batches API for this request, since batch processing runs asynchronously against separate infrastructure and is exempt from the per-request context-window limits that apply to synchronous Messages API calls."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "`model_context_window_exceeded` means the *input* (the full accumulated conversation) has exceeded the model's context window — a distinct condition from `stop_reason: \"max_tokens\"`, which means the *output* hit the requested generation cap. The fix is to shrink the input via compaction, summarization, or dropping older turns, not to raise `max_tokens` (A, which only affects output length and does nothing about oversized input), retry with backoff (B, since this isn't a transient/retryable server error like 429 or 529), or move to Batches (D, which has no special exemption from context-window limits).",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Debugging and Error Handling",
+      "id": "CCDV-E10-Q37",
+      "exam_id": 10,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q0406"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-7",
+      "prompt": "A long-running assistant slowly degrades: it repeats itself, mixes up earlier cases, and forgets recent instructions. The context window is near its limit and full of verbose tool outputs. What is the right remedy?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move to a model with a larger context window and continue as before"
+        },
+        {
+          "key": "B",
+          "text": "Repeat the system prompt after every user turn"
+        },
+        {
+          "key": "C",
+          "text": "Ask the model to ignore its earlier confusion"
+        },
+        {
+          "key": "D",
+          "text": "Prune and summarize tool outputs, compact the history, and isolate self-contained subtasks in subagents so the main context stays lean"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Drift and bloat are managed by context hygiene: prune, compact, and isolate. A bigger window (A) delays the same failure while raising cost, repetition (B) accelerates the bloat, and asking the model to ignore confusion (C) is not a mechanism.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E10-Q38",
+      "exam_id": 10,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q0407"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-27",
+      "prompt": "Which change most improves reliability when a prompt must follow several constraints at once?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Adding emphasis to the most important constraint"
+        },
+        {
+          "key": "B",
+          "text": "Repeating the constraints at the end of the prompt"
+        },
+        {
+          "key": "C",
+          "text": "Raising the temperature so the model explores more options"
+        },
+        {
+          "key": "D",
+          "text": "Giving the model an example of a compliant output"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A worked example makes the constraints concrete and demonstrates their interaction, which prose cannot. Emphasis (A) and repetition (B) restate without clarifying, and higher temperature (C) increases variance, which is the opposite of reliability.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q39",
+      "exam_id": 10,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q0408"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-28",
+      "prompt": "Where should stable, reusable instructions about role and behavior be placed?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "In the system prompt, so they apply consistently across the exchange"
+        },
+        {
+          "key": "B",
+          "text": "In the first user message of every conversation"
+        },
+        {
+          "key": "C",
+          "text": "In the final message, so they are freshest"
+        },
+        {
+          "key": "D",
+          "text": "Repeated in every user message"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The system prompt is the designated place for persistent framing and keeps it separate from turn-specific content. Placing it in user turns (B, C, D) mixes configuration with input and invites drift.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q40",
+      "exam_id": 10,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q0409"
+    },
+    {
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-29",
+      "prompt": "A prompt includes a large volume of loosely related background in case it helps. What is the likely effect?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Accuracy improves because more context is always better"
+        },
+        {
+          "key": "B",
+          "text": "Relevant material competes with irrelevant material, and accuracy can fall"
+        },
+        {
+          "key": "C",
+          "text": "The model ignores anything not referenced by the question"
+        },
+        {
+          "key": "D",
+          "text": "Only cost is affected"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Context is a budget rather than a free resource, and irrelevant material dilutes attention to what matters. More is not automatically better (A), the model does not reliably filter for you (C), and the effect is on quality as well as cost (D).",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E10-Q41",
+      "exam_id": 10,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q0410"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 46,
+      "prompt": "A QA engineer testing a Claude-powered application sets temperature to 0, expecting completely reproducible outputs, and sends the exact same prompt to the API ten times. Nine responses are identical, but one differs by a single word. The engineer assumes this must be a bug. What is the most accurate explanation?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Setting temperature to 0 disables all randomness in token selection, so the API guarantees bit-for-bit identical output on every call, meaning any observed difference must be a defect in Anthropic's serving infrastructure that engineering should file as a bug."
+        },
+        {
+          "key": "B",
+          "text": "Even at temperature 0, minor floating-point and infrastructure-level non-determinism (e.g., parallelized computation) can still produce small variations, so bit-for-bit identical output is not guaranteed."
+        },
+        {
+          "key": "C",
+          "text": "Temperature is a parameter that only influences how the system prompt is interpreted before generation begins, not the token-by-token sampling process during generation, so the sampling settings couldn't be responsible for the variation seen here."
+        },
+        {
+          "key": "D",
+          "text": "Switching to a model with a larger context window would give the model more room to consider prior tokens during decoding, which would eliminate this kind of small output variation between identical requests."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Temperature 0 minimizes randomness but does not create a strict determinism guarantee, because low-level numerical and infrastructure effects can still introduce tiny variations. Option A overstates what temperature 0 guarantees; option C misdescribes what temperature controls; option D is irrelevant since context window size has nothing to do with output determinism.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "LLM Fundamentals",
+      "id": "CCDV-E10-Q42",
+      "exam_id": 10,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q0465"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 47,
+      "prompt": "A developer building a long-running chat application is surprised when a request fails after many turns, even though each individual user message was short. Which statement correctly explains what counts against a model's context window?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Only the newest user message's text counts toward the context window, since prior turns in the conversation are cached separately by the API and no longer occupy any of the token budget once a response has been generated for them."
+        },
+        {
+          "key": "B",
+          "text": "The context window is strictly an output-token cap describing the maximum length of the model's generated response, while the input side, including the system prompt and full conversation history, can be arbitrarily long without limit."
+        },
+        {
+          "key": "C",
+          "text": "The context window is a shared token budget across the entire request: the system prompt, full conversation history sent with the request, and the generated output all count against it."
+        },
+        {
+          "key": "D",
+          "text": "Because each API call is a fresh, stateless request, the context window automatically resets to zero every time, so however much conversation history the client appends to the messages array, it never actually consumes any of the token budget."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The context window is a single shared budget covering the system prompt, all messages sent as input, and the tokens the model generates in response — as history grows, less room remains for the response. Options A, B, and D each describe a way the window could be circumvented that does not reflect how the token budget actually works.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "LLM Fundamentals",
+      "id": "CCDV-E10-Q43",
+      "exam_id": 10,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q0466"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 48,
+      "prompt": "A developer needs Claude to sort incoming support tickets into a company-specific taxonomy with subtle category boundaries that Claude was never trained on. Zero-shot prompting with only a written description of the categories produces inconsistent labels across similar tickets. What is the most effective fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Increase the temperature parameter so that resampling the same prompt multiple times produces a diverse spread of candidate labels, then take a majority vote across those samples to settle on the final category for each ticket."
+        },
+        {
+          "key": "B",
+          "text": "Keep the zero-shot approach, but rewrite the taxonomy description into a longer, more exhaustive paragraph that spells out every category's boundary conditions in exacting prose, so the model has more written guidance to draw on."
+        },
+        {
+          "key": "C",
+          "text": "Switch to multi-shot prompting by including several representative example tickets alongside their correct category labels directly in the prompt, giving the model concrete boundary cases to anchor its classifications on."
+        },
+        {
+          "key": "D",
+          "text": "Remove the taxonomy description from the prompt entirely to reduce token usage, trusting the model to infer the company's specific category boundaries purely from patterns it picked up during pretraining on general text."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Multi-shot prompting gives the model concrete input/output examples that pin down exactly where the category boundaries lie, which is far more effective for subtle, task-specific distinctions than more prose or more randomness. Raising temperature (A) increases inconsistency rather than reducing it, a longer zero-shot description (B) doesn't supply the concrete boundary cases needed, and removing the taxonomy (D) removes the very information the model needs to classify correctly.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "LLM Fundamentals",
+      "id": "CCDV-E10-Q44",
+      "exam_id": 10,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q0467"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 49,
+      "prompt": "A team is tuning how their coding agent uses extended/adaptive thinking and effort levels to balance quality, latency, and cost. Select the two statements below that are accurate.",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The effort level controls how much the model deliberates and how many tokens it spends reasoning before answering; lowering effort trades some quality for lower latency and cost."
+        },
+        {
+          "key": "B",
+          "text": "Extended or adaptive thinking lets the model allocate extra internal reasoning tokens to work through a problem before producing its final answer."
+        },
+        {
+          "key": "C",
+          "text": "Enabling extended thinking allocates so many additional reasoning tokens toward deliberation that it functionally guarantees the model's final answer will be fully accurate and free of any factual errors, regardless of task difficulty."
+        },
+        {
+          "key": "D",
+          "text": "Effort level and thinking configuration are mutually exclusive controls, so a request must choose one mechanism or the other, and attempting to set both an effort level and a thinking budget in the same API call will always be rejected or ignored."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Effort level and thinking both genuinely affect how much computation the model spends on a problem before answering, which is why they are the primary quality/latency/cost dials for reasoning-heavy tasks. Option C is false because more reasoning tokens reduce, but never eliminate, the chance of errors; option D is false because effort and thinking settings are designed to be used together.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "LLM Fundamentals",
+      "id": "CCDV-E10-Q45",
+      "exam_id": 10,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q0468"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 50,
+      "prompt": "A developer is deciding whether to use Anthropic's official Python SDK or to hand-roll HTTP requests with a generic library like `requests` to call the Claude API. Which statement about the relationship between the SDK and the underlying REST API is accurate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The official SDKs are a distinct product layered on top of a separate backend from the REST API, so requests issued through an SDK are metered against a different rate-limit pool and quota than requests made with raw HTTP calls."
+        },
+        {
+          "key": "B",
+          "text": "The official SDKs are thin wrappers around the same REST API endpoints — adding conveniences like typed objects, automatic retries, and streaming helpers — but do not expose capabilities unavailable via raw HTTP."
+        },
+        {
+          "key": "C",
+          "text": "Using an official SDK requires provisioning a dedicated SDK-specific API key that is distinct from the key used for raw HTTP requests, since the SDK authenticates through a separate credential system tied to the client library."
+        },
+        {
+          "key": "D",
+          "text": "The SDK bypasses the need for authentication headers on each request because it establishes a persistent, server-side authenticated session with Anthropic on the client's behalf, similar to how some OAuth-based SDKs manage login state."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The SDKs call the same REST endpoints under the hood and add developer conveniences (typed request/response objects, retries, streaming helpers) without unlocking hidden capabilities. Options A and C invent separate infrastructure that doesn't exist, and option D is wrong because the SDK still sends the same authentication headers on every request, just constructed for you.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Technical Fundamentals",
+      "id": "CCDV-E10-Q46",
+      "exam_id": 10,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q0469"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 51,
+      "prompt": "A developer is building a chat UI where the user should see Claude's reply appear incrementally, token by token, instead of waiting for the entire response to finish generating. Which approach correctly achieves this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use the Messages API's streaming mode, which delivers the response as a sequence of incremental events over the connection as tokens are generated."
+        },
+        {
+          "key": "B",
+          "text": "Repeatedly poll the standard non-streaming endpoint every 100 milliseconds, checking whether the full response has finished generating yet, and render the complete text to the UI as soon as one of those polling requests succeeds."
+        },
+        {
+          "key": "C",
+          "text": "Increase the `max_tokens` parameter on the request, since allowing the model a larger output budget causes the API to generate and return the completed response to the client more quickly."
+        },
+        {
+          "key": "D",
+          "text": "Use the Message Batches API instead of the standard Messages endpoint, since it is purpose-built for low-latency, real-time token-by-token delivery to interactive chat interfaces like this one."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Streaming mode is specifically designed to deliver partial output as it's generated, which is exactly what an incremental chat UI needs. Polling (B) is inefficient and doesn't provide true token-level incrementality, raising `max_tokens` (C) does not change how quickly tokens are delivered, and the Batches API (D) is designed for high-latency-tolerant asynchronous workloads, the opposite of this use case.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Technical Fundamentals",
+      "id": "CCDV-E10-Q47",
+      "exam_id": 10,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q0470"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 60,
+      "prompt": "A CI agent runs a build pipeline and, at every step, appends the full raw output of each shell command (sometimes tens of thousands of lines) to the conversation it sends back to Claude on the next turn. After about 15 steps, the agent's responses become slower, more expensive, and occasionally lose track of the original task. What is the best way to fix this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Increase the `max_tokens` parameter on each request, giving the model a larger output allowance so it has enough room to read through the growing volume of appended command output from prior steps."
+        },
+        {
+          "key": "B",
+          "text": "After each step, prune or summarize command output down to the parts relevant to the next decision (e.g., errors, exit codes, key log lines) instead of keeping every full transcript."
+        },
+        {
+          "key": "C",
+          "text": "Switch the pipeline to whichever available model offers the largest context window, and continue appending every full, unabridged command transcript from every prior step exactly as before."
+        },
+        {
+          "key": "D",
+          "text": "Stop sending any shell command output back to Claude at all after each step, and instead let the model simply guess or assume the outcome of each command based on the instructions it was given."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Pruning/summarizing superseded tool output keeps the context focused on what's actually needed for the next decision, preventing bloat and drift. Raising max_tokens affects output length, not input context size, and doesn't reduce bloat. A bigger context window only delays the problem and still wastes tokens, attention, and cost on irrelevant data. Withholding tool output entirely removes the information Claude needs to make correct decisions.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Context Engineering",
+      "id": "CCDV-E10-Q48",
+      "exam_id": 10,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q0507"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 61,
+      "prompt": "An engineering team builds a coding assistant that must search and reason across a very large monorepo to answer a single user question. If the main agent itself runs dozens of file reads and greps to find the answer, its own context fills with raw search results, most of which are irrelevant to the final answer. Which architecture best addresses this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Keep the search-and-explore work inside the main agent itself, having it run every file read and grep, then manually delete older tool-result messages from its own context once space runs low."
+        },
+        {
+          "key": "B",
+          "text": "Dispatch the search-and-explore work to one or more subagents that return only a condensed finding, so the main agent's context stays isolated from the raw intermediate search output."
+        },
+        {
+          "key": "C",
+          "text": "Raise the main agent's temperature so its sampling process can better tolerate and average over a context window cluttered with large volumes of irrelevant raw search results."
+        },
+        {
+          "key": "D",
+          "text": "Require the user to supply the exact file path and line number before the agent starts, so it never needs to run its own searches or manage the resulting output in context."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Delegating exploratory work to subagents isolates the noisy intermediate tool output in the subagent's own context and returns only a distilled result to the orchestrator, a standard context-isolation pattern for multi-step agentic workflows. Manually deleting messages is fragile and doesn't scale, and the main agent still has to run and read every search. Temperature has no effect on context size or clutter. Requiring the user to pre-locate the answer defeats the purpose of building an agent to do that work.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Context Engineering",
+      "id": "CCDV-E10-Q49",
+      "exam_id": 10,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q0508"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 62,
+      "prompt": "A long-running support agent conversation is approaching the model's context window limit, and the team wants the session to keep going without losing important earlier details. Which two techniques are effective ways to manage this? (Select 2)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Periodically compact the conversation by summarizing older turns into a condensed representation that preserves key facts while freeing up tokens."
+        },
+        {
+          "key": "B",
+          "text": "Discard or prune tool outputs that have been superseded by more recent, more relevant results instead of retaining every past output in full."
+        },
+        {
+          "key": "C",
+          "text": "Increase the model's temperature setting, on the theory that a higher-temperature sampling distribution lets it compress more information into the same fixed token budget."
+        },
+        {
+          "key": "D",
+          "text": "Retain every message ever sent in the conversation verbatim without any summarization or pruning, trusting the model to silently identify which older details still matter."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Compaction (summarizing older turns) and pruning superseded tool outputs are the two standard techniques for controlling context growth while retaining what matters, directly addressing context drift and bloat. Temperature controls sampling randomness, not information density or compression, so it does nothing for context size. Keeping everything verbatim is precisely the bloat pattern that causes context window exhaustion and drift, not a mitigation for it.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Context Engineering",
+      "id": "CCDV-E10-Q50",
+      "exam_id": 10,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q0509"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 63,
+      "prompt": "A developer is building an internal tool that answers employee HR questions. On every API call, the app sends one message that mixes together: the persona and tone instructions, the formatting rules, the company's HR policy text, and the employee's actual question. Responses are inconsistent in tone and format from one query to the next. What change would most improve consistency?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the persona, tone, and formatting rules into a stable system prompt that stays constant across calls, and keep only the policy context and the employee's question in the user turn."
+        },
+        {
+          "key": "B",
+          "text": "Keep all instructions combined in a single user message as before, but repeat the persona and formatting instructions three or four times within that same message for extra emphasis."
+        },
+        {
+          "key": "C",
+          "text": "Move the employee's variable question into the system prompt so it is processed ahead of the persona and formatting rules, on the assumption that whatever appears first carries more weight."
+        },
+        {
+          "key": "D",
+          "text": "Strip out the persona, tone, and formatting instructions from every call entirely, and rely on the model's default behavior to infer the desired voice and structure each time."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Placing stable, call-invariant instructions (persona, tone, formatting rules) in the system prompt while keeping variable content (policy text, the user's question) in the user turn is the recommended separation, and it produces more consistent behavior across calls. Repeating instructions multiple times in a user message doesn't fix the underlying placement problem and adds noise. The system prompt is meant for stable instructions, not the variable question, so moving the question there is backwards. Removing instructions entirely removes the tool's ability to control tone or format at all.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Prompt Engineering",
+      "id": "CCDV-E10-Q51",
+      "exam_id": 10,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q0510"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r52",
+      "prompt": "A platform team wants a coding agent with built-in file, shell and search tools, running inside their own continuous integration, driven by a prompt and options rather than an interactive terminal. Which surface is it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The tool runner in the regular SDK, which supplies the same built-in file and shell tools without a terminal."
+        },
+        {
+          "key": "B",
+          "text": "The Claude Code desktop application, driven headlessly by scripting its interface from the pipeline runner."
+        },
+        {
+          "key": "C",
+          "text": "Managed agents, which run the same coding harness inside a provider-hosted sandbox reachable from a pipeline."
+        },
+        {
+          "key": "D",
+          "text": "The Claude Agent SDK, which packages that harness and its built-in tools as a library they host themselves."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The Agent SDK is Claude Code packaged as a library: the coding-agent harness plus built-in file, shell, search and web tools, driven by a prompt and options, hosted wherever you run it. The tool runner is the near-miss — it automates the loop but ships no built-in tools, so the team would write every one. Managed agents move hosting to the provider, which the requirement rules out.",
+      "distractor_explanations": {},
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E10-Q52",
+      "exam_id": 10,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q0520"
+    },
+    {
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": 77,
+      "prompt": "A team is building a coding agent that includes a delete_file tool capable of permanently removing files from a user's repository. They are concerned about the model deleting files unintentionally during an autonomous session. Which approach best mitigates this risk?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a strongly worded warning in the system prompt instructing Claude to think carefully and double-check with the user before ever calling delete_file, relying on the model's instruction-following to prevent accidental destructive calls."
+        },
+        {
+          "key": "B",
+          "text": "Increase the model's decoding temperature, on the theory that a less deterministic sampling process will make Claude weigh the consequences of a destructive call more carefully before invoking delete_file."
+        },
+        {
+          "key": "C",
+          "text": "Gate execution of delete_file behind a human-approval step (e.g., an always-ask permission policy) so a person must explicitly confirm before the harness ever executes the call."
+        },
+        {
+          "key": "D",
+          "text": "Remove delete_file's description entirely so Claude has to infer its purpose and parameters from context alone, on the assumption that reduced documentation will make the model more hesitant to invoke it."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Gating a destructive, hard-to-reverse action behind a human-approval step (e.g., an always-ask permission policy) is a technical control that actually prevents unwanted execution, not just a request the model might not follow. A system-prompt warning is unenforceable and can be ignored. Increasing temperature is irrelevant — sampling doesn't govern whether a destructive tool is called. Removing the tool's description would break correct usage entirely without providing any real safeguard against misuse.",
+      "distractor_explanations": {},
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "Tool Implementation",
+      "id": "CCDV-E10-Q53",
+      "exam_id": 10,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q0530"
+    }
+  ]
+}

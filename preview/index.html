@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCDV-F Exam Simulator — Design Variants Preview</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Inter"', 'sans-serif'],
+            editorial: ['"Newsreader"', 'serif'],
+            tech: ['"IBM Plex Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Variant 1: Obsidian Terminal (Dark OLED) */
+    .variant-terminal {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --border: #1f293d;
+      --accent: #10b981;
+      --accent-subtle: rgba(16, 185, 129, 0.1);
+      --primary: #6366f1;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Variant 2: Claude Studio (Warm Editorial) */
+    .variant-editorial {
+      --bg: #faf7f2;
+      --card-bg: #ffffff;
+      --border: #e6dfd5;
+      --accent: #d97706;
+      --accent-subtle: rgba(217, 119, 6, 0.1);
+      --primary: #c2410c;
+      --text: #1c1917;
+      --text-muted: #78716c;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Variant 3: Pearson VUE Cockpit (High-Density Proctored) */
+    .variant-cockpit {
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --accent: #2563eb;
+      --accent-subtle: rgba(37, 99, 235, 0.1);
+      --primary: #1e3a8a;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+
+  <!-- Top Sticky Variant Switcher Header -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-6 py-3 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 font-mono font-bold text-white text-sm shadow">
+          CC
+        </span>
+        <div>
+          <h1 class="text-sm font-semibold tracking-wide text-white">CCDV-F Simulator — Design Variants</h1>
+          <p class="text-xs text-slate-400">Select your preferred interface style for the full 10-exam platform</p>
+        </div>
+      </div>
+
+      <!-- Segmented Buttons to switch variants -->
+      <div class="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80 shadow-inner">
+        <button id="btn-var1" onclick="switchVariant('terminal')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-indigo-600 text-white shadow">
+          1. Obsidian Terminal (Dark)
+        </button>
+        <button id="btn-var2" onclick="switchVariant('editorial')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-all duration-200">
+          2. Claude Studio (Warm)
+        </button>
+        <button id="btn-var3" onclick="switchVariant('cockpit')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-all duration-200">
+          3. Pearson Cockpit (Proctored)
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <span id="variant-badge" class="px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          Variant 1 Active
+        </span>
+        <button onclick="confirmSelection()" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition">
+          Confirm & Build App &rarr;
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Showcase Container -->
+  <main class="flex-1 p-4 md:p-8 flex justify-center items-start">
+    <div id="preview-wrapper" class="w-full max-w-6xl rounded-2xl shadow-2xl border transition-all duration-300 overflow-hidden variant-terminal border-slate-800">
+      
+      <!-- Variant 1: Obsidian Terminal Prototype -->
+      <div id="view-terminal" class="p-6 md:p-8 space-y-6">
+        <!-- Sub-Header / Status Bar -->
+        <div class="flex flex-wrap items-center justify-between pb-4 border-b border-slate-800/80 gap-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-2 py-0.5 rounded text-xs font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+              EXAM #01
+            </span>
+            <span class="text-xs font-mono text-slate-400">
+              QUESTION 14 / 53
+            </span>
+            <span class="px-2 py-0.5 rounded text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              D1: Applications & Integration (33.1%)
+            </span>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <!-- Timer -->
+            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800 font-mono text-xs">
+              <svg class="w-3.5 h-3.5 text-amber-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="text-slate-200">112:35</span>
+            </div>
+            <!-- Flag Button -->
+            <button class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-xs font-medium transition">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"></path></svg>
+              <span>Flagged for Review</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <!-- Question Pane (3 cols) -->
+          <div class="lg:col-span-3 space-y-6">
+            <div class="space-y-4">
+              <div class="text-xs font-mono text-emerald-400 tracking-wider uppercase">// SCENARIO & ARCHITECTURAL CONSTRAINTS</div>
+              <h2 class="text-lg md:text-xl font-medium text-slate-100 leading-relaxed">
+                An engineering team is deploying a customer support agent on the Anthropic Messages API. The workflow maintains a 25,000-token system prompt containing product documentation, followed by a dynamic multi-turn conversation. Latency on initial turns and API costs have grown substantially. What architectural change best addresses both issues?
+              </h2>
+            </div>
+
+            <!-- Options List -->
+            <div class="space-y-3 pt-2">
+              <label class="flex items-start p-4 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="opt-var1" class="mt-1 text-emerald-500 focus:ring-emerald-500 h-4 w-4 bg-slate-900 border-slate-700">
+                <div class="ml-3 text-sm text-slate-300">
+                  <span class="font-mono text-slate-400 mr-2">A.</span>
+                  Move the product documentation into every user message turn to avoid system prompt evaluation overhead.
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border-2 border-emerald-500/60 bg-emerald-950/20 shadow-lg shadow-emerald-950/20 cursor-pointer transition">
+                <input type="radio" name="opt-var1" checked class="mt-1 text-emerald-500 focus:ring-emerald-500 h-4 w-4 bg-slate-900 border-slate-700">
+                <div class="ml-3 text-sm text-slate-100 font-medium">
+                  <span class="font-mono text-emerald-400 mr-2">B.</span>
+                  Place the static 25,000-token documentation at the beginning of the prompt with a cache breakpoint (<code class="text-xs font-mono px-1.5 py-0.5 rounded bg-slate-800 text-emerald-300">cache_control: {"type": "ephemeral"}</code>), placing dynamic messages afterwards.
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="opt-var1" class="mt-1 text-emerald-500 focus:ring-emerald-500 h-4 w-4 bg-slate-900 border-slate-700">
+                <div class="ml-3 text-sm text-slate-300">
+                  <span class="font-mono text-slate-400 mr-2">C.</span>
+                  Compress the system prompt using aggressive abbreviations and truncate older user conversation turns without caching.
+                </div>
+              </label>
+
+              <label class="flex items-start p-4 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-slate-700 cursor-pointer transition">
+                <input type="radio" name="opt-var1" class="mt-1 text-emerald-500 focus:ring-emerald-500 h-4 w-4 bg-slate-900 border-slate-700">
+                <div class="ml-3 text-sm text-slate-300">
+                  <span class="font-mono text-slate-400 mr-2">D.</span>
+                  Migrate from Messages API to legacy Completions API to benefit from automatic server-side turn compression.
+                </div>
+              </label>
+            </div>
+
+            <!-- Instant Feedback / Explanation Pane (Toggleable) -->
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs space-y-2">
+              <div class="flex items-center space-x-2 text-emerald-400 font-mono font-semibold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>CORRECT ANSWER: B · Applications & Integration</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Prompt caching caches exact prefix tokens. By placing the static 25,000-token product documentation at the beginning with <code class="font-mono text-emerald-300">cache_control: {"type": "ephemeral"}</code>, subsequent requests achieve a 90% cost reduction on cached read tokens and cut time-to-first-token (TTFT) by up to 85%.
+              </p>
+              <div class="pt-1 text-slate-400">
+                <strong class="text-slate-300">Distractor Analysis:</strong> Option A breaks prefix alignment; Option C loses critical information without addressing root cause; Option D refers to deprecated APIs.
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+              <button class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">
+                &larr; PREV (Q13)
+              </button>
+              <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-mono transition">
+                  CLEAR SELECTION
+                </button>
+                <button class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-semibold shadow-lg shadow-emerald-900/30 transition">
+                  NEXT (Q15) &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigator Sidebar (1 col) -->
+          <div class="lg:col-span-1 space-y-4 bg-slate-900/40 p-4 rounded-xl border border-slate-800/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-slate-400 uppercase">Question Grid</span>
+              <span class="text-xs font-mono text-emerald-400">13/53 Done</span>
+            </div>
+
+            <!-- Matrix Grid of 53 items -->
+            <div class="grid grid-cols-5 gap-1.5 custom-scroll max-h-72 overflow-y-auto p-1">
+              <!-- Render sample items -->
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">1</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">2</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">3</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-amber-900/40 text-amber-300 border border-amber-700/50">4</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">5</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">6</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">7</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">8</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">9</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">10</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">11</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">12</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-emerald-900/40 text-emerald-300 border border-emerald-700/50">13</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-indigo-600 text-white font-bold ring-2 ring-indigo-400">14</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">15</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">16</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">17</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">18</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">19</span>
+              <span class="w-8 h-8 rounded text-xs font-mono flex items-center justify-center bg-slate-800 text-slate-400 border border-slate-700">20</span>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 text-xs space-y-1.5 font-mono text-slate-400">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded bg-emerald-500"></span>
+                <span>Answered (12)</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded bg-amber-500"></span>
+                <span>Flagged (1)</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded bg-slate-700"></span>
+                <span>Unanswered (40)</span>
+              </div>
+            </div>
+
+            <button class="w-full mt-4 py-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-mono font-semibold transition">
+              SUBMIT EXAM
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variant 2: Claude Studio (Warm Editorial) Prototype -->
+      <div id="view-editorial" class="hidden p-6 md:p-10 space-y-8">
+        <!-- Sub-Header -->
+        <div class="flex items-center justify-between pb-6 border-b border-stone-200">
+          <div>
+            <div class="text-xs font-serif tracking-widest text-amber-800 uppercase font-semibold">Anthropic Claude Certified Developer</div>
+            <h2 class="text-2xl font-editorial text-stone-900 font-normal">Mock Examination 01 &mdash; Question 14</h2>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="px-3 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 border border-stone-200">
+              112m 35s remaining
+            </span>
+            <button class="px-3 py-1 rounded-full text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100">
+              &star; Flag for Review
+            </button>
+          </div>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-8">
+          <div class="space-y-4">
+            <span class="inline-block px-3 py-0.5 rounded-md text-xs font-medium bg-amber-100 text-amber-900 border border-amber-200">
+              Domain 1 &middot; Applications & Integration
+            </span>
+            <p class="text-xl font-editorial leading-relaxed text-stone-900">
+              An engineering team is deploying a customer support agent on the Anthropic Messages API. The workflow maintains a 25,000-token system prompt containing product documentation, followed by a dynamic multi-turn conversation. Latency on initial turns and API costs have grown substantially. What architectural change best addresses both issues?
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-4 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white hover:border-stone-300 transition cursor-pointer flex items-start space-x-4">
+              <span class="font-serif text-sm font-semibold text-stone-500">A</span>
+              <p class="text-sm text-stone-700 leading-normal">Move the product documentation into every user message turn to avoid system prompt evaluation overhead.</p>
+            </div>
+
+            <div class="p-4 rounded-xl border-2 border-amber-600 bg-amber-50/50 shadow-sm transition cursor-pointer flex items-start space-x-4">
+              <span class="font-serif text-sm font-bold text-amber-700">B</span>
+              <p class="text-sm text-stone-900 font-medium leading-normal">Place the static 25,000-token documentation at the beginning of the prompt with a cache breakpoint (<code class="text-xs px-1 rounded bg-stone-200 text-stone-800">cache_control: {"type": "ephemeral"}</code>), placing dynamic messages afterwards.</p>
+            </div>
+
+            <div class="p-4 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white hover:border-stone-300 transition cursor-pointer flex items-start space-x-4">
+              <span class="font-serif text-sm font-semibold text-stone-500">C</span>
+              <p class="text-sm text-stone-700 leading-normal">Compress the system prompt using aggressive abbreviations and truncate older user conversation turns without caching.</p>
+            </div>
+
+            <div class="p-4 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white hover:border-stone-300 transition cursor-pointer flex items-start space-x-4">
+              <span class="font-serif text-sm font-semibold text-stone-500">D</span>
+              <p class="text-sm text-stone-700 leading-normal">Migrate from Messages API to legacy Completions API to benefit from automatic server-side turn compression.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-6 border-t border-stone-200">
+            <button class="px-5 py-2 rounded-lg border border-stone-300 text-stone-600 text-sm hover:bg-stone-100">
+              &larr; Previous Question
+            </button>
+            <button class="px-6 py-2 rounded-lg bg-stone-900 text-white text-sm font-medium hover:bg-stone-800 shadow">
+              Next Question &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variant 3: Pearson VUE Cockpit (High-Density Proctored) Prototype -->
+      <div id="view-cockpit" class="hidden flex flex-col h-full bg-slate-100 text-slate-800">
+        <!-- Blue Top Exam Bar -->
+        <div class="bg-blue-900 text-white px-6 py-3 flex items-center justify-between shadow">
+          <div class="flex items-center space-x-4">
+            <span class="font-bold tracking-wide text-sm">PEARSON VUE SIMULATOR</span>
+            <span class="text-xs bg-blue-800 px-2.5 py-1 rounded text-blue-200">CCDV-F (Foundations)</span>
+          </div>
+          <div class="flex items-center space-x-6 text-sm">
+            <span>Time Remaining: <strong class="font-mono text-amber-300">01:52:35</strong></span>
+            <button class="bg-blue-800 hover:bg-blue-700 px-3 py-1 rounded text-xs font-semibold">Pause Exam</button>
+          </div>
+        </div>
+
+        <!-- Question Header Bar -->
+        <div class="bg-slate-200 px-6 py-2 border-b border-slate-300 flex items-center justify-between text-xs font-medium text-slate-700">
+          <span>Question 14 of 53 &nbsp;|&nbsp; Single Choice</span>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center space-x-1 cursor-pointer">
+              <input type="checkbox" checked class="rounded text-blue-600">
+              <span>Mark for Review</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="p-6 md:p-8 space-y-6 flex-1 bg-white">
+          <div class="border-l-4 border-blue-600 pl-4 py-1">
+            <p class="text-base text-slate-900 leading-relaxed font-sans">
+              An engineering team is deploying a customer support agent on the Anthropic Messages API. The workflow maintains a 25,000-token system prompt containing product documentation, followed by a dynamic multi-turn conversation. Latency on initial turns and API costs have grown substantially. What architectural change best addresses both issues?
+            </p>
+          </div>
+
+          <div class="space-y-3 pl-4">
+            <div class="p-3 border border-slate-300 rounded hover:bg-slate-50 cursor-pointer text-sm flex items-center space-x-3">
+              <input type="radio" name="opt-v3" class="text-blue-600">
+              <span>A. Move the product documentation into every user message turn to avoid system prompt evaluation overhead.</span>
+            </div>
+            <div class="p-3 border-2 border-blue-600 bg-blue-50/50 rounded cursor-pointer text-sm flex items-center space-x-3 font-medium">
+              <input type="radio" name="opt-v3" checked class="text-blue-600">
+              <span>B. Place the static 25,000-token documentation at the beginning of the prompt with a cache breakpoint (<code class="bg-slate-200 px-1 text-xs">cache_control: {"type": "ephemeral"}</code>), placing dynamic messages afterwards.</span>
+            </div>
+            <div class="p-3 border border-slate-300 rounded hover:bg-slate-50 cursor-pointer text-sm flex items-center space-x-3">
+              <input type="radio" name="opt-v3" class="text-blue-600">
+              <span>C. Compress the system prompt using aggressive abbreviations and truncate older user conversation turns without caching.</span>
+            </div>
+            <div class="p-3 border border-slate-300 rounded hover:bg-slate-50 cursor-pointer text-sm flex items-center space-x-3">
+              <input type="radio" name="opt-v3" class="text-blue-600">
+              <span>D. Migrate from Messages API to legacy Completions API to benefit from automatic server-side turn compression.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cockpit Bottom Bar -->
+        <div class="bg-slate-200 px-6 py-3 border-t border-slate-300 flex items-center justify-between text-xs">
+          <button class="bg-slate-300 hover:bg-slate-400 px-4 py-2 rounded text-slate-800 font-semibold">&larr; Previous</button>
+          <div class="space-x-3">
+            <button class="bg-slate-300 hover:bg-slate-400 px-4 py-2 rounded text-slate-800 font-semibold">Review Screen</button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded font-semibold shadow">Next &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Script -->
+  <script>
+    let currentVariant = 'terminal';
+
+    function switchVariant(variant) {
+      currentVariant = variant;
+      const wrapper = document.getElementById('preview-wrapper');
+      const viewTerminal = document.getElementById('view-terminal');
+      const viewEditorial = document.getElementById('view-editorial');
+      const viewCockpit = document.getElementById('view-cockpit');
+      const badge = document.getElementById('variant-badge');
+
+      const btn1 = document.getElementById('btn-var1');
+      const btn2 = document.getElementById('btn-var2');
+      const btn3 = document.getElementById('btn-var3');
+
+      // Reset buttons
+      [btn1, btn2, btn3].forEach(b => {
+        b.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-all duration-200";
+      });
+
+      // Hide all
+      viewTerminal.classList.add('hidden');
+      viewEditorial.classList.add('hidden');
+      viewCockpit.classList.add('hidden');
+
+      // Reset wrapper classes
+      wrapper.className = "w-full max-w-6xl rounded-2xl shadow-2xl border transition-all duration-300 overflow-hidden";
+
+      if (variant === 'terminal') {
+        wrapper.classList.add('variant-terminal', 'border-slate-800');
+        viewTerminal.classList.remove('hidden');
+        btn1.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-indigo-600 text-white shadow";
+        badge.className = "px-2.5 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+        badge.textContent = "Variant 1: Obsidian Terminal Active";
+      } else if (variant === 'editorial') {
+        wrapper.classList.add('variant-editorial', 'border-stone-300');
+        viewEditorial.classList.remove('hidden');
+        btn2.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-amber-600 text-white shadow";
+        badge.className = "px-2.5 py-1 rounded-full text-xs font-mono bg-amber-500/10 text-amber-700 border border-amber-500/30";
+        badge.textContent = "Variant 2: Claude Studio Active";
+      } else if (variant === 'cockpit') {
+        wrapper.classList.add('variant-cockpit', 'border-slate-300');
+        viewCockpit.classList.remove('hidden');
+        btn3.className = "px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-blue-600 text-white shadow";
+        badge.className = "px-2.5 py-1 rounded-full text-xs font-mono bg-blue-500/10 text-blue-700 border border-blue-500/30";
+        badge.textContent = "Variant 3: Pearson Cockpit Active";
+      }
+    }
+
+    function confirmSelection() {
+      alert("Selected: " + currentVariant.toUpperCase() + "\nThis variant will now be applied to the full standalone testing application!");
+    }
+  </script>
+</body>
+</html>

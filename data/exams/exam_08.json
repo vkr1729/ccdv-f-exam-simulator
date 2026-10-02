@@ -1,0 +1,2023 @@
+{
+  "exam_id": 8,
+  "title": "CCDV-F Mock Exam #8",
+  "description": "Full-length 53-question simulation for Claude Certified Developer - Foundations (120 minutes).",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r8",
+      "prompt": "A team sets both temperature and the nucleus sampling parameter to non-default values. What is the guidance?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Adjust both together, since they control different aspects of the sampling behaviour independently."
+        },
+        {
+          "key": "B",
+          "text": "Adjust neither, since the defaults are appropriate for every workload the model is used for."
+        },
+        {
+          "key": "C",
+          "text": "Adjust one of them, since the two interact and tuning both makes the effect hard to reason about."
+        },
+        {
+          "key": "D",
+          "text": "Adjust the nucleus parameter only, since temperature has no effect once it has been constrained."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Both parameters shape the same sampling distribution, so moving them together produces a combined effect that is difficult to attribute or reproduce. The documented advice is to vary one. Defaults are a reasonable starting point rather than universally correct, and temperature continues to have an effect alongside the other parameter.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Sampling & Non-Determinism",
+      "id": "CCDV-E08-Q01",
+      "exam_id": 8,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q0127"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r9",
+      "prompt": "A single assistant turn contains both a text block and a tool use block. What must the application do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Handle the text and treat the tool use as advisory, executing it only if the text requests it."
+        },
+        {
+          "key": "B",
+          "text": "Handle both, since a turn's content is a list and the text is part of what was said."
+        },
+        {
+          "key": "C",
+          "text": "Handle the tool use and discard the text, which is commentary rather than part of the response."
+        },
+        {
+          "key": "D",
+          "text": "Treat the turn as malformed, since a turn should contain one kind of content block."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Content is a list of typed blocks and a turn can legitimately carry narration alongside a call. Dropping the text loses what the model told the user it was doing, which is often what the interface should display while the tool runs. Both blocks belong to the same turn and must be preserved in the conversation that is sent back.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q02",
+      "exam_id": 8,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q0128"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r10",
+      "prompt": "The same large document is sent with many requests. What does uploading it once and referencing it change?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The token cost of each request, since a referenced document is not counted against the window."
+        },
+        {
+          "key": "B",
+          "text": "The processing time, since a stored document has already been prepared for use by the model."
+        },
+        {
+          "key": "C",
+          "text": "The context limit, since stored documents are held outside the window the request occupies."
+        },
+        {
+          "key": "D",
+          "text": "The payload of each request, since the content no longer has to be transmitted every time."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Uploading once removes the transmission of the bytes on every call, which is a real saving in payload, latency and client-side work. It does not change what the model has to read: the content still occupies the context window and is still counted. Confusing the two is what leads teams to expect a cost reduction that does not arrive.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q03",
+      "exam_id": 8,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q0129"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r11",
+      "prompt": "A batch job is submitted and the results are not collected. What should the design account for?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Results are retained indefinitely, so collection can happen whenever it is convenient."
+        },
+        {
+          "key": "B",
+          "text": "Results expire, so collection has to happen within the window the service provides."
+        },
+        {
+          "key": "C",
+          "text": "Results are delivered by callback, so no collection step is required by the client."
+        },
+        {
+          "key": "D",
+          "text": "Results are discarded if not collected immediately, so polling must begin at once."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Batch results are held for a defined period and then removed, which makes collection a scheduled responsibility rather than something to do eventually. Designs that submit and forget lose completed work that was already paid for. Polling need not be immediate, and there is a retrieval step rather than a push.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batch Processing API",
+      "id": "CCDV-E08-Q04",
+      "exam_id": 8,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q0130"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r12",
+      "prompt": "Batch results are returned and the application matches them to inputs by position. What is wrong?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ordering is guaranteed, though failed entries are omitted, which shifts the positions of those after them."
+        },
+        {
+          "key": "B",
+          "text": "Ordering is not guaranteed, so results must be matched by the identifier supplied with each request."
+        },
+        {
+          "key": "C",
+          "text": "Ordering is guaranteed only within a page, so pagination has to be handled before matching by position."
+        },
+        {
+          "key": "D",
+          "text": "Ordering reflects completion time rather than submission, which is stable once the batch has finished."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Each request carries a custom identifier precisely so results can be joined without depending on order, and results may be returned in any sequence. Positional matching produces a silent misalignment where every record is attributed to the wrong input, which is far worse than an error. The identifier is the only correct join key.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batch Processing API",
+      "id": "CCDV-E08-Q05",
+      "exam_id": 8,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q0131"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r13",
+      "prompt": "An integration issues requests as fast as its work queue produces them and begins hitting limits. What should it implement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A bound on requests in flight, so the client's own concurrency matches what is available."
+        },
+        {
+          "key": "B",
+          "text": "A queue with a single worker, so requests are issued strictly one at a time in order."
+        },
+        {
+          "key": "C",
+          "text": "A delay between requests, calculated so that the average rate stays below the published limit."
+        },
+        {
+          "key": "D",
+          "text": "A retry with backoff on each rejected request, so the work eventually completes as capacity allows."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Limiting concurrency at the client shapes traffic to what the account can sustain and keeps latency predictable. Retrying rejections treats the symptom while the client keeps generating the pressure, fixed delays are either wasteful or insufficient as conditions change, and serializing gives up throughput the account is entitled to.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q06",
+      "exam_id": 8,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q0132"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r14",
+      "prompt": "An integration does not pin the API version it was developed against. What is the risk?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Requests will be rejected once a newer version becomes the default for the account."
+        },
+        {
+          "key": "B",
+          "text": "The application will receive responses in a format it is unable to parse at all."
+        },
+        {
+          "key": "C",
+          "text": "The application will be unable to use capabilities introduced in later versions."
+        },
+        {
+          "key": "D",
+          "text": "Behaviour can change under the application without any change on its own side."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Pinning makes the contract explicit so upgrades happen when the team chooses and can test them. Without it, a default that moves changes response shapes or behaviour in a working system with no local change to point at, which is among the harder classes of production surprise to diagnose.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q07",
+      "exam_id": 8,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q0133"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r15",
+      "prompt": "A service creates a new SDK client for every request it handles. What does that cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Connection setup on each request, which adds latency that a reused client avoids."
+        },
+        {
+          "key": "B",
+          "text": "Memory, since each client retains the responses it has previously received."
+        },
+        {
+          "key": "C",
+          "text": "Quota, since each client is counted separately against the account's limits."
+        },
+        {
+          "key": "D",
+          "text": "Correctness, since a fresh client cannot maintain the conversation across requests."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Clients hold connection pools and configuration, and constructing one per request pays TCP and TLS setup repeatedly. Reuse is the standard pattern. Conversation state lives in the messages the application sends rather than in the client, and clients are not a unit of quota accounting.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q08",
+      "exam_id": 8,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q0134"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r16",
+      "prompt": "Full request and response payloads are being written to application logs for debugging. What is the concern?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Log volume will then grow to a size that becomes expensive to store and search over time."
+        },
+        {
+          "key": "B",
+          "text": "Logs will contain the model's reasoning, which should not be exposed to operators."
+        },
+        {
+          "key": "C",
+          "text": "Prompts and outputs contain the data the system processes, which the log now retains."
+        },
+        {
+          "key": "D",
+          "text": "Logs will diverge from what was actually sent once requests are retried or modified."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Logging the payload logs whatever the application handles, including regulated or confidential material, into a system with its own retention, access and export characteristics. That has to be a deliberate decision with redaction and controls. Volume is a real operational cost of a much lower order.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q09",
+      "exam_id": 8,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q0135"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r17",
+      "prompt": "An application must maintain a conversation across several turns. What does the statelessness of the interface require?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The application periodically resynchronizes its history with the copy the service maintains."
+        },
+        {
+          "key": "B",
+          "text": "The application sends only the new turn, and the service appends it to what it already holds."
+        },
+        {
+          "key": "C",
+          "text": "The application holds the history and sends the whole conversation with each request."
+        },
+        {
+          "key": "D",
+          "text": "The application supplies a conversation identifier that the service resolves to prior turns."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Nothing is retained between calls, so the conversation exists only in the array the client constructs each time. Every prior user turn, assistant turn and tool result is resent. This is the property that makes context growth an application concern and makes conversation management the client's responsibility entirely.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q10",
+      "exam_id": 8,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q0136"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r1",
+      "prompt": "A team supplies high-resolution photographs to the model and costs are higher than expected. What explains it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Images are re-encoded before processing, and the encoded form is larger than the original file."
+        },
+        {
+          "key": "B",
+          "text": "Images are billed at a separate per-image rate, which is higher than the equivalent volume of text."
+        },
+        {
+          "key": "C",
+          "text": "Images are converted to text descriptions internally, and the description is what is billed for."
+        },
+        {
+          "key": "D",
+          "text": "Images consume tokens in proportion to their dimensions, so resolution drives the input cost."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Visual input is tokenized according to how large the image is, so downscaling to the resolution the task actually requires is a direct and often substantial saving. A photograph carrying detail nobody reads is paid for on every request. There is no separate per-image rate and no intermediate text representation being billed.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q11",
+      "exam_id": 8,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q0137"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r2",
+      "prompt": "A long PDF must be analyzed and only a few pages are relevant. What is the efficient approach?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Send a summary of the document, produced in a first pass over the complete file."
+        },
+        {
+          "key": "B",
+          "text": "Send the whole document and instruct the model to consider only the relevant pages."
+        },
+        {
+          "key": "C",
+          "text": "Send the whole document in several requests, each covering a portion of the pages."
+        },
+        {
+          "key": "D",
+          "text": "Extract the relevant pages before sending, so the request carries only what is needed."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Everything supplied occupies the context and is paid for whether or not it is used, so selection belongs before the request rather than inside the instruction. Splitting the whole document across requests pays for all of it anyway, and a summarization pass adds a call and loses the detail the analysis presumably needs.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q12",
+      "exam_id": 8,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q0138"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r3",
+      "prompt": "An application must show which part of a supplied document supports each claim in the response. What supports that directly?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A second request asking where in the document each of the claims was drawn from."
+        },
+        {
+          "key": "B",
+          "text": "A schema requiring a page number field, which the model populates for each claim."
+        },
+        {
+          "key": "C",
+          "text": "The citation capability, which returns references into the supplied documents."
+        },
+        {
+          "key": "D",
+          "text": "An instruction asking for quotations, which the application then locates in the source."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Grounded citations are produced as structured references rather than as generated prose about the source, which is what makes them checkable rather than another claim to verify. Asking for quotations or page numbers produces text that may be plausible and wrong, and a second pass compounds the problem it is meant to solve.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q13",
+      "exam_id": 8,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q0139"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r4",
+      "prompt": "A long-running request must be abandoned because the user navigated away. What should the application do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Reduce the output limit on a retry, so the request completes more quickly."
+        },
+        {
+          "key": "B",
+          "text": "Let it complete and cache the result, in case the user returns to the request."
+        },
+        {
+          "key": "C",
+          "text": "Let it complete and discard the result, since cancellation is not supported."
+        },
+        {
+          "key": "D",
+          "text": "Cancel it, so that generation stops and the work is not billed to completion."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Abandoned generation continues to consume output tokens, which are the expensive side of the bill, so cancelling is both correct and economically material at scale. Letting it run and discarding pays in full for something nobody reads, and caching a result for a user who has left is speculation.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q14",
+      "exam_id": 8,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q0140"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r5",
+      "prompt": "A request failed in production and the team is seeking support. What identifies the specific call?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The error message returned, which encodes the details of what occurred."
+        },
+        {
+          "key": "B",
+          "text": "The request identifier returned with the response, which should be logged."
+        },
+        {
+          "key": "C",
+          "text": "The content of the request, which distinguishes it from other calls made."
+        },
+        {
+          "key": "D",
+          "text": "The timestamp of the call, together with the account it was made under."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Responses carry an identifier precisely so a single call can be located, and logging it alongside the application's own context is what makes an investigation possible weeks later. Timestamps and payloads narrow a search without identifying a call, and an error message describes a class rather than an instance.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q15",
+      "exam_id": 8,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q0141"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r6",
+      "prompt": "An HTTP client is configured with a single timeout value. What does that fail to distinguish?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A synchronous request from a streamed one, which behaves differently."
+        },
+        {
+          "key": "B",
+          "text": "Establishing the connection from waiting for a response that is still being produced."
+        },
+        {
+          "key": "C",
+          "text": "The first attempt from any subsequent retries the client performs."
+        },
+        {
+          "key": "D",
+          "text": "Reading the response headers from reading the body that follows them."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Connection establishment should fail fast because a slow connect indicates a network problem, whereas a long generation is normal and needs a generous allowance. Collapsing them means either aborting healthy long responses or waiting a long time to discover an unreachable host. Streaming makes the distinction sharper still.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q16",
+      "exam_id": 8,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q0142"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r7",
+      "prompt": "A rate limit response includes a header stating when to retry. What should the client do with it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use it only when its value is shorter than the client's own schedule."
+        },
+        {
+          "key": "B",
+          "text": "Treat it as a minimum, and apply exponential backoff on top of it."
+        },
+        {
+          "key": "C",
+          "text": "Ignore it, since a jittered backoff distributes retries more evenly."
+        },
+        {
+          "key": "D",
+          "text": "Honour it, rather than applying its own backoff schedule instead."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The server is stating when capacity will be available, which is better information than any client-side estimate. Honouring it recovers as early as is actually possible and avoids compounding the pressure. Jitter remains useful for spreading a fleet's retries and belongs around the stated time rather than in place of it.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q17",
+      "exam_id": 8,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q0143"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r8",
+      "prompt": "Requests are rejected with a status indicating the caller is not permitted to perform the operation, as distinct from not being identified. What does that mean?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The operation is unavailable and the request should be routed elsewhere."
+        },
+        {
+          "key": "B",
+          "text": "The credential is recognized and lacks the access the operation requires."
+        },
+        {
+          "key": "C",
+          "text": "The credential is missing or invalid and must be corrected before retrying."
+        },
+        {
+          "key": "D",
+          "text": "The account has exceeded a limit and the request should be retried later."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Authentication establishes who is calling and authorization establishes what they may do, and the two produce different statuses for a reason: one is fixed by supplying a valid credential, the other by granting access to the right resource. Conflating them sends teams to rotate a key that was never the problem.",
+      "distractor_explanations": {},
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q18",
+      "exam_id": 8,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q0144"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r18",
+      "prompt": "A prompt prefix is cached and read on most subsequent requests. What is the economic shape of that?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Writing costs less and reading costs more, so caching favours prefixes that are read rarely."
+        },
+        {
+          "key": "B",
+          "text": "Writing and reading both cost less than a normal input token, and so caching is always favourable."
+        },
+        {
+          "key": "C",
+          "text": "Writing costs the same as a normal input token and reading is free, so there is no break-even."
+        },
+        {
+          "key": "D",
+          "text": "Writing costs more than a normal input token and reading costs much less, so reuse decides it."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A cache write carries a premium and a read is heavily discounted, which means the arrangement pays once the prefix is read enough times to recover the write. Where a prefix is written and read once or not at all, caching costs more than not caching, which is why the reuse pattern is the thing to establish first.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompt Caching & Cost",
+      "id": "CCDV-E08-Q19",
+      "exam_id": 8,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q0244"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r19",
+      "prompt": "A team caches a prefix that is shorter than the documented minimum. What happens?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The request is rejected, since the configuration does not meet the stated requirement."
+        },
+        {
+          "key": "B",
+          "text": "The prefix is padded to the minimum, and so that a valid cache entry can be created from it."
+        },
+        {
+          "key": "C",
+          "text": "No cache entry is created, and the requests behave as though caching were not configured."
+        },
+        {
+          "key": "D",
+          "text": "A cache entry is created and is evicted sooner than a longer prefix would be."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Caching applies only above a minimum length, and below it the marker has no effect: no write premium is paid and no discount is received. The failure is silent, which is why teams measuring a cache they believe is active sometimes find no difference in cost. Nothing is padded and no error is raised.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompt Caching & Cost",
+      "id": "CCDV-E08-Q20",
+      "exam_id": 8,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q0245"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r20",
+      "prompt": "Where should a cache breakpoint be placed in a prompt with a stable system section, stable tools and a varying user turn?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "After the last stable element, so everything invariant sits within the cached prefix."
+        },
+        {
+          "key": "B",
+          "text": "After the user turn, so that the entire request is available for reuse on later calls."
+        },
+        {
+          "key": "C",
+          "text": "At the start of the request, so the cache covers as much of the prompt as it can."
+        },
+        {
+          "key": "D",
+          "text": "Before the tool definitions, since these change more often than the system section does."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A cache covers a prefix, so the breakpoint belongs at the boundary between what never varies and what does. Placing it earlier leaves stable content uncached, and placing it after varying content means the prefix differs on every request and nothing is ever reused. Tool definitions are part of the stable prefix when they do not change.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompt Caching & Cost",
+      "id": "CCDV-E08-Q21",
+      "exam_id": 8,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q0246"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r21",
+      "prompt": "A team estimates cost from input volume alone. What will that systematically understate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Retries, which duplicate the input cost of any request that has to be reissued."
+        },
+        {
+          "key": "B",
+          "text": "Tool results, which are supplied as input on the iteration that follows each call."
+        },
+        {
+          "key": "C",
+          "text": "Output, which is billed at a materially higher rate per token than input."
+        },
+        {
+          "key": "D",
+          "text": "Cache writes, which are billed in addition to the input they correspond to."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Output tokens carry a substantially higher rate, so a workload that generates long responses is dominated by a term the estimate omits entirely. Retries and tool results are input-side effects the estimate would capture if counted, and cache writes are a smaller adjustment on top of the input volume.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q22",
+      "exam_id": 8,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q0247"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r22",
+      "prompt": "A workload is high volume and tolerant of delay. Which lever is available that a synchronous workload cannot use?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A smaller model tier, which reduces the per-token cost across the workload."
+        },
+        {
+          "key": "B",
+          "text": "Batch submission, which is offered at a materially reduced rate."
+        },
+        {
+          "key": "C",
+          "text": "Prompt caching, which reduces the cost of the repeated portion of each request."
+        },
+        {
+          "key": "D",
+          "text": "Shorter prompts, which reduce the input volume that each request carries."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The discount for asynchronous processing is the lever that latency tolerance specifically unlocks, and it applies on top of the others. Caching, tier selection and prompt trimming are all available to synchronous workloads too, which is why they do not answer what this workload's tolerance buys.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q23",
+      "exam_id": 8,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q0248"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r23",
+      "prompt": "An interactive application measures average total response time and users still describe it as slow. What should be measured instead?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Time to last token, since that is when the user has the complete response."
+        },
+        {
+          "key": "B",
+          "text": "Time spent queued, since that is the portion the application can influence."
+        },
+        {
+          "key": "C",
+          "text": "Time to first token, since that is when the user sees the response begin."
+        },
+        {
+          "key": "D",
+          "text": "Tokens per second, since that determines how quickly the response unfolds."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "For a streamed interface the perceived wait ends when text starts appearing, and a response with a long lead-in feels slow regardless of its total duration. Optimizing for first token is a different exercise from optimizing throughput. Total time and throughput matter for the complete experience and neither is what the complaint describes.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q24",
+      "exam_id": 8,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q0249"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r24",
+      "prompt": "Latency is reported as a mean and users intermittently experience long waits. What does that indicate about the measurement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The mean is the wrong statistic because the distribution has more than one mode."
+        },
+        {
+          "key": "B",
+          "text": "The mean includes failed requests, which distorts the figure the whole team is looking at."
+        },
+        {
+          "key": "C",
+          "text": "The mean conceals the tail, and the upper percentiles are what users are describing."
+        },
+        {
+          "key": "D",
+          "text": "The mean is being computed over too short a window to reflect the actual behaviour."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Intermittent long waits live in the tail, and an average dominated by the fast majority moves very little when a small proportion is very slow. Reporting the upper percentiles makes the experience visible. Windowing, failures and modality all affect the number without being what hides an intermittent tail.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q25",
+      "exam_id": 8,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q0250"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r25",
+      "prompt": "A team reduces cost per call by moving to a cheaper tier and total spend does not fall. What is the likely explanation?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "More calls are needed per completed task, so the saving per call is consumed by volume."
+        },
+        {
+          "key": "B",
+          "text": "The cheaper tier produces longer outputs, which are billed at the higher output rate."
+        },
+        {
+          "key": "C",
+          "text": "The cheaper tier simply does not support caching, so the discount previously obtained is lost."
+        },
+        {
+          "key": "D",
+          "text": "The measurement period includes work carried out before the change was applied."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The unit that matters is the completed outcome, not the individual call: a tier that needs retries, longer prompts or a verification pass can cost more overall while looking cheaper per request. Measuring cost per successful outcome is what makes tier comparisons meaningful. The other explanations are possible and narrower.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model Selection & Tradeoffs",
+      "id": "CCDV-E08-Q26",
+      "exam_id": 8,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q0251"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r26",
+      "prompt": "A model version an application depends on is scheduled for retirement. What does responsible planning require?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Waiting until the deadline approaches, so the successor has had time to stabilize."
+        },
+        {
+          "key": "B",
+          "text": "Pinning the current version, so the application is unaffected by the retirement."
+        },
+        {
+          "key": "C",
+          "text": "Migrating immediately, since the current version will stop working at the deadline."
+        },
+        {
+          "key": "D",
+          "text": "Evaluating the successor against the application's own cases before the deadline."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Behaviour differs between versions in ways only the application's own cases reveal, so the work is to run them and find what changed while there is time to adjust. Pinning does not survive retirement. Migrating without evaluation and deferring until the deadline both trade a manageable task for an urgent one.",
+      "distractor_explanations": {},
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q27",
+      "exam_id": 8,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q0252"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r27",
+      "prompt": "An input guardrail and an output guardrail are being placed in an agentic workflow. What does each catch that the other cannot?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The input check catches oversized requests; the output check catches responses that exceed their limits."
+        },
+        {
+          "key": "B",
+          "text": "The input check catches material that should not be processed; the output check catches results that should not be released."
+        },
+        {
+          "key": "C",
+          "text": "The input check catches malformed requests; the output check catches responses that fail to parse correctly."
+        },
+        {
+          "key": "D",
+          "text": "The input check catches policy violations; the output check catches errors introduced by the tools that ran."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The two sit at different boundaries and neither substitutes for the other: something that should never have entered the system, and something that should not leave it. This is why both are needed even when they appear to overlap, since an injected instruction may pass the input check and only its effect is visible on the way out.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q28",
+      "exam_id": 8,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q0327"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r28",
+      "prompt": "Several workers run in parallel and their results must be combined. Where should the combination happen?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "In the orchestrator's next model call, which can reconcile the results as it reasons."
+        },
+        {
+          "key": "B",
+          "text": "In a dedicated aggregation step, so the combination logic is explicit and testable."
+        },
+        {
+          "key": "C",
+          "text": "In whichever worker finishes last, since it has access to the results that preceded it."
+        },
+        {
+          "key": "D",
+          "text": "In each worker, so that partial combinations accumulate as the results arrive."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Fan-in deserves its own step because combining is real logic: deduplication, conflict resolution, and deciding what a missing result means. Hiding it in a worker makes it dependent on completion order, and folding it into a model call makes an important behaviour non-deterministic and hard to test.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q29",
+      "exam_id": 8,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q0328"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r29",
+      "prompt": "A worker in a parallel step fails permanently. What should it return to the orchestrator?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing, so that the orchestrator's aggregation treats it as an absent result."
+        },
+        {
+          "key": "B",
+          "text": "The partial result it produced, so that whatever work completed is not discarded."
+        },
+        {
+          "key": "C",
+          "text": "A generic failure status, so that the orchestrator's handling stays simple and uniform."
+        },
+        {
+          "key": "D",
+          "text": "Structured detail about the failure, so the orchestrator can decide how to proceed."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "An orchestrator can only make an intelligent recovery decision if it knows what kind of failure occurred: whether the source was unavailable, the input was rejected, or the work is simply not possible. A generic status collapses those into one, and silence is indistinguishable from a worker that never ran.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Agent Loops & Multi-Agent",
+      "id": "CCDV-E08-Q30",
+      "exam_id": 8,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q0329"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r30",
+      "prompt": "A workflow step calls a dependency with no timeout of its own. What is the consequence?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The step retries automatically once the default client timeout has elapsed."
+        },
+        {
+          "key": "B",
+          "text": "The step fails when the underlying connection is eventually closed by the peer."
+        },
+        {
+          "key": "C",
+          "text": "The step inherits the workflow's overall timeout, which bounds it adequately."
+        },
+        {
+          "key": "D",
+          "text": "The step can hang indefinitely, holding the workflow's resources with it."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "An unbounded call is where workflows stall: the resource is held, the concurrency slot is consumed, and nothing surfaces as an error. Per-step timeouts sized against the deadline are what keep a workflow's latency predictable. Relying on a peer to close the connection makes the bound depend on something outside the design.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q31",
+      "exam_id": 8,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q0330"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r31",
+      "prompt": "A workflow step with an external effect may be re-executed after a failure elsewhere. What must be true of it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It must record its execution, so that the workflow can avoid running it a second time."
+        },
+        {
+          "key": "B",
+          "text": "It must be the final step, so that no later failure can cause it to be re-executed."
+        },
+        {
+          "key": "C",
+          "text": "It must be reversible, so that its effect can be undone before it is run again."
+        },
+        {
+          "key": "D",
+          "text": "It must be safe to run more than once, producing the same result as running once."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Idempotence is what makes retry safe, and it is a property to design into the step rather than a policy to enforce around it. Recording execution helps and races with the failure itself. Ordering constraints and compensation are useful mechanisms that address a different part of the problem.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q32",
+      "exam_id": 8,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q0331"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r32",
+      "prompt": "An agent run produces a wrong result and the team cannot see why. What instrumentation would have made it diagnosable?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Aggregate metrics showing how the run compared with the distribution of previous runs."
+        },
+        {
+          "key": "B",
+          "text": "Logs of every model request and response the run produced, in chronological order."
+        },
+        {
+          "key": "C",
+          "text": "A trace linking each step's inputs, outputs and duration to the run they belong to."
+        },
+        {
+          "key": "D",
+          "text": "A record of the configuration and prompt versions that were in force during the run."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Diagnosis needs the causal chain for one run, which is what a correlated trace provides: which step ran, on what, producing what, in what order. Undifferentiated logs contain the same facts without the structure to follow them across concurrent runs. Metrics and configuration are context around the trace rather than replacements for it.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q33",
+      "exam_id": 8,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q0332"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r33",
+      "prompt": "A multi-step workflow's cost is rising and the team cannot tell where. What is missing?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A breakdown of cost by model tier across all of the workflow's model invocations."
+        },
+        {
+          "key": "B",
+          "text": "A record of how many runs were executed over the period the increase occurred in."
+        },
+        {
+          "key": "C",
+          "text": "A comparison of the current cost against the cost whenever the workflow first went live."
+        },
+        {
+          "key": "D",
+          "text": "Attribution of tokens and calls to individual steps rather than to the run as a whole."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Optimization requires knowing which step is expensive, and a per-run total cannot distinguish a verification pass that has grown from a retrieval step returning more. Per-step attribution turns a budget problem into a specific target. Run counts, historical baselines and tier breakdowns all describe the total without locating it.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q34",
+      "exam_id": 8,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q0333"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r34",
+      "prompt": "A process has a fixed set of states and legal transitions, and the path taken depends on data rather than judgment. What fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A state machine in code, since the transitions are known and should be deterministic."
+        },
+        {
+          "key": "B",
+          "text": "An agent, since the path varies between inputs and has to be selected at run time."
+        },
+        {
+          "key": "C",
+          "text": "A workflow with a model call at each transition, since the decisions are data-dependent."
+        },
+        {
+          "key": "D",
+          "text": "An orchestrator with workers, since each state's work can be delegated independently."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Model-driven control flow earns its cost when the next step cannot be determined in advance. Here it can: the transitions are enumerable and the choice follows from data, which makes code both cheaper and reproducible. Reaching for an agent because the path varies confuses variation with genuine uncertainty.",
+      "distractor_explanations": {},
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q35",
+      "exam_id": 8,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q0334"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r36",
+      "prompt": "Examples in a prompt are ordered with all of one class first and the other class after. What is the risk?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The ordering itself becomes a signal, biasing the output toward the class seen last."
+        },
+        {
+          "key": "B",
+          "text": "The model applies the classes in the sequence shown rather than by the input's features."
+        },
+        {
+          "key": "C",
+          "text": "The second class is treated as an exception to the first rather than as an equal case."
+        },
+        {
+          "key": "D",
+          "text": "The examples occupy more context than an interleaved arrangement would occupy."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Grouped examples introduce a positional pattern that has nothing to do with the task, and recency effects make the final block disproportionately influential. Interleaving removes the artefact. The other concerns are either not length-related or are speculative readings of how the grouping is interpreted.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q36",
+      "exam_id": 8,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q0393"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r37",
+      "prompt": "Documents are split into chunks for retrieval, with no overlap between adjacent chunks. What failure does that invite?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Chunks vary in length, so retrieval scores are not comparable between them."
+        },
+        {
+          "key": "B",
+          "text": "Adjacent chunks are retrieved together, which wastes the context they occupy."
+        },
+        {
+          "key": "C",
+          "text": "Boundaries fall inside sentences, which makes the chunks harder to read."
+        },
+        {
+          "key": "D",
+          "text": "Content spanning a boundary is split, so neither chunk contains the complete statement."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A definition, a clause or a table that straddles a boundary is truncated in both directions, and retrieval returns a fragment that appears complete. A modest overlap keeps such content intact in at least one chunk. Length variation and readability are secondary and are addressed by splitting on structure.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Evaluation & Testing",
+      "id": "CCDV-E08-Q37",
+      "exam_id": 8,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q0394"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r38",
+      "prompt": "Retrieval returns twenty candidate chunks and the answer quality is poor although the right chunk is among them. What addresses this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A smaller retrieval set, so the prompt contains less material for the model to work through."
+        },
+        {
+          "key": "B",
+          "text": "A reranking step that orders the candidates by relevance before they enter the prompt."
+        },
+        {
+          "key": "C",
+          "text": "A different embedding model, since the retrieval scores are evidently not discriminating well."
+        },
+        {
+          "key": "D",
+          "text": "A larger retrieval set, so the probability of including the right chunk increases further."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Retrieval optimizes for recall and reranking optimizes for precision, and the described symptom is precisely a precision problem: the material is present and buried. Reranking is the standard second stage. Simply shrinking the set risks dropping the right chunk, and enlarging it makes the burial worse.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Streaming & Messages API",
+      "id": "CCDV-E08-Q38",
+      "exam_id": 8,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q0395"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r39",
+      "prompt": "Tool results are accumulating in an agent's context and crowding out earlier material. Which mechanism addresses bulk of that kind?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Summarizing the whole conversation once the context approaches its limit."
+        },
+        {
+          "key": "B",
+          "text": "Moving the tool results into the system prompt, where they are stated once."
+        },
+        {
+          "key": "C",
+          "text": "Summarizing or truncating each result before it is appended, at the point it is returned."
+        },
+        {
+          "key": "D",
+          "text": "Removing the earliest turns, so that space is recovered from the oldest content."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The bulk originates at the point results are appended, so trimming there is what prevents the growth rather than reacting to it. Whole-conversation compaction and front-trimming both discard content indiscriminately and invalidate the cached prefix. Tool results are turn content and do not belong in the system prompt.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Streaming & Messages API",
+      "id": "CCDV-E08-Q39",
+      "exam_id": 8,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q0396"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r40",
+      "prompt": "A structured result is needed and the team is choosing between describing the schema in the prompt and declaring it as a tool. What is the strongest reason to prefer the tool?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Arguments are validated against the schema, so a structurally invalid result is not produced."
+        },
+        {
+          "key": "B",
+          "text": "The schema can be changed without altering the wording of the prompt itself."
+        },
+        {
+          "key": "C",
+          "text": "The schema is stated once rather than simply repeated in each and every request that is issued."
+        },
+        {
+          "key": "D",
+          "text": "The prompt is shorter, which reduces the input cost of each request made."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A described schema is an instruction the model usually follows; a declared schema is a constraint the arguments are checked against, which converts a class of parse failures into something that cannot occur. Brevity, reuse and maintainability are genuine secondary benefits that would not on their own decide it.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q40",
+      "exam_id": 8,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q0397"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-9.csv",
+      "source_id": "srini_e9_r35",
+      "prompt": "Source documents arrive in several languages and the output must be in one. Where should that be specified?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "In the instruction, stating the output language independently of the input's."
+        },
+        {
+          "key": "B",
+          "text": "In the system prompt, by setting the language for the whole deployment."
+        },
+        {
+          "key": "C",
+          "text": "In a preprocessing step that translates the input before it is sent."
+        },
+        {
+          "key": "D",
+          "text": "In the schema, by constraining the fields to the required language."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Stating the output language explicitly decouples it from whatever the source happens to be, which is what prevents the output drifting into the input's language. It belongs with the task instruction since it is a property of this output. Pre-translation adds a lossy step, and schemas constrain structure rather than language.",
+      "distractor_explanations": {},
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q41",
+      "exam_id": 8,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q0398"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r41",
+      "prompt": "Two tools are selected incorrectly about a third of the time, and each has a one-line description. What is the first change?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add an instruction to the system prompt describing when each should be used."
+        },
+        {
+          "key": "B",
+          "text": "Expand both descriptions to say when each applies and when it does not."
+        },
+        {
+          "key": "C",
+          "text": "Merge them into one tool with a parameter selecting the behaviour required."
+        },
+        {
+          "key": "D",
+          "text": "Remove the less used of the two, so that the ambiguity cannot arise."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Selection is made from the descriptions, so writing them to distinguish the tools, including the negative case, is the direct fix and usually a sufficient one. Merging and removal are structural changes to make once description work has failed, and system prompt guidance duplicates in a distant place what belongs on the tool itself.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q42",
+      "exam_id": 8,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q0453"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r42",
+      "prompt": "A tool fails and the application returns the failure text as an ordinary result. What is lost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The detail of the failure, which the text may not describe in sufficient depth."
+        },
+        {
+          "key": "B",
+          "text": "The ability to retry, since the failure has in fact been recorded as a successful result."
+        },
+        {
+          "key": "C",
+          "text": "The ordering of the results, since a failure is returned on a different path."
+        },
+        {
+          "key": "D",
+          "text": "The signal that this was an error, which the result's own error indicator conveys."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Tool results carry an explicit error indicator, and setting it tells the model that the call did not succeed rather than leaving it to infer that from prose. Without it a failure message can be read as data. Retry decisions and detail are matters for the application and the content of the result respectively.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q43",
+      "exam_id": 8,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q0454"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r43",
+      "prompt": "A model emits three tool use blocks in a single turn. What must the application do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Execute the first and return its result, so the model can reconsider the rest."
+        },
+        {
+          "key": "B",
+          "text": "Execute all three and return all three results in the next user turn."
+        },
+        {
+          "key": "C",
+          "text": "Reject the turn, since a turn should contain a single tool use block."
+        },
+        {
+          "key": "D",
+          "text": "Execute all three and return them across three separate turns in order."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Emitting several calls in one turn is how parallel tool use is expressed, and the protocol requires every call to be answered in the following user turn. Executing one and discarding the others leaves unanswered calls, which is a malformed conversation. Splitting the results across turns breaks the same correspondence.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q44",
+      "exam_id": 8,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q0455"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r44",
+      "prompt": "Two configured MCP servers each expose a tool called search. What keeps them distinguishable?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tool names are qualified by the server they came from, so the two do not collide."
+        },
+        {
+          "key": "B",
+          "text": "The server configured first takes precedence, and the second server's tool is not offered at all."
+        },
+        {
+          "key": "C",
+          "text": "The two are presented as one tool, and the client routes each call to whichever server can serve it."
+        },
+        {
+          "key": "D",
+          "text": "The client renames the second one automatically, appending a suffix so the names remain unique."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Qualification by origin is what allows independently developed servers to be combined without coordinating their names, and it is why tool identifiers carry their server. Silently dropping one hides a capability, automatic renaming would make the identifier unstable across configurations, and merging two different implementations behind one name gives unpredictable routing.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Model Context Protocol (MCP)",
+      "id": "CCDV-E08-Q45",
+      "exam_id": 8,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q0456"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r45",
+      "prompt": "A tool returns an output large enough to crowd the context on every call. What is the appropriate handling?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Return a summary or a reference, with a way to retrieve the detail when it is needed."
+        },
+        {
+          "key": "B",
+          "text": "Return the output and compact the conversation once the context becomes constrained."
+        },
+        {
+          "key": "C",
+          "text": "Return the full output, since truncating it may remove the part that matters."
+        },
+        {
+          "key": "D",
+          "text": "Return the output split across several tool results, so no single one is oversized."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The fix belongs at the tool boundary: return what the model needs to act on, with an affordance to fetch more. Splitting the same volume across results changes nothing about the total, and compacting afterwards reacts to a problem that the tool design is creating on every call.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q46",
+      "exam_id": 8,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q0457"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r46",
+      "prompt": "An MCP server must be reachable from several developers' machines rather than launched locally by each of them. Which transport applies?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "An HTTP transport, since a stdio server runs as a child process of its client."
+        },
+        {
+          "key": "B",
+          "text": "Either transport, since the choice affects only performance rather than how a server is reached."
+        },
+        {
+          "key": "C",
+          "text": "A stdio transport, configured with a shared address that each of the clients connects to."
+        },
+        {
+          "key": "D",
+          "text": "A stdio transport behind a proxy, which forwards each client's streams to the hosted process."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Stdio speaks to a process the client itself launches on the same machine, which suits local tooling and cannot serve a remotely hosted deployment. A network transport is what allows many clients to reach one server, and it brings authentication into scope as a consequence. Stdio has no notion of an address to connect to.",
+      "distractor_explanations": {},
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Model Context Protocol (MCP)",
+      "id": "CCDV-E08-Q47",
+      "exam_id": 8,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q0458"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r47",
+      "prompt": "A tool fetches a URL supplied through the model's arguments. What is the specific risk?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It can be directed at internal addresses the service can reach and the caller cannot."
+        },
+        {
+          "key": "B",
+          "text": "It can retrieve content whose format the application is unable to parse correctly."
+        },
+        {
+          "key": "C",
+          "text": "It can retrieve content that is out of date relative to what the caller expects."
+        },
+        {
+          "key": "D",
+          "text": "It can retrieve content that is too large for the context the result is placed into."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A fetcher runs with the service's network position, so an attacker-influenced URL becomes a request from inside the perimeter to metadata endpoints, internal APIs and private ranges. Allow-listing destinations and resolving before connecting are the controls. Size and format are robustness concerns rather than security ones.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q48",
+      "exam_id": 8,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q0499"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r48",
+      "prompt": "Model output is rendered into a web page. What must the application do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Render it as plain text only, since generated content cannot be safely formatted."
+        },
+        {
+          "key": "B",
+          "text": "Validate it against the schema, so that only expected structures are displayed."
+        },
+        {
+          "key": "C",
+          "text": "Encode it for the context it is rendered into, as with any untrusted content."
+        },
+        {
+          "key": "D",
+          "text": "Filter it for instructions, since injected text may have influenced what was produced."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Generated text is untrusted input to the renderer, and content influenced by a retrieved document or a user's message can carry markup. Contextual encoding is the standard control and it is what prevents script execution. Instruction filtering addresses a different threat, and schema validation does not make a string safe to interpolate.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q49",
+      "exam_id": 8,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q0500"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r49",
+      "prompt": "An agent calls a tool that reads records, using a service account with broad access. What is the flaw?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The service account's permissions cannot be reviewed as often as a user's."
+        },
+        {
+          "key": "B",
+          "text": "The agent can reach records the requesting user is not entitled to see."
+        },
+        {
+          "key": "C",
+          "text": "The tool cannot record which user each of its calls was made on behalf of."
+        },
+        {
+          "key": "D",
+          "text": "The service account's credential is exposed to the model through the tool."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Authorization has to be evaluated against the person the work is being done for, not the identity the service happens to hold. A broad service account turns any prompt influence into a route to data the user could not otherwise obtain. Attribution and credential handling are related concerns of lower severity.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Tool Calling & Implementation",
+      "id": "CCDV-E08-Q50",
+      "exam_id": 8,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q0501"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r50",
+      "prompt": "A team wants to add a third-party MCP server to a production agent. What does that decision involve?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Accepting a dependency whose availability the team simply does not control directly."
+        },
+        {
+          "key": "B",
+          "text": "Increasing the tool surface, which makes selection somewhat less reliable."
+        },
+        {
+          "key": "C",
+          "text": "Adding tools whose descriptions may overlap with those already configured."
+        },
+        {
+          "key": "D",
+          "text": "Extending trust to code that will see the agent's requests and shape its results."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A server sits inside the trust boundary: it receives arguments, returns content the model acts on, and can influence behaviour through its tool descriptions. Reviewing and pinning it is the security decision. Availability, overlap and surface size are real operational costs that would not by themselves warrant a trust review.",
+      "distractor_explanations": {},
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Model Context Protocol (MCP)",
+      "id": "CCDV-E08-Q51",
+      "exam_id": 8,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q0502"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r52",
+      "prompt": "An e-commerce platform's backend team wants to guarantee that Claude Code can never run a specific destructive shell command against /checkout, even if a prompt or a model mistake would otherwise attempt it. Relying on the model remembering not to run it isn't reliable enough. What mechanism enforces this deterministically?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A polite instruction in CLAUDE.md asking the model not to run that command."
+        },
+        {
+          "key": "B",
+          "text": "Hoping the model infers the danger from context every time."
+        },
+        {
+          "key": "C",
+          "text": "A slash command that must be manually typed to prevent the action."
+        },
+        {
+          "key": "D",
+          "text": "A hook (e.g., a PreToolUse hook) that deterministically blocks the specific command before it can execute, regardless of what the model intends."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A hook enforces behavior deterministically at the tool-execution layer, independent of the model's judgment — the right mechanism when a rule must never be bypassed, unlike a prompt-level instruction.",
+      "distractor_explanations": {},
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Claude Code Configuration",
+      "id": "CCDV-E08-Q52",
+      "exam_id": 8,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q0518"
+    },
+    {
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-8.csv",
+      "source_id": "srini_e8_r53",
+      "prompt": "A prompt change fixes the failing cases and the team wants confidence nothing else broke. What is required?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A retained set of previously passing cases, run against the change before it ships."
+        },
+        {
+          "key": "B",
+          "text": "A larger set of failing cases, to confirm the change generalizes beyond the examples."
+        },
+        {
+          "key": "C",
+          "text": "A comparison of the outputs before and after on the cases that were failing."
+        },
+        {
+          "key": "D",
+          "text": "A period of monitoring after the change, to detect any degradation that appears."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A regression set is what turns a fix into a safe change: the point is to check what used to work still does, since prompt edits reweight everything rather than acting locally. Generalization and monitoring both matter and neither detects a silent regression in a category nobody thought to re-test.",
+      "distractor_explanations": {},
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "Core Architecture & API",
+      "id": "CCDV-E08-Q53",
+      "exam_id": 8,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q0528"
+    }
+  ]
+}

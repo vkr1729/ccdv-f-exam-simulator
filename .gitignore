@@ -1,0 +1,33 @@
+# Secrets and environment
+.env
+.env.*
+*.local.json
+
+# Python and virtual environments
+.venv/
+__pycache__/
+*.pyc
+
+# Local dependencies & caches
+node_modules/
+.playwright-mcp/
+.active_page.md
+.active_page.json
+data/raw/
+
+# Personal study coaching & scratch tracking files
+AGENTS.md
+Agents.md
+CLAUDE.md
+GEMINI.md
+mistakes.md
+progress.md
+notes/
+labs/
+skills/
+.agents/
+.claude/
+scripts/launch_chrome.sh
+scripts/read_active_tab.py
+scripts/setup_env.sh
+skills
