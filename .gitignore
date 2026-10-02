@@ -31,3 +31,4 @@ scripts/launch_chrome.sh
 scripts/read_active_tab.py
 scripts/setup_env.sh
 skills
+.workflow/

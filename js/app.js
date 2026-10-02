@@ -108,14 +108,15 @@ function updateNavUI(activeRoute) {
 
   // Update quick stats in header
   const attempts = Storage.getAttempts();
+  const fullExams = attempts.filter(a => (a.exam_id !== undefined ? a.exam_id < 900 : true) && a.total_questions >= 50);
   const statsEl = document.getElementById('header-stats-pill');
   if (statsEl) {
-    if (attempts.length === 0) {
+    if (fullExams.length === 0) {
       statsEl.textContent = "10 Mock Exams · 530 Questions Ready";
     } else {
-      const avg = Math.round(attempts.reduce((acc, a) => acc + a.percentage, 0) / attempts.length);
-      const passedCount = attempts.filter(a => a.is_passing).length;
-      statsEl.textContent = `Completed: ${attempts.length} · Avg: ${avg}% (${passedCount} passed)`;
+      const avg = Math.round(fullExams.reduce((acc, a) => acc + a.percentage, 0) / fullExams.length);
+      const passedCount = fullExams.filter(a => a.is_passing).length;
+      statsEl.textContent = `Full Exams: ${fullExams.length} · Avg: ${avg}% (${passedCount} passed)`;
     }
   }
 }
@@ -274,6 +275,14 @@ function renderExamRunner(paramId) {
   const container = document.getElementById('view-exam');
   container.classList.remove('hidden');
 
+  // P1-1: Exit review mode if navigating to a different exam ID
+  if (State.isReviewMode) {
+    if (paramId && parseInt(paramId) !== State.activeExam?.exam_id) {
+      State.isReviewMode = false;
+      State.reviewAttempt = null;
+    }
+  }
+
   // Check if an in-progress exam is saved in storage
   const savedActive = Storage.getActiveExam();
 
@@ -288,7 +297,7 @@ function renderExamRunner(paramId) {
           exam_id: savedActive.exam_id,
           title: savedActive.exam_title,
           description: "Targeted Drill Session",
-          time_limit_minutes: Math.ceil(savedActive.timerSecondsRemaining / 60),
+          time_limit_minutes: Math.ceil((savedActive.timerSecondsRemaining ?? 7200) / 60),
           questions: savedActive.drillQuestions
         };
       }
@@ -298,8 +307,24 @@ function renderExamRunner(paramId) {
         State.currentQuestionIndex = savedActive.currentQuestionIndex || 0;
         State.userAnswers = savedActive.userAnswers || {};
         State.flaggedQuestions = new Set(savedActive.flaggedQuestions || []);
-        State.timerSecondsRemaining = savedActive.timerSecondsRemaining || (fullExam.time_limit_minutes * 60);
+        State.timerSecondsRemaining = savedActive.timerSecondsRemaining ?? (fullExam.time_limit_minutes * 60);
       } else {
+        startFreshExam(paramId);
+      }
+    } else if (savedActive && paramId && parseInt(paramId) !== savedActive.exam_id) {
+      // P1-2: Confirm before overwriting saved in-progress exam
+      const hasAnswers = savedActive.userAnswers && Object.values(savedActive.userAnswers).some(a => Array.isArray(a) && a.length > 0);
+      if (hasAnswers) {
+        const confirmMsg = `You have an in-progress session for "${savedActive.exam_title || ('Exam #' + savedActive.exam_id)}". Starting this exam will discard your saved progress. Proceed?`;
+        if (confirm(confirmMsg)) {
+          Storage.clearActiveExam();
+          startFreshExam(paramId);
+        } else {
+          window.location.hash = savedActive.exam_id < 900 ? `#exam/${savedActive.exam_id}` : '#exam';
+          return;
+        }
+      } else {
+        Storage.clearActiveExam();
         startFreshExam(paramId);
       }
     } else {
@@ -389,7 +414,7 @@ function renderCurrentQuestion() {
 
   // Question Type Guidance
   const typeGuidance = document.getElementById('question-type-guidance');
-  const isMultiple = q.type === 'multiple' || (q.correct_answers && q.correct_answers.length > 1);
+  const isMultiple = Analytics.isMulti(q);
   if (isMultiple) {
     typeGuidance.textContent = `Multiple Response — Select ${q.correct_answers.length} options:`;
     typeGuidance.classList.add('text-amber-800', 'font-semibold');
@@ -689,6 +714,9 @@ function pauseTimer() {
     clearInterval(State.timerInterval);
     State.timerInterval = null;
   }
+  if (!State.isReviewMode && State.activeExam) {
+    saveCurrentSession();
+  }
 }
 
 function updateTimerDisplay() {
@@ -746,15 +774,20 @@ function finishExam() {
   pauseTimer();
 
   const exam = State.activeExam;
+  if (!exam || !exam.questions || exam.questions.length === 0) {
+    window.location.hash = '#dashboard';
+    return;
+  }
+
   const evalResult = Analytics.evaluateExam(exam, State.userAnswers);
 
   const attempt = {
     exam_id: exam.exam_id,
     exam_title: exam.title,
-    time_spent_seconds: (exam.time_limit_minutes * 60) - State.timerSecondsRemaining,
-    user_answers: { ...State.userAnswers },
+    time_spent_seconds: (exam.time_limit_minutes * 60) - (State.timerSecondsRemaining ?? 0),
     questions: exam.exam_id >= 900 ? exam.questions : null, // keep questions for drill reviews
-    ...evalResult
+    ...evalResult,
+    user_answers: JSON.parse(JSON.stringify(State.userAnswers))
   };
 
   // If this was a remediation drill, remove correctly answered questions from vault
@@ -838,7 +871,7 @@ function renderResults(attemptId) {
 
     <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
       <div class="flex space-x-3">
-        <button onclick="window.App.reviewAttemptAnswers('${attempt.id}')" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition">
+        <button data-action="review-attempt" data-attempt-id="${escapeHtml(attempt.id)}" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow transition">
           Review Question Explanations &rarr;
         </button>
         <a href="#vault" class="px-4 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
@@ -915,9 +948,7 @@ function renderGapsView() {
     <div class="space-y-4">
       <h3 class="text-lg font-editorial text-stone-900">High-Impact Misconception Topics:</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        ${diagnostic.top_topic_gaps.map(item => {
-          const safeTopic = encodeURIComponent(item.topic);
-          return `
+        ${diagnostic.top_topic_gaps.map(item => `
           <div class="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <h4 class="text-base font-semibold text-stone-900">${escapeHtml(item.topic)}</h4>
@@ -930,12 +961,12 @@ function renderGapsView() {
               </div>
             ` : '<p class="text-xs text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
             <div class="pt-2 flex justify-end">
-              <button onclick="window.App.startTopicDrill('${safeTopic}')" class="text-xs font-semibold text-amber-800 hover:text-amber-900">
+              <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-amber-800 hover:text-amber-900">
                 Drill Missed Questions in this Topic &rarr;
               </button>
             </div>
           </div>
-        `}).join('')}
+        `).join('')}
       </div>
     </div>
   `;
@@ -993,7 +1024,7 @@ function renderVaultView() {
             </div>
             <div class="flex items-center space-x-2">
               <span class="text-xs text-stone-400 font-mono">Missed ${q.miss_count || 1} time${(q.miss_count || 1) > 1 ? 's' : ''}</span>
-              <button onclick="window.App.removeFromVault('${q.id}')" class="text-stone-400 hover:text-stone-600 text-xs font-mono" title="Remove from vault">✕</button>
+              <button data-action="remove-vault" data-question-id="${escapeHtml(q.id)}" class="text-stone-400 hover:text-stone-600 text-xs font-mono" title="Remove from vault">✕</button>
             </div>
           </div>
 
@@ -1031,7 +1062,9 @@ function renderSourcesView() {
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-stone-200">
-        ${meta.sources.map(src => `
+        ${meta.sources.map(src => {
+          const safeUrl = (src.url && (src.url.startsWith('https://') || src.url.startsWith('http://'))) ? src.url : '#';
+          return `
           <div class="p-5 rounded-xl bg-stone-50 border border-stone-200/90 space-y-2">
             <div class="flex items-center justify-between">
               <h4 class="text-sm font-semibold text-stone-900 font-mono">${escapeHtml(src.name)}</h4>
@@ -1039,13 +1072,13 @@ function renderSourcesView() {
             </div>
             <p class="text-xs text-stone-600 font-sans leading-relaxed">${escapeHtml(src.description)}</p>
             <div class="pt-2">
-              <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-amber-800 hover:text-amber-900 underline flex items-center space-x-1">
+              <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-amber-800 hover:text-amber-900 underline flex items-center space-x-1">
                 <span>View on GitHub</span>
                 <span>&rarr;</span>
               </a>
             </div>
           </div>
-        `).join('')}
+        `}).join('')}
       </div>
     </div>
   `;
@@ -1140,8 +1173,11 @@ window.App = {
     window.location.hash = '#exam/999';
   },
 
-  startTopicDrill(encodedTopic) {
-    const topic = decodeURIComponent(encodedTopic);
+  startTopicDrill(topicInput) {
+    let topic = topicInput;
+    try {
+      topic = decodeURIComponent(topicInput);
+    } catch (e) {}
     const missedVault = Storage.getMissedQuestions().filter(q => q.topic === topic);
     if (missedVault.length === 0) {
       alert(`No missed questions found for topic: ${topic}. Good job!`);
@@ -1198,3 +1234,20 @@ window.App = {
     }
   }
 };
+
+// Delegated click listener for data-action attributes
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  if (action === 'topic-drill') {
+    const topic = btn.dataset.topic;
+    if (topic) window.App.startTopicDrill(topic);
+  } else if (action === 'review-attempt') {
+    const attId = btn.dataset.attemptId;
+    if (attId) window.App.reviewAttemptAnswers(attId);
+  } else if (action === 'remove-vault') {
+    const qId = btn.dataset.questionId;
+    if (qId) window.App.removeFromVault(qId);
+  }
+});

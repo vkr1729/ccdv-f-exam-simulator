@@ -34,11 +34,30 @@ export const Storage = {
   },
 
   saveAttempt(attempt) {
-    const attempts = this.getAttempts();
+    let attempts = this.getAttempts();
     attempt.id = 'att_' + Date.now();
     attempt.date = new Date().toISOString();
     attempts.unshift(attempt); // latest first
-    safeSetItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(attempts));
+
+    // Quota management: Cap history to keep at most 20 full exams and 10 drills
+    const fullExams = [];
+    const drills = [];
+    for (const a of attempts) {
+      if (a.exam_id !== undefined && a.exam_id >= 900) {
+        if (drills.length < 10) drills.push(a);
+      } else {
+        if (fullExams.length < 20) fullExams.push(a);
+      }
+    }
+    // Recombine preserved attempts sorted newest first
+    attempts = [...fullExams, ...drills].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    let saved = safeSetItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(attempts));
+    if (!saved) {
+      // Emergency quota trimming: drop all but last 5 full and 2 drills
+      const trimmed = attempts.filter(a => a.exam_id < 900).slice(0, 5);
+      safeSetItem(STORAGE_KEYS.ATTEMPTS, JSON.stringify(trimmed));
+    }
     
     // Automatically record missed questions to the vault
     if (attempt.missed_questions && attempt.missed_questions.length > 0) {
@@ -72,7 +91,7 @@ export const Storage = {
       currentQuestionIndex: state.currentQuestionIndex || 0,
       userAnswers: state.userAnswers || {},
       flaggedQuestions: Array.isArray(state.flaggedQuestions) ? state.flaggedQuestions : Array.from(state.flaggedQuestions || []),
-      timerSecondsRemaining: state.timerSecondsRemaining || 7200,
+      timerSecondsRemaining: state.timerSecondsRemaining ?? 7200,
       drillQuestions: (state.exam && state.exam.exam_id >= 900) ? state.exam.questions : null
     };
     safeSetItem(STORAGE_KEYS.ACTIVE_EXAM, JSON.stringify(minimalState));

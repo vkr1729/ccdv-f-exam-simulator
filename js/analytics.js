@@ -73,6 +73,12 @@ export const TOPIC_STUDY_GUIDES = {
 };
 
 export const Analytics = {
+  // Shared helper: Check if question expects multiple selections
+  isMulti(q) {
+    if (!q) return false;
+    return q.type === "multiple" || (Array.isArray(q.correct_answers) && q.correct_answers.length > 1);
+  },
+
   // Score an exam run
   evaluateExam(exam, userAnswers) {
     let rawScore = 0;
@@ -103,7 +109,7 @@ export const Analytics = {
 
       // Check correctness
       let isCorrect = false;
-      if (q.type === "multiple") {
+      if (this.isMulti(q)) {
         const sortedUser = [...userSelection].sort().join(",");
         const sortedCorrect = [...correctAnswers].sort().join(",");
         isCorrect = sortedUser.length > 0 && sortedUser === sortedCorrect;
@@ -166,12 +172,13 @@ export const Analytics = {
 
   // Perform cross-exam diagnostic gap analysis
   diagnoseGaps(attempts, missedQuestions) {
-    // Only analyze full exams (not single-topic drills) for overall readiness
-    const fullExams = (attempts || []).filter(a => a.total_questions >= 50);
+    // Only analyze full exams (exam_id < 900 and at least 50 questions) for overall readiness
+    const fullExams = (attempts || []).filter(a => (a.exam_id !== undefined ? a.exam_id < 900 : true) && a.total_questions >= 50);
 
     if (!fullExams || fullExams.length === 0) {
       return {
         total_attempts: attempts ? attempts.length : 0,
+        full_attempts: 0,
         average_score: 0,
         readiness_level: "Not Started",
         domain_rankings: Object.keys(DOMAIN_METADATA).map(dId => ({

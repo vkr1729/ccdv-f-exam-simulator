@@ -1,19 +1,23 @@
 # CCDV-F Mock Exam Question Bank — Sources & Provenance
 
-This repository synthesizes **530 authentic scenario-based questions** structured into **10 full-length 53-question practice exams** for the **Anthropic Claude Certified Developer – Foundations (CCDV-F)** certification.
+This repository synthesizes **530 authentic scenario-based developer questions** structured into **10 full-length 53-question practice exams** for the **Anthropic Claude Certified Developer – Foundations (CCDV-F)** certification.
 
-Every question has been vetted strictly for **Developer (CCDV-F)** scope (excluding high-level Architect items), aligned to the official 8-domain exam blueprint, and provided with full technical explanations and distractor analyses.
+Every question has been vetted strictly for **Developer (CCDV-F)** scope, aligned to the official 8-domain exam blueprint, and provided with full technical explanations and distractor analyses.
+
+To completely eliminate single-source concentration risk, the question pool is balanced across **5 independent open-source developer repositories**, with **381 questions (71.9%)** sourced from independent contributors and **149 questions (28.1%)** from Srinipusuluri. Every single mock exam form interleaves items from all 5 repositories.
 
 ---
 
 ## 1. Upstream Open-Source Repositories
 
-| Repository | Author | License / Visibility | Content Description | Contribution |
-|---|---|---|---|---|
-| **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** | Srinivas Pusuluri | Public (GitHub) | 9 practice exams in Udemy-import CSV format with detailed explanations | ~380 items |
-| **[hbacheller-tribe/CCDV-F-Exam](https://github.com/hbacheller-tribe/CCDV-F-Exam)** | H. Bacheller | MIT (GitHub) | 85 scenario-based blueprint-weighted questions with option rationale | ~65 items |
-| **[Amey-Thakur/CLAUDE-CERTIFICATIONS](https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS)** | Amey Thakur | Apache 2.0 (GitHub) | Developer Foundations question bank and timed mock exams | ~50 items |
-| **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** | Nat Sh. | Public (GitHub) | Partner Academy 5-module quiz bank & hard exam form | ~35 items |
+| Repository | Author | License / Visibility | Content Description | Contribution | Share |
+|---|---|---|---|---|---|
+| **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** | Nat Sh. | Public (GitHub) | Anthropic Partner Academy 5-module quiz bank & hard exam form | 132 items | 24.9% |
+| **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** | Turjoy Real | Public (GitHub) | Full 53-item realistic mock exam and multi-domain developer practice drills | 88 items | 16.6% |
+| **[hbacheller-tribe/CCDV-F-Exam](https://github.com/hbacheller-tribe/CCDV-F-Exam)** | H. Bacheller | MIT (GitHub) | 85 scenario-based blueprint-weighted questions with option rationale | 85 items | 16.0% |
+| **[Amey-Thakur/CLAUDE-CERTIFICATIONS](https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS)** | Amey Thakur | Apache 2.0 (GitHub) | Developer Foundations question bank and timed mock exams | 76 items | 14.3% |
+| **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** | Srinivas Pusuluri | Public (GitHub) | 9 practice exams in Udemy-import CSV format with detailed explanations | 149 items | 28.1% |
+| **TOTAL** | | | | **530 items** | **100.0%** |
 
 ---
 

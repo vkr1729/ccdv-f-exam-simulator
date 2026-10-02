@@ -4,28 +4,34 @@
   "questions_per_exam": 53,
   "sources": [
     {
-      "name": "srinipusuluri/CCDV-F-SET1",
-      "url": "https://github.com/srinipusuluri/CCDV-F-SET1",
-      "description": "9 Udemy-format full practice exams for Claude Certified Developer - Foundations.",
-      "contributed_questions": 468
+      "name": "natsh/claude-developer-foundations-prep",
+      "url": "https://github.com/natsh/claude-developer-foundations-prep",
+      "description": "Anthropic Partner Academy curriculum 5-module quiz bank and hard preparation exam.",
+      "contributed_questions": 132
     },
     {
       "name": "hbacheller-tribe/CCDV-F-Exam",
       "url": "https://github.com/hbacheller-tribe/CCDV-F-Exam",
-      "description": "85 blueprint-weighted scenario questions for CCDV-F with comprehensive rationales.",
-      "contributed_questions": 39
+      "description": "85 scenario-based blueprint-weighted questions with option rationales.",
+      "contributed_questions": 85
+    },
+    {
+      "name": "turjoy-real/CCDV-F",
+      "url": "https://github.com/turjoy-real/CCDV-F",
+      "description": "Full 53-item realistic mock exam and multi-domain developer practice drills.",
+      "contributed_questions": 88
     },
     {
       "name": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
       "url": "https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "description": "Comprehensive developer-foundations question bank and mock examinations.",
-      "contributed_questions": 23
+      "description": "Developer Foundations question bank and timed mock practice exams.",
+      "contributed_questions": 76
     },
     {
-      "name": "natsh/claude-developer-foundations-prep",
-      "url": "https://github.com/natsh/claude-developer-foundations-prep",
-      "description": "Partner Academy curriculum hard prep exam and module quizzes.",
-      "contributed_questions": 0
+      "name": "srinipusuluri/CCDV-F-SET1",
+      "url": "https://github.com/srinipusuluri/CCDV-F-SET1",
+      "description": "9 full practice exams with detailed explanations and distractor reasoning.",
+      "contributed_questions": 149
     }
   ],
   "provenance": [
@@ -33,105 +39,105 @@
       "id": "CCDV-E01-Q01",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r1"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "1"
     },
     {
       "id": "CCDV-E01-Q02",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r2"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "11"
     },
     {
       "id": "CCDV-E01-Q03",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r3"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-16"
     },
     {
       "id": "CCDV-E01-Q04",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r4"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-5"
     },
     {
       "id": "CCDV-E01-Q05",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r5"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q7"
     },
     {
       "id": "CCDV-E01-Q06",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r6"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q19"
     },
     {
       "id": "CCDV-E01-Q07",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r7"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q41"
     },
     {
       "id": "CCDV-E01-Q08",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r8"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q4"
     },
     {
       "id": "CCDV-E01-Q09",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r9"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q9"
     },
     {
       "id": "CCDV-E01-Q10",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r10"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q36"
     },
     {
       "id": "CCDV-E01-Q11",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r11"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q17"
     },
     {
       "id": "CCDV-E01-Q12",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r12"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q71"
     },
     {
       "id": "CCDV-E01-Q13",
       "exam": 1,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r13"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q91"
     },
     {
       "id": "CCDV-E01-Q14",
@@ -139,7 +145,7 @@
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r14"
+      "source_id": "srini_e1_r3"
     },
     {
       "id": "CCDV-E01-Q15",
@@ -147,95 +153,95 @@
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r15"
+      "source_id": "srini_e1_r13"
     },
     {
       "id": "CCDV-E01-Q16",
       "exam": 1,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r16"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r6"
     },
     {
       "id": "CCDV-E01-Q17",
       "exam": 1,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r17"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r16"
     },
     {
       "id": "CCDV-E01-Q18",
       "exam": 1,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r1"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r9"
     },
     {
       "id": "CCDV-E01-Q19",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "13"
     },
     {
       "id": "CCDV-E01-Q20",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "23"
     },
     {
       "id": "CCDV-E01-Q21",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "33"
     },
     {
       "id": "CCDV-E01-Q22",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-22"
     },
     {
       "id": "CCDV-E01-Q23",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q13"
     },
     {
       "id": "CCDV-E01-Q24",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q22"
     },
     {
       "id": "CCDV-E01-Q25",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q10"
     },
     {
       "id": "CCDV-E01-Q26",
       "exam": 1,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r25"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q75"
     },
     {
       "id": "CCDV-E01-Q27",
@@ -243,39 +249,39 @@
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r26"
+      "source_id": "srini_e1_r25"
     },
     {
       "id": "CCDV-E01-Q28",
       "exam": 1,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r27"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "39"
     },
     {
       "id": "CCDV-E01-Q29",
       "exam": 1,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-1"
     },
     {
       "id": "CCDV-E01-Q30",
       "exam": 1,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r29"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD3_q19"
     },
     {
       "id": "CCDV-E01-Q31",
       "exam": 1,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q46"
     },
     {
       "id": "CCDV-E01-Q32",
@@ -283,63 +289,63 @@
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r31"
+      "source_id": "srini_e1_r27"
     },
     {
       "id": "CCDV-E01-Q33",
       "exam": 1,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r32"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r29"
     },
     {
       "id": "CCDV-E01-Q34",
       "exam": 1,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r33"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r31"
     },
     {
       "id": "CCDV-E01-Q35",
       "exam": 1,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r34"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r33"
     },
     {
       "id": "CCDV-E01-Q36",
       "exam": 1,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r35"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "43"
     },
     {
       "id": "CCDV-E01-Q37",
       "exam": 1,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-11"
     },
     {
       "id": "CCDV-E01-Q38",
       "exam": 1,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD4_q27"
     },
     {
       "id": "CCDV-E01-Q39",
       "exam": 1,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q18"
     },
     {
       "id": "CCDV-E01-Q40",
@@ -347,87 +353,87 @@
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r40"
+      "source_id": "srini_e1_r37"
     },
     {
       "id": "CCDV-E01-Q41",
       "exam": 1,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r35"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r37"
     },
     {
       "id": "CCDV-E01-Q42",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "46"
     },
     {
       "id": "CCDV-E01-Q43",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r42"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "56"
     },
     {
       "id": "CCDV-E01-Q44",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r43"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-12"
     },
     {
       "id": "CCDV-E01-Q45",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r44"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD5_q29"
     },
     {
       "id": "CCDV-E01-Q46",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q47"
     },
     {
       "id": "CCDV-E01-Q47",
       "exam": 1,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r46"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q60"
     },
     {
       "id": "CCDV-E01-Q48",
       "exam": 1,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "60"
     },
     {
       "id": "CCDV-E01-Q49",
       "exam": 1,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-33"
     },
     {
       "id": "CCDV-E01-Q50",
       "exam": 1,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r49"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD6_q37"
     },
     {
       "id": "CCDV-E01-Q51",
@@ -435,143 +441,143 @@
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r50"
+      "source_id": "srini_e1_r48"
     },
     {
       "id": "CCDV-E01-Q52",
       "exam": 1,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r51"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "69"
     },
     {
       "id": "CCDV-E01-Q53",
       "exam": 1,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "77"
     },
     {
       "id": "CCDV-E02-Q01",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r2"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "2"
     },
     {
       "id": "CCDV-E02-Q02",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r3"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "12"
     },
     {
       "id": "CCDV-E02-Q03",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r4"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-17"
     },
     {
       "id": "CCDV-E02-Q04",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r5"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-1"
     },
     {
       "id": "CCDV-E02-Q05",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r6"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q8"
     },
     {
       "id": "CCDV-E02-Q06",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r7"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q20"
     },
     {
       "id": "CCDV-E02-Q07",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r8"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q44"
     },
     {
       "id": "CCDV-E02-Q08",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r9"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q5"
     },
     {
       "id": "CCDV-E02-Q09",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r10"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q12"
     },
     {
       "id": "CCDV-E02-Q10",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r11"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q38"
     },
     {
       "id": "CCDV-E02-Q11",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r12"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q30"
     },
     {
       "id": "CCDV-E02-Q12",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r13"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q81"
     },
     {
       "id": "CCDV-E02-Q13",
       "exam": 2,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r14"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q92"
     },
     {
       "id": "CCDV-E02-Q14",
       "exam": 2,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r15"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r4"
     },
     {
       "id": "CCDV-E02-Q15",
       "exam": 2,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r16"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r14"
     },
     {
       "id": "CCDV-E02-Q16",
@@ -579,15 +585,15 @@
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r17"
+      "source_id": "srini_e2_r7"
     },
     {
       "id": "CCDV-E02-Q17",
       "exam": 2,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r1"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r17"
     },
     {
       "id": "CCDV-E02-Q18",
@@ -595,119 +601,119 @@
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r2"
+      "source_id": "srini_e3_r10"
     },
     {
       "id": "CCDV-E02-Q19",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "14"
     },
     {
       "id": "CCDV-E02-Q20",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "24"
     },
     {
       "id": "CCDV-E02-Q21",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "34"
     },
     {
       "id": "CCDV-E02-Q22",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-8"
     },
     {
       "id": "CCDV-E02-Q23",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q14"
     },
     {
       "id": "CCDV-E02-Q24",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q27"
     },
     {
       "id": "CCDV-E02-Q25",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q11"
     },
     {
       "id": "CCDV-E02-Q26",
       "exam": 2,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r25"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q76"
     },
     {
       "id": "CCDV-E02-Q27",
       "exam": 2,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r26"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r26"
     },
     {
       "id": "CCDV-E02-Q28",
       "exam": 2,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r27"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "40"
     },
     {
       "id": "CCDV-E02-Q29",
       "exam": 2,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-5"
     },
     {
       "id": "CCDV-E02-Q30",
       "exam": 2,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r29"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD3_q20"
     },
     {
       "id": "CCDV-E02-Q31",
       "exam": 2,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q51"
     },
     {
       "id": "CCDV-E02-Q32",
       "exam": 2,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r28"
     },
     {
       "id": "CCDV-E02-Q33",
@@ -715,63 +721,63 @@
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r32"
+      "source_id": "srini_e2_r30"
     },
     {
       "id": "CCDV-E02-Q34",
       "exam": 2,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r33"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r32"
     },
     {
       "id": "CCDV-E02-Q35",
       "exam": 2,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r34"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r34"
     },
     {
       "id": "CCDV-E02-Q36",
       "exam": 2,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r36"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "44"
     },
     {
       "id": "CCDV-E02-Q37",
       "exam": 2,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r37"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-12"
     },
     {
       "id": "CCDV-E02-Q38",
       "exam": 2,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r38"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD4_q28"
     },
     {
       "id": "CCDV-E02-Q39",
       "exam": 2,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q21"
     },
     {
       "id": "CCDV-E02-Q40",
       "exam": 2,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r40"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r39"
     },
     {
       "id": "CCDV-E02-Q41",
@@ -779,170 +785,242 @@
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r35"
+      "source_id": "srini_e3_r38"
     },
     {
       "id": "CCDV-E02-Q42",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "47"
     },
     {
       "id": "CCDV-E02-Q43",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r42"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "57"
     },
     {
       "id": "CCDV-E02-Q44",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r43"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-13"
     },
     {
       "id": "CCDV-E02-Q45",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r44"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD5_q30"
     },
     {
       "id": "CCDV-E02-Q46",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q26"
     },
     {
       "id": "CCDV-E02-Q47",
       "exam": 2,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r46"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q83"
     },
     {
       "id": "CCDV-E02-Q48",
       "exam": 2,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "61"
     },
     {
       "id": "CCDV-E02-Q49",
       "exam": 2,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-34"
     },
     {
       "id": "CCDV-E02-Q50",
       "exam": 2,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r49"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD6_q38"
     },
     {
       "id": "CCDV-E02-Q51",
       "exam": 2,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r50"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r49"
     },
     {
       "id": "CCDV-E02-Q52",
       "exam": 2,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-1.csv",
-      "source_id": "srini_e1_r52"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "70"
     },
     {
       "id": "CCDV-E02-Q53",
       "exam": 2,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "78"
     },
     {
       "id": "CCDV-E03-Q01",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r3"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "3"
     },
     {
       "id": "CCDV-E03-Q02",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r4"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-1"
     },
     {
       "id": "CCDV-E03-Q03",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r5"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-18"
     },
     {
       "id": "CCDV-E03-Q04",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r6"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-2"
     },
     {
       "id": "CCDV-E03-Q05",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r7"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q9"
     },
     {
       "id": "CCDV-E03-Q06",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r8"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q22"
     },
     {
       "id": "CCDV-E03-Q07",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r9"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q47"
     },
     {
       "id": "CCDV-E03-Q08",
       "exam": 3,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r10"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q6"
     },
     {
       "id": "CCDV-E03-Q09",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q15"
+    },
+    {
+      "id": "CCDV-E03-Q10",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q41"
+    },
+    {
+      "id": "CCDV-E03-Q11",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q31"
+    },
+    {
+      "id": "CCDV-E03-Q12",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q82"
+    },
+    {
+      "id": "CCDV-E03-Q13",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q93"
+    },
+    {
+      "id": "CCDV-E03-Q14",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r5"
+    },
+    {
+      "id": "CCDV-E03-Q15",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r15"
+    },
+    {
+      "id": "CCDV-E03-Q16",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r8"
+    },
+    {
+      "id": "CCDV-E03-Q17",
+      "exam": 3,
+      "domain": "D1",
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r1"
+    },
+    {
+      "id": "CCDV-E03-Q18",
       "exam": 3,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
@@ -950,196 +1028,124 @@
       "source_id": "srini_e3_r11"
     },
     {
-      "id": "CCDV-E03-Q10",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r12"
-    },
-    {
-      "id": "CCDV-E03-Q11",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r13"
-    },
-    {
-      "id": "CCDV-E03-Q12",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r14"
-    },
-    {
-      "id": "CCDV-E03-Q13",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r15"
-    },
-    {
-      "id": "CCDV-E03-Q14",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r16"
-    },
-    {
-      "id": "CCDV-E03-Q15",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r17"
-    },
-    {
-      "id": "CCDV-E03-Q16",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r1"
-    },
-    {
-      "id": "CCDV-E03-Q17",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r2"
-    },
-    {
-      "id": "CCDV-E03-Q18",
-      "exam": 3,
-      "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r3"
-    },
-    {
       "id": "CCDV-E03-Q19",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "15"
     },
     {
       "id": "CCDV-E03-Q20",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "25"
     },
     {
       "id": "CCDV-E03-Q21",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "35"
     },
     {
       "id": "CCDV-E03-Q22",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-6"
     },
     {
       "id": "CCDV-E03-Q23",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q15"
     },
     {
       "id": "CCDV-E03-Q24",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q34"
     },
     {
       "id": "CCDV-E03-Q25",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q12"
     },
     {
       "id": "CCDV-E03-Q26",
       "exam": 3,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r25"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q77"
     },
     {
       "id": "CCDV-E03-Q27",
       "exam": 3,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r18"
     },
     {
       "id": "CCDV-E03-Q28",
       "exam": 3,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r27"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "41"
     },
     {
       "id": "CCDV-E03-Q29",
       "exam": 3,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-6"
     },
     {
       "id": "CCDV-E03-Q30",
       "exam": 3,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r29"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD3_q21"
     },
     {
       "id": "CCDV-E03-Q31",
       "exam": 3,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q52"
     },
     {
       "id": "CCDV-E03-Q32",
       "exam": 3,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r29"
     },
     {
       "id": "CCDV-E03-Q33",
       "exam": 3,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r32"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r31"
     },
     {
       "id": "CCDV-E03-Q34",
@@ -1154,35 +1160,51 @@
       "exam": 3,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r27"
     },
     {
       "id": "CCDV-E03-Q36",
       "exam": 3,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r36"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "45"
     },
     {
       "id": "CCDV-E03-Q37",
       "exam": 3,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r37"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-10"
     },
     {
       "id": "CCDV-E03-Q38",
       "exam": 3,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q4"
     },
     {
       "id": "CCDV-E03-Q39",
+      "exam": 3,
+      "domain": "D4",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q22"
+    },
+    {
+      "id": "CCDV-E03-Q40",
+      "exam": 3,
+      "domain": "D4",
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r40"
+    },
+    {
+      "id": "CCDV-E03-Q41",
       "exam": 3,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
@@ -1190,812 +1212,796 @@
       "source_id": "srini_e3_r39"
     },
     {
-      "id": "CCDV-E03-Q40",
-      "exam": 3,
-      "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r40"
-    },
-    {
-      "id": "CCDV-E03-Q41",
-      "exam": 3,
-      "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r35"
-    },
-    {
       "id": "CCDV-E03-Q42",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "48"
     },
     {
       "id": "CCDV-E03-Q43",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r42"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "58"
     },
     {
       "id": "CCDV-E03-Q44",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q16"
     },
     {
       "id": "CCDV-E03-Q45",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r44"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD5_q31"
     },
     {
       "id": "CCDV-E03-Q46",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q27"
     },
     {
       "id": "CCDV-E03-Q47",
       "exam": 3,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r46"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q99"
     },
     {
       "id": "CCDV-E03-Q48",
       "exam": 3,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "62"
     },
     {
       "id": "CCDV-E03-Q49",
       "exam": 3,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-7"
     },
     {
       "id": "CCDV-E03-Q50",
       "exam": 3,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q8"
     },
     {
       "id": "CCDV-E03-Q51",
       "exam": 3,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r50"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r50"
     },
     {
       "id": "CCDV-E03-Q52",
       "exam": 3,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r51"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "71"
     },
     {
       "id": "CCDV-E03-Q53",
       "exam": 3,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "79"
     },
     {
       "id": "CCDV-E04-Q01",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r4"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "4"
     },
     {
       "id": "CCDV-E04-Q02",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r5"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-2"
     },
     {
       "id": "CCDV-E04-Q03",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r6"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-2"
     },
     {
       "id": "CCDV-E04-Q04",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r7"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-3"
     },
     {
       "id": "CCDV-E04-Q05",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r8"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q10"
     },
     {
       "id": "CCDV-E04-Q06",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r9"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q24"
     },
     {
       "id": "CCDV-E04-Q07",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r10"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q48"
     },
     {
       "id": "CCDV-E04-Q08",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r11"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q7"
     },
     {
       "id": "CCDV-E04-Q09",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r12"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q18"
     },
     {
       "id": "CCDV-E04-Q10",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r13"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q43"
     },
     {
       "id": "CCDV-E04-Q11",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r14"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q40"
     },
     {
       "id": "CCDV-E04-Q12",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r15"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q84"
     },
     {
       "id": "CCDV-E04-Q13",
       "exam": 4,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r16"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q94"
     },
     {
       "id": "CCDV-E04-Q14",
       "exam": 4,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r17"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r6"
     },
     {
       "id": "CCDV-E04-Q15",
       "exam": 4,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r1"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r16"
     },
     {
       "id": "CCDV-E04-Q16",
       "exam": 4,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r2"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r9"
     },
     {
       "id": "CCDV-E04-Q17",
       "exam": 4,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r3"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r2"
     },
     {
       "id": "CCDV-E04-Q18",
       "exam": 4,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r4"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r12"
     },
     {
       "id": "CCDV-E04-Q19",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "16"
     },
     {
       "id": "CCDV-E04-Q20",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "26"
     },
     {
       "id": "CCDV-E04-Q21",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "36"
     },
     {
       "id": "CCDV-E04-Q22",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-7"
     },
     {
       "id": "CCDV-E04-Q23",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q16"
     },
     {
       "id": "CCDV-E04-Q24",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q44"
     },
     {
       "id": "CCDV-E04-Q25",
       "exam": 4,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q13"
     },
     {
       "id": "CCDV-E04-Q26",
       "exam": 4,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r18"
     },
     {
       "id": "CCDV-E04-Q27",
       "exam": 4,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r19"
     },
     {
       "id": "CCDV-E04-Q28",
       "exam": 4,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r27"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "42"
     },
     {
       "id": "CCDV-E04-Q29",
       "exam": 4,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-9"
     },
     {
       "id": "CCDV-E04-Q30",
       "exam": 4,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r29"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD3_q22"
     },
     {
       "id": "CCDV-E04-Q31",
       "exam": 4,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q34"
     },
     {
       "id": "CCDV-E04-Q32",
       "exam": 4,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r30"
     },
     {
       "id": "CCDV-E04-Q33",
       "exam": 4,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r32"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r32"
     },
     {
       "id": "CCDV-E04-Q34",
       "exam": 4,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r33"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r34"
     },
     {
       "id": "CCDV-E04-Q35",
       "exam": 4,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r28"
     },
     {
       "id": "CCDV-E04-Q36",
       "exam": 4,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-7"
     },
     {
       "id": "CCDV-E04-Q37",
       "exam": 4,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r37"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-11"
     },
     {
       "id": "CCDV-E04-Q38",
       "exam": 4,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q13"
     },
     {
       "id": "CCDV-E04-Q39",
       "exam": 4,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q23"
     },
     {
       "id": "CCDV-E04-Q40",
       "exam": 4,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r40"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r35"
     },
     {
       "id": "CCDV-E04-Q41",
       "exam": 4,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r35"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r40"
     },
     {
       "id": "CCDV-E04-Q42",
       "exam": 4,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "49"
     },
     {
       "id": "CCDV-E04-Q43",
       "exam": 4,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r42"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "59"
     },
     {
       "id": "CCDV-E04-Q44",
       "exam": 4,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q28"
     },
     {
       "id": "CCDV-E04-Q45",
       "exam": 4,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r44"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD5_q32"
     },
     {
       "id": "CCDV-E04-Q46",
       "exam": 4,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q28"
     },
     {
       "id": "CCDV-E04-Q47",
       "exam": 4,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r41"
     },
     {
       "id": "CCDV-E04-Q48",
       "exam": 4,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "63"
     },
     {
       "id": "CCDV-E04-Q49",
       "exam": 4,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-12"
     },
     {
       "id": "CCDV-E04-Q50",
       "exam": 4,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q29"
     },
     {
       "id": "CCDV-E04-Q51",
       "exam": 4,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r50"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r47"
     },
     {
       "id": "CCDV-E04-Q52",
       "exam": 4,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-2.csv",
-      "source_id": "srini_e2_r52"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "72"
     },
     {
       "id": "CCDV-E04-Q53",
       "exam": 4,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "80"
     },
     {
       "id": "CCDV-E05-Q01",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r5"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "5"
     },
     {
       "id": "CCDV-E05-Q02",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r6"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-3"
     },
     {
       "id": "CCDV-E05-Q03",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r7"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-3"
     },
     {
       "id": "CCDV-E05-Q04",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r8"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-4"
     },
     {
       "id": "CCDV-E05-Q05",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r9"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q11"
     },
     {
       "id": "CCDV-E05-Q06",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r10"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q25"
     },
     {
       "id": "CCDV-E05-Q07",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r11"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q49"
     },
     {
       "id": "CCDV-E05-Q08",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r12"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q8"
     },
     {
       "id": "CCDV-E05-Q09",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r13"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q21"
     },
     {
       "id": "CCDV-E05-Q10",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r14"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q45"
     },
     {
       "id": "CCDV-E05-Q11",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r15"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q46"
     },
     {
       "id": "CCDV-E05-Q12",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r16"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q85"
     },
     {
       "id": "CCDV-E05-Q13",
       "exam": 5,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r17"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q95"
     },
     {
       "id": "CCDV-E05-Q14",
       "exam": 5,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r1"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r7"
     },
     {
       "id": "CCDV-E05-Q15",
       "exam": 5,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r2"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r17"
     },
     {
       "id": "CCDV-E05-Q16",
       "exam": 5,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r3"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r10"
     },
     {
       "id": "CCDV-E05-Q17",
       "exam": 5,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r4"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r3"
     },
     {
       "id": "CCDV-E05-Q18",
       "exam": 5,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r5"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r13"
     },
     {
       "id": "CCDV-E05-Q19",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "17"
     },
     {
       "id": "CCDV-E05-Q20",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "27"
     },
     {
       "id": "CCDV-E05-Q21",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "37"
     },
     {
       "id": "CCDV-E05-Q22",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-8"
     },
     {
       "id": "CCDV-E05-Q23",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q17"
     },
     {
       "id": "CCDV-E05-Q24",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q49"
     },
     {
       "id": "CCDV-E05-Q25",
       "exam": 5,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q14"
     },
     {
       "id": "CCDV-E05-Q26",
       "exam": 5,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r19"
     },
     {
       "id": "CCDV-E05-Q27",
       "exam": 5,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r20"
     },
     {
       "id": "CCDV-E05-Q28",
       "exam": 5,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r27"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-4"
     },
     {
       "id": "CCDV-E05-Q29",
       "exam": 5,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-10"
     },
     {
       "id": "CCDV-E05-Q30",
       "exam": 5,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r29"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD3_q23"
     },
     {
       "id": "CCDV-E05-Q31",
       "exam": 5,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q35"
     },
     {
       "id": "CCDV-E05-Q32",
       "exam": 5,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r31"
     },
     {
       "id": "CCDV-E05-Q33",
       "exam": 5,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r32"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r33"
     },
     {
       "id": "CCDV-E05-Q34",
       "exam": 5,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r33"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r27"
     },
     {
       "id": "CCDV-E05-Q35",
@@ -2003,1847 +2009,1847 @@
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
       "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r34"
+      "source_id": "srini_e5_r29"
     },
     {
       "id": "CCDV-E05-Q36",
       "exam": 5,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-27"
     },
     {
       "id": "CCDV-E05-Q37",
       "exam": 5,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q21"
     },
     {
       "id": "CCDV-E05-Q38",
       "exam": 5,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q20"
     },
     {
       "id": "CCDV-E05-Q39",
       "exam": 5,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q24"
     },
     {
       "id": "CCDV-E05-Q40",
       "exam": 5,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r40"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r36"
     },
     {
       "id": "CCDV-E05-Q41",
       "exam": 5,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r35"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r35"
     },
     {
       "id": "CCDV-E05-Q42",
       "exam": 5,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "50"
     },
     {
       "id": "CCDV-E05-Q43",
       "exam": 5,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r42"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-9"
     },
     {
       "id": "CCDV-E05-Q44",
       "exam": 5,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q37"
     },
     {
       "id": "CCDV-E05-Q45",
       "exam": 5,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r44"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD5_q33"
     },
     {
       "id": "CCDV-E05-Q46",
       "exam": 5,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q29"
     },
     {
       "id": "CCDV-E05-Q47",
       "exam": 5,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r42"
     },
     {
       "id": "CCDV-E05-Q48",
       "exam": 5,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "64"
     },
     {
       "id": "CCDV-E05-Q49",
       "exam": 5,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-14"
     },
     {
       "id": "CCDV-E05-Q50",
       "exam": 5,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q42"
     },
     {
       "id": "CCDV-E05-Q51",
       "exam": 5,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r50"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r48"
     },
     {
       "id": "CCDV-E05-Q52",
       "exam": 5,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r51"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "73"
     },
     {
       "id": "CCDV-E05-Q53",
       "exam": 5,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "81"
     },
     {
       "id": "CCDV-E06-Q01",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r6"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "6"
     },
     {
       "id": "CCDV-E06-Q02",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r7"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-11"
     },
     {
       "id": "CCDV-E06-Q03",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r8"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-13"
     },
     {
       "id": "CCDV-E06-Q04",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r9"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-5"
     },
     {
       "id": "CCDV-E06-Q05",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r10"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q12"
     },
     {
       "id": "CCDV-E06-Q06",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r11"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q29"
     },
     {
       "id": "CCDV-E06-Q07",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r12"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q50"
     },
     {
       "id": "CCDV-E06-Q08",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r13"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q9"
     },
     {
       "id": "CCDV-E06-Q09",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r14"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q23"
     },
     {
       "id": "CCDV-E06-Q10",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r15"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q48"
     },
     {
       "id": "CCDV-E06-Q11",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r16"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q52"
     },
     {
       "id": "CCDV-E06-Q12",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r17"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q86"
     },
     {
       "id": "CCDV-E06-Q13",
       "exam": 6,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r1"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q96"
     },
     {
       "id": "CCDV-E06-Q14",
       "exam": 6,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r2"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r8"
     },
     {
       "id": "CCDV-E06-Q15",
       "exam": 6,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r3"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r1"
     },
     {
       "id": "CCDV-E06-Q16",
       "exam": 6,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r4"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r11"
     },
     {
       "id": "CCDV-E06-Q17",
       "exam": 6,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r5"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r4"
     },
     {
       "id": "CCDV-E06-Q18",
       "exam": 6,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r6"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r14"
     },
     {
       "id": "CCDV-E06-Q19",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "18"
     },
     {
       "id": "CCDV-E06-Q20",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "28"
     },
     {
       "id": "CCDV-E06-Q21",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r20"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "38"
     },
     {
       "id": "CCDV-E06-Q22",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-6"
     },
     {
       "id": "CCDV-E06-Q23",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r22"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD2_q18"
     },
     {
       "id": "CCDV-E06-Q24",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q1"
     },
     {
       "id": "CCDV-E06-Q25",
       "exam": 6,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q19"
     },
     {
       "id": "CCDV-E06-Q26",
       "exam": 6,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r20"
     },
     {
       "id": "CCDV-E06-Q27",
       "exam": 6,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r21"
     },
     {
       "id": "CCDV-E06-Q28",
       "exam": 6,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r27"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-5"
     },
     {
       "id": "CCDV-E06-Q29",
       "exam": 6,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-8"
     },
     {
       "id": "CCDV-E06-Q30",
       "exam": 6,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r29"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q5"
     },
     {
       "id": "CCDV-E06-Q31",
       "exam": 6,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q36"
     },
     {
       "id": "CCDV-E06-Q32",
       "exam": 6,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r32"
     },
     {
       "id": "CCDV-E06-Q33",
       "exam": 6,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r32"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r34"
     },
     {
       "id": "CCDV-E06-Q34",
       "exam": 6,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r33"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r28"
     },
     {
       "id": "CCDV-E06-Q35",
       "exam": 6,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r30"
     },
     {
       "id": "CCDV-E06-Q36",
       "exam": 6,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-28"
     },
     {
       "id": "CCDV-E06-Q37",
       "exam": 6,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q26"
     },
     {
       "id": "CCDV-E06-Q38",
       "exam": 6,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q30"
     },
     {
       "id": "CCDV-E06-Q39",
       "exam": 6,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q25"
     },
     {
       "id": "CCDV-E06-Q40",
       "exam": 6,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r40"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r37"
     },
     {
       "id": "CCDV-E06-Q41",
       "exam": 6,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r35"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r36"
     },
     {
       "id": "CCDV-E06-Q42",
       "exam": 6,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "51"
     },
     {
       "id": "CCDV-E06-Q43",
       "exam": 6,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r42"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-30"
     },
     {
       "id": "CCDV-E06-Q44",
       "exam": 6,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q40"
     },
     {
       "id": "CCDV-E06-Q45",
       "exam": 6,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r44"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q2"
     },
     {
       "id": "CCDV-E06-Q46",
       "exam": 6,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q55"
     },
     {
       "id": "CCDV-E06-Q47",
       "exam": 6,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r43"
     },
     {
       "id": "CCDV-E06-Q48",
       "exam": 6,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "65"
     },
     {
       "id": "CCDV-E06-Q49",
       "exam": 6,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r48"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-14"
     },
     {
       "id": "CCDV-E06-Q50",
       "exam": 6,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q50"
     },
     {
       "id": "CCDV-E06-Q51",
       "exam": 6,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r50"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r49"
     },
     {
       "id": "CCDV-E06-Q52",
       "exam": 6,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-3.csv",
-      "source_id": "srini_e3_r52"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "74"
     },
     {
       "id": "CCDV-E06-Q53",
       "exam": 6,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-6.csv",
-      "source_id": "srini_e6_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "82"
     },
     {
       "id": "CCDV-E07-Q01",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r7"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "7"
     },
     {
       "id": "CCDV-E07-Q02",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r8"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-12"
     },
     {
       "id": "CCDV-E07-Q03",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r9"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-1"
     },
     {
       "id": "CCDV-E07-Q04",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r10"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q1"
     },
     {
       "id": "CCDV-E07-Q05",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r11"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q13"
     },
     {
       "id": "CCDV-E07-Q06",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r12"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q34"
     },
     {
       "id": "CCDV-E07-Q07",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r13"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q53"
     },
     {
       "id": "CCDV-E07-Q08",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r14"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q10"
     },
     {
       "id": "CCDV-E07-Q09",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r15"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q25"
     },
     {
       "id": "CCDV-E07-Q10",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r16"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q4"
     },
     {
       "id": "CCDV-E07-Q11",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r17"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q53"
     },
     {
       "id": "CCDV-E07-Q12",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r1"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q87"
     },
     {
       "id": "CCDV-E07-Q13",
       "exam": 7,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r2"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q97"
     },
     {
       "id": "CCDV-E07-Q14",
       "exam": 7,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r3"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r9"
     },
     {
       "id": "CCDV-E07-Q15",
       "exam": 7,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r4"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r2"
     },
     {
       "id": "CCDV-E07-Q16",
       "exam": 7,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r5"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r12"
     },
     {
       "id": "CCDV-E07-Q17",
       "exam": 7,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r6"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r5"
     },
     {
       "id": "CCDV-E07-Q18",
       "exam": 7,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r7"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r15"
     },
     {
       "id": "CCDV-E07-Q19",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "19"
     },
     {
       "id": "CCDV-E07-Q20",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "29"
     },
     {
       "id": "CCDV-E07-Q21",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r20"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-6"
     },
     {
       "id": "CCDV-E07-Q22",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r21"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-7"
     },
     {
       "id": "CCDV-E07-Q23",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r22"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q1"
     },
     {
       "id": "CCDV-E07-Q24",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q2"
     },
     {
       "id": "CCDV-E07-Q25",
       "exam": 7,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q20"
     },
     {
       "id": "CCDV-E07-Q26",
       "exam": 7,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r21"
     },
     {
       "id": "CCDV-E07-Q27",
       "exam": 7,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r22"
     },
     {
       "id": "CCDV-E07-Q28",
       "exam": 7,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r27"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-23"
     },
     {
       "id": "CCDV-E07-Q29",
       "exam": 7,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r28"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock3-9"
     },
     {
       "id": "CCDV-E07-Q30",
       "exam": 7,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r29"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q14"
     },
     {
       "id": "CCDV-E07-Q31",
       "exam": 7,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q37"
     },
     {
       "id": "CCDV-E07-Q32",
       "exam": 7,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r33"
     },
     {
       "id": "CCDV-E07-Q33",
       "exam": 7,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r32"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r27"
     },
     {
       "id": "CCDV-E07-Q34",
       "exam": 7,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r33"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r29"
     },
     {
       "id": "CCDV-E07-Q35",
       "exam": 7,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r31"
     },
     {
       "id": "CCDV-E07-Q36",
       "exam": 7,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-29"
     },
     {
       "id": "CCDV-E07-Q37",
       "exam": 7,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q35"
     },
     {
       "id": "CCDV-E07-Q38",
       "exam": 7,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q37"
     },
     {
       "id": "CCDV-E07-Q39",
       "exam": 7,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q32"
     },
     {
       "id": "CCDV-E07-Q40",
       "exam": 7,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r40"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r39"
     },
     {
       "id": "CCDV-E07-Q41",
       "exam": 7,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r35"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r37"
     },
     {
       "id": "CCDV-E07-Q42",
       "exam": 7,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "52"
     },
     {
       "id": "CCDV-E07-Q43",
       "exam": 7,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r42"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-31"
     },
     {
       "id": "CCDV-E07-Q44",
       "exam": 7,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q42"
     },
     {
       "id": "CCDV-E07-Q45",
       "exam": 7,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r44"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q11"
     },
     {
       "id": "CCDV-E07-Q46",
       "exam": 7,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q56"
     },
     {
       "id": "CCDV-E07-Q47",
       "exam": 7,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r44"
     },
     {
       "id": "CCDV-E07-Q48",
       "exam": 7,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "66"
     },
     {
       "id": "CCDV-E07-Q49",
       "exam": 7,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r48"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q32"
     },
     {
       "id": "CCDV-E07-Q50",
       "exam": 7,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q78"
     },
     {
       "id": "CCDV-E07-Q51",
       "exam": 7,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r50"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r50"
     },
     {
       "id": "CCDV-E07-Q52",
       "exam": 7,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r51"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "75"
     },
     {
       "id": "CCDV-E07-Q53",
       "exam": 7,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-7.csv",
-      "source_id": "srini_e7_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "83"
     },
     {
       "id": "CCDV-E08-Q01",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r8"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "8"
     },
     {
       "id": "CCDV-E08-Q02",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r9"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-13"
     },
     {
       "id": "CCDV-E08-Q03",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r10"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-2"
     },
     {
       "id": "CCDV-E08-Q04",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r11"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q2"
     },
     {
       "id": "CCDV-E08-Q05",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r12"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q14"
     },
     {
       "id": "CCDV-E08-Q06",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r13"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q36"
     },
     {
       "id": "CCDV-E08-Q07",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r14"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q1"
     },
     {
       "id": "CCDV-E08-Q08",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r15"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q11"
     },
     {
       "id": "CCDV-E08-Q09",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r16"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q28"
     },
     {
       "id": "CCDV-E08-Q10",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r17"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q7"
     },
     {
       "id": "CCDV-E08-Q11",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r1"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q54"
     },
     {
       "id": "CCDV-E08-Q12",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r2"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q88"
     },
     {
       "id": "CCDV-E08-Q13",
       "exam": 8,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r3"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q100"
     },
     {
       "id": "CCDV-E08-Q14",
       "exam": 8,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r4"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r10"
     },
     {
       "id": "CCDV-E08-Q15",
       "exam": 8,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r5"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r3"
     },
     {
       "id": "CCDV-E08-Q16",
       "exam": 8,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r6"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r13"
     },
     {
       "id": "CCDV-E08-Q17",
       "exam": 8,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r7"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r6"
     },
     {
       "id": "CCDV-E08-Q18",
       "exam": 8,
       "domain": "D1",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r8"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r16"
     },
     {
       "id": "CCDV-E08-Q19",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "20"
     },
     {
       "id": "CCDV-E08-Q20",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "30"
     },
     {
       "id": "CCDV-E08-Q21",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r20"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-19"
     },
     {
       "id": "CCDV-E08-Q22",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r21"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q5"
     },
     {
       "id": "CCDV-E08-Q23",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r22"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q6"
     },
     {
       "id": "CCDV-E08-Q24",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q5"
     },
     {
       "id": "CCDV-E08-Q25",
       "exam": 8,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q72"
     },
     {
       "id": "CCDV-E08-Q26",
       "exam": 8,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r22"
     },
     {
       "id": "CCDV-E08-Q27",
       "exam": 8,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r23"
     },
     {
       "id": "CCDV-E08-Q28",
       "exam": 8,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r27"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-24"
     },
     {
       "id": "CCDV-E08-Q29",
       "exam": 8,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r28"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q27"
     },
     {
       "id": "CCDV-E08-Q30",
       "exam": 8,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r29"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q24"
     },
     {
       "id": "CCDV-E08-Q31",
       "exam": 8,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q38"
     },
     {
       "id": "CCDV-E08-Q32",
       "exam": 8,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r31"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r34"
     },
     {
       "id": "CCDV-E08-Q33",
       "exam": 8,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r32"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r28"
     },
     {
       "id": "CCDV-E08-Q34",
       "exam": 8,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r33"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r30"
     },
     {
       "id": "CCDV-E08-Q35",
       "exam": 8,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r32"
     },
     {
       "id": "CCDV-E08-Q36",
       "exam": 8,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-4"
     },
     {
       "id": "CCDV-E08-Q37",
       "exam": 8,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD4_q24"
     },
     {
       "id": "CCDV-E08-Q38",
       "exam": 8,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q53"
     },
     {
       "id": "CCDV-E08-Q39",
       "exam": 8,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r39"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q33"
     },
     {
       "id": "CCDV-E08-Q40",
       "exam": 8,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r40"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r40"
     },
     {
       "id": "CCDV-E08-Q41",
       "exam": 8,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r35"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r39"
     },
     {
       "id": "CCDV-E08-Q42",
       "exam": 8,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "53"
     },
     {
       "id": "CCDV-E08-Q43",
       "exam": 8,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r42"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-32"
     },
     {
       "id": "CCDV-E08-Q44",
       "exam": 8,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q43"
     },
     {
       "id": "CCDV-E08-Q45",
       "exam": 8,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r44"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q17"
     },
     {
       "id": "CCDV-E08-Q46",
       "exam": 8,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q57"
     },
     {
       "id": "CCDV-E08-Q47",
       "exam": 8,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r45"
     },
     {
       "id": "CCDV-E08-Q48",
       "exam": 8,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "67"
     },
     {
       "id": "CCDV-E08-Q49",
       "exam": 8,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r48"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD6_q34"
     },
     {
       "id": "CCDV-E08-Q50",
       "exam": 8,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q79"
     },
     {
       "id": "CCDV-E08-Q51",
       "exam": 8,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r50"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r47"
     },
     {
       "id": "CCDV-E08-Q52",
       "exam": 8,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-4.csv",
-      "source_id": "srini_e4_r52"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "76"
     },
     {
       "id": "CCDV-E08-Q53",
       "exam": 8,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-8.csv",
-      "source_id": "srini_e8_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "84"
     },
     {
       "id": "CCDV-E09-Q01",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r9"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "9"
     },
     {
       "id": "CCDV-E09-Q02",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r10"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-14"
     },
     {
       "id": "CCDV-E09-Q03",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r11"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-3"
     },
     {
       "id": "CCDV-E09-Q04",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r12"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q4"
     },
     {
       "id": "CCDV-E09-Q05",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r13"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q15"
     },
     {
       "id": "CCDV-E09-Q06",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r14"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q38"
     },
     {
       "id": "CCDV-E09-Q07",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r15"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q2"
     },
     {
       "id": "CCDV-E09-Q08",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r16"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q12"
     },
     {
       "id": "CCDV-E09-Q09",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r17"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q31"
     },
     {
       "id": "CCDV-E09-Q10",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 1
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q15"
     },
     {
       "id": "CCDV-E09-Q11",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 2
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q69"
     },
     {
       "id": "CCDV-E09-Q12",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 3
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q89"
     },
     {
       "id": "CCDV-E09-Q13",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 4
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r1"
     },
     {
       "id": "CCDV-E09-Q14",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 5
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r11"
     },
     {
       "id": "CCDV-E09-Q15",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 6
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r4"
     },
     {
       "id": "CCDV-E09-Q16",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 7
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r14"
     },
     {
       "id": "CCDV-E09-Q17",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 8
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r7"
     },
     {
       "id": "CCDV-E09-Q18",
       "exam": 9,
       "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 9
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r17"
     },
     {
       "id": "CCDV-E09-Q19",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r18"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "21"
     },
     {
       "id": "CCDV-E09-Q20",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r19"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "31"
     },
     {
       "id": "CCDV-E09-Q21",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r20"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-20"
     },
     {
       "id": "CCDV-E09-Q22",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r21"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q18"
     },
     {
       "id": "CCDV-E09-Q23",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r22"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q10"
     },
     {
       "id": "CCDV-E09-Q24",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r23"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q8"
     },
     {
       "id": "CCDV-E09-Q25",
       "exam": 9,
       "domain": "D2",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r24"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q73"
     },
     {
       "id": "CCDV-E09-Q26",
       "exam": 9,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r25"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r23"
     },
     {
       "id": "CCDV-E09-Q27",
       "exam": 9,
       "domain": "D2",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r26"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r24"
     },
     {
       "id": "CCDV-E09-Q28",
       "exam": 9,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r27"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-25"
     },
     {
       "id": "CCDV-E09-Q29",
       "exam": 9,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r28"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q30"
     },
     {
       "id": "CCDV-E09-Q30",
       "exam": 9,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r29"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q35"
     },
     {
       "id": "CCDV-E09-Q31",
       "exam": 9,
       "domain": "D3",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r30"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q39"
     },
     {
       "id": "CCDV-E09-Q32",
       "exam": 9,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r31"
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r27"
     },
     {
       "id": "CCDV-E09-Q33",
       "exam": 9,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r32"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r29"
     },
     {
       "id": "CCDV-E09-Q34",
       "exam": 9,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r33"
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r31"
     },
     {
       "id": "CCDV-E09-Q35",
       "exam": 9,
       "domain": "D3",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r34"
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r33"
     },
     {
       "id": "CCDV-E09-Q36",
       "exam": 9,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r36"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-10"
     },
     {
       "id": "CCDV-E09-Q37",
       "exam": 9,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r37"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD4_q25"
     },
     {
       "id": "CCDV-E09-Q38",
       "exam": 9,
       "domain": "D4",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r38"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q3"
     },
     {
       "id": "CCDV-E09-Q39",
       "exam": 9,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r39"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r35"
     },
     {
       "id": "CCDV-E09-Q40",
       "exam": 9,
       "domain": "D4",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r40"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r35"
     },
     {
       "id": "CCDV-E09-Q41",
       "exam": 9,
       "domain": "D4",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 43
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r40"
     },
     {
       "id": "CCDV-E09-Q42",
       "exam": 9,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r41"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "54"
     },
     {
       "id": "CCDV-E09-Q43",
       "exam": 9,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r42"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-9"
     },
     {
       "id": "CCDV-E09-Q44",
       "exam": 9,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r43"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q45"
     },
     {
       "id": "CCDV-E09-Q45",
       "exam": 9,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r44"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q32"
     },
     {
       "id": "CCDV-E09-Q46",
       "exam": 9,
       "domain": "D5",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r45"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q58"
     },
     {
       "id": "CCDV-E09-Q47",
       "exam": 9,
       "domain": "D5",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r46"
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r46"
     },
     {
       "id": "CCDV-E09-Q48",
       "exam": 9,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r47"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "68"
     },
     {
       "id": "CCDV-E09-Q49",
       "exam": 9,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r48"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD6_q35"
     },
     {
       "id": "CCDV-E09-Q50",
       "exam": 9,
       "domain": "D6",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r49"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q80"
     },
     {
       "id": "CCDV-E09-Q51",
       "exam": 9,
       "domain": "D6",
       "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r50"
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r48"
     },
     {
       "id": "CCDV-E09-Q52",
       "exam": 9,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r51"
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-14"
     },
     {
       "id": "CCDV-E09-Q53",
       "exam": 9,
       "domain": "D8",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-9.csv",
-      "source_id": "srini_e9_r53"
+      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
+      "source_file": "CCDV-F_Practice_Exam_v1.html",
+      "source_id": "85"
     },
     {
       "id": "CCDV-E10-Q01",
@@ -3851,82 +3857,10 @@
       "domain": "D1",
       "source_repo": "hbacheller-tribe/CCDV-F-Exam",
       "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 10
+      "source_id": "10"
     },
     {
       "id": "CCDV-E10-Q02",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 11
-    },
-    {
-      "id": "CCDV-E10-Q03",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 12
-    },
-    {
-      "id": "CCDV-E10-Q04",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-1"
-    },
-    {
-      "id": "CCDV-E10-Q05",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-2"
-    },
-    {
-      "id": "CCDV-E10-Q06",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-3"
-    },
-    {
-      "id": "CCDV-E10-Q07",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-11"
-    },
-    {
-      "id": "CCDV-E10-Q08",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-12"
-    },
-    {
-      "id": "CCDV-E10-Q09",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-13"
-    },
-    {
-      "id": "CCDV-E10-Q10",
-      "exam": 10,
-      "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-14"
-    },
-    {
-      "id": "CCDV-E10-Q11",
       "exam": 10,
       "domain": "D1",
       "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
@@ -3934,60 +3868,132 @@
       "source_id": "developer-foundations-practice-15"
     },
     {
-      "id": "CCDV-E10-Q12",
+      "id": "CCDV-E10-Q03",
       "exam": 10,
       "domain": "D1",
       "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
       "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-16"
+      "source_id": "developer-foundations-mock2-4"
+    },
+    {
+      "id": "CCDV-E10-Q04",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q6"
+    },
+    {
+      "id": "CCDV-E10-Q05",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q17"
+    },
+    {
+      "id": "CCDV-E10-Q06",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q39"
+    },
+    {
+      "id": "CCDV-E10-Q07",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD1_q3"
+    },
+    {
+      "id": "CCDV-E10-Q08",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q3"
+    },
+    {
+      "id": "CCDV-E10-Q09",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q33"
+    },
+    {
+      "id": "CCDV-E10-Q10",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q16"
+    },
+    {
+      "id": "CCDV-E10-Q11",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q70"
+    },
+    {
+      "id": "CCDV-E10-Q12",
+      "exam": 10,
+      "domain": "D1",
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q90"
     },
     {
       "id": "CCDV-E10-Q13",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-17"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r2"
     },
     {
       "id": "CCDV-E10-Q14",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-18"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r12"
     },
     {
       "id": "CCDV-E10-Q15",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-mock1-2"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r5"
     },
     {
       "id": "CCDV-E10-Q16",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-mock1-3"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r15"
     },
     {
       "id": "CCDV-E10-Q17",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-mock1-13"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r8"
     },
     {
       "id": "CCDV-E10-Q18",
       "exam": 10,
       "domain": "D1",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-mock2-1"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r1"
     },
     {
       "id": "CCDV-E10-Q19",
@@ -3995,7 +4001,7 @@
       "domain": "D2",
       "source_repo": "hbacheller-tribe/CCDV-F-Exam",
       "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 13
+      "source_id": "22"
     },
     {
       "id": "CCDV-E10-Q20",
@@ -4003,175 +4009,175 @@
       "domain": "D2",
       "source_repo": "hbacheller-tribe/CCDV-F-Exam",
       "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 14
+      "source_id": "32"
     },
     {
       "id": "CCDV-E10-Q21",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 15
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-21"
     },
     {
       "id": "CCDV-E10-Q22",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 16
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q23"
     },
     {
       "id": "CCDV-E10-Q23",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 17
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q16"
     },
     {
       "id": "CCDV-E10-Q24",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 18
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q9"
     },
     {
       "id": "CCDV-E10-Q25",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 19
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q74"
     },
     {
       "id": "CCDV-E10-Q26",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 20
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r24"
     },
     {
       "id": "CCDV-E10-Q27",
       "exam": 10,
       "domain": "D2",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 21
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r25"
     },
     {
       "id": "CCDV-E10-Q28",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 39
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-26"
     },
     {
       "id": "CCDV-E10-Q29",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 40
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q33"
     },
     {
       "id": "CCDV-E10-Q30",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 41
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q39"
     },
     {
       "id": "CCDV-E10-Q31",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 42
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q98"
     },
     {
       "id": "CCDV-E10-Q32",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-4"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r28"
     },
     {
       "id": "CCDV-E10-Q33",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-5"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r30"
     },
     {
       "id": "CCDV-E10-Q34",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-23"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-4.csv",
+      "source_id": "srini_e4_r32"
     },
     {
       "id": "CCDV-E10-Q35",
       "exam": 10,
       "domain": "D3",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-24"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r34"
     },
     {
       "id": "CCDV-E10-Q36",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 44
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock1-11"
     },
     {
       "id": "CCDV-E10-Q37",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 45
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD4_q26"
     },
     {
       "id": "CCDV-E10-Q38",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-7"
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q6"
     },
     {
       "id": "CCDV-E10-Q39",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-27"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r36"
     },
     {
       "id": "CCDV-E10-Q40",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-28"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r36"
     },
     {
       "id": "CCDV-E10-Q41",
       "exam": 10,
       "domain": "D4",
-      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
-      "source_file": "question-bank.json",
-      "source_id": "developer-foundations-practice-29"
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-5.csv",
+      "source_id": "srini_e5_r35"
     },
     {
       "id": "CCDV-E10-Q42",
@@ -4179,95 +4185,95 @@
       "domain": "D5",
       "source_repo": "hbacheller-tribe/CCDV-F-Exam",
       "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 46
+      "source_id": "55"
     },
     {
       "id": "CCDV-E10-Q43",
       "exam": 10,
       "domain": "D5",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 47
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-mock2-13"
     },
     {
       "id": "CCDV-E10-Q44",
       "exam": 10,
       "domain": "D5",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 48
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q46"
     },
     {
       "id": "CCDV-E10-Q45",
       "exam": 10,
       "domain": "D5",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 49
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "hard-prep-exam.md",
+      "source_id": "natsh_hard_q40"
     },
     {
       "id": "CCDV-E10-Q46",
       "exam": 10,
       "domain": "D5",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 50
+      "source_repo": "natsh/claude-developer-foundations-prep",
+      "source_file": "practice-exam-quiz.md",
+      "source_id": "natsh_quiz_q59"
     },
     {
       "id": "CCDV-E10-Q47",
       "exam": 10,
       "domain": "D5",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 51
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-2.csv",
+      "source_id": "srini_e2_r41"
     },
     {
       "id": "CCDV-E10-Q48",
       "exam": 10,
       "domain": "D6",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 60
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-8"
     },
     {
       "id": "CCDV-E10-Q49",
       "exam": 10,
       "domain": "D6",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 61
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "practice_questions.md",
+      "source_id": "turjoy_pq_dD6_q36"
     },
     {
       "id": "CCDV-E10-Q50",
       "exam": 10,
       "domain": "D6",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 62
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-1.csv",
+      "source_id": "srini_e1_r47"
     },
     {
       "id": "CCDV-E10-Q51",
       "exam": 10,
       "domain": "D6",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 63
+      "source_repo": "srinipusuluri/CCDV-F-SET1",
+      "source_file": "practice-exam-3.csv",
+      "source_id": "srini_e3_r49"
     },
     {
       "id": "CCDV-E10-Q52",
       "exam": 10,
       "domain": "D7",
-      "source_repo": "srinipusuluri/CCDV-F-SET1",
-      "source_file": "practice-exam-5.csv",
-      "source_id": "srini_e5_r52"
+      "source_repo": "turjoy-real/CCDV-F",
+      "source_file": "mock_exam_53.md",
+      "source_id": "turjoy_m53_q3"
     },
     {
       "id": "CCDV-E10-Q53",
       "exam": 10,
       "domain": "D8",
-      "source_repo": "hbacheller-tribe/CCDV-F-Exam",
-      "source_file": "CCDV-F_Practice_Exam_v1.html",
-      "source_id": 77
+      "source_repo": "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+      "source_file": "question-bank.json",
+      "source_id": "developer-foundations-practice-10"
     }
   ]
 }
