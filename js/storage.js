@@ -92,7 +92,10 @@ export const Storage = {
       userAnswers: state.userAnswers || {},
       flaggedQuestions: Array.isArray(state.flaggedQuestions) ? state.flaggedQuestions : Array.from(state.flaggedQuestions || []),
       timerSecondsRemaining: state.timerSecondsRemaining ?? 7200,
-      drillQuestions: (state.exam && state.exam.exam_id >= 900) ? state.exam.questions : null
+      drillQuestions: (state.exam && state.exam.exam_id >= 900) ? state.exam.questions : null,
+      isStudyMode: Boolean(state.isStudyMode),
+      checkedQuestions: state.checkedQuestions || {},
+      studyElapsedSeconds: state.studyElapsedSeconds || 0
     };
     safeSetItem(STORAGE_KEYS.ACTIVE_EXAM, JSON.stringify(minimalState));
   },

@@ -21,6 +21,9 @@ const State = {
   timerInterval: null,
   lastCompletedAttempt: null,
   isReviewMode: false,      // when reviewing a finished exam
+  isStudyMode: false,       // interactive study mode with immediate feedback
+  checkedQuestions: {},     // { [qId]: { isCorrect: boolean, userAnswers: string[] } }
+  studyElapsedSeconds: 0,   // count-up timer in study mode
   drillMode: null           // null, 'vault', or 'topic'
 };
 
@@ -37,9 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up Hash router
   window.addEventListener('hashchange', handleRouting);
   
-  // Wall-clock sync on tab visibility change
+  // Wall-clock sync on tab visibility change (timed exam mode only)
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && State.timerEndTime && State.currentView === 'exam' && !State.isReviewMode) {
+    if (document.visibilityState === 'visible' && State.timerEndTime && State.currentView === 'exam' && !State.isReviewMode && !State.isStudyMode) {
       const now = Date.now();
       State.timerSecondsRemaining = Math.max(0, Math.round((State.timerEndTime - now) / 1000));
       updateTimerDisplay();
@@ -235,15 +238,23 @@ function renderDashboard() {
   const savedActive = Storage.getActiveExam();
   const resumeContainer = document.getElementById('resume-banner-container');
   if (savedActive && savedActive.exam_id) {
+    const isStudy = Boolean(savedActive.isStudyMode);
     const answeredCount = Object.values(savedActive.userAnswers || {}).filter(a => Array.isArray(a) && a.length > 0).length;
     const totalQ = savedActive.drillQuestions ? savedActive.drillQuestions.length : 53;
+    const timeInfo = isStudy
+      ? `${Math.floor((savedActive.studyElapsedSeconds || 0) / 60)} minutes elapsed`
+      : `${Math.floor((savedActive.timerSecondsRemaining ?? 7200) / 60)} minutes remaining`;
+
     resumeContainer.innerHTML = `
-      <div class="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 flex flex-wrap items-center justify-between gap-4">
+      <div class="p-5 rounded-2xl ${isStudy ? 'bg-amber-50/70 border-2 border-brand-terracotta-line' : 'bg-amber-50 border-2 border-amber-300'} flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span class="w-3 h-3 rounded-full bg-amber-500 shrink-0" aria-hidden="true"></span>
+          <span class="w-3 h-3 rounded-full ${isStudy ? 'bg-brand-terracotta' : 'bg-amber-500'} shrink-0" aria-hidden="true"></span>
           <div>
-            <h3 class="text-sm font-semibold text-stone-900">Active Exam in Progress: ${escapeHtml(savedActive.exam_title || 'Mock Exam')}</h3>
-            <p class="text-xs text-stone-600 font-sans">${answeredCount} of ${totalQ} answered · ${Math.floor(savedActive.timerSecondsRemaining / 60)} minutes remaining</p>
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-semibold text-stone-900">Active ${isStudy ? 'Study' : 'Exam'} Session: ${escapeHtml(savedActive.exam_title || 'Mock Exam')}</h3>
+              ${isStudy ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line font-semibold">Study Mode</span>' : ''}
+            </div>
+            <p class="text-xs text-stone-600 font-sans">${answeredCount} of ${totalQ} answered · ${timeInfo}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -251,7 +262,7 @@ function renderDashboard() {
             Discard
           </button>
           <a href="#exam" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5">
-            <span>Resume Exam</span>
+            <span>Resume ${isStudy ? 'Study' : 'Exam'}</span>
             <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
@@ -315,13 +326,16 @@ function renderDashboard() {
         <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
         <p class="text-xs font-mono text-stone-500 mt-0.5">Form ${formNum} · 53 questions · 120 minutes</p>
       </div>
-      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3">
+      <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-2.5">
         ${bestAttempt ? `
           <button type="button" onclick="window.App.viewPreviousResult('${bestAttempt.id}')" class="text-xs font-mono text-stone-500 hover:text-stone-900 underline-offset-2 hover:underline transition">
             Score
           </button>
         ` : '<span aria-hidden="true"></span>'}
-        <button type="button" onclick="window.App.startExam(${exam.exam_id})" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition shrink-0">
+        <button type="button" onclick="window.App.startStudyExam(${exam.exam_id})" class="px-3 py-2 rounded-lg border border-stone-300 hover:border-brand-terracotta hover:text-brand-terracotta text-stone-700 text-xs font-semibold transition shrink-0" title="Study with instant feedback and rationale">
+          Study
+        </button>
+        <button type="button" onclick="window.App.startExam(${exam.exam_id})" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition shrink-0" title="Timed practice exam">
           ${bestAttempt ? 'Retake' : 'Start'} <span aria-hidden="true">&rarr;</span>
         </button>
       </div>
@@ -370,6 +384,9 @@ function renderExamRunner(paramId) {
         State.userAnswers = savedActive.userAnswers || {};
         State.flaggedQuestions = new Set(savedActive.flaggedQuestions || []);
         State.timerSecondsRemaining = savedActive.timerSecondsRemaining ?? (fullExam.time_limit_minutes * 60);
+        State.isStudyMode = Boolean(savedActive.isStudyMode);
+        State.checkedQuestions = savedActive.checkedQuestions || {};
+        State.studyElapsedSeconds = savedActive.studyElapsedSeconds || 0;
       } else {
         startFreshExam(paramId);
       }
@@ -400,21 +417,24 @@ function renderExamRunner(paramId) {
   startTimer();
 }
 
-function startFreshExam(paramId) {
+function startFreshExam(paramId, isStudy = false) {
   const idToLoad = paramId ? parseInt(paramId) : 1;
   const foundExam = State.allExams.find(e => e.exam_id === idToLoad);
   if (!foundExam) {
     window.location.hash = '#dashboard';
     return;
   }
-  initNewExamSession(foundExam);
+  initNewExamSession(foundExam, isStudy);
 }
 
-function initNewExamSession(exam) {
+function initNewExamSession(exam, isStudy = false) {
   State.activeExam = exam;
   State.currentQuestionIndex = 0;
   State.userAnswers = {};
   State.flaggedQuestions = new Set();
+  State.isStudyMode = Boolean(isStudy);
+  State.checkedQuestions = {};
+  State.studyElapsedSeconds = 0;
   State.timerSecondsRemaining = (exam.time_limit_minutes || 120) * 60;
   State.timerEndTime = Date.now() + State.timerSecondsRemaining * 1000;
   State.isReviewMode = false;
@@ -430,7 +450,10 @@ function saveCurrentSession() {
       currentQuestionIndex: State.currentQuestionIndex,
       userAnswers: State.userAnswers,
       flaggedQuestions: Array.from(State.flaggedQuestions),
-      timerSecondsRemaining: State.timerSecondsRemaining
+      timerSecondsRemaining: State.timerSecondsRemaining,
+      isStudyMode: State.isStudyMode,
+      checkedQuestions: State.checkedQuestions,
+      studyElapsedSeconds: State.studyElapsedSeconds
     });
   }
 }
@@ -444,7 +467,8 @@ function renderCurrentQuestion() {
   const totalQ = exam.questions.length;
 
   // Header info
-  document.getElementById('exam-title-header').textContent = exam.title + (State.isReviewMode ? ' (Review Mode)' : '');
+  const modeSuffix = State.isReviewMode ? ' (Review Mode)' : (State.isStudyMode ? ' (Study Mode)' : '');
+  document.getElementById('exam-title-header').textContent = exam.title + modeSuffix;
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
   
   const domainInfo = DOMAIN_METADATA[q.domain_id] || { name: q.domain_name, weight: 10 };
@@ -492,6 +516,8 @@ function renderCurrentQuestion() {
   optionsContainer.innerHTML = '';
 
   const userSelected = State.userAnswers[q.id] || [];
+  const isQuestionChecked = State.isStudyMode && Boolean(State.checkedQuestions[q.id]);
+  const inFeedbackMode = State.isReviewMode || isQuestionChecked;
 
   q.options.forEach(opt => {
     const isUserChoice = userSelected.includes(opt.key);
@@ -502,7 +528,7 @@ function renderCurrentQuestion() {
     let cardClasses = "p-4 rounded-xl border transition flex items-start gap-4 ";
     let radioDisabled = "";
 
-    if (State.isReviewMode) {
+    if (inFeedbackMode) {
       radioDisabled = "disabled";
       if (isCorrectChoice) {
         // High visual contrast for correct choice
@@ -525,7 +551,7 @@ function renderCurrentQuestion() {
     card.className = cardClasses;
 
     let markerBadge = '';
-    if (State.isReviewMode) {
+    if (inFeedbackMode) {
       if (isCorrectChoice) {
         markerBadge = `<span class="ml-auto text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded whitespace-nowrap">✓ Correct</span>`;
       } else if (isUserChoice) {
@@ -548,9 +574,9 @@ function renderCurrentQuestion() {
     optionsContainer.appendChild(card);
   });
 
-  // Review mode / Explanation drawer
+  // Review / Study mode explanation drawer
   const explanationBox = document.getElementById('explanation-drawer');
-  if (State.isReviewMode) {
+  if (inFeedbackMode) {
     explanationBox.classList.remove('hidden');
     explanationBox.innerHTML = `
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
@@ -576,6 +602,37 @@ function renderCurrentQuestion() {
   // Update Prev / Next buttons
   const prevBtn = document.getElementById('prev-q-btn');
   const nextBtn = document.getElementById('next-q-btn');
+  const clearBtn = document.getElementById('clear-q-btn');
+  const checkBtn = document.getElementById('check-answer-btn');
+
+  if (clearBtn) {
+    if (inFeedbackMode || userSelected.length === 0) {
+      clearBtn.classList.add('hidden');
+    } else {
+      clearBtn.classList.remove('hidden');
+    }
+  }
+
+  if (checkBtn) {
+    if (State.isStudyMode && !State.isReviewMode) {
+      checkBtn.classList.remove('hidden');
+      if (isQuestionChecked) {
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Checked ✓';
+        checkBtn.className = "px-4 py-2 rounded-lg bg-stone-100 text-stone-400 border border-stone-200 text-xs font-semibold cursor-default";
+      } else if (userSelected.length > 0) {
+        checkBtn.disabled = false;
+        checkBtn.textContent = 'Check Answer';
+        checkBtn.className = "px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition cursor-pointer";
+      } else {
+        checkBtn.disabled = true;
+        checkBtn.textContent = 'Check Answer';
+        checkBtn.className = "px-4 py-2 rounded-lg bg-stone-200 text-stone-400 text-xs font-semibold cursor-not-allowed";
+      }
+    } else {
+      checkBtn.classList.add('hidden');
+    }
+  }
 
   prevBtn.disabled = State.currentQuestionIndex === 0;
   prevBtn.className = State.currentQuestionIndex === 0
@@ -607,7 +664,7 @@ function renderCurrentQuestion() {
 }
 
 function handleOptionClick(q, optKey, isMultiple) {
-  if (State.isReviewMode) return;
+  if (State.isReviewMode || (State.isStudyMode && State.checkedQuestions[q.id])) return;
 
   let current = State.userAnswers[q.id] || [];
   if (isMultiple) {
@@ -626,6 +683,29 @@ function handleOptionClick(q, optKey, isMultiple) {
   } else {
     State.userAnswers[q.id] = current;
   }
+
+  saveCurrentSession();
+  renderCurrentQuestion();
+  renderQuestionMatrix();
+}
+
+function checkCurrentAnswer() {
+  if (!State.isStudyMode || State.isReviewMode) return;
+  const exam = State.activeExam;
+  if (!exam) return;
+  const q = exam.questions[State.currentQuestionIndex];
+  if (!q) return;
+
+  const userSel = State.userAnswers[q.id] || [];
+  if (userSel.length === 0) return;
+
+  const correctSel = q.correct_answers || [];
+  const isCorrect = userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
+
+  State.checkedQuestions[q.id] = {
+    isCorrect,
+    userAnswers: [...userSel]
+  };
 
   saveCurrentSession();
   renderCurrentQuestion();
@@ -684,6 +764,7 @@ function clearCurrentAnswer() {
   const exam = State.activeExam;
   if (!exam || State.isReviewMode) return;
   const q = exam.questions[State.currentQuestionIndex];
+  if (State.isStudyMode && State.checkedQuestions[q.id]) return;
   delete State.userAnswers[q.id];
   saveCurrentSession();
   renderCurrentQuestion();
@@ -703,7 +784,13 @@ function renderQuestionMatrix() {
   const flaggedCount = State.flaggedQuestions.size;
   const totalCount = exam.questions.length;
 
-  const summaryText = `${answeredCount} of ${totalCount} answered · ${flaggedCount} flagged`;
+  let summaryText = `${answeredCount} of ${totalCount} answered · ${flaggedCount} flagged`;
+  if (State.isStudyMode) {
+    const checkedCount = Object.keys(State.checkedQuestions || {}).length;
+    const correctCount = Object.values(State.checkedQuestions || {}).filter(c => c.isCorrect).length;
+    summaryText = `${checkedCount} of ${totalCount} checked · ${correctCount} correct`;
+  }
+
   const summaryEl = document.getElementById('matrix-summary-text');
   if (summaryEl) summaryEl.textContent = summaryText;
   const mobileSummaryEl = document.getElementById('mobile-matrix-summary-text');
@@ -711,6 +798,30 @@ function renderQuestionMatrix() {
 
   const mobBtnLabel = document.getElementById('mobile-matrix-btn-label');
   if (mobBtnLabel) mobBtnLabel.textContent = `Grid (${totalCount})`;
+
+  // Toggle Matrix Legends between Exam and Study modes
+  const legendExam = document.getElementById('matrix-legend-exam');
+  const legendStudy = document.getElementById('matrix-legend-study');
+  const mobLegendExam = document.getElementById('mobile-matrix-legend-exam');
+  const mobLegendStudy = document.getElementById('mobile-matrix-legend-study');
+  if (legendExam && legendStudy) {
+    if (State.isStudyMode) {
+      legendExam.classList.add('hidden');
+      legendStudy.classList.remove('hidden');
+    } else {
+      legendExam.classList.remove('hidden');
+      legendStudy.classList.add('hidden');
+    }
+  }
+  if (mobLegendExam && mobLegendStudy) {
+    if (State.isStudyMode) {
+      mobLegendExam.classList.add('hidden');
+      mobLegendStudy.classList.remove('hidden');
+    } else {
+      mobLegendExam.classList.remove('hidden');
+      mobLegendStudy.classList.add('hidden');
+    }
+  }
 
   if (matrixContainer) matrixContainer.innerHTML = '';
   if (mobileContainer) mobileContainer.innerHTML = '';
@@ -722,10 +833,13 @@ function renderQuestionMatrix() {
 
     let baseClasses = "rounded-lg text-xs font-mono flex items-center justify-center transition relative ";
 
-    if (State.isReviewMode) {
-      const userSel = State.userAnswers[q.id] || [];
-      const correctSel = q.correct_answers || [];
-      const isCorrect = userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
+    const checkedInfo = State.isStudyMode ? State.checkedQuestions[q.id] : null;
+
+    if (State.isReviewMode || checkedInfo) {
+      const isCorrect = checkedInfo ? checkedInfo.isCorrect : (
+        (State.userAnswers[q.id] || []).length === (q.correct_answers || []).length &&
+        (State.userAnswers[q.id] || []).every(k => (q.correct_answers || []).includes(k))
+      );
       if (isCurrent) {
         baseClasses += "ring-2 ring-stone-900 font-bold ";
       }
@@ -807,6 +921,19 @@ function startTimer() {
     return;
   }
 
+  if (State.isStudyMode) {
+    updateTimerDisplay();
+    State.timerInterval = setInterval(() => {
+      State.studyElapsedSeconds = (State.studyElapsedSeconds || 0) + 1;
+      updateTimerDisplay();
+
+      if (State.studyElapsedSeconds % 30 === 0) {
+        saveCurrentSession();
+      }
+    }, 1000);
+    return;
+  }
+
   // Anchor wall-clock end time
   State.timerEndTime = Date.now() + State.timerSecondsRemaining * 1000;
   updateTimerDisplay();
@@ -841,6 +968,18 @@ function pauseTimer() {
 function updateTimerDisplay() {
   const el = document.getElementById('timer-display');
   if (!el) return;
+
+  if (State.isStudyMode) {
+    const elapsed = State.studyElapsedSeconds || 0;
+    const hours = Math.floor(elapsed / 3600);
+    const minutes = Math.floor((elapsed % 3600) / 60);
+    const seconds = elapsed % 60;
+    const formatted = `${hours > 0 ? hours + ':' : ''}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    el.textContent = `${formatted} (Study)`;
+    el.className = "font-mono text-xs font-semibold text-stone-900";
+    return;
+  }
+
   const hours = Math.floor(State.timerSecondsRemaining / 3600);
   const minutes = Math.floor((State.timerSecondsRemaining % 3600) / 60);
   const seconds = State.timerSecondsRemaining % 60;
@@ -904,7 +1043,10 @@ function finishExam() {
   const attempt = {
     exam_id: exam.exam_id,
     exam_title: exam.title,
-    time_spent_seconds: (exam.time_limit_minutes * 60) - (State.timerSecondsRemaining ?? 0),
+    mode: State.isStudyMode ? 'study' : 'exam',
+    time_spent_seconds: State.isStudyMode
+      ? (State.studyElapsedSeconds || 0)
+      : (exam.time_limit_minutes * 60) - (State.timerSecondsRemaining ?? 0),
     questions: exam.exam_id >= 900 ? exam.questions : null, // keep questions for drill reviews
     ...evalResult,
     user_answers: JSON.parse(JSON.stringify(State.userAnswers))
@@ -958,7 +1100,10 @@ function renderResults(attemptId) {
   scoreCard.innerHTML = `
     <div class="flex flex-wrap items-center justify-between gap-4">
       <div>
-        <span class="text-xs font-editorial uppercase tracking-widest ${isPass ? 'text-emerald-800' : 'text-amber-800'} font-semibold">Official Score Report</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-editorial uppercase tracking-widest ${isPass ? 'text-emerald-800' : 'text-amber-800'} font-semibold">Official Score Report</span>
+          ${attempt.mode === 'study' ? `<span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">Study Mode</span>` : ''}
+        </div>
         <h2 class="text-3xl font-editorial text-stone-900">${escapeHtml(attempt.exam_title)}</h2>
         <p class="text-xs text-stone-600 mt-1">Completed on ${new Date(attempt.date).toLocaleString()} · Duration: ${Math.floor((attempt.time_spent_seconds || 0) / 60)} minutes</p>
       </div>
@@ -1080,9 +1225,12 @@ function renderGapsView() {
                 <strong>Watch out for:</strong> ${escapeHtml(item.guide.traps)}
               </div>
             ` : '<p class="text-sm text-stone-500 font-sans">Review missed questions in this category using the Vault.</p>'}
-            <div class="pt-2 flex justify-end">
+            <div class="pt-2 flex items-center justify-end gap-3">
+              <button data-action="topic-study" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-stone-600 hover:text-brand-terracotta">
+                Study Drill
+              </button>
               <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep">
-                Drill Missed Questions in this Topic <span aria-hidden="true">&rarr;</span>
+                Timed Drill <span aria-hidden="true">&rarr;</span>
               </button>
             </div>
           </div>
@@ -1113,8 +1261,11 @@ function renderVaultView() {
         </div>
         <div class="flex flex-wrap gap-2">
           ${missedVault.length > 0 ? `
-            <button onclick="window.App.startRemediationQuiz()" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition">
-              Start Remediation Quiz (${missedVault.length}) <span aria-hidden="true">&rarr;</span>
+            <button onclick="window.App.startRemediationQuiz(true)" class="px-3.5 py-2 rounded-lg border border-brand-terracotta text-brand-terracotta hover:bg-brand-terracotta-tint text-xs font-semibold transition" title="Study with instant answers &amp; explanations">
+              Study Drill (${missedVault.length})
+            </button>
+            <button onclick="window.App.startRemediationQuiz(false)" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition" title="Timed remediation drill">
+              Timed Drill <span aria-hidden="true">&rarr;</span>
             </button>
           ` : ''}
           <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
@@ -1228,7 +1379,14 @@ window.App = {
   startExam(examId) {
     const exam = State.allExams.find(e => e.exam_id === examId);
     if (!exam) return;
-    initNewExamSession(exam);
+    initNewExamSession(exam, false);
+    window.location.hash = `#exam/${examId}`;
+  },
+
+  startStudyExam(examId) {
+    const exam = State.allExams.find(e => e.exam_id === examId);
+    if (!exam) return;
+    initNewExamSession(exam, true);
     window.location.hash = `#exam/${examId}`;
   },
 
@@ -1240,6 +1398,7 @@ window.App = {
 
   nextQuestion,
   prevQuestion,
+  checkCurrentAnswer,
   toggleFlag,
   toggleMobileMatrix,
   clearCurrentAnswer,
@@ -1276,7 +1435,7 @@ window.App = {
     window.location.hash = `#exam/${attempt.exam_id}`;
   },
 
-  startRemediationQuiz() {
+  startRemediationQuiz(isStudy = false) {
     const missedVault = Storage.getMissedQuestions();
     if (missedVault.length === 0) return;
 
@@ -1288,12 +1447,12 @@ window.App = {
       questions: missedVault
     };
 
-    initNewExamSession(drillExam);
+    initNewExamSession(drillExam, isStudy);
     State.drillMode = 'vault';
     window.location.hash = '#exam/999';
   },
 
-  startTopicDrill(topicInput) {
+  startTopicDrill(topicInput, isStudy = false) {
     let topic = topicInput;
     try {
       topic = decodeURIComponent(topicInput);
@@ -1310,7 +1469,7 @@ window.App = {
       time_limit_minutes: Math.max(10, Math.round(missedVault.length * 2.25)),
       questions: missedVault
     };
-    initNewExamSession(drillExam);
+    initNewExamSession(drillExam, isStudy);
     State.drillMode = 'topic';
     window.location.hash = '#exam/998';
   },
@@ -1362,7 +1521,10 @@ document.addEventListener('click', (e) => {
   const action = btn.dataset.action;
   if (action === 'topic-drill') {
     const topic = btn.dataset.topic;
-    if (topic) window.App.startTopicDrill(topic);
+    if (topic) window.App.startTopicDrill(topic, false);
+  } else if (action === 'topic-study') {
+    const topic = btn.dataset.topic;
+    if (topic) window.App.startTopicDrill(topic, true);
   } else if (action === 'review-attempt') {
     const attId = btn.dataset.attemptId;
     if (attId) window.App.reviewAttemptAnswers(attId);
