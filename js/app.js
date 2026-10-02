@@ -259,99 +259,68 @@ function renderDashboard() {
     resumeContainer.classList.add('hidden');
   }
 
-  // Diagnostic Summary Card
+  // Quick Diagnostic Strip (only displayed once user has taken at least 1 exam)
   const diagContainer = document.getElementById('dashboard-readiness-card');
   if (diagContainer) {
-    diagContainer.innerHTML = `
-      <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <span class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">Certification Readiness</span>
-            <h2 class="text-xl font-editorial text-stone-900">CCDV-F Readiness Assessment</h2>
+    if (diagnostic.total_attempts > 0) {
+      diagContainer.innerHTML = `
+        <div class="p-3.5 px-4 rounded-xl bg-white border border-stone-200 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div class="flex items-center space-x-3 text-stone-700">
+            <span class="font-semibold text-stone-900">${diagnostic.full_attempts || 0}/10 Completed</span>
+            <span class="text-stone-300">·</span>
+            <span>Avg: <strong class="text-stone-900">${diagnostic.average_score}%</strong></span>
+            <span class="text-stone-300">·</span>
+            <span class="${diagnostic.average_score >= 72 ? 'text-emerald-700 font-semibold' : 'text-amber-800 font-semibold'}">${diagnostic.readiness_level}</span>
+            ${missedVault.length > 0 ? `<span class="text-stone-300">·</span><span class="text-amber-800 font-medium">${missedVault.length} in Vault</span>` : ''}
           </div>
-          <div class="flex items-center space-x-2">
-            <span class="px-3 py-1 rounded-full text-xs font-semibold ${diagnostic.total_attempts > 0 ? (diagnostic.average_score >= 72 ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200') : 'bg-stone-100 text-stone-700 border border-stone-200'}">
-              ${diagnostic.readiness_level}
-            </span>
-          </div>
+          <a href="#gaps" class="text-amber-800 hover:text-amber-900 font-medium transition">
+            Gap Analysis &rarr;
+          </a>
         </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
-            <div class="text-xs text-stone-500 font-sans">Full Exams Taken</div>
-            <div class="text-2xl font-editorial text-stone-900 font-normal mt-1">${diagnostic.full_attempts || 0} / 10</div>
-          </div>
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
-            <div class="text-xs text-stone-500 font-sans">Average Score</div>
-            <div class="text-2xl font-editorial text-stone-900 font-normal mt-1">${diagnostic.average_score}%</div>
-          </div>
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
-            <div class="text-xs text-stone-500 font-sans">Missed Questions in Vault</div>
-            <div class="text-2xl font-editorial text-amber-700 font-normal mt-1">${missedVault.length}</div>
-          </div>
-          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200/80">
-            <div class="text-xs text-stone-500 font-sans">Passing Threshold</div>
-            <div class="text-2xl font-editorial text-stone-900 font-normal mt-1">720 / 1000</div>
-          </div>
-        </div>
-
-        <div class="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs text-stone-600">
-          <div class="flex items-center space-x-2">
-            <span class="font-medium text-stone-800">Primary Focus:</span>
-            <span>${diagnostic.recommendations[0] || 'Take a mock exam to diagnose your baseline.'}</span>
-          </div>
-          <div class="flex space-x-2">
-            <a href="#gaps" class="text-amber-800 hover:text-amber-900 font-medium underline">
-              View Detailed Gap Analysis &rarr;
-            </a>
-          </div>
-        </div>
-      </div>
-    `;
+      `;
+      diagContainer.classList.remove('hidden');
+    } else {
+      diagContainer.innerHTML = '';
+      diagContainer.classList.add('hidden');
+    }
   }
 
-  // 10 Mock Exam Cards Grid
+  // 10 Mock Exam Cards Grid (Compact & Minimal)
   const gridContainer = document.getElementById('exam-cards-grid');
   gridContainer.innerHTML = '';
 
   State.allExams.forEach(exam => {
     const bestAttempt = Storage.getExamBestScore(exam.exam_id);
     const card = document.createElement('div');
-    card.className = "p-6 rounded-2xl bg-white border border-stone-200 shadow-sm hover:shadow-md hover:border-amber-300 transition duration-200 flex flex-col justify-between space-y-5";
+    card.className = "p-4 sm:p-5 rounded-2xl bg-white border border-stone-200 shadow-2xs hover:border-amber-400 hover:shadow-xs transition duration-150 flex flex-col justify-between space-y-4";
 
-    let statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-stone-100 text-stone-600 border border-stone-200">Not Attempted</span>`;
+    let statusBadge = `<span class="text-[11px] font-mono text-stone-400">Untested</span>`;
     if (bestAttempt) {
       if (bestAttempt.is_passing) {
-        statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Passed: ${bestAttempt.percentage}% (${bestAttempt.scaled_score}/1000)</span>`;
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">${bestAttempt.percentage}% Passed</span>`;
       } else {
-        statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-50 text-amber-800 border border-amber-200">Attempted: ${bestAttempt.percentage}% (${bestAttempt.scaled_score}/1000)</span>`;
+        statusBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-amber-50 text-amber-800 border border-amber-200">${bestAttempt.percentage}%</span>`;
       }
     }
 
     card.innerHTML = `
-      <div class="space-y-3">
+      <div class="space-y-1">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-mono text-amber-800 font-semibold uppercase tracking-wider">Form #${exam.exam_id}</span>
+          <span class="text-xs font-mono font-bold text-amber-800 tracking-wider">Form #${String(exam.exam_id).padStart(2, '0')}</span>
           ${statusBadge}
         </div>
-        <h3 class="text-xl font-editorial text-stone-900 font-normal leading-snug">${escapeHtml(exam.title)}</h3>
-        <p class="text-xs text-stone-600 leading-relaxed font-sans">${escapeHtml(exam.description)}</p>
-        
-        <div class="pt-2 flex flex-wrap gap-1.5 text-xs font-mono text-stone-500">
-          <span class="px-2 py-0.5 bg-stone-100 rounded">53 Questions</span>
-          <span class="px-2 py-0.5 bg-stone-100 rounded">120 Minutes</span>
-          <span class="px-2 py-0.5 bg-stone-100 rounded">8 Domains Weighted</span>
-        </div>
+        <h3 class="text-base font-editorial text-stone-900 font-normal leading-snug">Mock Exam #${exam.exam_id}</h3>
+        <p class="text-[11px] font-mono text-stone-500">53 Qs · 120 mins</p>
       </div>
 
-      <div class="pt-4 border-t border-stone-100 flex items-center justify-between gap-3">
+      <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
         ${bestAttempt ? `
-          <button onclick="window.App.viewPreviousResult('${bestAttempt.id}')" class="px-3 py-1.5 rounded-lg text-xs font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition">
-            Review Score
+          <button onclick="window.App.viewPreviousResult('${bestAttempt.id}')" class="text-xs font-mono text-stone-500 hover:text-stone-900 transition">
+            Score
           </button>
         ` : '<div></div>'}
-        <button onclick="window.App.startExam(${exam.exam_id})" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-amber-800 text-white text-xs font-semibold shadow transition">
-          ${bestAttempt ? 'Retake Exam' : 'Begin Exam'} &rarr;
+        <button onclick="window.App.startExam(${exam.exam_id})" class="px-3 py-1.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-medium transition shadow-xs">
+          ${bestAttempt ? 'Retake' : 'Start'} &rarr;
         </button>
       </div>
     `;

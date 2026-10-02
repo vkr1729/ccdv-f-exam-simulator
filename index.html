@@ -133,71 +133,23 @@
     <!-- ======================================================== -->
     <!-- VIEW: DASHBOARD                                          -->
     <!-- ======================================================== -->
-    <div id="view-dashboard" class="view-container space-y-8">
+    <div id="view-dashboard" class="view-container space-y-6">
       
       <!-- Resume In-Progress Banner (Injected dynamically) -->
       <div id="resume-banner-container" class="hidden"></div>
 
-      <!-- Hero Header -->
-      <div class="space-y-2">
-        <div class="text-xs font-serif uppercase tracking-widest text-amber-800 font-semibold">10 Full-Length Exam Forms · 530 Scenario Questions</div>
-        <h2 class="text-3xl md:text-4xl font-editorial text-stone-900 font-normal">Claude Certified Developer Practice Lab</h2>
-        <p class="text-sm text-stone-600 max-w-3xl leading-relaxed font-sans">
-          Prepare for the official Pearson VUE proctored exam (53 questions, 120 minutes, 720/1000 passing threshold). All 10 practice forms strictly mirror the official 8-domain blueprint weights.
-        </p>
+      <!-- Minimal Header -->
+      <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 pb-3 border-b border-stone-200">
+        <h2 class="text-2xl sm:text-3xl font-editorial text-stone-900 font-normal">Practice Exams</h2>
+        <span class="text-xs font-mono text-stone-500">10 Full Forms · 530 Questions</span>
       </div>
 
-      <!-- Domain Blueprint Summary Strip -->
-      <div class="p-4 rounded-2xl bg-white border border-stone-200 shadow-2xs space-y-2">
-        <div class="text-xs font-mono font-semibold uppercase tracking-wider text-stone-500">Official Exam Blueprint Weights (53 Items per form):</div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-1 text-xs font-mono">
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D1 (33.1%)</span>
-            <span class="text-stone-500 text-[11px]">18 items · API/App</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D2 (16.8%)</span>
-            <span class="text-stone-500 text-[11px]">9 items · Models</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D3 (14.7%)</span>
-            <span class="text-stone-500 text-[11px]">8 items · Agents</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D4 (11.0%)</span>
-            <span class="text-stone-500 text-[11px]">6 items · Prompts</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D5 (10.6%)</span>
-            <span class="text-stone-500 text-[11px]">6 items · Tools/MCP</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D6 (8.1%)</span>
-            <span class="text-stone-500 text-[11px]">4 items · Security</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D7 (3.1%)</span>
-            <span class="text-stone-500 text-[11px]">1 item · Code</span>
-          </div>
-          <div class="p-2 rounded-lg bg-stone-50 border border-stone-200/80">
-            <span class="text-amber-800 font-bold block">D8 (2.6%)</span>
-            <span class="text-stone-500 text-[11px]">1 item · Evals</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Readiness Diagnostic Summary Card -->
+      <!-- Quick Readiness Summary (Injected dynamically only if attempts exist) -->
       <div id="dashboard-readiness-card"></div>
 
       <!-- 10 Full-Length Exam Cards -->
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="text-2xl font-editorial text-stone-900 font-normal">Available Mock Exams</h3>
-          <span class="text-xs font-mono text-stone-500">10 Full Forms · 530 Questions Total</span>
-        </div>
-        <div id="exam-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Injected dynamically by app.js -->
-        </div>
+      <div id="exam-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- Injected dynamically by app.js -->
       </div>
     </div>
 
@@ -437,10 +389,10 @@
   </div>
 
   <!-- Footer -->
-  <footer class="mt-12 border-t border-stone-200 py-6 bg-white/50 text-center text-xs text-stone-500 font-mono">
+  <footer class="mt-12 border-t border-stone-200 py-6 bg-white/50 text-xs text-stone-500 font-mono">
     <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
-      <span>Anthropic Claude Certified Developer — Foundations (CCDV-F) Practice Platform</span>
-      <span>10 Full Forms · 530 Questions · Open-Source Study Project</span>
+      <span>CCDV-F Exam Simulator</span>
+      <span>10 Full Forms · 530 Questions</span>
     </div>
   </footer>
 
