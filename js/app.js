@@ -274,7 +274,7 @@ function renderDashboard() {
             ${missedVault.length > 0 ? `<span class="text-stone-300">·</span><span class="text-amber-800 font-medium">${missedVault.length} in Vault</span>` : ''}
           </div>
           <a href="#gaps" class="text-amber-800 hover:text-amber-900 font-medium transition">
-            Gap Analysis &rarr;
+            Diagnostics &rarr;
           </a>
         </div>
       `;
