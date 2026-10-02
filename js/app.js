@@ -42,7 +42,7 @@ function cancelAutoAdvance() {
 document.addEventListener('DOMContentLoaded', () => {
   if (window.EXAM_DATA) {
     State.allExams = window.EXAM_DATA.exams || [];
-    State.sourcesMetadata = window.EXAM_DATA.sources || null;
+    State.sourcesMetadata = (window.EXAM_DATA && (window.EXAM_DATA.sources_metadata || window.EXAM_DATA.sources)) || null;
   }
   
   // Initialize Progressive Web App capabilities
@@ -1497,39 +1497,153 @@ function renderVaultView() {
 // -------------------------------------------------------------
 // SOURCES & PROVENANCE VIEW (Task 1)
 // -------------------------------------------------------------
+const COMMUNITY_SOURCES = [
+  {
+    author: "Nat Sh.",
+    repo: "natsh/claude-developer-foundations-prep",
+    url: "https://github.com/natsh/claude-developer-foundations-prep",
+    description: "Authored the comprehensive 5-module quiz bank based on the Anthropic Partner Academy curriculum plus advanced exam practice sets.",
+    contributed: 132,
+    share: "24.9%"
+  },
+  {
+    author: "Srinivas Pusuluri",
+    repo: "srinipusuluri/CCDV-F-SET1",
+    url: "https://github.com/srinipusuluri/CCDV-F-SET1",
+    description: "Compiled an extensive 9-set collection of developer practice questions with detailed explanations and distractor reasoning.",
+    contributed: 149,
+    share: "28.1%"
+  },
+  {
+    author: "Turjoy Real",
+    repo: "turjoy-real/CCDV-F",
+    url: "https://github.com/turjoy-real/CCDV-F",
+    description: "Created realistic 53-item practice mock exams and multi-domain developer practice scenario drills.",
+    contributed: 88,
+    share: "16.6%"
+  },
+  {
+    author: "H. Bacheller",
+    repo: "hbacheller-tribe/CCDV-F-Exam",
+    url: "https://github.com/hbacheller-tribe/CCDV-F-Exam",
+    description: "Engineered blueprint-weighted scenario questions with insightful technical rationales for real-world development patterns.",
+    contributed: 85,
+    share: "16.0%"
+  },
+  {
+    author: "Amey Thakur",
+    repo: "Amey-Thakur/CLAUDE-CERTIFICATIONS",
+    url: "https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS",
+    description: "Developed comprehensive Developer Foundations question collections and timed practice exam modules.",
+    contributed: 76,
+    share: "14.3%"
+  }
+];
+
 function renderSourcesView() {
   const container = document.getElementById('view-sources');
   container.classList.remove('hidden');
 
-  const meta = State.sourcesMetadata || { sources: [] };
   const content = document.getElementById('sources-content');
 
   content.innerHTML = `
-    <div class="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
-      <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Open Source Provenance</span>
-      <h2 class="text-2xl font-editorial text-stone-900">Question Bank Provenance &amp; Attribution</h2>
-      <p class="text-sm text-stone-600 leading-relaxed max-w-3xl">
-        This platform synthesizes 530 authentic scenario questions balanced into 10 full 53-question exams. All questions are sourced from open developer study repositories, mapped to the official CCDV-F domain blueprint weights, and verified for accuracy.
-      </p>
+    <!-- Top Provenance & Attribution Header -->
+    <div class="p-6 sm:p-8 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-6">
+      <div class="space-y-2">
+        <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Open Source Community</span>
+        <h2 class="text-2xl sm:text-3xl font-editorial text-stone-900">Question Bank Provenance &amp; Creator Attribution</h2>
+        <p class="text-sm text-stone-600 leading-relaxed max-w-3xl">
+          This platform synthesizes 530 authentic scenario questions balanced into 10 full 53-question exams. All questions are sourced from open developer study repositories, mapped to the official CCDV-F domain blueprint weights, and verified for technical accuracy.
+        </p>
+      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-stone-200">
-        ${meta.sources.map(src => {
-          const safeUrl = (src.url && (src.url.startsWith('https://') || src.url.startsWith('http://'))) ? src.url : '#';
-          return `
-          <div class="p-5 rounded-xl bg-stone-50 border border-stone-200/90 space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <h4 class="text-sm font-semibold text-stone-900 font-mono">${escapeHtml(src.name)}</h4>
-              <span class="px-2 py-0.5 rounded-full text-xs font-mono bg-stone-200 text-stone-700 font-medium whitespace-nowrap">${src.contributed_questions} questions</span>
+      <!-- Educational Synthesis & Anti-Plagiarism Statement -->
+      <div class="p-5 rounded-xl bg-amber-50/70 border border-brand-terracotta-line space-y-3">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-terracotta shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <h3 class="text-sm font-semibold text-stone-900 font-editorial">Educational Purpose &amp; Anti-Plagiarism Commitment</h3>
+        </div>
+        <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">
+          The objective of this exam simulator is <strong>educational synthesis and fair practice, not plagiarism</strong>. Studying from a single author often introduces authorial bias, repetitive question phrasing, and topical blind spots. By aggregating, vetting, and interleaving high-quality scenario questions across <strong>5 independent community creators</strong> into standardized 53-question exam forms matching Anthropic’s official 8-domain blueprint, learners gain a truly balanced, realistic preparation experience.
+        </p>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs font-mono text-stone-600 border-t border-brand-terracotta-line/50">
+          <span>✓ 100% Free &amp; Open Source</span>
+          <span>✓ Strict Creator Attribution</span>
+          <span>✓ No NDA / Non-Public Exam Dumps</span>
+          <span>✓ Educational Fair Use</span>
+        </div>
+      </div>
+
+      <!-- Heartfelt Community Thanks -->
+      <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-2">
+        <h3 class="text-sm font-semibold text-stone-900 flex items-center gap-2">
+          <span>A Sincere Thank You to Our Upstream Creators</span>
+          <span class="text-base" aria-hidden="true">🙏</span>
+        </h3>
+        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+          We extend our heartfelt gratitude and deep appreciation to the independent developers and community educators who authored, curated, and openly shared these practice questions. Their generosity and dedication empower developers worldwide to master the Claude API and build production-ready applications. <strong>Please visit their repositories below, star their work, and review their original materials:</strong>
+        </p>
+      </div>
+
+      <!-- Upstream Repositories Grid -->
+      <div class="space-y-4 pt-2">
+        <h3 class="text-base font-semibold text-stone-900">Upstream Open-Source Repositories (530 Questions Total)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          ${COMMUNITY_SOURCES.map(src => `
+            <div class="p-5 rounded-xl bg-white border border-stone-200 hover:border-brand-terracotta/40 shadow-sm transition flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <span class="text-xs font-editorial uppercase tracking-wider text-brand-terracotta font-semibold">Author / Creator</span>
+                    <h4 class="text-base font-bold text-stone-900">${escapeHtml(src.author)}</h4>
+                    <p class="text-xs font-mono text-stone-500 mt-0.5">${escapeHtml(src.repo)}</p>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 font-semibold border border-stone-200 shrink-0">
+                    ${src.contributed} questions (${src.share})
+                  </span>
+                </div>
+                <p class="text-xs text-stone-600 leading-relaxed">${escapeHtml(src.description)}</p>
+              </div>
+              <div class="pt-3 border-t border-stone-100">
+                <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep transition group">
+                  <svg class="w-4 h-4 text-stone-600 group-hover:text-brand-terracotta transition shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                  <span>Visit ${escapeHtml(src.repo)}</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
             </div>
-            <p class="text-sm text-stone-600 font-sans leading-relaxed">${escapeHtml(src.description)}</p>
-            <div class="pt-2">
-              <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-brand-terracotta hover:text-brand-terracotta-deep underline underline-offset-2 flex items-center gap-1">
-                <span>View on GitHub</span>
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Multi-Source Interleaving Breakdown -->
+      <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+        <h3 class="text-sm font-semibold text-stone-900">Multi-Source Distribution Across All 10 Mock Exams</h3>
+        <p class="text-xs text-stone-600 leading-relaxed">
+          Every single 53-question mock exam in this simulator is mathematically balanced to include questions from <strong>all 5 repositories</strong> while strictly adhering to Anthropic's official blueprint weights (Applications &amp; Integration: 33.1%, Model Selection: 16.8%, Agents &amp; Workflows: 14.7%, Prompt Engineering: 11.0%, Tools &amp; MCP: 10.6%, Security &amp; Safety: 8.1%, Claude Code: 3.1%, Eval &amp; Testing: 2.6%).
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 text-center text-xs font-mono">
+          <div class="p-2.5 rounded-lg bg-white border border-stone-200">
+            <div class="font-bold text-stone-900">149</div>
+            <div class="text-[10px] text-stone-500 truncate">Srinipusuluri (28%)</div>
           </div>
-        `}).join('')}
+          <div class="p-2.5 rounded-lg bg-white border border-stone-200">
+            <div class="font-bold text-stone-900">132</div>
+            <div class="text-[10px] text-stone-500 truncate">Nat Sh. (25%)</div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-stone-200">
+            <div class="font-bold text-stone-900">88</div>
+            <div class="text-[10px] text-stone-500 truncate">Turjoy Real (17%)</div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-stone-200">
+            <div class="font-bold text-stone-900">85</div>
+            <div class="text-[10px] text-stone-500 truncate">H. Bacheller (16%)</div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-white border border-stone-200">
+            <div class="font-bold text-stone-900">76</div>
+            <div class="text-[10px] text-stone-500 truncate">Amey Thakur (14%)</div>
+          </div>
+        </div>
       </div>
     </div>
   `;
