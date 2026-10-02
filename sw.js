@@ -3,7 +3,7 @@
  * Provides complete offline practice capability for commutes, flights, and low-connectivity environments.
  */
 
-const CACHE_NAME = 'ccdv-f-v1.5';
+const CACHE_NAME = 'ccdv-f-v1.6';
 
 const PRECACHE_ASSETS = [
   'index.html',

@@ -24,8 +24,19 @@ const State = {
   isStudyMode: false,       // interactive study mode with immediate feedback
   checkedQuestions: {},     // { [qId]: { isCorrect: boolean, userAnswers: string[] } }
   studyElapsedSeconds: 0,   // count-up timer in study mode
-  drillMode: null           // null, 'vault', or 'topic'
+  drillMode: null,          // null, 'vault', or 'topic'
+  quickChecking: false      // true during 1-second visual feedback transition when pressing Next in study mode
 };
+
+let autoAdvanceTimeout = null;
+
+function cancelAutoAdvance() {
+  if (autoAdvanceTimeout) {
+    clearTimeout(autoAdvanceTimeout);
+    autoAdvanceTimeout = null;
+  }
+  State.quickChecking = false;
+}
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
@@ -145,6 +156,7 @@ function initPWA() {
 
 // View Routing
 function handleRouting() {
+  cancelAutoAdvance();
   const hash = window.location.hash.slice(1) || 'dashboard';
   const parts = hash.split('/');
   const route = parts[0];
@@ -428,6 +440,7 @@ function startFreshExam(paramId, isStudy = false) {
 }
 
 function initNewExamSession(exam, isStudy = false) {
+  cancelAutoAdvance();
   State.activeExam = exam;
   State.currentQuestionIndex = 0;
   State.userAnswers = {};
@@ -584,9 +597,9 @@ function renderCurrentQuestion() {
     optionsContainer.appendChild(card);
   });
 
-  // Review / Study mode explanation drawer
+  // Review / Study mode explanation drawer (suppressed during quick-check auto-advance)
   const explanationBox = document.getElementById('explanation-drawer');
-  if (inFeedbackMode) {
+  if (inFeedbackMode && !State.quickChecking) {
     explanationBox.classList.remove('hidden');
     explanationBox.innerHTML = `
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
@@ -644,12 +657,24 @@ function renderCurrentQuestion() {
     }
   }
 
-  prevBtn.disabled = State.currentQuestionIndex === 0;
-  prevBtn.className = State.currentQuestionIndex === 0
+  prevBtn.disabled = State.currentQuestionIndex === 0 || State.quickChecking;
+  prevBtn.className = (State.currentQuestionIndex === 0 || State.quickChecking)
     ? "px-4 py-2 rounded-lg text-xs font-medium text-stone-500 bg-stone-100 cursor-not-allowed"
     : "px-4 py-2 rounded-lg text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 transition";
 
-  if (State.currentQuestionIndex === totalQ - 1) {
+  if (State.quickChecking) {
+    const qChecked = State.checkedQuestions[q.id];
+    const isCorrect = qChecked && qChecked.isCorrect;
+    nextBtn.disabled = true;
+    if (isCorrect) {
+      nextBtn.className = "px-5 py-2 rounded-lg bg-emerald-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait";
+      nextBtn.innerHTML = `<span>✓ Correct</span> <span aria-hidden="true">&rarr;</span>`;
+    } else {
+      nextBtn.className = "px-5 py-2 rounded-lg bg-rose-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait";
+      nextBtn.innerHTML = `<span>✕ Incorrect</span> <span aria-hidden="true">&rarr;</span>`;
+    }
+  } else if (State.currentQuestionIndex === totalQ - 1) {
+    nextBtn.disabled = false;
     if (State.isReviewMode) {
       nextBtn.innerHTML = `<span>Back to Results</span> <span aria-hidden="true">&rarr;</span>`;
       nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
@@ -658,6 +683,7 @@ function renderCurrentQuestion() {
       nextBtn.className = "px-5 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5";
     }
   } else {
+    nextBtn.disabled = false;
     nextBtn.innerHTML = `<span>Next Question</span> <span aria-hidden="true">&rarr;</span>`;
     nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
   }
@@ -737,7 +763,7 @@ function toggleFlag() {
   renderQuestionMatrix();
 }
 
-function nextQuestion() {
+function advanceToNextQuestionOrFinish() {
   const exam = State.activeExam;
   if (!exam) return;
   if (State.currentQuestionIndex < exam.questions.length - 1) {
@@ -754,7 +780,49 @@ function nextQuestion() {
   }
 }
 
+function nextQuestion() {
+  const exam = State.activeExam;
+  if (!exam) return;
+
+  const q = exam.questions[State.currentQuestionIndex];
+  if (!q) return;
+
+  const userSel = State.userAnswers[q.id] || [];
+  const isAlreadyChecked = State.isStudyMode && Boolean(State.checkedQuestions[q.id]);
+
+  // In Study Mode: If an answer is selected and not yet checked,
+  // show immediate correctness feedback for ~1 second without opening the full explanation drawer,
+  // then automatically advance to the next question.
+  if (State.isStudyMode && !State.isReviewMode && userSel.length > 0 && !isAlreadyChecked) {
+    if (autoAdvanceTimeout) return; // Prevent double trigger
+
+    const correctSel = q.correct_answers || [];
+    const isCorrect = userSel.length === correctSel.length && userSel.every(k => correctSel.includes(k));
+
+    State.checkedQuestions[q.id] = {
+      isCorrect,
+      userAnswers: [...userSel]
+    };
+    State.quickChecking = true;
+
+    saveCurrentSession();
+    renderCurrentQuestion();
+    renderQuestionMatrix();
+
+    autoAdvanceTimeout = setTimeout(() => {
+      autoAdvanceTimeout = null;
+      State.quickChecking = false;
+      advanceToNextQuestionOrFinish();
+    }, 1000);
+    return;
+  }
+
+  cancelAutoAdvance();
+  advanceToNextQuestionOrFinish();
+}
+
 function prevQuestion() {
+  cancelAutoAdvance();
   if (State.currentQuestionIndex > 0) {
     State.currentQuestionIndex--;
     saveCurrentSession();
@@ -764,6 +832,7 @@ function prevQuestion() {
 }
 
 function goToQuestion(index) {
+  cancelAutoAdvance();
   State.currentQuestionIndex = index;
   saveCurrentSession();
   renderCurrentQuestion();
@@ -775,6 +844,7 @@ function clearCurrentAnswer() {
   if (!exam || State.isReviewMode) return;
   const q = exam.questions[State.currentQuestionIndex];
   if (State.isStudyMode && State.checkedQuestions[q.id]) return;
+  cancelAutoAdvance();
   delete State.userAnswers[q.id];
   saveCurrentSession();
   renderCurrentQuestion();
@@ -1008,6 +1078,7 @@ function updateTimerDisplay() {
 
 // Exam Submission Modal
 function openSubmitModal() {
+  cancelAutoAdvance();
   if (State.isReviewMode) return;
   const exam = State.activeExam;
   if (!exam) return;
