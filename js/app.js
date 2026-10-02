@@ -581,7 +581,7 @@ function renderCurrentQuestion() {
     explanationBox.innerHTML = `
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Answer Key &amp; Official Rationale</span>
+          <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Answer</span>
           <span class="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">Official Correct: ${q.correct_answers.join(', ')}</span>
         </div>
         <p class="text-sm text-stone-800 leading-relaxed font-sans">${escapeHtml(q.explanation)}</p>
