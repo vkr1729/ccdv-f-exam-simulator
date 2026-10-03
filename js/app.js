@@ -101,8 +101,13 @@ function initPWA() {
       updateConnectionBadge();
     });
 
+    let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       updateConnectionBadge();
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
     });
   }
 
