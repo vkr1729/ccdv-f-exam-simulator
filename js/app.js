@@ -391,8 +391,8 @@ function renderDashboard() {
       <div class="flex-1 min-w-[10rem]">
         <div class="flex items-center gap-2 flex-wrap">
           <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
-          ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier</span>' : ''}
-          ${isModerateTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-900 border border-sky-300">Moderate Tier</span>' : ''}
+          ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier · Blueprint Original</span>' : ''}
+          ${isModerateTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-900 border border-sky-300">Moderate Tier · Blueprint Original</span>' : ''}
         </div>
         <p class="text-xs font-mono text-stone-500 mt-0.5">${subtitle}</p>
       </div>
@@ -1631,21 +1631,21 @@ function renderSourcesView() {
         </p>
         <ul class="text-xs sm:text-sm text-stone-700 space-y-1.5 list-disc pl-5">
           <li><strong>Base Practice Forms (Exams #1–#10 · 530 Questions)</strong>: Interleaved across 5 independent community study repositories so every form draws from multiple creators under official blueprint weights.</li>
-          <li><strong>Original Practice Forms (Exams #11–#15 · 265 Questions)</strong>: Developed directly against official Anthropic blueprints across Moderate Tier (#13, #14 &amp; #15) and Hard Tier (#11 &amp; #12) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
+          <li><strong>Blueprint Originals (Exams #11–#15 · 265 Questions)</strong>: Developed directly against official Anthropic blueprints across Moderate Tier (#13, #14 &amp; #15) and Hard Tier (#11 &amp; #12) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
         </ul>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs font-mono text-stone-600 border-t border-brand-terracotta-line/50">
           <span>✓ 100% Free &amp; Open Source</span>
           <span>✓ Strict Creator Attribution</span>
-          <span>✓ 265 Original Blueprint Items</span>
+          <span>✓ 265 Blueprint Original Items</span>
           <span>✓ No NDA / Non-Public Exam Dumps</span>
           <span>✓ Educational Fair Use</span>
         </div>
       </div>
 
-      <!-- Original Blueprint Exams Section -->
+      <!-- Blueprint Originals Section -->
       <div class="space-y-4 pt-2">
         <div class="flex items-baseline justify-between flex-wrap gap-2">
-          <h3 class="text-base font-semibold text-stone-900">Original Blueprint Exam Forms (265 Questions Total · Exams #11–#15)</h3>
+          <h3 class="text-base font-semibold text-stone-900">Blueprint Originals (265 Questions Total · Exams #11–#15)</h3>
           <span class="text-xs font-mono text-stone-500">Developed directly against Anthropic CCDV-F blueprints</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1655,7 +1655,7 @@ function renderSourcesView() {
                 <div class="flex items-start justify-between gap-2">
                   <div>
                     <div class="flex items-center gap-2 mb-1">
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${src.badgeClass}">${escapeHtml(src.tier)}</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${src.badgeClass}">${escapeHtml(src.tier)} · Blueprint Original</span>
                       <span class="text-xs font-mono text-stone-500">${escapeHtml(src.exams)}</span>
                     </div>
                     <h4 class="text-base font-bold text-stone-900">${escapeHtml(src.title)}</h4>

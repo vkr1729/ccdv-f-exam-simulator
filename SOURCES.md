@@ -42,10 +42,10 @@ Their open contributions empower developers worldwide to master the Claude API a
 
 | Repository / Source | Author / Curator | License / Visibility | Content Description | Contribution | Share |
 |---|---|---|---|---|---|
-| **[Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Original Prep | Open (GitHub) | Realistic moderate-difficulty simulation across all domains (Exams #13, #14 & #15) | 159 items | 20.0% |
+| **[Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Blueprint Originals | Open (GitHub) | Realistic moderate-difficulty simulation across all domains (Exams #13, #14 & #15) | 159 items | 20.0% |
 | **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** | Srinivas Pusuluri | Public (GitHub) | 9 practice exams with detailed explanations & distractor reasoning | 149 items | 18.7% |
 | **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** | Nat Sh. | Public (GitHub) | Anthropic Partner Academy 5-module quiz bank & hard exam form | 132 items | 16.6% |
-| **[Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Original Prep | Open (GitHub) | Elevated-difficulty scenario questions with deep distractor plausibility (Exams #11 & #12) | 106 items | 13.3% |
+| **[Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Blueprint Originals | Open (GitHub) | Elevated-difficulty scenario questions with deep distractor plausibility (Exams #11 & #12) | 106 items | 13.3% |
 | **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** | Turjoy Real | Public (GitHub) | Full 53-item realistic mock exam and multi-domain developer practice drills | 88 items | 11.1% |
 | **[hbacheller-tribe/CCDV-F-Exam](https://github.com/hbacheller-tribe/CCDV-F-Exam)** | H. Bacheller | MIT (GitHub) | 85 scenario-based blueprint-weighted questions with option rationale | 85 items | 10.7% |
 | **[Amey-Thakur/CLAUDE-CERTIFICATIONS](https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS)** | Amey Thakur | Apache 2.0 (GitHub) | Developer Foundations question bank and timed mock exams | 76 items | 9.6% |

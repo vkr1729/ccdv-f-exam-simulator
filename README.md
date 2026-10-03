@@ -85,9 +85,9 @@ Or open `preview/index.html` to view the 3 UI/UX design variants explored during
 
 ## 📜 Attributions & Provenance
 
-This educational study project incorporates authentic scenario items from vetted community developer repositories as well as original Hard and Moderate Tier forms:
-- **Exams #11 & #12 (Hard Tier)**: Developed directly against official Anthropic CCDV-F blueprints with elevated distractor plausibility and deep answer explanations.
-- **Exams #13, #14 & #15 (Moderate Tier)**: Developed directly against official Anthropic CCDV-F blueprints providing realistic moderate-difficulty full-length simulations.
+This educational study project incorporates authentic scenario items from vetted community developer repositories as well as Blueprint Originals across Hard and Moderate Tiers:
+- **Exams #11 & #12 (Hard Tier · Blueprint Originals)**: Developed directly against official Anthropic CCDV-F blueprints with elevated distractor plausibility and deep answer explanations.
+- **Exams #13, #14 & #15 (Moderate Tier · Blueprint Originals)**: Developed directly against official Anthropic CCDV-F blueprints providing realistic moderate-difficulty full-length simulations.
 - **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** by Srinivas Pusuluri
 - **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** by Nat Sh.
 - **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** by Turjoy
