@@ -223,8 +223,10 @@ function updateNavUI(activeRoute) {
   const statsEl = document.getElementById('header-stats-pill');
   if (statsEl) {
     if (fullExams.length === 0) {
-      const examCount = State.allExams.length || 15;
-      const questionCount = State.allQuestions.length || (examCount * 53);
+      const examCount = State.allExams?.length || 15;
+      const questionCount = (State.allExams && State.allExams.length > 0)
+        ? State.allExams.reduce((sum, e) => sum + (e.questions ? e.questions.length : (e.question_count || 53)), 0)
+        : (examCount * 53);
       statsEl.textContent = `${examCount} Mock Exams · ${questionCount} Questions Ready`;
     } else {
       const avg = Math.round(fullExams.reduce((acc, a) => acc + a.percentage, 0) / fullExams.length);
