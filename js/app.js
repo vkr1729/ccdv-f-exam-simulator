@@ -321,7 +321,6 @@ function renderDashboard() {
           </button>
           <a href="#exam" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5">
             <span>Resume ${isStudy ? 'Study' : 'Exam'}</span>
-            <span aria-hidden="true">&rarr;</span>
           </a>
         </div>
       </div>
@@ -352,7 +351,7 @@ function renderDashboard() {
             ${missedVault.length > 0 ? `<span class="text-stone-300" aria-hidden="true">·</span><span class="text-amber-800 font-medium">${missedVault.length} in Vault</span>` : ''}
           </div>
           <a href="#gaps" class="text-brand-terracotta hover:text-brand-terracotta-deep font-medium transition">
-            Diagnostics &rarr;
+            Diagnostics
           </a>
         </div>
       `;
@@ -413,7 +412,7 @@ function renderDashboard() {
           Study
         </button>
         <button type="button" onclick="window.App.startExam(${exam.exam_id})" class="px-3.5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition shrink-0" title="Timed practice exam">
-          ${bestAttempt ? 'Retake' : 'Start'} <span aria-hidden="true">&rarr;</span>
+          ${bestAttempt ? 'Retake' : 'Start'}
         </button>
       </div>
     `;
@@ -755,23 +754,23 @@ function renderCurrentQuestion() {
     nextBtn.disabled = true;
     if (isCorrect) {
       nextBtn.className = "px-5 py-2 rounded-lg bg-emerald-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait motion-safe:animate-pulse";
-      nextBtn.innerHTML = `<span>✓ Correct</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.innerHTML = `<span>✓ Correct</span>`;
     } else {
       nextBtn.className = "px-5 py-2 rounded-lg bg-rose-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-wait motion-safe:animate-pulse";
-      nextBtn.innerHTML = `<span>✕ Incorrect</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.innerHTML = `<span>✕ Incorrect</span>`;
     }
   } else if (State.currentQuestionIndex === totalQ - 1) {
     nextBtn.disabled = false;
     if (State.isReviewMode) {
-      nextBtn.innerHTML = `<span>Back to Results</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.innerHTML = `<span>Back to Results</span>`;
       nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
     } else {
-      nextBtn.innerHTML = `<span>Finish &amp; Review</span> <span aria-hidden="true">&rarr;</span>`;
+      nextBtn.innerHTML = `<span>Finish &amp; Review</span>`;
       nextBtn.className = "px-5 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition flex items-center gap-1.5";
     }
   } else {
     nextBtn.disabled = false;
-    nextBtn.innerHTML = `<span>Next Question</span> <span aria-hidden="true">&rarr;</span>`;
+    nextBtn.innerHTML = `<span>Next Question</span>`;
     nextBtn.className = "px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition flex items-center gap-1.5";
   }
 
@@ -1343,14 +1342,14 @@ function renderResults(attemptId) {
     <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
       <div class="flex flex-wrap gap-3">
         <button data-action="review-attempt" data-attempt-id="${escapeHtml(attempt.id)}" class="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition">
-          Review Question Explanations <span aria-hidden="true">&rarr;</span>
+          Review Question Explanations
         </button>
         <a href="#vault" class="px-4 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
           View Missed Questions Vault (${attempt.missed_questions.length})
         </a>
       </div>
       <a href="#dashboard" class="text-xs text-stone-600 hover:text-stone-900 font-medium">
-        <span aria-hidden="true">&larr;</span> Back to All Exams
+        Back to All Exams
       </a>
     </div>
   `;
@@ -1448,7 +1447,7 @@ function renderGapsView() {
                   Study Drill
                 </button>
                 <button data-action="topic-drill" data-topic="${escapeHtml(item.topic)}" class="text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep">
-                  Timed Drill <span aria-hidden="true">&rarr;</span>
+                  Timed Drill
                 </button>
               </div>
             </div>
@@ -1489,7 +1488,7 @@ function renderVaultView() {
               Study Drill (${missedVault.length})
             </button>
             <button onclick="window.App.startRemediationQuiz(false)" class="px-4 py-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-deep text-white text-xs font-semibold transition" title="Timed remediation drill">
-              Timed Drill <span aria-hidden="true">&rarr;</span>
+              Timed Drill
             </button>
           ` : ''}
           <button onclick="window.App.exportMistakesLog()" class="px-3.5 py-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-800 text-xs font-medium transition">
@@ -1506,7 +1505,7 @@ function renderVaultView() {
           <h3 class="text-xl font-editorial text-stone-900">Nothing in the vault yet.</h3>
           <p class="text-sm text-stone-600 leading-relaxed max-w-xl">Take a mock exam from the dashboard. Any question you answer incorrectly is filed here automatically, so your revision time goes to exactly the items you got wrong.</p>
           <div class="pt-1">
-            <a href="#dashboard" class="inline-block px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition">Browse Mock Exams <span aria-hidden="true">&rarr;</span></a>
+            <a href="#dashboard" class="inline-block px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition">Browse Mock Exams</a>
           </div>
         </div>
       ` : missedVault.map(q => `
@@ -1678,7 +1677,6 @@ function renderSourcesView() {
                 <span class="font-mono text-stone-500">100% Original Content</span>
                 <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 font-semibold text-brand-terracotta hover:text-brand-terracotta-deep transition group">
                   <span>View Repository</span>
-                  <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
             </div>
@@ -1723,7 +1721,6 @@ function renderSourcesView() {
                 <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-terracotta hover:text-brand-terracotta-deep transition group">
                   <svg class="w-4 h-4 text-stone-600 group-hover:text-brand-terracotta transition shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                   <span>Visit ${escapeHtml(src.repo)}</span>
-                  <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
             </div>
