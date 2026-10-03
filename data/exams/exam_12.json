@@ -79,13 +79,13 @@
         },
         {
           "key": "D",
-          "text": "It is wrong: when a text block comes alongside a tool_use block, the full content array must be kept in history, or Claude's context is corrupted."
+          "text": "It is wrong, because when a text block comes with a tool_use block, the full content array must be kept in history, or Claude's context is corrupted."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "Claude may return a text block alongside a tool_use block in the same turn. The course's block-structure table says your code must preserve the full content array, including that text block, when appending the turn to history; dropping it corrupts the context Claude relies on for follow-up turns. The tool_use block must also stay, because each tool_result has to pair with it by ID.",
+      "explanation": "Claude may return a text block alongside a tool_use block in the same turn, and the course's block-structure table says your code must append the full content array, text included, to history; dropping the text corrupts the context Claude relies on for follow-up turns, and the tool_use block must stay too, because each tool_result pairs with it by ID. Analogy: a nurse writes 'explained the procedure to the patient' and then 'ordered a blood test' in one chart entry; if the ward copies only the lab order into the file, the next shift has no record of what the patient was told and may repeat or contradict it. The chart entry is the assistant turn, the note is the text block, and the lab order is the tool_use. Treating the text as commentary the API ignores fails, because anything stripped from history is missing from Claude's context.",
       "distractor_explanations": {
         "A": "Every `tool_result` must pair with a `tool_use` block in the immediately preceding assistant turn; dropping that block fails validation.",
         "B": "The course says to preserve the full content array, including the text block; dropping it corrupts the context for follow-up turns.",
@@ -112,11 +112,11 @@
         },
         {
           "key": "B",
-          "text": "Execute the tool, because the course's rule is that a turn is complete and safe to act on once `message_stop` has been received for the stream."
+          "text": "Execute the tool, because the streaming rule is that a turn is complete and safe to act on once `message_stop` has been received for the stream."
         },
         {
           "key": "C",
-          "text": "Check `stop_reason` before running tools: `max_tokens` means generation was cut off, so the truncated call must not run; regenerate the turn."
+          "text": "Check `stop_reason` before running tools, because `max_tokens` means generation was cut off; the truncated call must not run, so regenerate the turn."
         },
         {
           "key": "D",
@@ -126,7 +126,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "The course's streaming rules are two-part: act only after the block closes and the message completes, and check the `stop_reason` from `message_delta` before continuing a loop. A `stop_reason` of `tool_use` means the assembled tool calls are ready to run; any other value, such as `max_tokens`, means you are on a different path and must not execute the partial call.",
+      "explanation": "The course's streaming rules are two-part: act only after the block closes and the message completes, and check the `stop_reason` from `message_delta` before continuing a loop. A `stop_reason` of `tool_use` means the assembled tool calls are ready to run; any other value, such as `max_tokens`, means generation was cut off, so the partial call must not execute and the turn is regenerated. Analogy: an answering machine with a time limit always ends the recording with a clean beep, but the little display reads 'time limit reached' and the message stops at 'please pick up two bags of...'. The beep is `message_stop`, the display is the `stop_reason`, and you would not go shopping on half a sentence. Executing because `message_stop` arrived fails, since that event says the stream finished, not that the model finished its call.",
       "distractor_explanations": {
         "A": "With `stop_reason: max_tokens` the model was not waiting on tool results. The turn itself is incomplete and should be regenerated.",
         "B": "`message_stop` means the stream finished, not that the model finished. `stop_reason` says which path you are on, and only `tool_use` means calls are ready.",
@@ -172,7 +172,7 @@
         "B",
         "C"
       ],
-      "explanation": "The Message Batches API processes each request asynchronously and independently, and results return in arbitrary order, so `custom_id` is how outputs are matched back to inputs. Requests cannot share state or chain within a batch. A multi-stage pipeline therefore runs as successive batches (or synchronous calls) that build each stage's inputs from the previous stage's results.",
+      "explanation": "The Message Batches API processes each request asynchronously and independently, and results return in arbitrary order, so `custom_id` is how outputs are matched back to inputs; requests cannot share state or chain within a batch. A multi-stage pipeline therefore runs as successive batches (or synchronous calls) that build each stage's inputs from the previous stage's results. Analogy: you place three separate online grocery orders, and different pickers pack them in parallel in whatever order suits the warehouse, each bag tagged with its order number. You cannot write 'put in order two whatever was left over from order one', because no picker sees another picker's bag; you wait for order one to arrive, then place order two. The order number is the `custom_id`. Making one `custom_id` reference another fails, because that key only labels results and creates no dependency or ordering.",
       "distractor_explanations": {
         "A": "`custom_id` is a caller-assigned key for matching results to inputs. It creates no dependency and no ordering.",
         "D": "There is no ordering guarantee at any size; results return in arbitrary order.",
@@ -195,7 +195,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Set `disable_parallel_tool_use` so Claude issues one call per turn, because the API cannot accept results for more than one tool in a single turn."
+          "text": "Set `disable_parallel_tool_use` so Claude issues one call per turn; the API cannot accept results for more than one tool in a single turn."
         },
         {
           "key": "B",
@@ -213,7 +213,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The API requires every tool_use block from an assistant turn to be answered by a tool_result with a matching ID in the user turn that immediately follows. The course's loop checklist adds that all tool-use blocks from a single assistant turn must be resolved together. Sending a request while two of the three tool_use blocks are still unanswered breaks that invariant, even though the one result that was sent has the correct ID.",
+      "explanation": "The API requires every tool_use block from an assistant turn to be answered by a tool_result with a matching ID in the user turn that immediately follows, and the course's loop checklist adds that all tool-use blocks from one assistant turn must be resolved together. Sending a request while two of three tool_use blocks are still unanswered breaks that invariant, even though the one result sent has the correct ID. Analogy: a GP ticks three blood tests on one lab form, and the lab returns a single report listing all three results, each against its test code. Sending back one result and promising two later leaves the form half-answered, and the clinic will not file it. The form is the assistant turn, the report is the user turn, and the test codes are the IDs. Setting `disable_parallel_tool_use` misreads the bug, since one user turn can carry several results.",
       "distractor_explanations": {
         "A": "The API accepts multiple tool_result blocks in one turn. Disabling parallel calls is for genuine dependencies, not for this bug.",
         "C": "tool_result blocks always belong in the user role, and every result must be in the user turn immediately following the tool_use turn.",
@@ -254,7 +254,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "A URL source requires the image to be public, stable, and reachable at the moment Claude fetches it. The course says to skip URLs for anything behind auth or signed with a short expiry. Batch work makes this worse because requests run asynchronously, within a window of up to 24 hours. Inline base64 suits one-off images, and the Files API suits images reused across requests.",
+      "explanation": "A URL source requires the image to be public, stable, and reachable at the moment Claude fetches it, and the course says to skip URLs for anything behind auth or signed with a short expiry. Batch work makes this worse, because requests run asynchronously within a window of up to 24 hours; inline base64 suits one-off images, and the Files API suits images reused across requests. Analogy: you give a neighbour a 15-minute door code and ask them to water your plants sometime tomorrow; by the time they arrive, the code is dead. Leaving the plant on their doorstep is inline base64, and a lockbox key they can use again and again is the uploaded `file_id`. Stretching the signed link to two hours still fails, because any expiry shorter than the batch's completion window can lapse before the request is processed.",
       "distractor_explanations": {
         "B": "That exposes private data. The course points to base64 or the Files API for content you cannot guarantee is reachable.",
         "C": "The same expired URLs would fail again. The encoding method is the defect, not a transient fault.",
@@ -277,7 +277,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Keep retrying 404s with a longer backoff, because new model identifiers can take time to propagate across regions after a release goes out."
+          "text": "Keep retrying 404s with a longer backoff; new model identifiers can take time to propagate across regions after a release goes out."
         },
         {
           "key": "B",
@@ -295,7 +295,7 @@
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course's first question for any failure is whether retrying the identical request could plausibly succeed. Statuses like 400, 401, 403, and 404 come from the request itself, so they fail identically every time and should fail fast and be surfaced. Retrying them burns the retry budget and hides the real problem behind repeated failures.",
+      "explanation": "The course's first question for any failure is whether retrying the identical request could plausibly succeed. Statuses like 400, 401, 403, and 404 come from the request itself, so they fail identically every time and should fail fast and be surfaced; retrying them burns the retry budget and hides the real problem behind repeated failures. Analogy: you ask the library desk for a book using a catalogue number that does not exist. Asking again every few minutes will not make the book appear; the clerk's 'no such record' is final, and the fix is to correct the number on your request slip. The catalogue number is the model ID, and the slip is the configuration. Keeping 404 retriable with a two-attempt cap still fails, because any retry of a terminal error only adds latency and spends budget on a request that cannot succeed.",
       "distractor_explanations": {
         "A": "A 404 is terminal in the course's taxonomy. Waiting does not make a wrong identifier valid.",
         "B": "Any retry of a terminal error wastes budget and adds latency. Terminal statuses should fail fast.",
@@ -326,17 +326,17 @@
         },
         {
           "key": "C",
-          "text": "Switch to immediate retries with a higher attempt cap, since a 429 clears quickly and waiting only wastes throughput the fleet could be using."
+          "text": "Switch to immediate retries with a higher attempt cap; a 429 clears quickly, and waiting only wastes throughput the fleet could be using."
         },
         {
           "key": "D",
-          "text": "Honor `retry-after` as the authoritative wait with jitter added, and fall back to capped exponential backoff with jitter when it is absent."
+          "text": "Honor `retry-after` with jitter added, since lockstep retries collide, and use capped exponential backoff with jitter only when it is absent."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "For retriable rate limits, the course prescribes exponential backoff with jitter, a cap on attempts, and honoring `retry-after` when the response includes it. The header is the authoritative wait, and your own backoff is the fallback when it is absent. Jitter matters at fleet scale, because synchronized retries keep landing on the same limit.",
+      "explanation": "For retriable rate limits, the course prescribes exponential backoff with jitter, a cap on attempts, and honoring `retry-after` when the response includes it. The header is the authoritative wait and your own backoff is the fallback when it is absent, while jitter matters at fleet scale, because synchronized retries keep landing on the same limit. Analogy: at a railway level crossing, a sign says 'barrier lifts in 30 seconds'. Drivers trust the sign rather than guessing, but if all 200 cars floor it the instant the barrier rises, they jam the junction; pulling away a few seconds apart lets traffic flow. The sign is `retry-after`, the staggered starts are jitter, and guessing when no sign is posted is capped backoff. Retrying every worker at exactly the `retry-after` moment fails, because a synchronized fleet simply recreates the stampede.",
       "distractor_explanations": {
         "A": "Synchronized retries recreate the stampede. Jitter spreads the fleet out.",
         "B": "The course says to treat `retry-after` as authoritative when present, because the service is telling you when capacity returns.",
@@ -371,13 +371,13 @@
         },
         {
           "key": "D",
-          "text": "Claude Platform on AWS: reached through the customer's AWS account with Anthropic's model IDs and lifecycle, and inference run by Anthropic."
+          "text": "Claude Platform on AWS, because it is reached through the customer's AWS account with Anthropic's model IDs, lifecycle, and Anthropic-run inference."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "Claude Platform on AWS is reached through the customer's AWS account using Anthropic's own model IDs and lifecycle, with feature parity to the first-party API; inference is Anthropic-operated, outside the AWS boundary. Claude in Amazon Bedrock keeps data in the AWS boundary but uses `anthropic.`-prefixed IDs and partner retirement dates. With no in-boundary requirement, Claude Platform on AWS matches these priorities.",
+      "explanation": "Claude Platform on AWS is reached through the customer's AWS account using Anthropic's own model IDs and lifecycle, with feature parity to the first-party API; inference is Anthropic-operated, outside the AWS boundary. Claude in Amazon Bedrock keeps data inside the AWS boundary but uses `anthropic.`-prefixed IDs and partner retirement dates, so with no in-boundary requirement Claude Platform on AWS matches these priorities. Analogy: you pay with your city transit card for a private coach company's own service; the billing goes through the card you already hold, but the route numbers, timetable changes, and drivers are the coach company's. A city-run bus licensed on the same route keeps you inside the city network but follows city numbering and city timetables. Choosing Bedrock for its parity fails here, because it does not follow Anthropic's published retirement dates or ID format.",
       "distractor_explanations": {
         "A": "The legacy integration uses InvokeModel/Converse with ARN-versioned identifiers, not Anthropic's IDs or lifecycle.",
         "B": "Global versus regional endpoints affect residency and cost, not which model lifecycle applies.",
@@ -423,7 +423,7 @@
         "B",
         "D"
       ],
-      "explanation": "The course states that the direct Anthropic API does not currently provide EU data residency, so partners with EU requirements route through Bedrock or Vertex with the region pinned in client configuration. Within Bedrock, the global-versus-regional endpoint choice is the primary residency control and can affect cost. Foundry residency depends on each model's hosting form, so confirm current regional coverage at build time.",
+      "explanation": "The course states that the direct Anthropic API does not currently provide EU data residency, so partners with EU requirements route through Bedrock or Vertex with the region pinned in client configuration. Within Bedrock, the global-versus-regional endpoint choice is the primary residency control and can affect cost, and Foundry residency depends on each model's hosting form, so confirm current regional coverage at build time. Analogy: you need groceries packed in-country. Your usual chain has no in-country packing line, so you order from a partner chain and tick its 'local warehouse' box; choosing 'any warehouse' instead decides where the food is packed and changes the price. Your usual chain is the first-party API, the partner chain is Bedrock or Vertex, and the box is the regional endpoint. Encrypting payloads fails as an answer, just as shrink-wrap does not change where food was packed.",
       "distractor_explanations": {
         "A": "The course says the direct API does not currently provide EU data residency. No request header changes that.",
         "C": "Anthropic-hosted Foundry models do not satisfy EU regional residency. It has to be checked per model.",
@@ -446,7 +446,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Pin the Bedrock full model ID in the `anthropic.` prefix format (often with a regional prefix like `us.`) and confirm Bedrock's own retirement dates."
+          "text": "Pin the Bedrock full model ID in the `anthropic.` prefix format (often with a regional `us.` prefix) and confirm Bedrock's own retirement dates."
         },
         {
           "key": "B",
@@ -454,17 +454,17 @@
         },
         {
           "key": "C",
-          "text": "Bedrock ignores model ID strings and pins versions only by ARN, so the team must replace the ID with an inference-profile ARN in the client."
+          "text": "Bedrock ignores model ID strings and pins versions by ARN instead, so the team has to replace the ID with an inference-profile ARN in the client."
         },
         {
           "key": "D",
-          "text": "The ID string is right as-is, because Claude in Amazon Bedrock uses the same model ID format as the first-party API; only the retirement dates differ."
+          "text": "The ID string is right as-is: Claude in Amazon Bedrock uses the same model ID format as the first-party API, and just the retirement dates differ."
         }
       ],
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course's deployment table says Claude in Amazon Bedrock pins the full model ID in the `anthropic.` prefix format (its corrected example uses `us.anthropic.claude-opus-4-8`), and that partner retirement dates differ from Anthropic's schedule. Copying a first-party ID or assuming Anthropic's deprecation dates both carry first-party assumptions onto a platform that follows its own conventions.",
+      "explanation": "The course's deployment table says Claude in Amazon Bedrock pins the full model ID in the `anthropic.` prefix format (its corrected example uses `us.anthropic.claude-opus-4-8`), and that partner retirement dates differ from Anthropic's schedule. Copying a first-party ID or assuming Anthropic's deprecation dates both carry first-party assumptions onto a platform that follows its own conventions. Analogy: you move your reading list from your local library to the state library, which uses a different call-number system with its own prefix and its own withdrawal dates for old editions. Copying your local call numbers into the new catalogue finds nothing, and assuming the old withdrawal dates misleads you. The call number is the model ID, and the withdrawal date is the retirement date. Keeping the first-party ID string fails, because Anthropic's own format is how Claude Platform on AWS pins models, not Claude in Amazon Bedrock.",
       "distractor_explanations": {
         "B": "Partner retirement dates differ from Anthropic's, so the lifecycle has to be confirmed per platform.",
         "C": "ARN-versioned identifiers belong to the legacy InvokeModel/Converse integration. The Messages API integration pins the prefixed full model ID.",
@@ -491,11 +491,11 @@
         },
         {
           "key": "B",
-          "text": "Switch the model string to the family alias so the service always gets the newest snapshot automatically, and monitor error rates for a week."
+          "text": "Switch the model string to the family alias so the service automatically picks up each newest snapshot, and monitor error rates for a week."
         },
         {
           "key": "C",
-          "text": "Run the new snapshot through the unit and functional test suites, and promote it if they pass, since those suites cover the parser and response shape."
+          "text": "Run the new snapshot through the unit and functional test suites, and promote it if they pass; those suites cover the parser and the response shape."
         },
         {
           "key": "D",
@@ -505,7 +505,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course makes the eval the deployment gate: send a new version to a portion of traffic, compare it against the pinned baseline, and promote or roll back on the result. Pin the full model ID rather than an alias, version the prompt alongside the code, and keep the prior pinned version available so a regression becomes a rollback rather than a hotfix.",
+      "explanation": "The course makes the eval the deployment gate: send a new version to a portion of traffic, compare it against the pinned baseline, and promote or roll back on the result. Pin the full model ID rather than an alias, version the prompt alongside the code, and keep the prior pinned version available so a regression becomes a rollback rather than a hotfix. Analogy: a gardener trials a new tomato variety in one bed beside the proven variety, compares the harvests, and replants the whole garden only if the new one wins, keeping a packet of the old seeds just in case. The trial bed is the partial traffic, the proven variety is the baseline, the harvest comparison is the eval, and the saved seeds are the prior pinned ID. Promoting because unit and functional tests pass fails, since sprouted seedlings say nothing about how the fruit tastes.",
       "distractor_explanations": {
         "B": "An alias turns every upstream update into an untracked production change. Promotion should be gated on the eval.",
         "C": "Shape tests do not measure quality. Promotion is gated on the eval against the pinned baseline.",
@@ -546,7 +546,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "Functional requirements state what the system must do; infrastructure requirements are the non-functional constraints you derive by asking the questions the business problem implies. The course names latency (measured where the user is), scale, residency, and identity as the infrastructure requirements that most often decide the platform, and says to capture them before a platform is picked for other reasons.",
+      "explanation": "Functional requirements state what the system must do; infrastructure requirements are the non-functional constraints you derive by asking the questions the business problem implies. The course names latency (measured where the user is), scale, residency, and identity as the infrastructure requirements that most often decide the platform, and says to capture them before a platform is picked for other reasons. Analogy: before a band books a tour venue, it asks how long fans will wait to get in where they actually are, how many will turn up at peak, which city the permit says the show must happen in, and who gets backstage on which pass. The setlist, meanwhile, is the functional requirement. Asking about claim categories, triage outcomes, and approval points fails here, because those describe what the system does, not the constraints that pick the platform.",
       "distractor_explanations": {
         "A": "These are functional requirements (what the system must do), not infrastructure constraints.",
         "C": "Familiarity and token price are the traps the course warns about; they are not requirements.",
@@ -581,13 +581,13 @@
         },
         {
           "key": "D",
-          "text": "The audit bundle: a statement of the data touched and the identity acted under, plus a log of what the asset did, shipped as part of the package."
+          "text": "An audit bundle stating the data touched and the identity acted under, plus a log of every action the asset took, shipped as part of the package."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course's packaging checklist has three columns for every asset type: what to parameterize, what to document, and what to bundle for audit. A regulated reviewer asks what data the asset touches, what identity it acts under, and what log it leaves; an accelerator without those passes a demo and stalls at the first security review. The audit log is part of the package.",
+      "explanation": "The course's packaging checklist has three columns for every asset type: what to parameterize, what to document, and what to bundle for audit. A regulated reviewer asks what data the asset touches, what identity it acts under, and what log it leaves; an accelerator without those passes a demo and stalls at the first security review, so the audit log is part of the package. Analogy: a rented stunt rig arrives on a film set with adjustable settings and a manual, yet the safety officer will not sign it off until the crew states what it touches, whose licence it runs under, and shows the log of every run. The settings are parameters, the manual is documentation, and the statement plus run log is the audit bundle. A data-flow diagram alone fails, because it covers data scope but not identity or the record of what happened.",
       "distractor_explanations": {
         "A": "A diagram covers data scope only. It says nothing about the identity the asset acts under or the record it leaves of what it actually did.",
         "B": "Prompt instructions are not controls, and the reviewer asked for an inspectable record.",
@@ -628,7 +628,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "A maintainer accepts what they can verify. The course lists four things that make verification possible: the code does one thing, an example shows it running, a test proves it works, and a short statement names the assumptions. A contribution the reviewer cannot verify without reconstructing intent goes to the back of the queue.",
+      "explanation": "A maintainer accepts what they can verify. The course lists four things that make verification possible: the code does one thing, an example shows it running, a test proves it works, and a short statement names the assumptions; a contribution the reviewer cannot verify without reconstructing intent goes to the back of the queue. Analogy: a guitarist who wants to change a band's arrangement does best bringing one fix to the bridge, a recording of it played through, proof it holds up in rehearsal, and a note saying which tuning it assumes. Turning up with that fix plus a rewritten chorus and a new solo leaves the bandleader untangling three ideas at once. The bandleader is the maintainer, and the single fix is the focused PR. Adding tests for everything and pinging again fails, because coverage does not make a sprawling change focused.",
       "distractor_explanations": {
         "B": "The Cookbook is for focused reference implementations. A fix belongs in the tool's own repository.",
         "C": "Coverage helps, but a sprawling PR still forces the reviewer to reconstruct intent. Focus is the first criterion.",
@@ -651,7 +651,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Linear's server uses OAuth: on first connection the client redirects to Linear's sign-in, and after approval a token is issued and stored without manual copying."
+          "text": "Linear's server uses OAuth, so on first connection the client redirects to Linear's sign-in and stores the issued token without manual copying."
         },
         {
           "key": "B",
@@ -667,14 +667,14 @@
         },
         {
           "key": "E",
-          "text": "GitHub's server takes a Personal Access Token as a Bearer header that references an environment variable, never an inline value."
+          "text": "GitHub's server takes a Personal Access Token as a Bearer header that references an environment variable, never a value written inline."
         }
       ],
       "correct_answers": [
         "A",
         "E"
       ],
-      "explanation": "The course contrasts the two: the GitHub MCP server is a remote HTTP server authenticated with a Personal Access Token passed as a Bearer header, supplied through an environment variable and never committed inline to `.mcp.json`. Linear's remote server uses OAuth, where the client runs a browser sign-in and stores the issued token. Both follow the same transport and scope logic; only authentication differs.",
+      "explanation": "The course contrasts the two: the GitHub MCP server is a remote HTTP server authenticated with a Personal Access Token passed as a Bearer header, supplied through an environment variable and never committed inline to `.mcp.json`. Linear's remote server uses OAuth, where the client runs a browser sign-in and stores the issued token; both follow the same transport and scope logic, and only authentication differs. Analogy: the household alarm code lives in a locked drawer, and the family's instructions say 'use the code from the drawer' rather than writing it on the front door; that drawer is the environment variable. The library, by contrast, sends you to its front desk to prove who you are, then hands you a card you keep, which is the OAuth redirect and stored token. Committing the PAT inline once fails, because it stays in repository history permanently.",
       "distractor_explanations": {
         "B": "Remote servers use HTTP transport. Stdio is for local subprocesses.",
         "C": "The GitHub server uses a PAT as a service credential. OAuth fits services whose authorization is tied to user identity.",
@@ -715,7 +715,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course maps each regulated-review question to a concrete control. Data residency comes from an HTTP endpoint in a specific region combined with a platform deployment pinned to that region. Access logging comes from a PostToolUse hook that records every tool call deterministically. Configuration lock comes from administrator-deployed managed settings that users and project files cannot override.",
+      "explanation": "The course maps each regulated-review question to a concrete control. Data residency comes from an HTTP endpoint in a specific region combined with a platform deployment pinned to that region; access logging comes from a PostToolUse hook that records every tool call deterministically; and configuration lock comes from administrator-deployed managed settings that users and project files cannot override. Analogy: a hospital pharmacy sends samples only to its in-state lab, its drug cabinet has an electronic reader that logs every opening automatically, and the cabinet's access rules are set by hospital administration, so ward staff cannot change them during an inspection. The lab is the region-pinned platform, the reader is the hook, and administration's rules are managed settings. A CLAUDE.md instruction to log tool calls fails, because, like a poster asking staff to note each opening, it is a convention rather than a deterministic record.",
       "distractor_explanations": {
         "A": "ZDR does not answer where data is processed, and user-level settings are not administrator-locked.",
         "C": "CLAUDE.md is a convention, not a deterministic log, and project settings can be overridden. The course uses hooks and managed settings.",
@@ -756,7 +756,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "Whether the Agent SDK loads filesystem settings such as CLAUDE.md and skills is controlled by `settingSources` (`setting_sources` in Python). The course's examples are `[\"user\", \"project\", \"local\"]` to match CLI behavior and `[]` for full isolation, and it insists on setting the value explicitly. Selecting only the project source loads the repository's configuration without the build user's.",
+      "explanation": "Whether the Agent SDK loads filesystem settings such as CLAUDE.md and skills is controlled by `settingSources` (`setting_sources` in Python). The course's examples are `[\"user\", \"project\", \"local\"]` to match CLI behavior and `[]` for full isolation, and it insists on setting the value explicitly; selecting only the project source loads the repository's configuration without the build user's. Analogy: a guest director rehearsing in a shared studio is told explicitly to use the production's own script and set, not the studio owner's personal props stacked backstage. Telling them 'use whatever you usually use' brings the owner's props too, and giving them nothing leaves them without even the script. The production's materials are the project source, and the owner's props are the user settings. Leaving the value unset fails, because the course says never to rely on a default here.",
       "distractor_explanations": {
         "B": "That loads the build user's personal settings, which the requirement forbids.",
         "C": "An empty list runs fully isolated with only what you pass programmatically, so the project's skills and CLAUDE.md would not load either.",
@@ -779,7 +779,7 @@
       "options": [
         {
           "key": "A",
-          "text": "The two `run-tests` commands now collide, because automatic namespacing only applies when both plugins come from the same marketplace."
+          "text": "The two `run-tests` commands now collide; automatic namespacing applies only when both plugins come from the same marketplace."
         },
         {
           "key": "B",
@@ -797,7 +797,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "Plugin commands are namespaced automatically: the plugin's name becomes the prefix, so `run-tests` in a plugin named `payments` is `/payments:run-tests`. That is why two plugins can ship the same command name without colliding. The course tells authors to treat the plugin name as part of the interface, because renaming the plugin renames every command it ships.",
+      "explanation": "Plugin commands are namespaced automatically: the plugin's name becomes the prefix, so `run-tests` in a plugin named `payments` is `/payments:run-tests`. That is why two plugins can ship the same command name without colliding, and the course tells authors to treat the plugin name as part of the interface, because renaming the plugin renames every command it ships. Analogy: two brands each sell 'Classic Crisps', and the supermarket shelf tags read 'Brand: Classic Crisps', so the products never get mixed up. If one brand renames itself, every shopping list that still names the old brand finds nothing, while the other brand's crisps stay distinct. The brand is the plugin name, and the shopping lists are the runbooks. Assuming the old prefix survives fails, because the prefix is the plugin name itself, so commands follow the new name.",
       "distractor_explanations": {
         "A": "Namespacing applies to plugin commands regardless of marketplace, which is why both plugins can ship a `run-tests` command.",
         "B": "The plugin name is the prefix, so renaming the plugin renames every command it ships.",
@@ -820,11 +820,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Choose the lower tier, because per-token price is the decisive cost metric, and the extra turns only affect latency rather than the bill."
+          "text": "Choose the lower tier: per-token price is the decisive cost metric, and the extra turns only affect latency rather than the bill."
         },
         {
           "key": "B",
-          "text": "Compare measured cost per completed task, including extra turns and reverted edits, plus the eval score; the pricier tier may finish cheaper."
+          "text": "Compare measured cost per completed task, counting all extra turns and reverted edits, plus eval score, since the pricier tier can be cheaper."
         },
         {
           "key": "C",
@@ -838,7 +838,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course notes that a higher-tier model can process a request faster and cheaper if it reaches a conclusion in fewer tokens, and that the cost of mistakes belongs in the calculation. The discipline is to make the trade-off measurable (cost per task from per-call instrumentation, plus the eval score) rather than comparing per-token prices or defaulting to the biggest model.",
+      "explanation": "The course notes that a higher-tier model can process a request faster and cheaper if it reaches a conclusion in fewer tokens, and that the cost of mistakes belongs in the calculation. The discipline is to make the trade-off measurable, cost per task from per-call instrumentation plus the eval score, rather than comparing per-token prices or defaulting to the biggest model. Analogy: a cheap tin of paint needs three coats and touch-ups where it streaked, while a pricier tin covers in one; the sensible comparison is the total cost of a finished room and how good it looks, not the price per litre. The litre price is the per-token rate, the extra coats are extra turns, the touch-ups are reverted edits, and how the room looks is the eval. Choosing the lower tier on per-token price fails, because extra turns and reverted edits are real spend.",
       "distractor_explanations": {
         "A": "Cost is measured per task, not per token. Extra turns and reverted edits are real spend.",
         "C": "The course calls defaulting to the most capable tier the most common and expensive mistake. Decide on measurement.",
@@ -879,7 +879,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "Caching matches on an exact prefix, and requests are processed tools, then system, then messages. Anything that varies before the breakpoint, such as a tenant name or date at the very top, makes every tenant's prefix unique. The course's guidance is to put stable content first, mark the breakpoint after it, and place dynamic content after the breakpoint.",
+      "explanation": "Caching matches on an exact prefix, and requests are processed tools, then system, then messages. Anything that varies before the breakpoint, such as a tenant name or date at the very top, makes every tenant's prefix unique, so the course's guidance is to put stable content first, mark the breakpoint after it, and place dynamic content after the breakpoint. Analogy: a tram network records its safety announcement once and replays it on every trip. If each recording had to start with 'Good morning, passenger name, today is the date', the operator would need a new recording for every rider; recording the shared message alone and adding the greeting live afterward lets one recording serve everyone. The recording is the cached prefix, and the greeting is the dynamic content. Adding a second breakpoint after the tenant line fails, because the tenant text still sits in front of the manual.",
       "distractor_explanations": {
         "A": "Matching is on identical content, not length; any differing characters before the breakpoint break the match.",
         "B": "A longer lifetime helps reuse within one tenant, but the shared manual is still never reused across tenants.",
@@ -906,7 +906,7 @@
         },
         {
           "key": "B",
-          "text": "The default lifetime is five minutes and is refreshed on each cache hit, so a prefix that is reused several times a minute stays warm."
+          "text": "The default lifetime is five minutes and is refreshed on every cache hit, so a prefix that is reused several times a minute stays warm."
         },
         {
           "key": "C",
@@ -925,7 +925,7 @@
         "B",
         "E"
       ],
-      "explanation": "The course gives the pricing (writes at 1.25x for the 5-minute TTL and 2x for the 1-hour TTL, reads at 0.1x), so caching pays only when reads outnumber writes. The default lifetime is five minutes and is refreshed on each hit. Caching is turned on per request, through automatic mode or up to four explicit breakpoints.",
+      "explanation": "The course gives the pricing: writes at 1.25x for the 5-minute TTL and 2x for the 1-hour TTL, reads at 0.1x, so caching pays only when reads outnumber writes. The default lifetime is five minutes and is refreshed on each hit, and caching is turned on per request, through automatic mode or up to four explicit breakpoints. Analogy: a newspaper press pays extra to make a printing plate, a bit more for one it keeps mounted for an hour, and each reprint from a mounted plate costs about a tenth of fresh setup. The plate stays mounted for five minutes after each reprint, and every new reprint restarts that clock, so a page reprinted every minute never comes down. The plate is the cache write, the reprint is a read, and the mounting clock is the TTL. Assuming reads cost half fails; about 50% is the batch discount.",
       "distractor_explanations": {
         "A": "The limit is four breakpoints per request.",
         "C": "There is no global switch. Caching uses automatic mode on the request or explicit `cache_control` breakpoints.",
@@ -948,7 +948,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Automatic caching: one cache flag at the top level of the request, with the system managing breakpoints as the conversation grows."
+          "text": "Automatic caching, since a single flag at the top level of the request lets the system move breakpoints as the conversation grows."
         },
         {
           "key": "B",
@@ -956,17 +956,17 @@
         },
         {
           "key": "C",
-          "text": "Disable caching for chat and rely on the batch discount instead, since a multi-turn conversation never repeats the same prefix."
+          "text": "Disable caching for chat and rely on the batch discount instead, since a multi-turn conversation rarely repeats the same prefix."
         },
         {
           "key": "D",
-          "text": "Set the one-hour TTL on the system prompt only, because conversation turns change on every request and can never be cached."
+          "text": "Set the one-hour TTL on the system prompt alone, as conversation turns change on each request and are not worth caching."
         }
       ],
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course describes two caching modes. In automatic mode you add a single cache flag at the top level of the request and the system manages breakpoints as the conversation grows; this is the recommended starting point for most use cases. Explicit breakpoints put a `cache_control` marker on a specific block when you need precise control.",
+      "explanation": "The course describes two caching modes. In automatic mode you add a single cache flag at the top level of the request, and the system manages breakpoints as the conversation grows; this is the recommended starting point for most use cases. Explicit breakpoints put a `cache_control` marker on a specific block when you need precise control. Analogy: a pianist playing a long piece can stop after every page to move a paper clip to the current spot, often clipping the wrong page, or use a page-turning app that follows along as the music advances. The app is automatic mode: one setting, and it keeps track as the piece grows. Hand-placed clips are explicit breakpoints, worth it only when you need to mark one exact spot. Pinning all four breakpoints on the first four messages fails, because as the conversation grows most of the reusable prefix sits beyond them.",
       "distractor_explanations": {
         "B": "Fixed early breakpoints cache only the start. As the conversation grows, most of the reusable prefix sits beyond them.",
         "C": "Chat history is a growing stable prefix, a strong caching candidate, and batching does not suit a live chat.",
@@ -989,7 +989,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Rely on the API to drop the oldest turns when the input is too large, and log a warning whenever that trimming takes place."
+          "text": "Rely on the API to drop the oldest turns automatically when the input is too large, and log a warning whenever that trimming takes place."
         },
         {
           "key": "B",
@@ -1001,13 +1001,13 @@
         },
         {
           "key": "D",
-          "text": "Keep the characters-divided-by-four heuristic but subtract a 20% safety margin, because characters per token stay stable across Claude model generations."
+          "text": "Keep the characters-divided-by-four heuristic but subtract a 20% safety margin; characters per token stay stable across Claude model generations."
         }
       ],
       "correct_answers": [
         "C"
       ],
-      "explanation": "The `count_tokens` endpoint takes the same request body as a messages call and returns the token count without running inference. The course recommends it for checking context-budget assumptions against real inputs and for gating requests that would exceed the window before they fail. Character-based heuristics are model-dependent, and the API rejects oversized input rather than trimming it.",
+      "explanation": "The `count_tokens` endpoint takes the same request body as a messages call and returns the token count without running inference. The course recommends it for checking context-budget assumptions against real inputs and for gating requests that would exceed the window before they fail; character-based heuristics are model-dependent, and the API rejects oversized input rather than trimming it. Analogy: before driving into a low car park, you measure your van with an accurate tape, roof box included, instead of guessing by eye. The tape is `count_tokens`, the roof box is the tools and images a rough estimate misses, and measuring in the driveway costs no trip. The height barrier at the entrance turns you away before you go in, and it never saws off the roof box to make you fit. Dividing characters by four with a safety margin fails, because characters per token differ between model generations.",
       "distractor_explanations": {
         "A": "The API never silently truncates input. Trimming and summarizing are the application's job.",
         "B": "When the input alone exceeds the window, no `max_tokens` value makes it fit, and retrying the identical input fails again.",
@@ -1038,17 +1038,17 @@
         },
         {
           "key": "C",
-          "text": "Drop the sampling parameter and steer variety in the prompt, for example by asking for five distinct taglines with explicitly different angles."
+          "text": "Drop the sampling parameter and steer variety in the prompt, e.g. by asking for five distinct taglines with explicitly different angles."
         },
         {
           "key": "D",
-          "text": "Set `top_p: 0.95` instead of `temperature`, because only the temperature control was removed from the newest models' request schema."
+          "text": "Set `top_p: 0.95` instead of `temperature`; the temperature control is the one removed from the newest models' request schema."
         }
       ],
       "correct_answers": [
         "C"
       ],
-      "explanation": "The course states that the newest Claude models do not accept non-default sampling parameters: setting temperature, top_p, or top_k returns a 400, and behavior is steered through prompting instead. Sampling still makes outputs non-deterministic, but variety you actually need, such as distinct alternatives, should be requested explicitly in the prompt.",
+      "explanation": "The course states that the newest Claude models do not accept non-default sampling parameters: setting temperature, top_p, or top_k returns a 400, and behavior is steered through prompting instead. Sampling still makes outputs non-deterministic, but variety you actually need, such as distinct alternatives, should be requested explicitly in the prompt. Analogy: a band's new mixing desk has no 'randomness' dial, and trying to set one is rejected outright, so the singer asks the band directly for five encores in clearly different styles, one acoustic, one upbeat, one slow. The missing dial is the sampling parameter, the rejection is the 400, and the spoken request is the prompt. Swapping `temperature` for `top_p` fails, because the newest models reject every non-default sampling control alike, and playing the same tune five times does not guarantee five distinct versions.",
       "distractor_explanations": {
         "A": "Default sampling makes outputs vary but does not guarantee distinct results. Explicitly prompting for variety is the lever.",
         "B": "Sampling is not relocated. Non-default sampling parameters are not accepted on these models.",
@@ -1094,7 +1094,7 @@
         "D",
         "E"
       ],
-      "explanation": "The Message Batches API trades latency for cost: it processes requests asynchronously, within up to 24 hours, at a lower per-token price. The course names offline pipelines, evaluation runs, and scheduled data processing as the fit, and rules out any flow where a user is waiting. Requests are independent, so dependent chains need successive batches.",
+      "explanation": "The Message Batches API trades latency for cost: it processes requests asynchronously, within up to 24 hours, at a lower per-token price. The course names offline pipelines, evaluation runs, and scheduled data processing as the fit and rules out any flow where a user is waiting; requests are independent, so dependent chains need successive batches. Analogy: running the dishwasher on the overnight off-peak electricity tariff is cheaper per load and finished by morning, perfect for the pile nobody needs right now, useless for the plate someone wants for dinner in five minutes, and you cannot make one load depend on what came out of another in the same cycle. The cheap tariff is the batch discount, the overnight cycle is the 24-hour window, and the dinner plate is a waiting user. Choosing batch for a summary a user is watching for fails, because results may take hours.",
       "distractor_explanations": {
         "A": "Requests in a batch are independent, so dependent chains cannot run inside a single batch.",
         "B": "This is a real-time latency requirement. Batching is asynchronous.",
@@ -1135,7 +1135,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course warns that spreading work across agents multiplies the places a failure can happen. Each subagent needs the same retriable-versus-terminal handling, backoff, and fallback as a single agent, applied independently; one subagent that hits a rate limit with no backoff can stall the whole compilation step. Orchestration does not replace failure handling, it multiplies it.",
+      "explanation": "The course warns that spreading work across agents multiplies the places a failure can happen. Each subagent needs the same retriable-versus-terminal handling, backoff, and fallback as a single agent, applied independently; one subagent that hits a rate limit with no backoff can stall the whole compilation step, because orchestration does not replace failure handling, it multiplies it. Analogy: an editor waits for five reporters' stories before the front page goes to press. Four file on time, but one reporter's phone line drops and they have no plan to redial, try another line, or file what they have, so the edition never prints. The editor is the lead agent, the reporters are subagents, and each reporter's backup plan is their own retry logic. Assuming the lead's SDK retries cover the worker fails, because each subagent's calls are independent.",
       "distractor_explanations": {
         "A": "Model capability does not add the missing retry and fallback logic to each worker.",
         "C": "Fewer workers lowers load, but each one still has no error handling.",
@@ -1158,11 +1158,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Keep the router as insurance in case harder requests appear later, because a single classifier call is negligible at any request volume."
+          "text": "Keep the router as insurance in case harder requests appear later; a single classifier call is negligible at any realistic request volume."
         },
         {
           "key": "B",
-          "text": "Remove the router and pin one model; routing only pays off when traffic is mixed, and this traffic is uniform and met by Haiku."
+          "text": "Remove the router and pin one model, because routing only pays off when traffic is mixed, and this traffic is uniform and met by Haiku."
         },
         {
           "key": "C",
@@ -1176,7 +1176,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "A default model with an override, routed on a cheap signal, pays for the capable model only on requests that need it. The course is explicit about the flip side: when every request has the same shape, skip the router and pin one model. Routing adds a classification step and a second path to maintain, which uniform traffic never repays.",
+      "explanation": "A default model with an override, routed on a cheap signal, pays for the capable model only on requests that need it. The course is explicit about the flip side: when every request has the same shape, skip the router and pin one model, because routing adds a classification step and a second path to maintain, which uniform traffic never repays. Analogy: a bus depot posts a dispatcher to inspect every passenger group and choose between a minibus and a double-decker. Every group is three people and the minibus always does the job, so the inspection just delays every trip. The dispatcher is the classifier call, the minibus is Haiku, and the double-decker is Opus. Keeping the router as insurance fails, because the classifier is an extra call on every request with no benefit; add routing when traffic actually becomes mixed.",
       "distractor_explanations": {
         "A": "The classifier is an extra call on every request with no benefit. Add routing when traffic actually becomes mixed.",
         "C": "The decisions are already uniform, so a costlier router adds spend without changing any outcome.",
@@ -1211,13 +1211,13 @@
         },
         {
           "key": "D",
-          "text": "An agent: the goal and tools are clear but the path isn't, and the read-only, draft-producing toolset limits what the agent can actually do."
+          "text": "An agent, because the goal and tools are clear but the path isn't, and the read-only, draft-producing toolset limits what it can actually do."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course's decision table says to choose an agent when you can specify the goal and tools but not the path, when user inputs vary unpredictably, when non-determinism is acceptable, and when the agent's actions are constrained by its registered toolset. Here every condition holds, and the read-only, draft-producing tools keep the risk low.",
+      "explanation": "The course's decision table says to choose an agent when you can specify the goal and tools but not the path, when user inputs vary unpredictably, when non-determinism is acceptable, and when the agent's actions are constrained by its registered toolset. Here every condition holds, and the read-only, draft-producing tools keep the risk low. Analogy: a reference librarian fields any question a patron brings, using the same catalogue, archive, and notepad, but chooses a different order of steps for each question; and because the librarian can only look things up and draft notes, a wrong turn costs little. The patron's goal and the librarian's resources are clear, while the path is not. A router workflow with fixed branches fails, because these requests do not reduce to a known set, and any request outside the branches breaks it.",
       "distractor_explanations": {
         "A": "The request space does not reduce to a known set, so a workflow breaks when an input falls outside its branches.",
         "B": "The task needs creative sequencing of the tools. A fixed order cannot adapt as the path changes per request.",
@@ -1248,7 +1248,7 @@
         },
         {
           "key": "C",
-          "text": "The system prompt tells the agent to use `escalate_to_manager`, a tool that is not in the registered tools list."
+          "text": "The system prompt tells the agent to use `escalate_to_manager`, a tool that does not appear in the registered tools list."
         },
         {
           "key": "D",
@@ -1263,7 +1263,7 @@
         "B",
         "C"
       ],
-      "explanation": "The course's loop wiring checklist requires that no unregistered tools be referenced in the system prompt, that the system prompt be scoped to the task and available tools, that every tool_use gets a tool_result before the next turn, that a HITL point is defined, and that exit conditions do not depend on Claude volunteering to stop. Referencing an unregistered tool and having no hard stop are the two violations here.",
+      "explanation": "The course's loop wiring checklist requires that no unregistered tools be referenced in the system prompt, that the system prompt be scoped to the task and available tools, that every tool_use gets a tool_result before the next turn, that a HITL point is defined, and that exit conditions do not depend on Claude volunteering to stop. Referencing an unregistered tool and having no hard stop are the two violations here. Analogy: a stage manager's pre-show check finds a script line telling an actor to grab a sword that is not on the props table, and a scene that ends only when the actor decides to take a bow, with no running-time limit. Flagging tool results placed in the user role fails, because that is where tool_result blocks always belong; it is correct wiring, not a defect.",
       "distractor_explanations": {
         "A": "Scoping the system prompt to the task and its tools is exactly what the checklist recommends.",
         "D": "`tool_result` blocks always go in the user role. That is correct.",
@@ -1286,7 +1286,7 @@
       "options": [
         {
           "key": "A",
-          "text": "The `managed-agents-2026-04-01` beta header, which every Managed Agents endpoint requires while the product is in public beta."
+          "text": "The `managed-agents-2026-04-01` beta header, because every Managed Agents endpoint requires it throughout the public beta."
         },
         {
           "key": "B",
@@ -1304,7 +1304,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "Claude Managed Agents is in public beta, and the course states that all of its endpoints require the `managed-agents-2026-04-01` beta header and that behavior may change between releases, so teams should build with a migration plan. The code-execution, skills, and mcp-client headers enable other API features, and `settingSources` belongs to the Agent SDK.",
+      "explanation": "Claude Managed Agents is in public beta, and the course states that all of its endpoints require the `managed-agents-2026-04-01` beta header and that behavior may change between releases, so teams should build with a migration plan. The code-execution, skills, and mcp-client headers enable other API features, and `settingSources` belongs to the Agent SDK. Analogy: a hospital trial ward admits only patients wearing that trial's wristband; perfect paperwork is still turned away without it, and wristbands from other trials open other wards, not this one. The wristband is the beta header, the paperwork is the correctly shaped payload, and the other wristbands are the code-execution, skills, and mcp-client headers. Adding `code-execution-2025-08-25` fails, because that header belongs to code execution and skills on the Messages API, and Managed Agents have their own beta header.",
       "distractor_explanations": {
         "B": "That header belongs to code execution and skills on the Messages API. Managed Agents have their own beta header.",
         "C": "The mcp-client header enables the API MCP connector's toolset, not the Managed Agents endpoints.",
@@ -1339,13 +1339,13 @@
         },
         {
           "key": "D",
-          "text": "Stateless sessions, because asking users to restate their goals each time keeps every session cheap, short, and independent of the last."
+          "text": "Stateless sessions, with users restating their goals each time, which keeps each session cheap, short, and independent of the last."
         }
       ],
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course's memory table lists summarized memory for long-running conversational agents whose full history would outgrow the context budget. It costs fewer tokens than replaying history but loses whatever the summarizer drops, so it depends on a summarizer prompt that names what to keep. External storage persists state, but replaying all of it into context does not solve a budget problem.",
+      "explanation": "The course's memory table lists summarized memory for long-running conversational agents whose full history would outgrow the context budget. It costs fewer tokens than replaying history but loses whatever the summarizer drops, so it depends on a summarizer prompt that names what to keep; external storage persists state, but replaying all of it into context does not solve a budget problem. Analogy: a volunteer taking over a community garden plot each season reads a one-page handover, covering what was planted, what failed, and what was promised to the neighbours, rather than every daily diary entry from past years. If the handover template never asks about promises, the promise of roses for next door is lost. The handover is the summary, and the template is the summarizer prompt. Replaying the full stored transcript fails, because it puts the entire history back into context.",
       "distractor_explanations": {
         "A": "In-context state ends with the session, and cost grows with length. A bigger window postpones the problem rather than solving it.",
         "C": "Replaying the full history still puts all of it in context, which is the overflow the scenario rules out.",
@@ -1386,7 +1386,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course's HITL table names three insertion points: before a destructive tool call (high, irreversible risk), after a planning step (medium risk: an incorrect plan produces the wrong outcome even if all steps execute correctly), and on unexpected output (failures retries won't fix). A plan-level error is caught only by a checkpoint on the plan itself.",
+      "explanation": "The course's HITL table names three insertion points: before a destructive tool call (high, irreversible risk), after a planning step (medium risk: an incorrect plan produces the wrong outcome even if all steps execute correctly), and on unexpected output (failures retries won't fix). A plan-level error is caught only by a checkpoint on the plan itself. Analogy: a removal crew packs, carries, and unloads every box flawlessly, each mover checking their own work, but the job sheet listed the wrong address, so everything ends up in the wrong house. The fix is for the family to read the job sheet before the truck leaves. The job sheet is the plan, the movers' self-checks are per-step validation, and the read-through is the post-planning checkpoint. Extending each step's validation fails, because steps are checked against the plan, so a wrong plan still passes every check.",
       "distractor_explanations": {
         "A": "Reviewing after execution comes too late; the wrong tenant has already been migrated.",
         "C": "Validation checks steps against the plan. If the plan is wrong, every step still passes, which is the scoped-exit-condition trap.",
@@ -1432,7 +1432,7 @@
         "A",
         "C"
       ],
-      "explanation": "A subagent handoff spawns an agent in its own isolated context window with only the task description and context it needs, and it returns a summary. The course lists what to pass (a scoped task, minimum relevant context, the tools, clear exit conditions) and what you give up (visibility into the intermediate steps, discarded with the subagent's context). Apply it where context cost is a real constraint.",
+      "explanation": "A subagent handoff spawns an agent in its own isolated context window with only the task description and context it needs, and it returns a summary. The course lists what to pass (a scoped task, minimum relevant context, the tools, clear exit conditions) and what you give up (visibility into the intermediate steps, discarded with the subagent's context); apply it where context cost is a real constraint. Analogy: a film director sends a second-unit crew to shoot location footage with a precise shot list, just the script pages they need, the right cameras, and a wrap time. They return the finished footage, and the director never sees the discarded takes. The shot list and wrap time are the scoped task and exit conditions, and the footage is the summary. Assuming the subagent inherits the parent's full history fails, because subagents start clean and need their context passed in.",
       "distractor_explanations": {
         "B": "Subagents start clean and must be given the context they need.",
         "D": "Handoffs add overhead. The course reserves them for cases where context cost is a real constraint.",
@@ -1473,7 +1473,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course's progression is explicit: start with the simplest pattern that solves the problem (a single API call), then a workflow, then an agent, and move up only when the simpler pattern cannot handle the variability the task requires. Agents add behavioral complexity and multi-agent systems add coordination cost, neither of which a fixed-format extraction needs.",
+      "explanation": "The course's progression is explicit: start with the simplest pattern that solves the problem (a single API call), then a workflow, then an agent, and move up only when the simpler pattern cannot handle the variability the task requires. Agents add behavioral complexity and multi-agent systems add coordination cost, neither of which a fixed-format extraction needs. Analogy: reading five numbers off a gas meter does not need a household committee where one person plans the reading, another reads, and a third double-checks; one person with a printed form does it faster and cheaper. The form is the single well-constrained call, and the committee is the planner-executor-evaluator system. Chaining the three roles as fixed calls in a workflow fails, because three sequential calls still over-build a task one constrained call handles; it is a smaller committee, still more than the job needs.",
       "distractor_explanations": {
         "B": "That is still an agent where a single call is enough. Agents are the last step in the progression.",
         "C": "Better than multi-agent, but three chained calls still over-build a task that one constrained call handles.",
@@ -1514,7 +1514,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course says over-tooling is the more common production problem: teams register every tool they might need, and Claude's selection quality degrades as the tool surface grows, especially with overlapping descriptions. The remedy is to start with the minimum set the task needs and add a tool only when a specific capability gap is confirmed.",
+      "explanation": "The course says over-tooling is the more common production problem: teams register every tool they might need, and Claude's selection quality degrades as the tool surface grows, especially with overlapping descriptions. The remedy is to start with the minimum set the task needs and add a tool only when a specific capability gap is confirmed. Analogy: a garden shed crammed with 38 tools, including five nearly identical trowels, leads you to grab the wrong one and use three where one would do. Keeping only the tools today's jobs need, and buying another only when you meet a job none of them can do, makes every choice quick and obvious. The shed is the tool surface, and the look-alike trowels are overlapping descriptions. Lengthening each description fails, because long descriptions bury the trigger conditions while the oversized surface stays.",
       "distractor_explanations": {
         "A": "Overly long descriptions bury the trigger conditions, and the tool surface itself is still too large.",
         "C": "Random partitioning does not match tools to tasks. The fix is a minimal set chosen for the task.",
@@ -1555,7 +1555,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "The diagnosis table distinguishes a wrong shape (missing output constraint), content or scope drift (underspecified system prompt), and a correct task with invented structure, which calls for few-shot examples. Examples show the pattern rather than describe it, and one correct input-output pair pins down a structure that a written instruction leaves ambiguous. A schema-level constraint is the API-side complement.",
+      "explanation": "The diagnosis table distinguishes a wrong shape (missing output constraint), content or scope drift (underspecified system prompt), and a correct task with invented structure, which calls for few-shot examples. Examples show the pattern rather than describe it, and one correct input-output pair pins down a structure that a written instruction leaves ambiguous; a schema-level constraint is the API-side complement. Analogy: a supermarket asks suppliers for 'a price list with product, sizes, and price' and gets tables, nested lists, and sentences, all with the right prices. Sending one filled-in sample row makes every list arrive in the same layout. The suppliers understood the task; only the layout was invented, and the sample row is the few-shot example. Restating the assistant's role and scope fails, because scope drift is not the symptom when the content is right and only the structure varies.",
       "distractor_explanations": {
         "B": "Role or scope drift is not the symptom here. The content is correct, and only the structure is invented.",
         "C": "Reasoning depth does not fix structure. Examples or a schema constraint do.",
@@ -1582,7 +1582,7 @@
         },
         {
           "key": "B",
-          "text": "Use `/compact` when nearing the context ceiling while continuing the same feature, accepting that details missing from the summary are lost."
+          "text": "Use `/compact` when nearing the context ceiling while continuing the same feature, accepting that details the summary omits are lost."
         },
         {
           "key": "C",
@@ -1601,7 +1601,7 @@
         "B",
         "C"
       ],
-      "explanation": "The course's four strategies trade continuity differently. Pruning rewinds and loses everything after the rewind point. Compaction (`/compact`) summarizes history to keep working on the same feature, at the cost of details the summary drops. Clearing (`/clear`) starts fresh for an unrelated task, so anything that must persist goes somewhere durable like CLAUDE.md. Subagent handoffs isolate exploratory work.",
+      "explanation": "The course's four strategies trade continuity differently. Pruning rewinds and loses everything after the rewind point; compaction (`/compact`) summarizes history to keep working on the same feature, at the cost of details the summary drops; clearing (`/clear`) starts fresh for an unrelated task, so anything that must persist goes somewhere durable like CLAUDE.md; and subagent handoffs isolate exploratory work. Analogy: a family's fridge whiteboard is wiped clean when they switch from planning a holiday to doing chores, after copying lasting house rules onto a laminated card. When it fills up mid-holiday-planning, they condense it into a short summary, accepting that anything not copied is gone. Wiping is `/clear`, the card is CLAUDE.md, and condensing is `/compact`. Using `/compact` for an unrelated task fails, because the summary carries the old task's bias forward.",
       "distractor_explanations": {
         "A": "Compaction carries a summary forward, which brings bias from the previous task into unrelated work.",
         "D": "Clearing discards the session context, and nothing is restored afterward.",
@@ -1642,7 +1642,7 @@
       "correct_answers": [
         "D"
       ],
-      "explanation": "In the course's six-pass trace, pass 5 is the engineering failure: a verbose prompt produced verbose output of over 2,000 characters per call, because the model calibrates response length and style to its input, so latency rose with no accuracy gain. Pass 6 fixed it by replacing the descriptions with a structural constraint and two examples, which brought latency back down.",
+      "explanation": "In the course's six-pass trace, pass 5 is the engineering failure: a verbose prompt produced verbose output of over 2,000 characters per call, because the model calibrates response length and style to its input, so latency rose with no accuracy gain. Pass 6 fixed it by replacing the descriptions with a structural constraint and two examples, which brought latency back down. Analogy: leave a house-sitter a rambling five-page letter and you tend to get a five-page reply; leave a short checklist that says 'reply in one line' plus two sample replies, and the answers come back short. The letter is the bloated prompt, the reply is the output, and the checklist and samples are the constraint and examples. Caching the long prompt fails, because caching speeds input processing, while this regression is output length driven by the verbose prompt.",
       "distractor_explanations": {
         "A": "Caching cuts input processing, but this regression is output length driven by the verbose prompt. The content fix is a constraint plus examples.",
         "B": "Thinking adds billed tokens and does not address the verbosity the prompt induces.",
@@ -1673,7 +1673,7 @@
         },
         {
           "key": "C",
-          "text": "Conditions that reference earlier turns can only be checked against history that is sent; pruning removed the evidence, so the rule fails silently."
+          "text": "Pruning removed the evidence, and since conditions about earlier turns can only be checked against the history sent, the rule fails silently."
         },
         {
           "key": "D",
@@ -1683,7 +1683,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "The course's exclusion-condition example comes with an explicit caveat: these conditions rely on complete conversation history being passed in each request, and if prior turns are truncated or dropped, Claude cannot evaluate them and the exclusion logic silently fails. Context strategies have to keep, for example in a compacted summary, any state the routing rules depend on.",
+      "explanation": "The course's exclusion-condition example comes with an explicit caveat: these conditions rely on complete conversation history being passed in each request, and if prior turns are truncated or dropped, Claude cannot evaluate them and the exclusion logic silently fails. Context strategies have to keep, for example in a compacted summary, any state the routing rules depend on. Analogy: a pharmacy rule says to dispense a quick refill only if the doctor's original prescription appears earlier in the patient's file. If the file is trimmed to its last two pages, the pharmacist cannot see the prescription and sends the patient back for one they already have. The file is the conversation history, the trimming is pruning, and the refill rule is the tool description. Blaming prompt-cache invalidation fails, because `get_cached_result` is the application's own tool, and cache state has no effect on its data or routing.",
       "distractor_explanations": {
         "A": "Length is not the issue. The conditions point to turns that are no longer in the request.",
         "B": "Descriptions are sent with each request. The problem is the missing history the rule depends on.",
@@ -1724,7 +1724,7 @@
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course says the same prompting techniques apply to images and PDFs: a bare \"describe this image\" prompt is shallow because Claude has no target structure. Images also carry ambiguity text lacks, such as overlapping objects, depth, and occlusion, so a visual prompt should state how to handle each case, for example \"if objects overlap, describe each separately and note the overlap.\"",
+      "explanation": "The course says the same prompting techniques apply to images and PDFs: a bare 'describe this image' prompt is shallow because Claude has no target structure. Images also carry ambiguity text lacks, such as overlapping objects, depth, and occlusion, so a visual prompt should state how to handle each case, for example 'if objects overlap, describe each separately and note the overlap'. Analogy: a road-safety auditor told only to describe the hazards in intersection photos writes vague, uneven notes. Given a form with set fields and rules such as 'list overlapping vehicles separately' and 'flag any sign half hidden by a tree', the reports become thorough and consistent. The form is the target structure, and the rules are the ambiguity instructions. Sending higher-resolution photos fails, because sharper pixels do not tell the model how to report ambiguity, and larger images cost more tokens.",
       "distractor_explanations": {
         "B": "Duplicating the image multiplies visual tokens without supplying the missing structure.",
         "C": "Resolution does not tell the model how to report ambiguity, and larger images cost more tokens and may be downscaled anyway.",
@@ -1765,7 +1765,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "The carry-back rule is structural: with extended thinking and tools, every thinking block, and every redacted thinking block, must go back to the API exactly as it arrived, because each carries a signature that proves it was not tampered with. Editing, summarizing, or dropping blocks breaks the next request. Data-handling requirements belong in what the application chooses to log or display.",
+      "explanation": "The carry-back rule is structural: with extended thinking and tools, every thinking block, and every redacted thinking block, must go back to the API exactly as it arrived, because each carries a signature that proves it was not tampered with. Editing, summarizing, or dropping blocks breaks the next request, and data-handling requirements belong in what the application chooses to log or display. Analogy: a transit pass carries a hologram that inspectors check; scribble out your name on the pass and it is rejected at the gate. If privacy matters, you black out the name on your own photocopy, not on the pass itself. The hologram is the signature, the pass is the thinking block, and the photocopy is the application's log. Converting edited text into `redacted_thinking` fails, because those blocks are encrypted by the API, must also be returned unchanged, and cannot be made from edited text.",
       "distractor_explanations": {
         "A": "Signatures are produced by the API, and the client cannot re-sign modified reasoning.",
         "B": "In a tool-use loop the thinking blocks must be passed back; dropping them also breaks the request.",
@@ -1792,7 +1792,7 @@
         },
         {
           "key": "B",
-          "text": "Remove `cabin_class` and `max_price` from `required` and give them defaults in the function, so Claude can omit what it doesn't know."
+          "text": "Make `cabin_class` and `max_price` optional with defaults in the function, since a required field forces Claude to give a value on every call."
         },
         {
           "key": "C",
@@ -1806,7 +1806,7 @@
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course's schema guidance is to mark a field required only when the call doesn't make sense without it. Marking everything required forces Claude to fabricate values for fields it has no basis to fill. Optional parameters with sensible defaults in the function signature let Claude leave out what it doesn't know, instead of guessing values that quietly change results.",
+      "explanation": "The course's schema guidance is to mark a field required only when the call doesn't make sense without it. Marking everything required forces Claude to fabricate values for fields it has no basis to fill, while optional parameters with sensible defaults in the function signature let Claude leave out what it doesn't know, instead of guessing values that quietly change results. Analogy: a train ticket machine refuses to search until you choose a seat class and a maximum fare, so travellers who do not care tap 'standard' and a random price, and the machine then hides trains that would have suited them. Origin, destination, and date are genuinely needed; class and fare should default to 'any'. Keeping every field required and adding 'never guess values' fails, because a required field still forces a value on every call; the schema is the lever.",
       "distractor_explanations": {
         "A": "That removes the ability to pass a real value. Optional fields with defaults are the pattern.",
         "C": "Destination and date are needed for the call to make sense. Required means non-negotiable, not minimal.",
@@ -1837,17 +1837,17 @@
         },
         {
           "key": "C",
-          "text": "Descriptions are cut off after a fixed character limit, so the trigger conditions written at the end of each long description are never seen."
+          "text": "Descriptions are cut off after a fixed character limit, so the trigger conditions written at the end of each long description get silently dropped."
         },
         {
           "key": "D",
-          "text": "Long descriptions are fine; the regression simply shows that the tools must now be merged into one tool that takes a type parameter."
+          "text": "Long descriptions are fine; the regression simply shows that the tools should now be merged into one tool that takes a type parameter."
         }
       ],
       "correct_answers": [
         "A"
       ],
-      "explanation": "The course's decision table puts description length at three to four sentences per tool, covering what it does, when Claude should reach for it, and what it returns, with examples where format matters. Too short and Claude guesses; too long and the trigger conditions get buried under detail Claude doesn't use when it decides which tool to call.",
+      "explanation": "The course's decision table puts description length at three to four sentences per tool, covering what it does, when Claude should reach for it, and what it returns, with examples where format matters. Too short and Claude guesses; too long and the trigger conditions get buried under detail Claude doesn't use when it decides which tool to call. Analogy: a station platform sign reading 'Platform 3: northbound to Central, every ten minutes' gets commuters onto the right train. Replace it with a page of the line's founding history and old incident numbers, and people miss their train while reading. The short sign is the three-to-four-sentence description, and the history page is the bloat. Blaming a fixed truncation limit fails, because the course's concern is that useful signal gets buried, not that descriptions are cut off.",
       "distractor_explanations": {
         "B": "Descriptions are weighed heavily in routing. Adding noise degraded the very signal Claude uses.",
         "C": "The course's concern is that useful signal gets buried, not that descriptions are truncated.",
@@ -1878,7 +1878,7 @@
         },
         {
           "key": "C",
-          "text": "API: `enabled: false` for the admin tools in `mcp_toolset` configs. Claude Code: allow `mcp__crm__update_contact`, deny `mcp__crm__delete_contact`."
+          "text": "API: `enabled: false` for the admin tools in `mcp_toolset`. Claude Code: allow `mcp__crm__update_contact`, deny `mcp__crm__delete_contact`."
         },
         {
           "key": "D",
@@ -1888,7 +1888,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "The course separates two controls. In Claude Code, permission rules can name a single MCP tool as `mcp__server__tool`: an allow skips its prompt, and a deny blocks it while other tools still prompt. With the API MCP Connector, the `enabled` flag in `mcp_toolset` decides whether the model sees a tool at all. One is a governance control and the other a scope and context-cost control, and they are often used together.",
+      "explanation": "The course separates two controls. In Claude Code, permission rules can name a single MCP tool as `mcp__server__tool`: an allow skips its prompt, and a deny blocks it while other tools still prompt. With the API MCP Connector, the `enabled` flag in `mcp_toolset` decides whether the model sees a tool at all; one is a governance control and the other a scope and context-cost control, and they are often used together. Analogy: in a theatre, the props master decides which props are placed on stage at all, while the stage manager's rules say which props an actor may use freely and which are off-limits. Leaving a prop off stage is `enabled: false`, and the stage manager's rules are allow and deny. Swapping them, with deny rules in the API and `enabled` in `.mcp.json`, fails, because each control belongs to the other runtime.",
       "distractor_explanations": {
         "A": "This is reversed: `enabled` is the connector's visibility control, and permission rules are Claude Code's run-governance control.",
         "B": "`defer_loading` delays loading until the tool is needed. It neither hides nor blocks the tool.",
@@ -1934,7 +1934,7 @@
         "C",
         "E"
       ],
-      "explanation": "The course defines four MCP scopes. Local is `~/.claude.json` under the current project's path, personal to one project. User is personal settings across all projects. Project is `.mcp.json` at the repository root, shared through version control; a stdio server configured there launches a local subprocess on each clone. Enterprise is admin-managed and pushed to every user.",
+      "explanation": "The course defines four MCP scopes. Local is `~/.claude.json` under the current project's path, personal to one project; user is personal settings across all projects; project is `.mcp.json` at the repository root, shared through version control, and a stdio server configured there launches a local subprocess on each clone; enterprise is admin-managed and pushed to every user. Analogy: a sticky note inside one folder is local, your personal phone contacts are user, the shared family recipe binder everyone copies is project, and rules the landlord sends to every flat are enterprise. A binder recipe that calls for a slow cooker means each household following it needs its own slow cooker, just as a stdio server needs its runtime on every teammate's machine. Putting local scope in `.claude/settings.local.json` fails, because local MCP scope lives in `~/.claude.json` per project.",
       "distractor_explanations": {
         "A": "Enterprise scope pushes servers to all users without any individual configuration steps.",
         "B": "Local MCP scope lives in `~/.claude.json` per project. Team-shared servers belong in project scope.",
@@ -1961,7 +1961,7 @@
         },
         {
           "key": "B",
-          "text": "It loads every connected server's tool definitions at session start, so the developer must disconnect servers to stay within the budget."
+          "text": "It loads each connected server's tool definitions at session start, so the developer has to disconnect some servers to stay within the budget."
         },
         {
           "key": "C",
@@ -1975,7 +1975,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "Per the course, Claude Code by default defers MCP tool definitions and uses a search step to discover and load only the tools a task needs; an opt-in mode loads definitions upfront when they fit within about 10 percent of the context window. Every connected server still adds to the pool the model must account for, so connect only what the work needs.",
+      "explanation": "Per the course, Claude Code by default defers MCP tool definitions and uses a search step to discover and load only the tools a task needs; an opt-in mode loads definitions upfront when they fit within about 10 percent of the context window. Every connected server still adds to the pool the model must account for, so connect only what the work needs. Analogy: a large library keeps most books in closed stacks; you search the catalogue and staff fetch only the titles your project needs, instead of piling every book on your desk. A small reading shelf can be stocked in advance only if it takes up little desk space. The closed stacks are deferred definitions, the catalogue is tool search, and the reading shelf is the opt-in upfront mode. Assuming everything loads at session start fails, because deferral is the default.",
       "distractor_explanations": {
         "A": "There is no such cap. Connecting only the servers you need is still good practice.",
         "B": "By default, definitions are deferred. Loading them upfront is the opt-in behavior.",
@@ -2002,7 +2002,7 @@
         },
         {
           "key": "B",
-          "text": "Raise the exception out of the loop and restart the whole conversation from the first user message with a fresh request."
+          "text": "Raise the exception out of the agent loop and restart the whole conversation from the first user message with a brand-new request."
         },
         {
           "key": "C",
@@ -2010,13 +2010,13 @@
         },
         {
           "key": "D",
-          "text": "Return a `tool_result` with `is_error: true` and a message like `Timed out after 30s`, so Claude can retry, try another route, or tell the user."
+          "text": "Return a `tool_result` flagged `is_error` with the message `Timed out after 30s`, so that Claude can retry, reroute, or tell the user."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course says a failed tool call should come back to Claude as a tool_result with `is_error` set to true and the error message, not as a silent empty result. With the error visible, Claude can try a different approach, ask for clarification, or stop. An empty result makes Claude reason on a false premise, and a missing tool_result breaks the request.",
+      "explanation": "The course says a failed tool call should come back to Claude as a tool_result with `is_error` set to true and the error message, not as a silent empty result. With the error visible, Claude can try a different approach, ask for clarification, or stop; an empty result makes Claude reason on a false premise, and a missing tool_result breaks the request. Analogy: you send your brother to check whether the corner shop has bread. If he comes back and says 'the shop was shut, I couldn't check', you can try another shop, ask a neighbour, or skip it; if he shrugs and says nothing, you assume all is fine and go without. His clear report is the `is_error` result. Returning empty content to keep the loop moving fails, because Claude reads emptiness as valid data and produces a confident, wrong answer.",
       "distractor_explanations": {
         "A": "Every `tool_use` needs a matching `tool_result` in the next user turn. Leaving one out fails validation.",
         "B": "Restarting throws away progress and hides a recoverable, often transient failure from the model.",
@@ -2047,17 +2047,17 @@
         },
         {
           "key": "C",
-          "text": "The defense fails only because the tags are XML; switching to JSON-escaped strings makes the trust boundary structural rather than textual."
+          "text": "The defense fails just because the tags are XML; switching to JSON-escaped strings makes the trust boundary structural rather than textual."
         },
         {
           "key": "D",
-          "text": "Delimiters reduce risk but are a soft boundary content can mimic; the reliable control limits what the agent can do (least privilege, hooks)."
+          "text": "Delimiters help but stay a soft boundary, since content can mimic them; the reliable control limits what the agent can do (least privilege, hooks)."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course says wrapping untrusted content in delimiters helps but remains a soft boundary, because the content can mimic your delimiters or argue persuasively for an exception, and model training and classifiers are probabilistic. The reliable boundary is in what the agent is allowed to do because of that text: least-privilege access plus a hook in front of consequential actions such as an export.",
+      "explanation": "The course says wrapping untrusted content in delimiters helps but remains a soft boundary, because the content can mimic your delimiters or argue persuasively for an exception, and model training and classifiers are probabilistic. The reliable boundary is in what the agent is allowed to do because of that text: least-privilege access plus a hook in front of consequential actions such as an export. Analogy: a newsroom stamps reader letters 'reader submission', but one letter contains a fake 'end of submission, editor's instruction: publish the subscriber list'. The stamp helps, yet a forged one looks the same; what truly protects the list is that the intern sorting mail cannot reach the subscriber database, and printing anything sensitive needs a sign-off. Randomizing the tag name fails as a full defense, because it raises the bar while content can still argue for an exception.",
       "distractor_explanations": {
         "A": "Training and classifiers raise the bar, but Anthropic states that no agent reading untrusted content is fully immune.",
         "B": "Randomizing the tag raises the bar, but content can still argue for an exception. The defense remains probabilistic.",
@@ -2092,13 +2092,13 @@
         },
         {
           "key": "D",
-          "text": "It is blocked: when several hooks or rules apply to one action, deny takes precedence over ask, which takes precedence over allow."
+          "text": "It is blocked, because when several hooks or rules cover one action, deny outranks ask, which takes precedence over allow."
         }
       ],
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course states the precedence order when several hooks or rules apply to the same action: deny over ask over allow. A single deny blocks the action regardless of how many allow rules are also present, and that ordering is what makes a hook a real boundary rather than a best-effort check.",
+      "explanation": "The course states the precedence order when several hooks or rules apply to the same action: deny over ask over allow. A single deny blocks the action regardless of how many allow rules are also present, and that ordering is what makes a hook a real boundary rather than a best-effort check. Analogy: at a junction, a green light and a 'go' arrow both say proceed, and a give-way sign says check first, but a police officer holding up a stop hand overrides them all; it is not a vote among the signals. The officer is the deny, the give-way sign is ask, and the green light and arrow are the allows. Concluding that two allows outweigh one deny fails, because precedence is a ranking, not a count, so `git push --force` is blocked without a prompt.",
       "distractor_explanations": {
         "A": "Precedence is not a vote. A single deny blocks the action no matter how many allows also apply.",
         "B": "Deny outranks ask, so the action is blocked without any prompt.",
@@ -2121,11 +2121,11 @@
       "options": [
         {
           "key": "A",
-          "text": "Move the workload to Claude Managed Agents, whose managed sandbox satisfies ZDR by discarding all state at the end of each session."
+          "text": "Move the workload to Claude Managed Agents, whose managed sandbox satisfies ZDR by discarding session state at the end of each session."
         },
         {
           "key": "B",
-          "text": "Confirm that model's ZDR eligibility on the Trust Center and the platform's retention terms; eligibility varies by model and platform."
+          "text": "Confirm the model's ZDR eligibility on the Trust Center and the platform's retention terms, since it varies by model and platform."
         },
         {
           "key": "C",
@@ -2133,13 +2133,13 @@
         },
         {
           "key": "D",
-          "text": "Proceed on the cloud platform, because Claude models hosted there inherit ZDR from the cloud provider's standard data-retention terms."
+          "text": "Proceed on the cloud platform: Claude models hosted there inherit ZDR from the cloud provider's standard data-retention terms."
         }
       ],
       "correct_answers": [
         "B"
       ],
-      "explanation": "The course flags a model-specific constraint to name early: ZDR eligibility varies by model and platform and is not guaranteed for every model, even under an existing ZDR agreement, and newer or higher-capability models may not have confirmed ZDR status yet. Confirm each model at scoping time on the Trust Center and under each cloud platform's terms; the answer may constrain the model or platform choice.",
+      "explanation": "The course flags a model-specific constraint to name early: ZDR eligibility varies by model and platform and is not guaranteed for every model, even under an existing ZDR agreement, and newer or higher-capability models may not have confirmed ZDR status yet. Confirm each model at scoping time on the Trust Center and under each cloud platform's terms, because the answer may constrain the model or platform choice. Analogy: a health-insurance plan covers many treatments, but a brand-new procedure may not be on the covered list yet, and coverage can differ between clinics. Before booking, the patient checks that exact procedure at that exact clinic. The plan is the ZDR agreement, the procedure is the model, and the clinic is the platform. Assuming the existing agreement covers every model fails, because eligibility is confirmed per model and per platform, not inherited.",
       "distractor_explanations": {
         "A": "Managed Agents sessions are stateful and stored server-side, so they are not currently ZDR-eligible.",
         "C": "The course says ZDR eligibility is not guaranteed for every model, even under an existing agreement.",
@@ -2170,7 +2170,7 @@
         },
         {
           "key": "C",
-          "text": "What the agent's identity can do: least privilege plus enforced hooks turns the same injection into a denied action and a log entry."
+          "text": "What the agent's identity can do, since least privilege plus enforced hooks turns the same injection into a denied action and a log entry."
         },
         {
           "key": "D",
@@ -2180,7 +2180,7 @@
       "correct_answers": [
         "C"
       ],
-      "explanation": "The course frames least privilege as the control that holds when every other defense fails. If an injection gets through and the agent acts on it, what happens next is bounded entirely by what the agent's identity can do: broad write and secret access makes it an incident, while one output path and read-only input makes it a denied action and a log entry.",
+      "explanation": "The course frames least privilege as the control that holds when every other defense fails. If an injection gets through and the agent acts on it, what happens next is bounded entirely by what the agent's identity can do: broad write and secret access makes it an incident, while one output path and read-only input makes it a denied action and a log entry. Analogy: a night-shift supermarket stacker receives a forged memo saying 'hand the cash-office contents to the courier'. If their key card opens the cash office, it becomes an incident; if it opens only the stockroom, and the cash-office door logs refused swipes, it ends as a refused swipe on record. The key card is the agent's identity, and the logging door is the enforced hook. Relying on firm system-prompt wording fails, because once the agent is steered that wording has already failed.",
       "distractor_explanations": {
         "A": "Logs provide evidence after the fact; they do not limit what the action could reach.",
         "B": "Once the agent is steered, the prompt wording has already failed. The course says no prompt instruction is a security control.",
@@ -2203,7 +2203,7 @@
       "options": [
         {
           "key": "A",
-          "text": "Claude Code prompts the developer to choose between the conflicting rules, since the local and managed settings disagree."
+          "text": "Claude Code prompts the developer to choose between the conflicting rules, as the local and managed settings disagree here."
         },
         {
           "key": "B",
@@ -2211,17 +2211,17 @@
         },
         {
           "key": "C",
-          "text": "Blocked: deny beats allow, and an enterprise deny can't be overridden by user or project files and still applies in bypass mode."
+          "text": "Blocked, since deny beats allow, and no user or project file can override an enterprise deny, which still applies in bypass mode."
         },
         {
           "key": "D",
-          "text": "The edit succeeds, because the local settings file is the most specific scope and overrides broader rules for this one project."
+          "text": "The edit succeeds, because the local settings file is the most specific scope and overrides the broader rules for this one project."
         }
       ],
       "correct_answers": [
         "C"
       ],
-      "explanation": "Claude Code settings layer user, project, local, and enterprise managed scopes. The course states that a deny rule always wins over an allow rule regardless of mode, and that the most durable governance control is an enterprise-level deny: no individual developer can remove it, and it applies even when a bypass mode is set.",
+      "explanation": "Claude Code settings layer user, project, local, and enterprise managed scopes. The course states that a deny rule always wins over an allow rule regardless of mode, and that the most durable governance control is an enterprise-level deny: no individual developer can remove it, and it applies even when a bypass mode is set. Analogy: a film studio's fire marshal bans flares on every stage. A director's own call sheet allowing a flare on a throwaway set, even with the crew in a no-questions-asked mode, does not lift the ban, because the marshal's rule sits above every production. The marshal's ban is the managed deny, the call sheet is `.claude/settings.local.json`, and the no-questions mode is `bypassPermissions`. Treating the local file as the most specific and therefore winning scope fails, because managed settings cannot be overridden by user or project files.",
       "distractor_explanations": {
         "A": "Deny wins outright. There is no conflict prompt.",
         "B": "The course states that enterprise deny rules still apply when a bypass mode is set.",
@@ -2262,7 +2262,7 @@
       "correct_answers": [
         "D"
       ],
-      "explanation": "The course matches the grader to the output's shape: exact match for a single correct form, code checks for structure, and a calibrated judge for open-ended quality. Code checks run locally and cost almost nothing per case, while a judge is an extra model call per case. Many teams grade format on every commit and keep the judge for a slower, scheduled quality pass.",
+      "explanation": "The course matches the grader to the output's shape: exact match for a single correct form, code checks for structure, and a calibrated judge for open-ended quality. Code checks run locally and cost almost nothing per case, while a judge is an extra model call per case, so many teams grade format on every commit and keep the judge for a slower, scheduled quality pass. Analogy: a supermarket's checkout scanner verifies every barcode instantly and almost for free, while a trained taster samples produce quality on a weekly schedule, judging against agreed standards. The scanner is the code check on JSON and fields, and the taster is the calibrated judge. Cutting the eval to 50 hand-picked cases so the judge can keep running on every commit fails, because coverage is what catches regressions, and a few cases lose the edge inputs.",
       "distractor_explanations": {
         "A": "Coverage is what catches regressions. Shrinking to a few cases loses the edge inputs.",
         "B": "An uncalibrated judge produces numbers that look rigorous but mean nothing. Changing the judge requires recalibrating it.",

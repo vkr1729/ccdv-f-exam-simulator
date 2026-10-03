@@ -120,7 +120,7 @@
       <!-- Primary Nav Tabs (own scrollable row on small screens) -->
       <nav aria-label="Primary" class="order-last sm:order-none w-full sm:w-auto flex items-center flex-nowrap gap-1 bg-stone-100/80 p-1 rounded-xl border border-stone-200 overflow-x-auto no-scrollbar">
         <a href="#dashboard" data-route="dashboard" aria-current="page" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium bg-brand-terracotta-tint text-brand-terracotta border border-brand-terracotta-line">
-          Exams (12)
+          Exams (15)
         </a>
         <a href="#gaps" data-route="gaps" class="nav-link shrink-0 whitespace-nowrap px-3.5 py-2 rounded-lg text-sm font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 transition">
           Diagnostics
@@ -166,7 +166,7 @@
       <!-- Minimal Header -->
       <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 pb-3 border-b border-stone-200">
         <h2 class="text-2xl sm:text-3xl font-editorial text-stone-900 font-normal">Practice Exams</h2>
-        <span class="text-xs font-mono text-stone-500">10 Full Forms · 530 Questions</span>
+        <span class="text-xs font-mono text-stone-500">15 Full Forms · 795 Questions</span>
       </div>
 
       <!-- Quick Readiness Summary (Injected dynamically only if attempts exist) -->
@@ -222,6 +222,12 @@
       <div id="hard-tier-banner" class="hidden p-4 rounded-xl bg-amber-50/80 border border-amber-300 text-amber-950 text-xs flex items-center gap-3">
         <span class="px-2 py-0.5 rounded font-mono font-bold bg-amber-200 text-amber-900 shrink-0">Hard Tier</span>
         <p>This exam is authored from scratch against official Anthropic blueprints with elevated distractor plausibility and subtle edge cases. It is not part of external public mock dumps.</p>
+      </div>
+
+      <!-- Moderate Tier Notice Banner (visible only for Exams 13, 14, and 15) -->
+      <div id="moderate-tier-banner" class="hidden p-4 rounded-xl bg-sky-50/80 border border-sky-300 text-sky-950 text-xs flex items-center gap-3">
+        <span class="px-2 py-0.5 rounded font-mono font-bold bg-sky-200 text-sky-900 shrink-0">Moderate Tier</span>
+        <p>This exam is authored from scratch against official Anthropic blueprints providing a realistic full-length 53-question moderate-difficulty simulation. It is not part of external public mock dumps.</p>
       </div>
 
       <!-- Main Layout: 3 cols Question + 1 col Navigator -->
@@ -485,7 +491,7 @@
   <footer class="mt-12 border-t border-stone-200 py-6 bg-white/50 text-xs text-stone-500 font-mono">
     <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
       <div class="space-y-1">
-        <p class="font-semibold text-stone-700">CCDV-F Exam Simulator · 10 Practice Exams (530 Questions)</p>
+        <p class="font-semibold text-stone-700">CCDV-F Exam Simulator · 15 Practice Exams (795 Questions)</p>
         <p class="text-[11px] text-stone-500">Independent community study platform. Not affiliated with, sponsored by, or endorsed by Anthropic PBC.</p>
       </div>
       <div class="flex items-center gap-4 text-[11px]">

@@ -93,10 +93,10 @@ def bundle():
     sources_meta["exams_count"] = len(all_exams)
     sources_meta["questions_per_exam"] = 53
 
-    # Ensure Hard Tier source is registered if exams 11/12 exist
-    hard_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) >= 11)
+    # Ensure Hard and Moderate Tier sources are registered
+    sources_list = sources_meta.get("sources", [])
+    hard_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (11, 12))
     if hard_tier_count > 0:
-        sources_list = sources_meta.get("sources", [])
         hard_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)"
         existing_hard = next((s for s in sources_list if s.get("name") == hard_source_name), None)
         if existing_hard:
@@ -108,7 +108,23 @@ def bundle():
                 "description": "Authored from scratch specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
                 "contributed_questions": hard_tier_count
             })
-        sources_meta["sources"] = sources_list
+
+    mod_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (13, 14, 15))
+    if mod_tier_count > 0:
+        mod_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)"
+        mod_desc = "Authored from scratch specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps."
+        existing_mod = next((s for s in sources_list if s.get("name") == mod_source_name), None)
+        if existing_mod:
+            existing_mod["contributed_questions"] = mod_tier_count
+            existing_mod["description"] = mod_desc
+        else:
+            sources_list.append({
+                "name": mod_source_name,
+                "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
+                "description": mod_desc,
+                "contributed_questions": mod_tier_count
+            })
+    sources_meta["sources"] = sources_list
 
     # Update complete provenance array for all questions
     provenance = []
@@ -155,6 +171,9 @@ window.EXAM_DATA = {{
             html = f.read()
 
         new_html, count = re.subn(r'Exams \(\d+\)', f'Exams ({len(all_exams)})', html)
+        new_html = re.sub(r'\d+ Full Forms · \d+ Questions', f'{len(all_exams)} Full Forms · {len(all_questions)} Questions', new_html)
+        new_html = re.sub(r'CCDV-F Exam Simulator · \d+ Practice Exams \(\d+ Questions\)', f'CCDV-F Exam Simulator · {len(all_exams)} Practice Exams ({len(all_questions)} Questions)', new_html)
+
         if count == 0:
             print("Warning: Could not find 'Exams (N)' badge text in index.html to update", file=sys.stderr)
         else:

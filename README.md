@@ -1,4 +1,4 @@
-# Claude Certified Developer Foundations (CCDV-F) — 12 Mock Exam Simulator
+# Claude Certified Developer Foundations (CCDV-F) — 15 Mock Exam Simulator
 *(Unofficial Community Study & Practice Platform)*
 
 > **Disclaimer:** This is an independent, open-source community preparation project. It is **not** affiliated with, endorsed by, sponsored by, or certified by Anthropic PBC. Claude and CCDV-F are trademarks or service marks of Anthropic PBC.
@@ -11,10 +11,11 @@ Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/
 
 ## 🌟 Key Features
 
-- **12 Full-Length Exam Forms (636 Questions Total)**: Every form strictly simulates the real 53-item, 120-minute Pearson VUE exam structure and blueprint domain weights.
-- **Hard Tier Forms (#11 & #12)**: Authored from scratch against official Anthropic blueprints, featuring elevated difficulty with subtle, plausible near-miss distractors to simulate tough edge cases and deep architectural reasoning. These are completely original and not part of other mocks available across sources.
+- **15 Full-Length Exam Forms (795 Questions Total)**: Every form strictly simulates the real 53-item, 120-minute Pearson VUE exam structure and blueprint domain weights.
+- **Hard Tier Forms (#11 & #12)**: Authored from scratch against official Anthropic blueprints, featuring elevated difficulty with subtle, plausible near-miss distractors to simulate tough edge cases and deep architectural reasoning. Expanded with detailed answer explanations.
+- **Moderate Tier Forms (#13, #14 & #15)**: Authored from scratch against official Anthropic blueprints, providing realistic moderate-difficulty simulations with balanced exam-style practice across all 8 domains (completely original and not from public dumps).
 - **Strict Developer Scope**: Rigorously curated and audited for Developer-specific scenarios (Messages API, Agent SDK, MCP, streaming, caching, hooks, security boundaries) rather than high-level Architect topologies.
-- **PWA & Offline Commute Ready**: Installable as a Progressive Web App (PWA) with responsive mobile bottom-sheet ergonomics, touch optimizations (`touch-action: manipulation`), safe-area padding for notch/gesture bars, and Service Worker caching. Once loaded online initially, the entire application shell and all 636 questions are cached for complete offline practice on trains, subways, or flights without internet.
+- **PWA & Offline Commute Ready**: Installable as a Progressive Web App (PWA) with responsive mobile bottom-sheet ergonomics, touch optimizations (`touch-action: manipulation`), safe-area padding for notch/gesture bars, and Service Worker caching. Once loaded online initially, the entire application shell and all 795 questions are cached for complete offline practice on trains, subways, or flights without internet.
 - **Claude Studio Design Language**: Built in a warm, editorial, distraction-free light theme inspired by Anthropic's brand aesthetic (`Newsreader` serif headlines + `Inter` body + `JetBrains Mono` code blocks).
 - **Persistent Missed Questions Vault**: Incorrect answers across all attempts automatically save to local browser storage for revision. Existing user attempts and scores are strictly preserved and never overwritten by updates.
 - **Lagging-Area Gap Diagnostic**: Dynamically ranks your proficiency across the 8 exam domains against the 72% (720/1000) passing threshold and provides targeted topic watch-outs.
@@ -26,17 +27,17 @@ Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/
 
 ## 📊 Official CCDV-F Domain Balance (Per 53-Question Form)
 
-| Domain Code | Official Domain Name | Blueprint Weight | Questions / Form | Total in Bank (12 Exams) |
+| Domain Code | Official Domain Name | Blueprint Weight | Questions / Form | Total in Bank (15 Exams) |
 |---|---|---|---|---|
-| **D1** | **Applications & Integration** | 33.1% | 18 | 216 |
-| **D2** | **Model Selection & Optimization** | 16.8% | 9 | 108 |
-| **D3** | **Agents & Workflows** | 14.7% | 8 | 96 |
-| **D4** | **Prompt & Context Engineering** | 11.0% | 6 | 72 |
-| **D5** | **Tools & MCPs** | 10.6% | 6 | 72 |
-| **D6** | **Security & Safety** | 8.1% | 4 | 48 |
-| **D7** | **Claude Code** | 3.1% | 1 | 12 |
-| **D8** | **Eval, Testing & Debugging** | 2.6% | 1 | 12 |
-| **TOTAL** | | **100%** | **53** | **636** |
+| **D1** | **Applications & Integration** | 33.1% | 18 | 270 |
+| **D2** | **Model Selection & Optimization** | 16.8% | 9 | 135 |
+| **D3** | **Agents & Workflows** | 14.7% | 8 | 120 |
+| **D4** | **Prompt & Context Engineering** | 11.0% | 6 | 90 |
+| **D5** | **Tools & MCPs** | 10.6% | 6 | 90 |
+| **D6** | **Security & Safety** | 8.1% | 4 | 60 |
+| **D7** | **Claude Code** | 3.1% | 1 | 15 |
+| **D8** | **Eval, Testing & Debugging** | 2.6% | 1 | 15 |
+| **TOTAL** | | **100%** | **53** | **795** |
 
 ---
 
@@ -84,8 +85,9 @@ Or open `preview/index.html` to view the 3 UI/UX design variants explored during
 
 ## 📜 Attributions & Provenance
 
-This educational study project incorporates authentic scenario items from vetted community developer repositories as well as scratch-authored Hard Tier forms:
-- **Exams #11 & #12 (Hard Tier)**: Authored from scratch against official Anthropic CCDV-F blueprints with elevated distractor plausibility.
+This educational study project incorporates authentic scenario items from vetted community developer repositories as well as scratch-authored Hard and Moderate Tier forms:
+- **Exams #11 & #12 (Hard Tier)**: Authored from scratch against official Anthropic CCDV-F blueprints with elevated distractor plausibility and deep answer explanations.
+- **Exams #13, #14 & #15 (Moderate Tier)**: Authored against official Anthropic CCDV-F blueprints providing realistic moderate-difficulty full-length simulations.
 - **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** by Srinivas Pusuluri
 - **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** by Nat Sh.
 - **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** by Turjoy

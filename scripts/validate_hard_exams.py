@@ -33,7 +33,10 @@ DOMAIN_ORDER = ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8"]
 
 GLOBAL_ID_RANGES = {
     11: (531, 583),
-    12: (584, 636)
+    12: (584, 636),
+    13: (637, 689),
+    14: (690, 742),
+    15: (743, 795)
 }
 
 def load_existing_prompts(exams_dir, exclude_exam_ids):

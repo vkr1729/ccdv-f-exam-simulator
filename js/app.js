@@ -361,7 +361,8 @@ function renderDashboard() {
   State.allExams.forEach(exam => {
     const bestAttempt = Storage.getExamBestScore(exam.exam_id);
     const formNum = String(exam.exam_id).padStart(2, '0');
-    const isHardTier = exam.exam_id >= 11;
+    const isHardTier = exam.exam_id === 11 || exam.exam_id === 12;
+    const isModerateTier = exam.exam_id >= 13 && exam.exam_id <= 15;
 
     let statusBadge = `<span class="text-xs font-mono text-stone-500">Untested</span>`;
     if (bestAttempt) {
@@ -375,14 +376,22 @@ function renderDashboard() {
     const row = document.createElement('li');
     row.className = "px-4 sm:px-6 py-4 flex flex-wrap sm:flex-nowrap sm:items-center gap-x-4 gap-y-3 hover:bg-stone-50/80 transition";
 
+    let subtitle = '53 questions · 120 minutes';
+    if (isHardTier) {
+      subtitle = '53 questions · 120 min · High-difficulty subtle distractors (not from external mock dumps)';
+    } else if (isModerateTier) {
+      subtitle = '53 questions · 120 min · Realistic moderate-difficulty simulation (not from external mock dumps)';
+    }
+
     row.innerHTML = `
       <span class="hidden sm:block font-editorial text-2xl leading-none text-stone-400 w-9 text-right shrink-0" aria-hidden="true">${formNum}</span>
       <div class="flex-1 min-w-[10rem]">
         <div class="flex items-center gap-2 flex-wrap">
           <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
           ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier · Scratch Authored</span>' : ''}
+          ${isModerateTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-900 border border-sky-300">Moderate Tier · Scratch Authored</span>' : ''}
         </div>
-        <p class="text-xs font-mono text-stone-500 mt-0.5">${isHardTier ? '53 questions · 120 min · High-difficulty subtle distractors (not from external mock dumps)' : '53 questions · 120 minutes'}</p>
+        <p class="text-xs font-mono text-stone-500 mt-0.5">${subtitle}</p>
       </div>
       <div class="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-2.5">
         ${bestAttempt ? `
@@ -527,7 +536,8 @@ function renderCurrentQuestion() {
 
   // Header info
   const modeSuffix = State.isReviewMode ? ' (Review Mode)' : (State.isStudyMode ? ' (Study Mode)' : '');
-  const isHardTier = exam.exam_id >= 11;
+  const isHardTier = exam.exam_id === 11 || exam.exam_id === 12;
+  const isModerateTier = exam.exam_id >= 13 && exam.exam_id <= 15;
   document.getElementById('exam-title-header').textContent = exam.title + modeSuffix;
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
 
@@ -537,6 +547,15 @@ function renderCurrentQuestion() {
       hardBanner.classList.remove('hidden');
     } else {
       hardBanner.classList.add('hidden');
+    }
+  }
+
+  const moderateBanner = document.getElementById('moderate-tier-banner');
+  if (moderateBanner) {
+    if (isModerateTier) {
+      moderateBanner.classList.remove('hidden');
+    } else {
+      moderateBanner.classList.add('hidden');
     }
   }
   
@@ -1511,22 +1530,49 @@ function renderVaultView() {
 // -------------------------------------------------------------
 // SOURCES & PROVENANCE VIEW (Task 1)
 // -------------------------------------------------------------
-const COMMUNITY_SOURCES = [
+const SCRATCH_SOURCES = [
   {
-    author: "Nat Sh.",
-    repo: "natsh/claude-developer-foundations-prep",
-    url: "https://github.com/natsh/claude-developer-foundations-prep",
-    description: "Authored the comprehensive 5-module quiz bank based on the Anthropic Partner Academy curriculum plus advanced exam practice sets.",
-    contributed: 132,
-    share: "24.9%"
+    tier: "Moderate Tier",
+    badgeClass: "bg-sky-100 text-sky-900 border-sky-300",
+    exams: "Exams #13, #14 & #15",
+    title: "Moderate Tier Practice Simulations",
+    author: "Scratch Authored (CCDV-F Simulator)",
+    repo: "vkr1729/ccdv-f-exam-simulator",
+    url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
+    description: "Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications. Provides full-length 53-question moderate-difficulty simulations with realistic exam-style scenarios across all 8 domains and comprehensive technical explanations. Completely original and not sourced from external mock dumps.",
+    contributed: 159,
+    share: "20.0%"
   },
+  {
+    tier: "Hard Tier",
+    badgeClass: "bg-amber-100 text-amber-900 border-amber-300",
+    exams: "Exams #11 & #12",
+    title: "Hard Tier Practice Simulations",
+    author: "Scratch Authored (CCDV-F Simulator)",
+    repo: "vkr1729/ccdv-f-exam-simulator",
+    url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
+    description: "Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications. Features elevated difficulty with subtle near-miss distractors and deep architectural edge cases, expanded with detailed rationales for every option. Completely original and not sourced from external mock dumps.",
+    contributed: 106,
+    share: "13.3%"
+  }
+];
+
+const COMMUNITY_SOURCES = [
   {
     author: "Srinivas Pusuluri",
     repo: "srinipusuluri/CCDV-F-SET1",
     url: "https://github.com/srinipusuluri/CCDV-F-SET1",
     description: "Compiled an extensive 9-set collection of developer practice questions with detailed explanations and distractor reasoning.",
     contributed: 149,
-    share: "28.1%"
+    share: "18.7%"
+  },
+  {
+    author: "Nat Sh.",
+    repo: "natsh/claude-developer-foundations-prep",
+    url: "https://github.com/natsh/claude-developer-foundations-prep",
+    description: "Authored the comprehensive 5-module quiz bank based on the Anthropic Partner Academy curriculum plus advanced exam practice sets.",
+    contributed: 132,
+    share: "16.6%"
   },
   {
     author: "Turjoy Real",
@@ -1534,7 +1580,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/turjoy-real/CCDV-F",
     description: "Created realistic 53-item practice mock exams and multi-domain developer practice scenario drills.",
     contributed: 88,
-    share: "16.6%"
+    share: "11.1%"
   },
   {
     author: "H. Bacheller",
@@ -1542,7 +1588,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/hbacheller-tribe/CCDV-F-Exam",
     description: "Engineered blueprint-weighted scenario questions with insightful technical rationales for real-world development patterns.",
     contributed: 85,
-    share: "16.0%"
+    share: "10.7%"
   },
   {
     author: "Amey Thakur",
@@ -1550,7 +1596,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS",
     description: "Developed comprehensive Developer Foundations question collections and timed practice exam modules.",
     contributed: 76,
-    share: "14.3%"
+    share: "9.6%"
   }
 ];
 
@@ -1564,10 +1610,10 @@ function renderSourcesView() {
     <!-- Top Provenance & Attribution Header -->
     <div class="p-6 sm:p-8 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-6">
       <div class="space-y-2">
-        <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Open Source Community</span>
+        <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Provenance</span>
         <h2 class="text-2xl sm:text-3xl font-editorial text-stone-900">Question Bank Provenance &amp; Creator Attribution</h2>
         <p class="text-sm text-stone-600 leading-relaxed max-w-3xl">
-          This platform synthesizes 530 authentic scenario questions balanced into 10 full 53-question exams. All questions are sourced from open developer study repositories, mapped to the official CCDV-F domain blueprint weights, and verified for technical accuracy.
+          This platform synthesizes <strong>795 authentic scenario questions</strong> structured into <strong>15 full-length 53-question practice exams</strong> (120 minutes each). All questions strictly adhere to Anthropic's official 8-domain blueprint weights and have been verified for developer accuracy.
         </p>
       </div>
 
@@ -1578,30 +1624,75 @@ function renderSourcesView() {
           <h3 class="text-sm font-semibold text-stone-900 font-editorial">Educational Purpose &amp; Anti-Plagiarism Commitment</h3>
         </div>
         <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">
-          The objective of this exam simulator is <strong>educational synthesis and fair practice, not plagiarism</strong>. Studying from a single author often introduces authorial bias, repetitive question phrasing, and topical blind spots. By aggregating, vetting, and interleaving high-quality scenario questions across <strong>5 independent community creators</strong> into standardized 53-question exam forms matching Anthropic’s official 8-domain blueprint, learners gain a truly balanced, realistic preparation experience.
+          The objective of this exam simulator is <strong>educational synthesis and fair practice, not plagiarism</strong>. Studying from a single author often introduces authorial bias, repetitive question phrasing, and topical blind spots. This question bank combines two complementary pillars:
         </p>
+        <ul class="text-xs sm:text-sm text-stone-700 space-y-1.5 list-disc pl-5">
+          <li><strong>Base Practice Forms (Exams #1–#10 · 530 Questions)</strong>: Interleaved across 5 independent community study repositories so every form draws from multiple creators under official blueprint weights.</li>
+          <li><strong>Scratch-Authored Forms (Exams #11–#15 · 265 Questions)</strong>: Authored completely from scratch directly against official Anthropic blueprints across Moderate Tier (#13, #14 &amp; #15) and Hard Tier (#11 &amp; #12) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
+        </ul>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs font-mono text-stone-600 border-t border-brand-terracotta-line/50">
           <span>✓ 100% Free &amp; Open Source</span>
           <span>✓ Strict Creator Attribution</span>
+          <span>✓ 265 Scratch-Authored Items</span>
           <span>✓ No NDA / Non-Public Exam Dumps</span>
           <span>✓ Educational Fair Use</span>
+        </div>
+      </div>
+
+      <!-- Scratch-Authored Exams Section -->
+      <div class="space-y-4 pt-2">
+        <div class="flex items-baseline justify-between flex-wrap gap-2">
+          <h3 class="text-base font-semibold text-stone-900">Scratch-Authored Exam Forms (265 Questions Total · Exams #11–#15)</h3>
+          <span class="text-xs font-mono text-stone-500">Authored from scratch against Anthropic CCDV-F blueprints</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          ${SCRATCH_SOURCES.map(src => `
+            <div class="p-5 rounded-xl bg-white border border-stone-200 hover:border-brand-terracotta/40 shadow-sm transition flex flex-col justify-between space-y-3">
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${src.badgeClass}">${escapeHtml(src.tier)} · Scratch Authored</span>
+                      <span class="text-xs font-mono text-stone-500">${escapeHtml(src.exams)}</span>
+                    </div>
+                    <h4 class="text-base font-bold text-stone-900">${escapeHtml(src.title)}</h4>
+                    <p class="text-xs font-mono text-stone-500 mt-0.5">${escapeHtml(src.repo)}</p>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-stone-100 text-stone-700 font-semibold border border-stone-200 shrink-0">
+                    ${src.contributed} questions (${src.share})
+                  </span>
+                </div>
+                <p class="text-xs text-stone-600 leading-relaxed">${escapeHtml(src.description)}</p>
+              </div>
+              <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+                <span class="font-mono text-stone-500">100% Original Content</span>
+                <a href="${src.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 font-semibold text-brand-terracotta hover:text-brand-terracotta-deep transition group">
+                  <span>View Repository</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          `).join('')}
         </div>
       </div>
 
       <!-- Heartfelt Community Thanks -->
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-2">
         <h3 class="text-sm font-semibold text-stone-900 flex items-center gap-2">
-          <span>A Sincere Thank You to Our Upstream Creators</span>
+          <span>A Sincere Thank You to Upstream Community Creators</span>
           <span class="text-base" aria-hidden="true">🙏</span>
         </h3>
         <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
-          We extend our heartfelt gratitude and deep appreciation to the independent developers and community educators who authored, curated, and openly shared these practice questions. Their generosity and dedication empower developers worldwide to master the Claude API and build production-ready applications. <strong>Please visit their repositories below, star their work, and review their original materials:</strong>
+          We extend our heartfelt gratitude and deep appreciation to the independent developers and community educators who authored, curated, and openly shared practice questions for Exams #1–#10. Their generosity and dedication empower developers worldwide to master the Claude API and build production-ready applications. <strong>Please visit their repositories below, star their work, and review their original materials:</strong>
         </p>
       </div>
 
       <!-- Upstream Repositories Grid -->
       <div class="space-y-4 pt-2">
-        <h3 class="text-base font-semibold text-stone-900">Upstream Open-Source Repositories (530 Questions Total)</h3>
+        <div class="flex items-baseline justify-between flex-wrap gap-2">
+          <h3 class="text-base font-semibold text-stone-900">Upstream Open-Source Repositories (530 Questions Total · Exams #1–#10)</h3>
+          <span class="text-xs font-mono text-stone-500">Vetted community repositories</span>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           ${COMMUNITY_SOURCES.map(src => `
             <div class="p-5 rounded-xl bg-white border border-stone-200 hover:border-brand-terracotta/40 shadow-sm transition flex flex-col justify-between space-y-3">
@@ -1630,32 +1721,40 @@ function renderSourcesView() {
         </div>
       </div>
 
-      <!-- Multi-Source Interleaving Breakdown -->
+      <!-- Multi-Source Distribution Breakdown Across All 15 Exams -->
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
-        <h3 class="text-sm font-semibold text-stone-900">Multi-Source Distribution Across All 10 Mock Exams</h3>
+        <h3 class="text-sm font-semibold text-stone-900">Comprehensive Question Bank Distribution (795 Questions Total)</h3>
         <p class="text-xs text-stone-600 leading-relaxed">
-          Every single 53-question mock exam in this simulator is mathematically balanced to include questions from <strong>all 5 repositories</strong> while strictly adhering to Anthropic's official blueprint weights (Applications &amp; Integration: 33.1%, Model Selection: 16.8%, Agents &amp; Workflows: 14.7%, Prompt Engineering: 11.0%, Tools &amp; MCP: 10.6%, Security &amp; Safety: 8.1%, Claude Code: 3.1%, Eval &amp; Testing: 2.6%).
+          Every single 53-question mock exam in this simulator strictly adheres to Anthropic's official blueprint weights (Applications &amp; Integration: 33.1%, Model Selection: 16.8%, Agents &amp; Workflows: 14.7%, Prompt Engineering: 11.0%, Tools &amp; MCP: 10.6%, Security &amp; Safety: 8.1%, Claude Code: 3.1%, Eval &amp; Testing: 2.6%).
         </p>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 text-center text-xs font-mono">
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 pt-2 text-center text-xs font-mono">
+          <div class="p-2.5 rounded-lg bg-sky-50 border border-sky-200">
+            <div class="font-bold text-sky-950">159</div>
+            <div class="text-[10px] text-sky-800 truncate" title="Moderate Tier · Scratch Authored (Exams 13-15)">Moderate Tier (20%)</div>
+          </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">149</div>
-            <div class="text-[10px] text-stone-500 truncate">Srinipusuluri (28%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Srinivas Pusuluri">Srinipusuluri (19%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">132</div>
-            <div class="text-[10px] text-stone-500 truncate">Nat Sh. (25%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Nat Sh.">Nat Sh. (17%)</div>
+          </div>
+          <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200">
+            <div class="font-bold text-amber-950">106</div>
+            <div class="text-[10px] text-amber-800 truncate" title="Hard Tier · Scratch Authored (Exams 11-12)">Hard Tier (13%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">88</div>
-            <div class="text-[10px] text-stone-500 truncate">Turjoy Real (17%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Turjoy Real">Turjoy Real (11%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">85</div>
-            <div class="text-[10px] text-stone-500 truncate">H. Bacheller (16%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="H. Bacheller">H. Bacheller (11%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">76</div>
-            <div class="text-[10px] text-stone-500 truncate">Amey Thakur (14%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Amey Thakur">Amey Thakur (10%)</div>
           </div>
         </div>
       </div>
