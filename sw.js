@@ -3,7 +3,7 @@
  * Provides complete offline practice capability for commutes, flights, and low-connectivity environments.
  */
 
-const CACHE_NAME = 'ccdv-f-v2.3';
+const CACHE_NAME = 'ccdv-f-v2.4';
 
 const PRECACHE_ASSETS = [
   'index.html',
@@ -98,10 +98,10 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Local assets: Stale-While-Revalidate
+  // Local assets: Stale-While-Revalidate (ignoreSearch: true for cache-busting query strings)
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(req).then((cachedResponse) => {
+      return cache.match(req, { ignoreSearch: true }).then((cachedResponse) => {
         const fetchPromise = fetch(req).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             cache.put(req, networkResponse.clone());
