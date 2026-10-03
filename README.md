@@ -68,11 +68,11 @@ Or open `preview/index.html` to view the 3 UI/UX design variants explored during
 │   ├── app.js                  # Main SPA view controller and router
 │   ├── storage.js              # LocalStorage persistent state engine
 │   ├── analytics.js            # Scoring engine, gap diagnostic & export tools
-│   └── exam-data.js            # Bundled 636 questions across 12 exams
+│   └── exam-data.js            # Bundled 795 questions across 15 exams
 ├── data/
-│   ├── all_questions.json      # Complete curated question bank (636 questions)
+│   ├── all_questions.json      # Complete curated question bank (795 questions)
 │   ├── sources_metadata.json   # Upstream provenance metadata
-│   └── exams/                  # Individual exam JSON files (exam_01 to exam_12)
+│   └── exams/                  # Individual exam JSON files (exam_01 to exam_15)
 ├── scripts/
 │   ├── bundle_client_data.py   # Compiles exams into client bundles
 │   ├── validate_hard_exams.py  # Blueprint & distractor validation for hard forms

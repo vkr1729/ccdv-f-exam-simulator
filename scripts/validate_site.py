@@ -207,6 +207,33 @@ def test_exam_data():
 
     print(f"\n✓ Client bundle js/exam-data.js verified ({len(bundle_text):,} bytes, {num_exams} exams)")
 
+def test_ui_cleanliness_and_cache_sync():
+    # 1. Assert no stray raw arrows in app.js button templates
+    with open(os.path.join(BASE_DIR, "js", "app.js"), "r", encoding="utf-8") as f:
+        app_code = f.read()
+    assert "&rarr;" not in app_code, "Stray &rarr; arrow glyph found in js/app.js buttons"
+    assert "&larr;" not in app_code, "Stray &larr; arrow glyph found in js/app.js buttons"
+
+    # 2. Assert no stray raw arrows in index.html button templates
+    with open(os.path.join(BASE_DIR, "index.html"), "r", encoding="utf-8") as f:
+        index_html = f.read()
+    assert "&rarr;" not in index_html, "Stray &rarr; arrow glyph found in index.html"
+    assert "&larr;" not in index_html, "Stray &larr; arrow glyph found in index.html"
+
+    # 3. Assert sw.js cache version matches index.html script tag version
+    with open(os.path.join(BASE_DIR, "sw.js"), "r", encoding="utf-8") as f:
+        sw_code = f.read()
+    m_sw = re.search(r"CACHE_NAME\s*=\s*['\"]ccdv-f-v([\d\.]+)['\"]", sw_code)
+    assert m_sw, "CACHE_NAME version string missing in sw.js"
+    sw_ver = m_sw.group(1)
+
+    m_html = re.search(r'src="js/app\.js\?v=([\d\.]+)"', index_html)
+    assert m_html, "Versioned script tag missing in index.html (e.g. js/app.js?v=X.X)"
+    html_ver = m_html.group(1)
+
+    assert sw_ver == html_ver, f"Cache mismatch: sw.js version ({sw_ver}) != index.html version ({html_ver})"
+    print(f"✓ UI cleanliness and PWA cache version synchronization verified (v{sw_ver})!")
+
 if __name__ == "__main__":
     print("=====================================================")
     print("  CCDV-F EXAM SIMULATOR SYSTEM INTEGRITY VALIDATION  ")
@@ -214,6 +241,7 @@ if __name__ == "__main__":
     test_files_exist()
     test_pwa_configuration()
     test_exam_data()
+    test_ui_cleanliness_and_cache_sync()
     print("\n=====================================================")
     print("  ALL SYSTEM CHECKS & BLUEPRINT TESTS PASSED (100%)  ")
     print("=====================================================")
