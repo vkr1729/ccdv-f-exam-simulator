@@ -12,8 +12,8 @@ Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/
 ## 🌟 Key Features
 
 - **15 Full-Length Exam Forms (795 Questions Total)**: Every form strictly simulates the real 53-item, 120-minute Pearson VUE exam structure and blueprint domain weights.
-- **Hard Tier Forms (#11 & #12)**: Authored from scratch against official Anthropic blueprints, featuring elevated difficulty with subtle, plausible near-miss distractors to simulate tough edge cases and deep architectural reasoning. Expanded with detailed answer explanations.
-- **Moderate Tier Forms (#13, #14 & #15)**: Authored from scratch against official Anthropic blueprints, providing realistic moderate-difficulty simulations with balanced exam-style practice across all 8 domains (completely original and not from public dumps).
+- **Hard Tier Forms (#11 & #12)**: Developed directly against official Anthropic blueprints, featuring elevated difficulty with subtle, plausible near-miss distractors to simulate tough edge cases and deep architectural reasoning. Expanded with detailed answer explanations.
+- **Moderate Tier Forms (#13, #14 & #15)**: Developed directly against official Anthropic blueprints, providing realistic moderate-difficulty simulations with balanced exam-style practice across all 8 domains (completely original and not from public dumps).
 - **Strict Developer Scope**: Rigorously curated and audited for Developer-specific scenarios (Messages API, Agent SDK, MCP, streaming, caching, hooks, security boundaries) rather than high-level Architect topologies.
 - **PWA & Offline Commute Ready**: Installable as a Progressive Web App (PWA) with responsive mobile bottom-sheet ergonomics, touch optimizations (`touch-action: manipulation`), safe-area padding for notch/gesture bars, and Service Worker caching. Once loaded online initially, the entire application shell and all 795 questions are cached for complete offline practice on trains, subways, or flights without internet.
 - **Claude Studio Design Language**: Built in a warm, editorial, distraction-free light theme inspired by Anthropic's brand aesthetic (`Newsreader` serif headlines + `Inter` body + `JetBrains Mono` code blocks).
@@ -21,7 +21,7 @@ Hosted live on GitHub Pages: **[https://vkr1729.github.io/ccdv-f-exam-simulator/
 - **Lagging-Area Gap Diagnostic**: Dynamically ranks your proficiency across the 8 exam domains against the 72% (720/1000) passing threshold and provides targeted topic watch-outs.
 - **Targeted Remediation Quiz**: Launch custom drills composed exclusively of your previously missed questions until mastered.
 - **Zero-Dependency Architecture**: Standalone modern HTML5, Tailwind CSS, and Vanilla ES Modules with 100% offline capability and zero backend requirements.
-- **Transparent Provenance**: Complete author attribution and repository citations across community developer repositories and original scratch-authored forms.
+- **Transparent Provenance**: Complete author attribution and repository citations across community developer repositories and original blueprint forms.
 
 ---
 
@@ -85,9 +85,9 @@ Or open `preview/index.html` to view the 3 UI/UX design variants explored during
 
 ## 📜 Attributions & Provenance
 
-This educational study project incorporates authentic scenario items from vetted community developer repositories as well as scratch-authored Hard and Moderate Tier forms:
-- **Exams #11 & #12 (Hard Tier)**: Authored from scratch against official Anthropic CCDV-F blueprints with elevated distractor plausibility and deep answer explanations.
-- **Exams #13, #14 & #15 (Moderate Tier)**: Authored against official Anthropic CCDV-F blueprints providing realistic moderate-difficulty full-length simulations.
+This educational study project incorporates authentic scenario items from vetted community developer repositories as well as original Hard and Moderate Tier forms:
+- **Exams #11 & #12 (Hard Tier)**: Developed directly against official Anthropic CCDV-F blueprints with elevated distractor plausibility and deep answer explanations.
+- **Exams #13, #14 & #15 (Moderate Tier)**: Developed directly against official Anthropic CCDV-F blueprints providing realistic moderate-difficulty full-length simulations.
 - **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** by Srinivas Pusuluri
 - **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** by Nat Sh.
 - **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** by Turjoy

@@ -98,21 +98,23 @@ def bundle():
     hard_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (11, 12))
     if hard_tier_count > 0:
         hard_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)"
+        hard_desc = "Developed specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps."
         existing_hard = next((s for s in sources_list if s.get("name") == hard_source_name), None)
         if existing_hard:
             existing_hard["contributed_questions"] = hard_tier_count
+            existing_hard["description"] = hard_desc
         else:
             sources_list.append({
                 "name": hard_source_name,
                 "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
-                "description": "Authored from scratch specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
+                "description": hard_desc,
                 "contributed_questions": hard_tier_count
             })
 
     mod_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (13, 14, 15))
     if mod_tier_count > 0:
         mod_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)"
-        mod_desc = "Authored from scratch specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps."
+        mod_desc = "Developed specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps."
         existing_mod = next((s for s in sources_list if s.get("name") == mod_source_name), None)
         if existing_mod:
             existing_mod["contributed_questions"] = mod_tier_count

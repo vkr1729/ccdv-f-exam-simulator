@@ -6,8 +6,8 @@ Every question has been vetted strictly for **Developer (CCDV-F)** scope, aligne
 
 > [!NOTE]
 > **Hard Tier Exams (#11 & #12) & Moderate Tier Exams (#13, #14 & #15):**
-> - **Hard Tier (Exams #11 & #12)**: Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications with elevated distractor plausibility and edge-case testing; expanded with thorough answer explanations for deep reasoning.
-> - **Moderate Tier (Exams #13, #14 & #15)**: Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications, providing full-length 53-question moderate-difficulty simulations with balanced, realistic exam-style questions across all 8 domains.
+> - **Hard Tier (Exams #11 & #12)**: Developed directly against official Anthropic CCDV-F blueprint specifications with elevated distractor plausibility and edge-case testing; expanded with thorough answer explanations for deep reasoning.
+> - **Moderate Tier (Exams #13, #14 & #15)**: Developed directly against official Anthropic CCDV-F blueprint specifications, providing full-length 53-question moderate-difficulty simulations with balanced, realistic exam-style questions across all 8 domains.
 > Neither set is sourced from external mock dumps.
 
 ---
@@ -16,7 +16,7 @@ Every question has been vetted strictly for **Developer (CCDV-F)** scope, aligne
 
 The objective of this exam simulator is **educational synthesis and fair practice, not plagiarism**. 
 
-Single-source question banks often suffer from narrow authorial bias, idiosyncratic phrasing, and blind spots. By aggregating, vetting, and balancing high-quality questions across multiple independent community creators and scratch-authored hard and moderate forms matching Anthropic's official blueprint, candidates gain realistic, unbiased preparation for the actual proctored exam.
+Single-source question banks often suffer from narrow authorial bias, idiosyncratic phrasing, and blind spots. By aggregating, vetting, and balancing high-quality questions across multiple independent community creators and original blueprint-aligned hard and moderate forms matching Anthropic's official blueprint, candidates gain realistic, unbiased preparation for the actual proctored exam.
 
 - **Non-Commercial / Purely Educational:** This simulator is 100% free and open for developer community preparation.
 - **Strict Attribution:** All questions preserve author and repository provenance in `data/sources_metadata.json` and are viewable in the in-app "Sources & Provenance" view.
@@ -42,10 +42,10 @@ Their open contributions empower developers worldwide to master the Claude API a
 
 | Repository / Source | Author / Curator | License / Visibility | Content Description | Contribution | Share |
 |---|---|---|---|---|---|
-| **[Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Scratch Authored | Open (GitHub) | Authored from scratch realistic moderate-difficulty simulation across all domains (Exams #13, #14 & #15) | 159 items | 20.0% |
+| **[Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Original Prep | Open (GitHub) | Realistic moderate-difficulty simulation across all domains (Exams #13, #14 & #15) | 159 items | 20.0% |
 | **[srinipusuluri/CCDV-F-SET1](https://github.com/srinipusuluri/CCDV-F-SET1)** | Srinivas Pusuluri | Public (GitHub) | 9 practice exams with detailed explanations & distractor reasoning | 149 items | 18.7% |
 | **[natsh/claude-developer-foundations-prep](https://github.com/natsh/claude-developer-foundations-prep)** | Nat Sh. | Public (GitHub) | Anthropic Partner Academy 5-module quiz bank & hard exam form | 132 items | 16.6% |
-| **[Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Scratch Authored | Open (GitHub) | Elevated-difficulty scenario questions with deep distractor plausibility (Exams #11 & #12) | 106 items | 13.3% |
+| **[Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)](https://github.com/vkr1729/ccdv-f-exam-simulator)** | Original Prep | Open (GitHub) | Elevated-difficulty scenario questions with deep distractor plausibility (Exams #11 & #12) | 106 items | 13.3% |
 | **[turjoy-real/CCDV-F](https://github.com/turjoy-real/CCDV-F)** | Turjoy Real | Public (GitHub) | Full 53-item realistic mock exam and multi-domain developer practice drills | 88 items | 11.1% |
 | **[hbacheller-tribe/CCDV-F-Exam](https://github.com/hbacheller-tribe/CCDV-F-Exam)** | H. Bacheller | MIT (GitHub) | 85 scenario-based blueprint-weighted questions with option rationale | 85 items | 10.7% |
 | **[Amey-Thakur/CLAUDE-CERTIFICATIONS](https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS)** | Amey Thakur | Apache 2.0 (GitHub) | Developer Foundations question bank and timed mock exams | 76 items | 9.6% |

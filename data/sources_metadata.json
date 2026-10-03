@@ -36,13 +36,13 @@
     {
       "name": "Anthropic Partner Academy / CCDV-F Official Prep (Hard Tier)",
       "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
-      "description": "Authored from scratch specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
+      "description": "Developed specifically for Exams #11 & #12 with elevated distractor plausibility and edge-case testing; not sourced from external mock dumps.",
       "contributed_questions": 106
     },
     {
       "name": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
       "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
-      "description": "Authored from scratch specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps.",
+      "description": "Developed specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps.",
       "contributed_questions": 159
     }
   ],

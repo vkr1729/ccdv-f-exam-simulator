@@ -223,7 +223,9 @@ function updateNavUI(activeRoute) {
   const statsEl = document.getElementById('header-stats-pill');
   if (statsEl) {
     if (fullExams.length === 0) {
-      statsEl.textContent = "10 Mock Exams · 530 Questions Ready";
+      const examCount = State.allExams.length || 15;
+      const questionCount = State.allQuestions.length || (examCount * 53);
+      statsEl.textContent = `${examCount} Mock Exams · ${questionCount} Questions Ready`;
     } else {
       const avg = Math.round(fullExams.reduce((acc, a) => acc + a.percentage, 0) / fullExams.length);
       const passedCount = fullExams.filter(a => a.is_passing).length;
@@ -327,8 +329,9 @@ function renderDashboard() {
   if (diagContainer) {
     const hasData = (diagnostic.full_attempts > 0) || (diagnostic.total_questions_tested > 0) || (missedVault.length > 0);
     if (hasData) {
+      const totalExamCount = State.allExams.length || 15;
       const summaryText = diagnostic.full_attempts > 0
-        ? `<span class="font-semibold text-stone-900">${diagnostic.full_attempts}/10 Completed</span>`
+        ? `<span class="font-semibold text-stone-900">${diagnostic.full_attempts}/${totalExamCount} Completed</span>`
         : `<span class="font-semibold text-stone-900">${diagnostic.total_questions_tested} Questions Evaluated</span>`;
 
       diagContainer.innerHTML = `
@@ -388,8 +391,8 @@ function renderDashboard() {
       <div class="flex-1 min-w-[10rem]">
         <div class="flex items-center gap-2 flex-wrap">
           <h3 class="text-base font-editorial text-stone-900 leading-snug">Mock Exam #${exam.exam_id}</h3>
-          ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier · Scratch Authored</span>' : ''}
-          ${isModerateTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-900 border border-sky-300">Moderate Tier · Scratch Authored</span>' : ''}
+          ${isHardTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-900 border border-amber-300">Hard Tier</span>' : ''}
+          ${isModerateTier ? '<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-900 border border-sky-300">Moderate Tier</span>' : ''}
         </div>
         <p class="text-xs font-mono text-stone-500 mt-0.5">${subtitle}</p>
       </div>
@@ -1530,16 +1533,16 @@ function renderVaultView() {
 // -------------------------------------------------------------
 // SOURCES & PROVENANCE VIEW (Task 1)
 // -------------------------------------------------------------
-const SCRATCH_SOURCES = [
+const ORIGINAL_SOURCES = [
   {
     tier: "Moderate Tier",
     badgeClass: "bg-sky-100 text-sky-900 border-sky-300",
     exams: "Exams #13, #14 & #15",
     title: "Moderate Tier Practice Simulations",
-    author: "Scratch Authored (CCDV-F Simulator)",
+    author: "CCDV-F Exam Simulator",
     repo: "vkr1729/ccdv-f-exam-simulator",
     url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
-    description: "Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications. Provides full-length 53-question moderate-difficulty simulations with realistic exam-style scenarios across all 8 domains and comprehensive technical explanations. Completely original and not sourced from external mock dumps.",
+    description: "Developed directly against official Anthropic CCDV-F blueprint specifications. Provides full-length 53-question moderate-difficulty simulations with realistic exam-style scenarios across all 8 domains and comprehensive technical explanations. Completely original and not sourced from external mock dumps.",
     contributed: 159,
     share: "20.0%"
   },
@@ -1548,10 +1551,10 @@ const SCRATCH_SOURCES = [
     badgeClass: "bg-amber-100 text-amber-900 border-amber-300",
     exams: "Exams #11 & #12",
     title: "Hard Tier Practice Simulations",
-    author: "Scratch Authored (CCDV-F Simulator)",
+    author: "CCDV-F Exam Simulator",
     repo: "vkr1729/ccdv-f-exam-simulator",
     url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
-    description: "Authored completely from scratch directly against official Anthropic CCDV-F blueprint specifications. Features elevated difficulty with subtle near-miss distractors and deep architectural edge cases, expanded with detailed rationales for every option. Completely original and not sourced from external mock dumps.",
+    description: "Developed directly against official Anthropic CCDV-F blueprint specifications. Features elevated difficulty with subtle near-miss distractors and deep architectural edge cases, expanded with detailed rationales for every option. Completely original and not sourced from external mock dumps.",
     contributed: 106,
     share: "13.3%"
   }
@@ -1628,31 +1631,31 @@ function renderSourcesView() {
         </p>
         <ul class="text-xs sm:text-sm text-stone-700 space-y-1.5 list-disc pl-5">
           <li><strong>Base Practice Forms (Exams #1–#10 · 530 Questions)</strong>: Interleaved across 5 independent community study repositories so every form draws from multiple creators under official blueprint weights.</li>
-          <li><strong>Scratch-Authored Forms (Exams #11–#15 · 265 Questions)</strong>: Authored completely from scratch directly against official Anthropic blueprints across Moderate Tier (#13, #14 &amp; #15) and Hard Tier (#11 &amp; #12) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
+          <li><strong>Original Practice Forms (Exams #11–#15 · 265 Questions)</strong>: Developed directly against official Anthropic blueprints across Moderate Tier (#13, #14 &amp; #15) and Hard Tier (#11 &amp; #12) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
         </ul>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs font-mono text-stone-600 border-t border-brand-terracotta-line/50">
           <span>✓ 100% Free &amp; Open Source</span>
           <span>✓ Strict Creator Attribution</span>
-          <span>✓ 265 Scratch-Authored Items</span>
+          <span>✓ 265 Original Blueprint Items</span>
           <span>✓ No NDA / Non-Public Exam Dumps</span>
           <span>✓ Educational Fair Use</span>
         </div>
       </div>
 
-      <!-- Scratch-Authored Exams Section -->
+      <!-- Original Blueprint Exams Section -->
       <div class="space-y-4 pt-2">
         <div class="flex items-baseline justify-between flex-wrap gap-2">
-          <h3 class="text-base font-semibold text-stone-900">Scratch-Authored Exam Forms (265 Questions Total · Exams #11–#15)</h3>
-          <span class="text-xs font-mono text-stone-500">Authored from scratch against Anthropic CCDV-F blueprints</span>
+          <h3 class="text-base font-semibold text-stone-900">Original Blueprint Exam Forms (265 Questions Total · Exams #11–#15)</h3>
+          <span class="text-xs font-mono text-stone-500">Developed directly against Anthropic CCDV-F blueprints</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          ${SCRATCH_SOURCES.map(src => `
+          ${ORIGINAL_SOURCES.map(src => `
             <div class="p-5 rounded-xl bg-white border border-stone-200 hover:border-brand-terracotta/40 shadow-sm transition flex flex-col justify-between space-y-3">
               <div class="space-y-2">
                 <div class="flex items-start justify-between gap-2">
                   <div>
                     <div class="flex items-center gap-2 mb-1">
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${src.badgeClass}">${escapeHtml(src.tier)} · Scratch Authored</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${src.badgeClass}">${escapeHtml(src.tier)}</span>
                       <span class="text-xs font-mono text-stone-500">${escapeHtml(src.exams)}</span>
                     </div>
                     <h4 class="text-base font-bold text-stone-900">${escapeHtml(src.title)}</h4>
@@ -1730,7 +1733,7 @@ function renderSourcesView() {
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 pt-2 text-center text-xs font-mono">
           <div class="p-2.5 rounded-lg bg-sky-50 border border-sky-200">
             <div class="font-bold text-sky-950">159</div>
-            <div class="text-[10px] text-sky-800 truncate" title="Moderate Tier · Scratch Authored (Exams 13-15)">Moderate Tier (20%)</div>
+            <div class="text-[10px] text-sky-800 truncate" title="Moderate Tier (Exams 13-15)">Moderate Tier (20%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">149</div>
@@ -1742,7 +1745,7 @@ function renderSourcesView() {
           </div>
           <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200">
             <div class="font-bold text-amber-950">106</div>
-            <div class="text-[10px] text-amber-800 truncate" title="Hard Tier · Scratch Authored (Exams 11-12)">Hard Tier (13%)</div>
+            <div class="text-[10px] text-amber-800 truncate" title="Hard Tier (Exams 11-12)">Hard Tier (13%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">88</div>
