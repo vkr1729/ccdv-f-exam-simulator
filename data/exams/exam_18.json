@@ -1,0 +1,2280 @@
+{
+  "exam_id": 18,
+  "title": "CCDV-F Mock Exam #18 (Moderate Tier)",
+  "description": "Full-length 53-question moderate-difficulty simulation for Claude Certified Developer - Foundations (120 minutes). Realistic exam-style mix of easier, medium, and hard scenario questions.",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 1,
+      "prompt": "A team compares OAuth with a service-account key held in an environment variable for its MCP integrations. What does OAuth add that the key does not?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A small overhead on each tool call from the audit hook that logs it to the record kept for compliance review."
+        },
+        {
+          "key": "B",
+          "text": "A requirement to commit the issued token to `.mcp.json` so teammates can connect without their own sign-in."
+        },
+        {
+          "key": "C",
+          "text": "A secret rotation schedule that the team has to run for each connected service on a fixed calendar."
+        },
+        {
+          "key": "D",
+          "text": "A one-time browser sign-in setup step for each user and each service connected through OAuth to Claude."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The patterns carry different costs. OAuth adds a one-time setup step per user per service, because each person signs in through the browser and approves access. An API key held in an environment variable adds a rotation process instead, and audit logging through a PostToolUse hook adds a small overhead to every tool call whichever pattern is used.",
+      "distractor_explanations": {
+        "A": "Audit logging is a PostToolUse hook concern and applies to every pattern, not just OAuth.",
+        "B": "Tokens are issued per user and stored by the client. They are not committed to the repository.",
+        "C": "Rotation is the cost of a key. OAuth tokens are issued and stored by the client after the user approves access."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Authentication Costs by Pattern",
+      "id": "CCDV-E18-Q01",
+      "exam_id": 18,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q0902"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 2,
+      "prompt": "A prototype connects Claude to an internal system and works well in a demo. Which gaps would make it fail a regulated customer's security review?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A user-identity service using OAuth, an audit hook on each call, and a configuration locked through managed settings."
+        },
+        {
+          "key": "B",
+          "text": "No dashboard of model accuracy, no A/B test between two prompts, and no fallback to a smaller model for easy requests."
+        },
+        {
+          "key": "C",
+          "text": "A pinned model ID, a regional endpoint, and a prior version kept for rollback as the previous release's fallback."
+        },
+        {
+          "key": "D",
+          "text": "Hardcoded credentials, no audit log of tool calls, and no way for an administrator to lock the whole configuration."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A prototype answers one question: does the connection work? A regulated review asks more, and a system that uses hardcoded credentials, has no audit log, and cannot be centrally locked will not pass. Those fixes are not hard, but they take attention before the review rather than after a failed one.",
+      "distractor_explanations": {
+        "A": "Those are the controls a reviewer expects to see, so they are not gaps.",
+        "B": "Those are quality and cost concerns. A security review asks about identity, data location, access logging, and configuration control.",
+        "C": "Those are deployment and versioning practices. They are not the identity, logging, and lock gaps a prototype usually has."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Failing a Regulated Review",
+      "id": "CCDV-E18-Q02",
+      "exam_id": 18,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q0903"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 3,
+      "prompt": "A leaked service key lived inline in a committed file. Which practice did that break, and when does rotation help with recovery?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Separation was broken; rotation does not help once a key is in history, so deleting the repository is the sole recovery."
+        },
+        {
+          "key": "B",
+          "text": "Storage was broken; rotation is unnecessary once the key moves to a secret store, since the old value stops working there."
+        },
+        {
+          "key": "C",
+          "text": "Rotation was broken; separation helps when keys are rotated on a schedule that matches the repository's release cadence."
+        },
+        {
+          "key": "D",
+          "text": "Separation was broken; rotation helps recovery when the value also lives outside the file and is referenced by its name."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Three practices keep a credential safe: separation, a proper home for the value, and rotation. A key written inline into a committed file breaks separation, and the value rides along with every clone. Rotation helps with recovery only when the first two are held, because only then do consumers read the value by name and keep working when it changes. Analogy: changing the lock on a shared office door is easy if everyone gets keys from the front desk, but if staff copied keys onto personal key rings, every copy has to be hunted down. The wrong options blame the wrong practice or abandon rotation.",
+      "distractor_explanations": {
+        "A": "Rotation is the right response to a leak. It only works cleanly when consumers reference the value by name.",
+        "B": "The old value stays in repository history and still works until it is rotated, wherever the new copy lives.",
+        "C": "Separation is the first practice and the one the inline key broke. Rotation depends on it rather than the other way round."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Three Practices for Secrets",
+      "id": "CCDV-E18-Q03",
+      "exam_id": 18,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q0904"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 4,
+      "prompt": "A team is building a demo that connects Claude to a sample dataset and will never see production data. The security lead asks whether the full enterprise checklist is needed: managed-settings lock, audit store, and separate registrations per environment. What does the guidance suggest?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Apply just the audit store and the managed-settings lock, since those two cover what a reviewer inspects first on an integration."
+        },
+        {
+          "key": "B",
+          "text": "Apply the full checklist anyway, so the same configuration is used for the demo and for production and nothing drifts later."
+        },
+        {
+          "key": "C",
+          "text": "Skip each item, including secret handling, so the demo stays easy to share and can be tidied up once it is approved for use."
+        },
+        {
+          "key": "D",
+          "text": "The full checklist is not warranted for a demo with no production data, but secrets in environment variables cost nothing."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Enterprise integration controls exist for production data that a regulated customer cares about. A demo or proof of concept that will never see such data does not need the full checklist, so the administrator lock, the audit store, and the per-environment registrations can wait. Using an environment variable for secrets is the one habit worth keeping, since it costs nothing.",
+      "distractor_explanations": {
+        "A": "Those two items are exactly what a demo with no production data can leave out. The cheap habit worth keeping is environment-variable secrets.",
+        "B": "The guidance says a prototype that never sees production data does not need the full enterprise checklist.",
+        "C": "Even for a demo, putting secrets in environment variables is recommended, because it costs nothing and builds the right habit."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Authentication by Service Type",
+      "id": "CCDV-E18-Q04",
+      "exam_id": 18,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q0905"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 5,
+      "prompt": "A policy asks how often a service-account key should be rotated. What does the guidance say?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "On a regular schedule, and also immediately after any suspected exposure of that key to other parties."
+        },
+        {
+          "key": "B",
+          "text": "At most once a year, so that consumers are not disturbed more often than that by a new value."
+        },
+        {
+          "key": "C",
+          "text": "Only when the key expires or a consumer reports a failure, to avoid breaking consumers that depend on it."
+        },
+        {
+          "key": "D",
+          "text": "Never, once the key lives in an environment variable, as a value held there cannot leak from the host."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Rotation is replacing a credential with a new one, on a schedule and immediately after any suspected exposure. It is the only appropriate response to a leaked key, because an exposed key cannot be made secret again. Reading the key by name from an environment variable or a secret store keeps rotation cheap, since the code that uses it does not change.",
+      "distractor_explanations": {
+        "B": "The guidance is a regular schedule plus an immediate rotation after suspected exposure, not a yearly ceiling.",
+        "C": "Waiting for a failure leaves an exposed key in use. Rotation is scheduled and also follows any suspected exposure.",
+        "D": "A value in an environment variable can still leak. Keeping it out of files makes rotation cheap but does not remove the need."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Rotation Schedule",
+      "id": "CCDV-E18-Q05",
+      "exam_id": 18,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q0906"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 6,
+      "prompt": "A security policy requires a service key to be rotated every 90 days, with no edits to the code that uses it. Which design makes this possible?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Each consumer keeps its own copy of the key in its own file, so a rotation can be rolled out one service at a time as owners get to it."
+        },
+        {
+          "key": "B",
+          "text": "Consumers hold the key as a constant in source, and a quarterly job regenerates that constant and commits the new value to the repository."
+        },
+        {
+          "key": "C",
+          "text": "Consumers read the key from the configuration file, and each rotation overwrites that file in place in the repository."
+        },
+        {
+          "key": "D",
+          "text": "Consumers read the credential by name from a secret store or environment variable, so only the value changes."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A credential read from a secret store or an environment variable rotates without touching the code that uses it, because the code refers to the value by name and the name does not change when the value behind it does. A value baked into code cannot be rotated cleanly: the old value stays in history and every consumer hardcoded to it breaks.",
+      "distractor_explanations": {
+        "A": "Separate copies multiply the places a value must be replaced, and any consumer missed breaks when the old key stops working.",
+        "B": "A constant in source means every rotation is a code change, and the old value stays in history after the commit.",
+        "C": "The configuration file would hold the value itself. Overwriting leaves the old key in repository history, where it can still be read."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Secrets: Rotation Design",
+      "id": "CCDV-E18-Q06",
+      "exam_id": 18,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q0907"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 7,
+      "prompt": "A team on Claude Platform on AWS pins `claude-opus-4-8` and asks which retirement schedule applies to it. What is the answer?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "AWS's, as the model is billed through the AWS account and retires on the partner's own published dates."
+        },
+        {
+          "key": "B",
+          "text": "Bedrock's, as the Claude routes on AWS share one retirement calendar and one model ID format between them."
+        },
+        {
+          "key": "C",
+          "text": "Neither, as a pinned ID on a route through AWS stays available until the customer chooses to change it."
+        },
+        {
+          "key": "D",
+          "text": "Anthropic's, because that route pins with the first-party API's ID format and follows Anthropic's schedule."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Claude Platform on AWS is reached through the customer's AWS account, but it uses Anthropic's own model IDs and lifecycle, with inference operated by Anthropic outside the AWS boundary. A team pins it with the same model ID format as the first-party API, and its lifecycle follows Anthropic's deprecation schedule. Analogy: a franchise shop that bills you through your local bank still stocks the head office's products and follows the head office's recall dates, while a store brand follows its own calendar. The wrong options attach the partner's calendar to this route.",
+      "distractor_explanations": {
+        "A": "On this route the model lifecycle follows Anthropic's deprecation schedule. Partner dates apply on Bedrock and Vertex AI.",
+        "B": "The routes differ. Bedrock uses an `anthropic.`-prefixed ID and partner retirement dates.",
+        "C": "A pinned ID is a fixed snapshot, but snapshots still retire on a schedule, here Anthropic's."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Pinning on Claude Platform on AWS",
+      "id": "CCDV-E18-Q07",
+      "exam_id": 18,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q0908"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 8,
+      "prompt": "A throwaway prototype never touches production. What does the deployment guidance say about using a moving model alias there?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It is acceptable on the condition that the prior version is kept as a rollback target for the prototype itself."
+        },
+        {
+          "key": "B",
+          "text": "It is unacceptable, since a prototype has to pin a full model ID before its first call is made."
+        },
+        {
+          "key": "C",
+          "text": "It breaks the eval, as a graded test set cannot be run against a model referred to by an alias."
+        },
+        {
+          "key": "D",
+          "text": "A moving alias is fine there, because pinning is for work that ships, not for a throwaway one."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Pinning exists so that an upstream model update is a deliberate choice instead of a silent production change. A throwaway prototype that never touches production has no production behavior to protect, so a moving alias is fine there. The discipline applies to what ships.",
+      "distractor_explanations": {
+        "A": "A rollback target matters for a shipped system. A throwaway prototype has no release to roll back.",
+        "B": "Pinning protects what ships. A prototype that never touches production does not need it.",
+        "C": "An alias can be used with any request. It simply moves over time, which only matters for shipped work."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Aliases in Throwaway Work",
+      "id": "CCDV-E18-Q08",
+      "exam_id": 18,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q0909"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 9,
+      "prompt": "A team reviews how its services refer to models. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pinning gives identical output on each call, so no eval is needed before a version is promoted."
+        },
+        {
+          "key": "B",
+          "text": "An unpinned deployment makes each upstream model update an untracked change to the application's output."
+        },
+        {
+          "key": "C",
+          "text": "An alias such as `opus` or `sonnet` resolves to a recommended version that updates and can differ by platform."
+        },
+        {
+          "key": "D",
+          "text": "A pinned full model ID can still move on its own, so keeping the prior version adds no rollback value to a release."
+        },
+        {
+          "key": "E",
+          "text": "Aliases are fixed snapshots on partner platforms, so just the first-party API has an alias that moves over time."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "An alias is convenient but it is a moving target: it resolves to a recommended version that updates over time and can differ across platforms. A deployment that follows an alias is unpinned, so each upstream model update becomes an untracked change to the application's output, which is how a parser can break overnight. Analogy: asking a shop for the current edition of a book means the text can change under you, while citing a fixed edition keeps your references stable. The alias is the current edition, the pinned ID is the fixed one, and the wrong options deny the moving target.",
+      "distractor_explanations": {
+        "A": "Pinning fixes which snapshot runs. A new version is still gated through the eval against the pinned baseline.",
+        "D": "A pinned full ID resolves to a fixed snapshot, and keeping the prior version is what makes a regression a rollback.",
+        "E": "Aliases can resolve to different versions across deployment platforms, and they evolve over time."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Aliases and Unpinned Deployments",
+      "id": "CCDV-E18-Q09",
+      "exam_id": 18,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q0910"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 10,
+      "prompt": "A team picks Claude in Amazon Bedrock for its broad feature parity with the first-party API. What should it still do before relying on a specific feature?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Check feature-specific requirements in the Bedrock documentation, as a features-not-supported list exists."
+        },
+        {
+          "key": "B",
+          "text": "Nothing further, as Claude in Amazon Bedrock supports each first-party feature with identical behavior."
+        },
+        {
+          "key": "C",
+          "text": "Move to the legacy `InvokeModel` route, as that route carries the complete feature set of the first-party API."
+        },
+        {
+          "key": "D",
+          "text": "Upload the files through the Files API, as it is available on Bedrock and closes a gap in feature support."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Claude in Amazon Bedrock serves the Messages API at `/anthropic/v1/messages` with broad feature parity with the first-party API, and it keeps data inside the customer's configured AWS boundary. Parity is broad but not total: a features-not-supported list exists, so the team should confirm any feature-specific requirement against the Bedrock documentation before it relies on it.",
+      "distractor_explanations": {
+        "B": "Parity is broad, not complete. A features-not-supported list exists, so specific features need checking.",
+        "C": "The legacy route is the one tied to ARN identifiers and the older APIs. It is not a fuller feature route.",
+        "D": "The Files API is a beta feature that is not available on Bedrock or Vertex AI."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Bedrock Feature Parity",
+      "id": "CCDV-E18-Q10",
+      "exam_id": 18,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q0911"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 11,
+      "prompt": "A platform decision for a regulated client will be reviewed next month by security and procurement staff who were not in the scoping meetings. What should the team's requirements record contain so the choice can be defended?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A price comparison of each platform's per-token rate, since cost is the criterion reviewers weigh most heavily."
+        },
+        {
+          "key": "B",
+          "text": "The functional behaviors, the infrastructure constraints, and the regulation that each constraint comes from."
+        },
+        {
+          "key": "C",
+          "text": "The prompt text and sampling settings used in testing, so reviewers can reproduce the behavior on the chosen platform."
+        },
+        {
+          "key": "D",
+          "text": "A list of platforms the team has shipped on before, with notes on how quickly each one can be set up."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Requirements are written down because the deployment decision will be reviewed by people who did not gather them. A short record of the functional behaviors, the infrastructure constraints, and the regulation behind each constraint lets the team defend a platform choice as following from the requirements rather than from familiarity.",
+      "distractor_explanations": {
+        "A": "Per-token rates are broadly aligned, and the record is meant to show the choice follows from requirements, not from price.",
+        "C": "A review of the platform decision reads constraints and their sources, not the prompt used during testing.",
+        "D": "Familiarity is the reasoning a defensible record is meant to replace. It does not show that the platform satisfies the constraints."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Documenting Requirements",
+      "id": "CCDV-E18-Q11",
+      "exam_id": 18,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q0912"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 12,
+      "prompt": "When are the infrastructure requirements for a Claude application easiest to capture?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "During the operate phase, when users arrive and the infrastructure constraints first show up."
+        },
+        {
+          "key": "B",
+          "text": "At the security review, when reviewers state the residency and identity rules for the first time."
+        },
+        {
+          "key": "C",
+          "text": "At the start of the project, before a platform is chosen for other reasons such as familiarity."
+        },
+        {
+          "key": "D",
+          "text": "After the build is finished, once real traffic reveals the latency, scale, and identity needs."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Infrastructure requirements are mostly not stated in the business problem. They are derived by asking the questions it implies about latency, scale, residency, and identity, and they are easiest to capture at the start, before a platform is chosen for other reasons.",
+      "distractor_explanations": {
+        "A": "By then the platform is deployed. These constraints decide the platform, so they come first.",
+        "B": "A review that discovers them late rejects the build. They should be captured during scoping.",
+        "D": "Learning them after the build means a platform may already be chosen for other reasons."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Capturing Infrastructure Requirements",
+      "id": "CCDV-E18-Q12",
+      "exam_id": 18,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q0913"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 13,
+      "prompt": "In what order do the phases of the systems lifecycle for a Claude application run?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Requirements, design, test, build, deploy, iterate, operate."
+        },
+        {
+          "key": "B",
+          "text": "Requirements, design, build, test, deploy, operate, iterate."
+        },
+        {
+          "key": "C",
+          "text": "Design, requirements, build, deploy, test, operate, iterate."
+        },
+        {
+          "key": "D",
+          "text": "Requirements, build, design, test, operate, deploy, iterate."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The lifecycle for a Claude application runs requirements, design, build, test, deploy, operate, and iterate. Each phase has its own work and its own gate, and iterate feeds production findings back into the requirements for the next release.",
+      "distractor_explanations": {
+        "A": "A system is built before it is tested, and it is operated before production findings are iterated on.",
+        "C": "Requirements come first, because the platform and model are chosen from them in design.",
+        "D": "Design precedes build, and deploy precedes operate."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Lifecycle Order",
+      "id": "CCDV-E18-Q13",
+      "exam_id": 18,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q0914"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 14,
+      "prompt": "A regulated team discusses the lifecycle gates between phases. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "A gate is a document written at the end of the lifecycle that summarizes what each earlier phase produced."
+        },
+        {
+          "key": "B",
+          "text": "A gate is a decision to move from one phase to the next, and a regulated engagement keeps control there."
+        },
+        {
+          "key": "C",
+          "text": "Placing work in the right phase and refusing to skip a gate is what keeps a Claude application reviewable."
+        },
+        {
+          "key": "D",
+          "text": "Gates apply between test and deploy, as the earlier phases produce no decisions that a reviewer needs to see."
+        },
+        {
+          "key": "E",
+          "text": "A team under deadline can skip a gate when the eval score looks strong, as a score replaces the decision."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "A gate is a decision to move from one phase to the next, and it is where a regulated engagement keeps control. You do not move from design to build until the platform satisfies the residency requirement, and you do not move from deploy toward full production until the new version clears the eval against the pinned baseline. Placing work in the right phase and refusing to skip a gate keeps the application reviewable.",
+      "distractor_explanations": {
+        "A": "A gate is a decision to move between phases, not a summary document written afterward.",
+        "D": "Gates also sit between design and build, where the platform must satisfy the residency requirement.",
+        "E": "Refusing to skip a gate is what keeps the application reviewable, however strong a score looks."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Lifecycle Gates",
+      "id": "CCDV-E18-Q14",
+      "exam_id": 18,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q0915"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 15,
+      "prompt": "A team building for a hospital plans to write prompts, tools, and memory first, and to pick the endpoint and credentials in the final sprint. A reviewer objects. What is the reviewer's point?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A regulated customer's procurement team has to pick the endpoint before code is written, so developers should wait for its decision."
+        },
+        {
+          "key": "B",
+          "text": "The governing constraint decides the endpoint, credentials, and log destination, so a wrong setup is costly to undo."
+        },
+        {
+          "key": "C",
+          "text": "Prompts and tool schemas are tied to one endpoint, so they would have to be rewritten in full if the route changes late."
+        },
+        {
+          "key": "D",
+          "text": "The endpoint affects just latency, so the team may defer it provided it measures from the customer's region at the end."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "For regulated data, the governing constraint decides the delivery route before any choice about prompts, tools, or memory. It determines which endpoint your code calls, which credentials it carries, and where its logs land. Analogy: before packing for a trip you check which country you are flying to, because that decides your passport, your plug adapter, and where the receipts go. The constraint is the destination, and the endpoint, credentials, and logs are what it decides. Fixing the wrong client configuration after the agent is built is far more expensive than setting it correctly at the start.",
+      "distractor_explanations": {
+        "A": "Developers usually write the code that targets the endpoint. The point is to name the governing constraint at the start, not to wait.",
+        "C": "The concern is the client configuration, endpoint, credentials, and log destination, not prompt or schema compatibility.",
+        "D": "A regulated constraint rules routes out entirely. Endpoint choice is not a pure latency decision that can wait."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Regulated Data & Delivery Route",
+      "id": "CCDV-E18-Q15",
+      "exam_id": 18,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q0916"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 16,
+      "prompt": "A team's checklist for choosing a delivery route lists HIPAA, GDPR residency, FedRAMP, an internal data-residency policy, and SOC 2. Which one governs how the team's systems are built and operated, rather than which endpoint the code calls?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "SOC 2, because it concerns security posture and audit, not the selection of an endpoint or its credentials."
+        },
+        {
+          "key": "B",
+          "text": "HIPAA, because a BAA covers specific configurations, so it sets the way the team's own systems are built and run internally."
+        },
+        {
+          "key": "C",
+          "text": "GDPR residency, because it governs how the team's own build process is operated rather than where inference happens on the platform."
+        },
+        {
+          "key": "D",
+          "text": "FedRAMP, because it is a process standard for the team's engineering, with no bearing on which endpoint the code calls."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The constraints that directly determine endpoint selection and credential configuration are the data-handling ones: HIPAA, GDPR and residency, FedRAMP, and an internal data-residency policy. SOC 2 is different. It governs how systems are built and operated, which belongs to security posture and audit work, not to the choice of which endpoint your code calls.",
+      "distractor_explanations": {
+        "B": "HIPAA does determine routes: PHI may only go to an endpoint covered by a BAA for the configuration in use.",
+        "C": "GDPR residency is about where the model executes, so it decides endpoint and region choices.",
+        "D": "FedRAMP determines endpoint choice directly: code must call an endpoint on an authorized environment at the required level."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Regulated Data & Delivery Route",
+      "id": "CCDV-E18-Q16",
+      "exam_id": 18,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q0917"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 17,
+      "prompt": "A team moves a long-running research agent to Claude Managed Agents. Which TWO things does it take on in exchange for no longer running the loop and the sandbox? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Provisioning and tearing down the container in which each tool call executes, along with the tools installed in it."
+        },
+        {
+          "key": "B",
+          "text": "Writing the iteration loop itself, including the retries that run inside it each time a model call or a tool call fails."
+        },
+        {
+          "key": "C",
+          "text": "Keeping its own process alive for the hours a session runs, so the loop is not interrupted partway through the work."
+        },
+        {
+          "key": "D",
+          "text": "Server-side session state that Anthropic stores for each session, subject to its data-handling policies and constraints."
+        },
+        {
+          "key": "E",
+          "text": "A versioned agent definition held as an API resource, covering model, system prompt, tools, MCP servers, skills."
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "With Managed Agents, Anthropic runs the loop, the retries inside it, and the sandbox, so the team takes on a different set of work: defining the agent once as a versioned API resource and living with server-side session state governed by Anthropic's data handling. Analogy: hiring a catering company instead of cooking in your own kitchen means you stop buying stoves and washing pans, but you still write the menu and accept that the food is prepared in their premises. The menu is the agent definition and their premises are the server-side state. The loop, retries, sandbox, and long-lived process are the kitchen work you no longer do.",
+      "distractor_explanations": {
+        "A": "Sandbox provisioning and teardown are handled by the managed service, so the team no longer owns them.",
+        "B": "Anthropic runs the loop and its in-loop retries server-side; this is one of the things the team stops owning.",
+        "C": "Managed sessions run for minutes or hours without the team's process holding the loop open."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Claude Managed Agents",
+      "id": "CCDV-E18-Q17",
+      "exam_id": 18,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q0918"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 18,
+      "prompt": "A team needs a custom approval gate inside every iteration of its agent, run inside its own VPC with its own tool runtime. Tasks last under a minute. Which wiring path fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Claude Managed Agents, because a managed sandbox lowers cost and risk for short tasks that run inside a minute."
+        },
+        {
+          "key": "B",
+          "text": "Claude Platform on AWS, which gives the team direct control over the agent loop through a different deployment platform."
+        },
+        {
+          "key": "C",
+          "text": "Claude Managed Agents, because it runs the loop in the team's process while Anthropic hosts just the sandbox."
+        },
+        {
+          "key": "D",
+          "text": "A raw Messages API loop or the Agent SDK, because both keep the loop and tool execution in the team's own environment."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The wiring path is chosen by how much of the runtime you want to own. Managed Agents suits long-running work and teams that would rather not build a loop and sandbox, but when you need full in-process control or your own tool runtime, you stay on the Agent SDK or a raw loop. Short tasks that need a per-iteration approval gate inside the team's own environment point the same way.",
+      "distractor_explanations": {
+        "A": "It suits long-running work or teams that want to avoid building a sandbox. It is not meant for in-process control.",
+        "B": "A deployment platform decides where the model is reached from. The wiring path, who runs the loop, is a separate choice.",
+        "C": "With Managed Agents Anthropic runs both the loop and the sandbox, so neither stays inside the team's environment."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Claude Managed Agents",
+      "id": "CCDV-E18-Q18",
+      "exam_id": 18,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q0919"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 19,
+      "prompt": "A team studies the default-plus-override routing pattern for model choice. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Routing needs a separate fine-tuned model for each tier before traffic can be split between the tiers of the family."
+        },
+        {
+          "key": "B",
+          "text": "It applies the same routing idea used for retrieval to model choice, so the capable model is paid for where needed."
+        },
+        {
+          "key": "C",
+          "text": "The pattern pays off most when each request has the same shape and one quality bar across the traffic it serves."
+        },
+        {
+          "key": "D",
+          "text": "A cheap signal read from the request, such as task type, input length, or a difficulty classification, can choose the model."
+        },
+        {
+          "key": "E",
+          "text": "The override tier is chosen by sending each request to the largest model first and passing the easy ones down to a cheaper one."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "Routing is a default model plus an override. Most traffic goes to a balanced default, and specific request types go to a larger or smaller model, chosen by a cheap signal read from the request such as task type, input length, or a difficulty classification. It is the same routing idea used for retrieval, applied to model choice, so you pay for the capable model only on the requests that need it. Analogy: a hospital triage desk sends most visitors to the general clinic and only some to the specialist, using a quick check at the door. Sending everyone to the specialist first defeats the point.",
+      "distractor_explanations": {
+        "A": "The same prompt runs on any tier, so routing only chooses which tier receives each request.",
+        "C": "For uniform traffic at one quality bar, the guidance is to pin a single model and skip the router.",
+        "E": "That adds the most expensive call to every request. The signal should be cheap and read from the request."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Default Plus Override Routing",
+      "id": "CCDV-E18-Q19",
+      "exam_id": 18,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q0920"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 20,
+      "prompt": "A latency-sensitive feature moves from Sonnet to Opus because an eval shows Sonnet missing the quality bar. What trade does the upgrade make?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "No change in cost or latency, as the tiers differ just in the quality of the answers they produce for a request."
+        },
+        {
+          "key": "B",
+          "text": "More quality, paid for with a higher per-token cost and usually higher latency than the Sonnet tier had."
+        },
+        {
+          "key": "C",
+          "text": "Lower latency at a higher cost, as a larger tier is built for speed on short and simple requests."
+        },
+        {
+          "key": "D",
+          "text": "More quality at the same cost, as the tiers differ in how many requests each one can serve per minute."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Upgrading a model tier trades quality against a higher per-token cost and usually higher latency, while downgrading buys speed and lower cost at the risk of a quality drop. A higher tier can occasionally be cheaper if it reaches a conclusion in fewer tokens, so the decision is made on measurement rather than assumption.",
+      "distractor_explanations": {
+        "A": "The tiers trade cost, latency, and capability against each other. A higher tier costs more per token and is usually slower.",
+        "C": "Speed and cost efficiency are what Haiku is built for. Opus is built for demanding work.",
+        "D": "The tiers differ in cost, latency, and capability. A higher tier costs more per token."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Cost of Stepping Up a Tier",
+      "id": "CCDV-E18-Q20",
+      "exam_id": 18,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q0921"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 21,
+      "prompt": "A team has trimmed prompts and added caching to a feature that runs on the top model tier, yet the bill is still large. An eval shows Sonnet meets the quality bar on it. Why could the earlier work not close the gap?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Cost levers optimize spend within a model, while the model choice sets the baseline they start from, so the tier needed review."
+        },
+        {
+          "key": "B",
+          "text": "A cheaper tier would raise latency and total cost, so the earlier levers had already reached their best possible result."
+        },
+        {
+          "key": "C",
+          "text": "The top tiers ignore trimming and bill for the full context window instead of for the tokens that were actually sent."
+        },
+        {
+          "key": "D",
+          "text": "Caching and trimming reduce only output tokens, which are a small share of the bill on a top-tier model for this feature."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Cost management optimizes spend within a model, whereas model selection determines the baseline that optimization works from. Caching and trimming shrink what each call costs on the chosen tier, but if an eval shows a cheaper tier meets the bar, the biggest saving is moving the baseline itself. Analogy: haggling over the price of a tank of fuel for a gas-guzzling truck saves less than swapping to a car that makes the same trip on half the fuel. The truck is the top tier, the haggling is caching and trimming, and the quality bar is the trip you actually need to make.",
+      "distractor_explanations": {
+        "B": "Moving down a tier buys speed and lower cost at the risk of a quality drop, and here the eval shows the bar still holds.",
+        "C": "Every tier bills for the tokens in the request, so trimming does lower the bill within a tier.",
+        "D": "Caching and trimming act on input tokens. The gap comes from the per-token baseline of the chosen tier."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model Selection Sets the Cost Baseline",
+      "id": "CCDV-E18-Q21",
+      "exam_id": 18,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q0922"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 22,
+      "prompt": "A team documents the three prompting modes. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "One-shot retrains the model on its single example, so the change carries over into later requests."
+        },
+        {
+          "key": "B",
+          "text": "Multi-shot suits output with no fixed structure, as a fixed structure is easiest to describe in words."
+        },
+        {
+          "key": "C",
+          "text": "Zero-shot is the right mode when an edge case keeps being missed, as examples just lengthen the prompt."
+        },
+        {
+          "key": "D",
+          "text": "Zero-shot gives the instruction with no examples, which suits a simple task whose output shape is obvious."
+        },
+        {
+          "key": "E",
+          "text": "One-shot adds a single example of an input paired with the desired output, and multi-shot includes several."
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "The modes differ in how many worked examples sit in the prompt. Zero-shot gives the instruction and no examples, which suits a simple task whose output shape is obvious. One-shot adds a single input and desired-output pair, and multi-shot includes several. The examples are not training data, and each costs tokens on every call. Analogy: a recipe card with no photo suits a simple dish you know, a card with one photo shows the plating, and a card with several shows variations, but each photo makes the card heavier to carry. Add only as many as the dish needs.",
+      "distractor_explanations": {
+        "A": "Examples are not training data. They sit in the prompt and shape only the requests that carry them.",
+        "B": "Examples are for output with a specific structure, casing, or edge case that a description keeps missing.",
+        "C": "A description that keeps missing an edge case is the signal to add an example, at a token cost."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompting Modes",
+      "id": "CCDV-E18-Q22",
+      "exam_id": 18,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q0923"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 23,
+      "prompt": "On a 200,000-token context window, a multi-shot prompt has grown to 90 worked examples of about 2,000 tokens each. Requests that attach long documents now fail with a validation error before generation starts. What explains it, and what is the fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Examples count toward the window only on the first request, so the failures come from the documents alone and trimming examples cannot help."
+        },
+        {
+          "key": "B",
+          "text": "The API drops the oldest examples silently when the window fills, so the error means one of the documents was malformed."
+        },
+        {
+          "key": "C",
+          "text": "Examples are billed but not counted toward the window, so the fix is to raise `max_tokens` to leave more room for the reply."
+        },
+        {
+          "key": "D",
+          "text": "The examples count against the window on every request alongside the document, so trim to the fewest examples that still pass the eval."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Few-shot examples are not training data; they sit in the prompt, so each one costs tokens on every call and consumes context budget. Ninety examples at about 2,000 tokens each take most of a 200,000-token window before a document is attached, and an input larger than the window is rejected with a validation error before generation begins. The discipline is to add the smallest amount of prompt that produces a reliable result, so trim the examples while watching the eval.",
+      "distractor_explanations": {
+        "A": "Examples sit in the prompt, so every call that carries them pays for them in tokens and in context budget.",
+        "B": "The API never silently drops content. Input that is larger than the window is rejected with a validation error before generation.",
+        "C": "Examples occupy the context window, and `max_tokens` limits only the output, not what fits on the input side."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompting Modes & Context Budget",
+      "id": "CCDV-E18-Q23",
+      "exam_id": 18,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q0924"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 24,
+      "prompt": "Haiku zero-shot misses the required structure, but Haiku with six worked examples passes, adding about 1,500 input tokens to each call. Sonnet passes zero-shot. Traffic is about two million calls a day. What should decide the choice?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Choose Haiku with examples, since a smaller tier is cheaper once it clears the bar, whatever the prompt around it looks like in tokens per call."
+        },
+        {
+          "key": "B",
+          "text": "Choose Sonnet zero-shot, as worked examples are never worth the per-call tokens they add at high volume."
+        },
+        {
+          "key": "C",
+          "text": "Compare the total cost per call at the real volume, because examples add input tokens to every call, and pick the cheaper passing option."
+        },
+        {
+          "key": "D",
+          "text": "Keep Haiku zero-shot and accept the structural failures, since the content is right and the cost is lowest."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Prompting mode and model choice are related levers, and the discipline is to try the simplest model and the fewest examples that meet the eval. Examples can let a cheaper model succeed, but each one adds input tokens to every call, so the winner depends on the numbers at your volume. Analogy: comparing a cheaper printer with costly ink cartridges against a pricier printer with cheap ink means looking at cost per page, not the sticker price. The printer is the model tier, the ink is the examples carried on every call, and a page is one request. Both options pass the eval, so cost per call decides.",
+      "distractor_explanations": {
+        "A": "The examples add input tokens to every call, so at high volume the smaller tier's saving may shrink or vanish. It has to be measured.",
+        "B": "Sometimes examples let a cheaper model do the job at lower total cost. The answer depends on measured cost, not on a blanket rule.",
+        "D": "The task fails the eval on structure, so Haiku zero-shot does not meet the quality bar the decision is anchored to."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Prompting Modes & Model Choice",
+      "id": "CCDV-E18-Q24",
+      "exam_id": 18,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q0925"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 25,
+      "prompt": "A team ports an unchanged request from an older Claude model to one of the newest model generations. Output tokens per call rise sharply on short FAQ lookups, and responses contain no thinking content. What should the team check first?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Whether `temperature` was changed during the port, as sampling settings control how many tokens a response contains in total."
+        },
+        {
+          "key": "B",
+          "text": "Whether `budget_tokens` is still being sent, since a leftover thinking budget doubles output billing on the newest model generations."
+        },
+        {
+          "key": "C",
+          "text": "Whether the new model thinks adaptively by default, since defaults differ per model, and then set lower effort for simple calls."
+        },
+        {
+          "key": "D",
+          "text": "Whether thinking blocks are being returned unchanged, as dropping them multiplies the output tokens on later calls in the same loop."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Whether the model reasons before answering is a per-call decision, but defaults differ by model: some of the newest models think adaptively by default or always. Thinking tokens cost the same as output tokens, and on the newest models their content is omitted by default, so a silent default shows up as higher output usage with nothing visible in the response. Analogy: a new rental car may have the headlights turned on automatically, and you only notice when the battery drains and nothing looks different from outside. The automatic headlights are the default thinking and the drained battery is the output bill. The old model's settings do not explain it.",
+      "distractor_explanations": {
+        "A": "On the newest models a non-default temperature returns a 400 error. Sampling settings do not set response length.",
+        "B": "On the newest model generations a `budget_tokens` setting returns a 400 error, so it would fail the request instead of inflating the bill.",
+        "D": "Dropping or editing a thinking block makes the next request fail in a tool loop. It does not raise output token counts."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Reasoning Defaults",
+      "id": "CCDV-E18-Q25",
+      "exam_id": 18,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q0926"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 26,
+      "prompt": "A document-review agent runs one hard step, resolving conflicting clauses across contracts, and a dozen routine steps that extract dates and copy fields. Evals show Haiku clears the bar on the routine steps and only Opus clears it on the conflict step. How should the team assign models?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Give each step the cheapest tier that clears its own bar: Opus for the conflict step and Haiku for the routine ones."
+        },
+        {
+          "key": "B",
+          "text": "Run the whole chain on Sonnet, the balanced default, since splitting tiers within one run adds more risk than it removes."
+        },
+        {
+          "key": "C",
+          "text": "Run the whole chain on Haiku, and ask the model to reason longer on the conflict step so it matches what Opus delivers."
+        },
+        {
+          "key": "D",
+          "text": "Run the whole chain on Opus, so the steps behave consistently and the routine ones add little to the bill."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A model choice is a per-workload lever, and the same logic applies to the steps inside one agent run. Reserve the most capable model for the steps that need it and route simpler work to a cheaper one, using the eval as the evidence for each assignment. Here the evals already say Haiku holds on the routine steps and only Opus holds on the conflict step, so assigning models by step cuts the bill without risking the hard step.",
+      "distractor_explanations": {
+        "B": "The evals already assign a tier to each step, so one default would overpay on routine steps and may miss the bar on the hard one.",
+        "C": "Only Opus cleared the conflict step on the eval. A tier change is promoted on a measured score, not on a guess that more reasoning closes the gap.",
+        "D": "Reaching for the most capable model by default is the most common and most expensive selection mistake. The top tier belongs only on the steps that need it."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model Choice per Step",
+      "id": "CCDV-E18-Q26",
+      "exam_id": 18,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q0927"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 27,
+      "prompt": "A brainstorming feature drafts ten campaign slogans for a person to skim and discard. An eval shows Sonnet's output is weak on the hardest 6% of briefs, and a manager wants to step up to Opus. What does the guidance support?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Adding the highest effort setting to each brief, since a miss on hard cases means reasoning is missing from the requests."
+        },
+        {
+          "key": "B",
+          "text": "Staying on Sonnet is reasonable, because stepping up needs a measured miss and a costly error, and slogans are cheap."
+        },
+        {
+          "key": "C",
+          "text": "Stepping down to Haiku instead, as low-stakes output means quality no longer needs to be measured on an eval at all."
+        },
+        {
+          "key": "D",
+          "text": "Stepping up now, as a measured miss on the hardest cases is enough to justify moving up to the next tier at once."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Step up a tier when an eval shows the current model failing on the hardest cases and the cost of a wrong answer is high. Both halves matter: here the weak slogans are skimmed and discarded, so the cost of a miss is low and the extra per-token price may not be worth it. Analogy: you pay for a professional mover for a piano, where a drop is a disaster, but not for a box of old magazines. The piano is the high-stakes answer, and the magazines are the discarded slogans. An eval miss alone is not the reason to climb a tier.",
+      "distractor_explanations": {
+        "A": "Reasoning on every call is wasted on simple requests, and it does not address the question of whether the miss is worth paying more for.",
+        "C": "In both directions a model change is promoted on a measured score. Low stakes do not remove the need for the eval.",
+        "D": "The guidance pairs the eval miss with a high cost of a wrong answer. Cheap, discarded output does not meet that second condition."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "When to Step Up a Tier",
+      "id": "CCDV-E18-Q27",
+      "exam_id": 18,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q0928"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 28,
+      "prompt": "A team compares how CLAUDE.md loads in the Claude Code CLI and in the Agent SDK. Which statement is accurate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It loads in each CLI session, but in the SDK `settingSources` decides if it loads, so set it explicitly."
+        },
+        {
+          "key": "B",
+          "text": "It does not load in the SDK, as the CLI alone reads filesystem instruction files and the SDK ignores them."
+        },
+        {
+          "key": "C",
+          "text": "It loads in the SDK by default exactly as it does in the CLI, so the SDK needs no setting to pick it up."
+        },
+        {
+          "key": "D",
+          "text": "It loads in the SDK when the system prompt passed to the agent mentions the file by name."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "In the Claude Code CLI, a CLAUDE.md file loads into every session regardless of the task. In the Agent SDK, whether filesystem settings including CLAUDE.md load is controlled by `settingSources`, and it should be set explicitly rather than left to a default. A team that assumes the CLI behavior can find its project rules silently missing from an SDK agent.",
+      "distractor_explanations": {
+        "B": "The SDK can load CLAUDE.md once `settingSources` names the filesystem sources it should use.",
+        "C": "Whether filesystem settings such as CLAUDE.md load in the SDK depends on `settingSources`. A default should not be relied on.",
+        "D": "Loading in the SDK is controlled by `settingSources`, not by what the system prompt mentions."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "How Instructions Load",
+      "id": "CCDV-E18-Q28",
+      "exam_id": 18,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q0929"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 29,
+      "prompt": "What does a human-in-the-loop step do in an automated agent process?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It inserts a human review or approval step before a consequential action is taken by the agent."
+        },
+        {
+          "key": "B",
+          "text": "It lets the model rewrite its own system prompt whenever a tool call fails during a run of the loop."
+        },
+        {
+          "key": "C",
+          "text": "It replaces the agent's loop with a person who performs each tool call by hand for the whole task."
+        },
+        {
+          "key": "D",
+          "text": "It records each action in an audit log after the action has already been carried out by the agent."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Human-in-the-loop means inserting a human review or approval step into an automated process before a consequential action is taken. Where to place it depends on the worst outcome if the step runs without a check: before a destructive tool call, after a planning step, or on unexpected output.",
+      "distractor_explanations": {
+        "B": "A human-in-the-loop step involves a person. The model does not rewrite its own instructions.",
+        "C": "The loop still runs. The person reviews or approves at chosen points.",
+        "D": "Logging is a separate control. A human-in-the-loop check comes before the consequential action."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Human-in-the-Loop",
+      "id": "CCDV-E18-Q29",
+      "exam_id": 18,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q0930"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 30,
+      "prompt": "A team ships a Claude Managed Agents integration to production. A later release refines how one endpoint behaves, and their application breaks. What should they have had in place?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing beyond the beta header, since sending it freezes endpoint behavior for the whole life of the integration."
+        },
+        {
+          "key": "B",
+          "text": "A fresh agent resource created for each session, since an agent definition changes whenever the beta is refined."
+        },
+        {
+          "key": "C",
+          "text": "A migration plan from the outset, since the surface is in public beta and behaviors may change between releases."
+        },
+        {
+          "key": "D",
+          "text": "A Zero Data Retention agreement, as only ZDR customers are insulated from changes to the behavior of beta endpoints."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Claude Managed Agents is in public beta: every endpoint requires the `managed-agents-2026-04-01` beta header, and behaviors may be refined between releases, so the guidance is to build with a migration plan in place. Treating the surface as fixed leaves the application exposed when a release changes an endpoint. Analogy: if you set up a stall at a market whose organizers may rearrange the layout each season, you keep the stall on wheels. The wheels are the migration plan.",
+      "distractor_explanations": {
+        "A": "The header is required on every endpoint, but it does not freeze behavior; the guidance expects refinements between releases.",
+        "B": "An agent is defined once as a versioned API resource and referenced by ID across sessions. Recreating it per session does not address changing behavior.",
+        "D": "Managed Agents sessions are stored server-side and are not currently eligible for Zero Data Retention, and such an agreement would not stop behavior changes."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Claude Managed Agents",
+      "id": "CCDV-E18-Q30",
+      "exam_id": 18,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q0931"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 31,
+      "prompt": "An engineering team needs an agent that works for hours, with no loop, sandbox, or tool-execution layer for the team to build or secure. Which wiring path fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Claude Managed Agents, where Anthropic runs the loop and a managed sandbox for long work lasting hours."
+        },
+        {
+          "key": "B",
+          "text": "A stateless workflow of single API calls, which keeps a long task alive without any loop to maintain."
+        },
+        {
+          "key": "C",
+          "text": "A raw Messages API loop, which takes long-running execution and the sandbox off the team's hands by default."
+        },
+        {
+          "key": "D",
+          "text": "The Agent SDK, which runs the loop in the team's process and also provisions a sandbox for each tool call."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Claude Managed Agents fits long-running execution measured in minutes or hours, a managed sandbox, and teams that would rather not build the loop, the sandbox, and the tool-execution layer at all. Anthropic runs the loop and the sandbox, and the application defines the agent once as an API resource. Analogy: a team that does not want to build, staff, and secure a kitchen hires a catering service for a long event. The raw loop and the Agent SDK are the cases where the team keeps its own kitchen, and the tempting wrong options hand the work off without a loop.",
+      "distractor_explanations": {
+        "B": "A workflow of single calls does not keep a task running for hours. An agent loop does.",
+        "C": "A raw loop leaves the loop, the sandbox, and the tool-execution layer with the team.",
+        "D": "The Agent SDK runs inside the team's own process, and the team's code still executes the tools."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "When Managed Agents Fits",
+      "id": "CCDV-E18-Q31",
+      "exam_id": 18,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q0932"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 32,
+      "prompt": "A document-formatting agent runs stateless: each job is independent. Users now start asking follow-ups such as `redo yesterday's file with the same settings`, and the agent has no answer. What does this show?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Summarized memory has to be adopted first, as a summary has to exist before anything can be written to external storage."
+        },
+        {
+          "key": "B",
+          "text": "A stateless agent has no way to reach earlier sessions, so follow-ups that depend on them need state kept in external storage."
+        },
+        {
+          "key": "C",
+          "text": "In-context memory would fix it, as the conversation window carries state across sessions once the window is large enough."
+        },
+        {
+          "key": "D",
+          "text": "The agent should resend the full transcripts of every earlier job in each request, which keeps stateless agents consistent."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Memory scope should match the shape of the work. A stateless agent suits independent jobs because nothing has to be stored or retrieved, but the cost is that all prior context is lost, and a follow-up that depends on an earlier session has no way to reach it. Once such follow-ups are required, state has to be written to external storage and read back. In-context memory does not survive the end of a session.",
+      "distractor_explanations": {
+        "A": "External storage can hold the state directly. A summary is an option for long conversations, not a prerequisite for persistence.",
+        "C": "In-context state is wiped when the session ends, so a larger window does not carry anything into the next session.",
+        "D": "Replaying every transcript is the in-context approach that inflates every call until the window closes, and it is no longer stateless."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Stateless Memory Limits",
+      "id": "CCDV-E18-Q32",
+      "exam_id": 18,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q0933"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 33,
+      "prompt": "A team is deciding where each set of instructions should live in Claude Code. Which TWO placements match the guidance? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Instructions for a one-off exploratory task confined to a single conversation can simply stay in-context for that session."
+        },
+        {
+          "key": "B",
+          "text": "Constraints that must hold across all tasks belong in a Skill, which loads only when the request matches its description."
+        },
+        {
+          "key": "C",
+          "text": "A specialized review checklist that applies to a subset of tasks belongs in CLAUDE.md so it is always available to Claude."
+        },
+        {
+          "key": "D",
+          "text": "Instructions that must still apply next week can stay in-context, since the conversation window holds them across sessions."
+        },
+        {
+          "key": "E",
+          "text": "Team-standard coding conventions that apply to everything in the codebase go in CLAUDE.md, which loads in every session."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "E"
+      ],
+      "explanation": "Each mechanism has its own loading behavior. CLAUDE.md loads every session unconditionally, which suits always-on standards. A Skill's name and description load at startup and the full instructions load only when the request matches, which suits task-specific expertise. In-context instructions are present each turn of one session but grow with its length and vanish when it ends, which suits one-off work. Analogy: house rules are posted on the fridge for everyone to see every day, a recipe card is pulled from the drawer only when you cook that dish, and a sticky note on the counter is for tonight only.",
+      "distractor_explanations": {
+        "B": "A Skill loads on a description match, so it is not guaranteed to be present. Always-on constraints belong in CLAUDE.md.",
+        "C": "Always-loaded content adds fixed overhead to sessions that never need it. A Skill loads only when its description matches the request.",
+        "D": "In-context instructions do not survive session end. A clear command or a new session wipes them."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Skills, CLAUDE.md & In-Context Instructions",
+      "id": "CCDV-E18-Q33",
+      "exam_id": 18,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q0934"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 34,
+      "prompt": "An agent has bugs planted in four layers: schema, streaming, context structure, and memory. Which TWO findings are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The loop sets `stop_seen` on `message_stop` but appends the assistant turn regardless, so a dropped stream commits a partial turn."
+        },
+        {
+          "key": "B",
+          "text": "Appending tool results in a user turn is a schema-layer bug, as results belong in the tool definition rather than in a turn."
+        },
+        {
+          "key": "C",
+          "text": "The memory layer concatenates every prior session transcript into live context, so the history grows until the window fills."
+        },
+        {
+          "key": "D",
+          "text": "Dropping thinking blocks from history is a memory-layer bug, as it removes state that should persist between separate sessions."
+        },
+        {
+          "key": "E",
+          "text": "The tool description `Gets data.` is a streaming-layer bug, as a short description changes how deltas are assembled in the handler."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "C"
+      ],
+      "explanation": "The cumulative task plants one bug per layer. In the streaming layer the loop records that `message_stop` arrived but never checks it, so an interrupted stream commits a half-built turn to history. In the memory layer the agent keeps concatenating every prior session transcript in-context, so the history grows each session until the window fills. Analogy: a restaurant ticket printer that prints orders whether or not the cook has finished writing them leaves half-orders on the rail, and a pile of every past night's receipts on the counter eventually leaves no room to work. Each fault belongs to its own layer, and the wrong options misfile them.",
+      "distractor_explanations": {
+        "B": "Tool results belong in a user turn as tool_result blocks. That is how the API expects them.",
+        "D": "Filtering thinking blocks breaks the context structure the API validates. It is not a memory problem.",
+        "E": "A vague description is a schema-layer bug. It leaves Claude without a basis for choosing the tool."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Cumulative Debug Across Layers",
+      "id": "CCDV-E18-Q34",
+      "exam_id": 18,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q0935"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 35,
+      "prompt": "A team wants a built-in subagent to follow skill-backed behavior. What is the correct path?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Mention the skill in CLAUDE.md, as a skill named there is loaded into each built-in subagent when it starts."
+        },
+        {
+          "key": "B",
+          "text": "Rename the skill file to match the built-in agent, as built-in agents load skills by matching file names."
+        },
+        {
+          "key": "C",
+          "text": "Load the skill in the parent session, as built-in subagents inherit the skills that the parent has loaded."
+        },
+        {
+          "key": "D",
+          "text": "Create a custom subagent that lists the skill, because built-in agents have no preloaded skills of any kind."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Subagents start from a clean context. They do not inherit conversation history or skills from the parent, though they do inherit its permission context. Built-in agents do not have preloaded skills, so if skill-backed behavior is needed the correct path is a custom subagent with those skills listed explicitly in its configuration.",
+      "distractor_explanations": {
+        "A": "A mention in CLAUDE.md does not load a skill. Built-in agents have no preloaded skills, and Explore and Plan skip that file.",
+        "B": "Built-in agents do not load skills by file name. A custom subagent has to list the skill explicitly.",
+        "C": "Subagents do not inherit skills from the parent. They start with a clean context."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Skills and Built-In Subagents",
+      "id": "CCDV-E18-Q35",
+      "exam_id": 18,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q0936"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 36,
+      "prompt": "A team is explaining retrieval-augmented generation to a colleague who assumes it works like loading every document into the prompt. Which TWO statements about how retrieval behaves are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "If retrieval misses the document holding the answer, the model never sees it, so how the sources are organized matters."
+        },
+        {
+          "key": "B",
+          "text": "Retrieval removes the need to put anything in the context window, because the model queries the database as it generates."
+        },
+        {
+          "key": "C",
+          "text": "Agentic search needs an embedding index to be built and kept in sync before the first question can be answered at all."
+        },
+        {
+          "key": "D",
+          "text": "Per-request cost stays roughly flat as the corpus grows, because only the retrieved slice reaches the model each time."
+        },
+        {
+          "key": "E",
+          "text": "A semantic similarity match reliably returns the chunk that holds a specific identifier, so keyword matching is not needed."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "D"
+      ],
+      "explanation": "Retrieval stores material outside the context window, finds the parts most relevant to a request, and supplies only those parts to the model. That is why per-request cost stays flat as the source grows, and also why the model is only as good as what retrieval finds. Analogy: a librarian who hands you three relevant pages never needs a bigger desk when the library doubles, but if she pulls the wrong shelf you never see the right book, and a file named notes_final_v3 is harder to find than one with a descriptive title. Real retrieval still depends on well-organized sources.",
+      "distractor_explanations": {
+        "B": "The retrieved slice is supplied to the model in its request, and the model generates from that slice.",
+        "C": "Agentic search skips upfront indexing. The model searches live sources at the moment of need.",
+        "E": "A query for a specific identifier can miss the relevant chunk if a more semantically similar result outranks it, which is why a lexical match is sometimes run alongside."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Retrieval: Scale & Source Quality",
+      "id": "CCDV-E18-Q36",
+      "exam_id": 18,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q0937"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 37,
+      "prompt": "A RAG assistant splits its handbook into single sentences. Retrieval returns the right sentences, but answers are often incomplete. What is the most likely cause?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The embedding match is returning sentences that are semantically close to the question but not relevant to it."
+        },
+        {
+          "key": "B",
+          "text": "The chunks are too small, so a single chunk lacks the surrounding context needed to be useful on its own."
+        },
+        {
+          "key": "C",
+          "text": "The assembly step is missing, so the retrieved sentences never reach the model in the structure the prompt expects."
+        },
+        {
+          "key": "D",
+          "text": "The chunks are too large, so each one dilutes the match with unrelated text from neighboring sentences."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Chunking decides what a unit of retrievable context is. Split too small and a single chunk lacks the surrounding context to be useful, split too large and one chunk dilutes the match with unrelated text. Sentence- or section-based chunking with a little overlap is a reasonable default. Analogy: handing someone single sentences torn out of a handbook gives them correct words with no page around them, while handing them whole chapters buries the answer. The right size is a section with some overlap, and the tempting wrong options blame other parts of the path.",
+      "distractor_explanations": {
+        "A": "The scenario says retrieval returns the right sentences. The gap is that each one is too small to stand alone.",
+        "C": "Missing assembly makes the model answer from memory. Here the answers are incomplete, not ignoring the text.",
+        "D": "Single sentences are the opposite problem. Too-large chunks come from splitting by whole chapters."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Chunks That Are Too Small",
+      "id": "CCDV-E18-Q37",
+      "exam_id": 18,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q0938"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 38,
+      "prompt": "Each turn of an agent's task is small, yet turns get slower and costlier as a long session grows. What best explains this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Latency depends on the number of tools registered, so a long session slows down only when new tools are added."
+        },
+        {
+          "key": "B",
+          "text": "Every token in the window costs input money and adds latency, and a long session compounds both as history builds up."
+        },
+        {
+          "key": "C",
+          "text": "The model re-reads only the newest turns, so older turns add cost to the invoice without adding any latency."
+        },
+        {
+          "key": "D",
+          "text": "Output tokens are billed at a higher rate on each later turn, so the cost climbs even when the input stays the same size."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The context window is not a free resource. Every token in it costs money on input and adds latency to the response, and a long session compounds both, because the accumulated history is processed again on each turn. Analogy: a taxi meter that charges for every passenger's luggage already in the trunk will tick faster each stop, even if the new luggage is one small bag. The trunk is the window, the luggage is the history, and the wrong options blame price changes, partial reading, or the tool list.",
+      "distractor_explanations": {
+        "A": "Tool definitions add to the window, but a growing history is what compounds the cost and latency over a session.",
+        "C": "The whole window is processed on each call, so older content adds both cost and latency.",
+        "D": "Pricing does not rise per turn. The history that is re-read on each call keeps growing."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Why Long Sessions Cost More",
+      "id": "CCDV-E18-Q38",
+      "exam_id": 18,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q0939"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 39,
+      "prompt": "A prompt says `Return only JSON`. It holds on every test case but slips on an unusual input in production. A colleague proposes passing a schema through `output_config.format` instead. Why is that more reliable?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A schema makes the model reason more carefully about field names and types, which a plain instruction cannot trigger."
+        },
+        {
+          "key": "B",
+          "text": "The API validates the finished response against the schema and regenerates it until it matches, so violations never reach your code."
+        },
+        {
+          "key": "C",
+          "text": "A schema guarantees success on every call, including refusals and responses cut off at `max_tokens`, so no checks are needed."
+        },
+        {
+          "key": "D",
+          "text": "The API constrains generation token by token, so a violating output cannot be produced; a prompt is only a request."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A prompt instruction is a request, and it holds on the cases you tried and then slips on one you did not. Structured outputs use constrained decoding: as each token is generated, the API allows only tokens that keep the output valid against the schema, so a violating response cannot be produced. That moves correctness from something checked after the fact to something ruled out beforehand. A refusal or a `max_tokens` truncation can still occur, so `stop_reason` is still checked.",
+      "distractor_explanations": {
+        "A": "Structured outputs constrain which tokens are allowed. They do not change how carefully the model reasons.",
+        "B": "The constraint is applied while tokens are generated, not by checking and retrying afterwards.",
+        "C": "A refusal and a truncation at `max_tokens` can still return output that does not match the schema, so the code must still check `stop_reason`."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Structured Outputs",
+      "id": "CCDV-E18-Q39",
+      "exam_id": 18,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q0940"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 40,
+      "prompt": "Instead of loading every document into the prompt, what does retrieval-augmented generation do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It compresses each document into one summary that is placed at the top of every prompt it sends."
+        },
+        {
+          "key": "B",
+          "text": "It sends each document to the model in parallel requests and keeps whichever answer appears most often."
+        },
+        {
+          "key": "C",
+          "text": "It keeps the material outside the context window and supplies only the parts relevant to the request."
+        },
+        {
+          "key": "D",
+          "text": "It trains the model on the documents so that it no longer needs to see them again at request time."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A model reads everything in its context window for every request, so the more documents loaded up front, the less room is left for the work. Retrieval-augmented generation resolves this by storing the material outside the window, finding the parts most relevant to the current request, and supplying only those at request time. The model then answers from that retrieved slice.",
+      "distractor_explanations": {
+        "A": "Retrieval finds the relevant slice for each request. It does not fold the library into one summary.",
+        "B": "Retrieval narrows what the model reads. It does not poll the model over the whole library.",
+        "D": "Retrieval supplies relevant text to the prompt at request time. It does not train the model."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "What Retrieval Does",
+      "id": "CCDV-E18-Q40",
+      "exam_id": 18,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q0941"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 41,
+      "prompt": "A team maps where a RAG path can go wrong. Which list names the three places?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Chunking, the embedding match, and assembly of the retrieved chunks into the prompt for the model."
+        },
+        {
+          "key": "B",
+          "text": "Caching, the batch queue, and the retry logic that wraps each retrieval call in the application code."
+        },
+        {
+          "key": "C",
+          "text": "Indexing, the system prompt, and the stop sequence that ends the generated answer for the caller."
+        },
+        {
+          "key": "D",
+          "text": "Tokenizing, the sampling step, and the streaming of the final answer back to the user of the system."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A RAG path can break in three places. Chunking decides what a retrievable unit is, the embedding match decides which chunks come back, and assembly decides whether the retrieved chunks reach the model in the structure the prompt expects. A fault in any of the three shows up as a wrong or incomplete answer.",
+      "distractor_explanations": {
+        "B": "Those are cost and reliability mechanisms. The retrieval path breaks in chunking, matching, and assembly.",
+        "C": "These are not the three places a path breaks, which are chunking, the embedding match, and assembly.",
+        "D": "Those are general generation steps, not the three places a retrieval path breaks."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Where a RAG Path Breaks",
+      "id": "CCDV-E18-Q41",
+      "exam_id": 18,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q0942"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 42,
+      "prompt": "A tool in an agent loop fails. Which TWO statements about returning the failure are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "With `is_error` set to true, the model can try a different approach, ask for clarification, or simply stop."
+        },
+        {
+          "key": "B",
+          "text": "The failure message belongs in the result's content, so Claude can read what went wrong with the call."
+        },
+        {
+          "key": "C",
+          "text": "Raising the exception out of the loop is the standard path, as the model cannot use a failure message."
+        },
+        {
+          "key": "D",
+          "text": "A failed call needs no `tool_result`, as the model infers the failure when it sees no result for that call."
+        },
+        {
+          "key": "E",
+          "text": "An empty result is the safest return, as the model treats an empty result as a clear signal that the tool failed."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "When a tool fails, the result should come back to Claude with `is_error` explicitly set to true and a message in its content, not as a silent empty result. With the error visible, the model can try a different approach, ask for clarification, or stop. Without it, the model treats the empty result as valid data and continues on a false premise. Analogy: a waiter who returns from the kitchen with an empty tray and no word lets the guests assume dinner is coming, whereas one who says the kitchen is out of salmon lets them reorder. The wrong options hide the failure.",
+      "distractor_explanations": {
+        "C": "The error should come back to Claude explicitly so that it can react instead of the loop being abandoned.",
+        "D": "Every tool_use block must be answered by a matching tool_result, including when the tool failed.",
+        "E": "The model treats an empty result as valid data and continues on a false premise."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "What a Visible Tool Failure Gives Claude",
+      "id": "CCDV-E18-Q42",
+      "exam_id": 18,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q0943"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 43,
+      "prompt": "A team connects both GitHub's MCP server and Linear's MCP server to Claude Code. What differs between the two connections?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing, as each authenticates with a personal access token and differs only in the URL it uses."
+        },
+        {
+          "key": "B",
+          "text": "The scope, as GitHub can only be project-scoped while Linear can only be user-scoped for sign-in."
+        },
+        {
+          "key": "C",
+          "text": "Only the authentication step, as both are remote HTTP servers with the same transport and scope."
+        },
+        {
+          "key": "D",
+          "text": "The transport, as GitHub's tools are local and use stdio while Linear is remote and uses HTTP."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "GitHub's MCP server and Linear's are both remote HTTP servers, and both follow the same transport and scope logic. The authentication step is what differs. GitHub uses a personal access token passed as a Bearer header from an environment variable, while Linear redirects the client to a sign-in page, and a token is issued and stored automatically. Analogy: two offices in the same building share the same lobby and lifts, but one opens with a keycard you carry and the other has a guard who signs you in. The wrong options change the building instead of the door.",
+      "distractor_explanations": {
+        "A": "GitHub uses a personal access token as a Bearer header, while Linear starts a browser sign-in handled by OAuth.",
+        "B": "Scope is a separate choice for each server. Neither authentication method restricts it.",
+        "D": "Both are remote servers over HTTP. The transport is the same."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "GitHub and Linear MCP Servers",
+      "id": "CCDV-E18-Q43",
+      "exam_id": 18,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q0944"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 44,
+      "prompt": "After a bug where two dependent calls were issued in the same turn, a team sets `disable_parallel_tool_use` on every request its agent makes. What is the consequence?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Claude can no longer issue tool calls, as the setting requires parallel use to be on for tool use to work."
+        },
+        {
+          "key": "B",
+          "text": "Independent calls are still issued together, but their results have to be returned one per message in later turns."
+        },
+        {
+          "key": "C",
+          "text": "Claude issues one tool call per turn, so independent lookups that could have run together each take their own separate turn."
+        },
+        {
+          "key": "D",
+          "text": "Claude runs the tools itself in dependency order, so the application no longer has to execute them."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Current Claude models default to parallel calls when calls are independent, and `disable_parallel_tool_use` forces one call per turn. That is the right fix where a real dependency exists, but applied everywhere it gives up the concurrency that independent calls could have had. The narrower design is to model the dependency as separate turns only where it is real.",
+      "distractor_explanations": {
+        "A": "The setting limits Claude to one tool call per turn. Tool use itself keeps working.",
+        "B": "With the setting on, Claude issues only one call per turn, so there is nothing to return together or apart.",
+        "D": "Client-side tools are still executed by the application's own code, and results come back as tool results."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Parallel Tool Use",
+      "id": "CCDV-E18-Q44",
+      "exam_id": 18,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q0945"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 45,
+      "prompt": "Which part of a tool schema defines the parameters that the tool function accepts?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The description, which holds the parameter types in a fixed machine-readable format."
+        },
+        {
+          "key": "B",
+          "text": "The `input_schema`, which describes the parameters using JSON Schema for the tool."
+        },
+        {
+          "key": "C",
+          "text": "The `tool_use` ID, which Claude generates to carry the parameters from call to call."
+        },
+        {
+          "key": "D",
+          "text": "The name, which lists each parameter after the tool's identifier in a fixed order."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A tool schema has three parts: a name, a description, and an input schema. The input schema defines the parameters the tool function accepts, using JSON Schema, and the required array in it names the inputs that are non-negotiable for a call.",
+      "distractor_explanations": {
+        "A": "The description tells Claude when to use the tool. It does not define parameter types.",
+        "C": "The ID links a result to its call. The input schema defines the parameters.",
+        "D": "The name is a short identifier. Parameters are defined in the input schema."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Schema Parts",
+      "id": "CCDV-E18-Q45",
+      "exam_id": 18,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q0946"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 46,
+      "prompt": "A team sets `defer_loading` in `mcp_toolset` on an MCP Connector request but leaves out the `mcp-client-2025-11-20` header. What happens?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The configuration applies as written, as the header selects which transport the connector will use."
+        },
+        {
+          "key": "B",
+          "text": "The request fails with a 529, as the connector retries overloaded servers when the header is set."
+        },
+        {
+          "key": "C",
+          "text": "The toolset configuration does not apply as described, because the connector needs that beta header."
+        },
+        {
+          "key": "D",
+          "text": "Every tool loads upfront, but `enabled` still works, as `defer_loading` is the setting that depends on the header."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The API MCP Connector controls loading through an `mcp_toolset` object, with `defer_loading` and `enabled` settings. The connector requires the `mcp-client-2025-11-20` beta header on the request, and without it the `mcp_toolset` configuration will not apply as described. Only HTTP-exposed servers are supported through the connector.",
+      "distractor_explanations": {
+        "A": "The header is what makes the `mcp_toolset` configuration apply. It does not select a transport.",
+        "B": "A missing header does not produce an overload error. The configuration simply does not apply as described.",
+        "D": "Without the header the `mcp_toolset` configuration does not apply as described, which includes both settings."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "The MCP Connector Beta Header",
+      "id": "CCDV-E18-Q46",
+      "exam_id": 18,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q0947"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 47,
+      "prompt": "A team attaches a server with 80 tools through the MCP Connector and sets `defer_loading` on all of them. A teammate assumes Claude can no longer call the rarely used ones. What is accurate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The teammate is right, as a deferred tool stays switched off until a developer enables it again in a later request to the API."
+        },
+        {
+          "key": "B",
+          "text": "Deferral changes nothing about context cost, as it only reorders where the tools appear in the list sent to Claude each time."
+        },
+        {
+          "key": "C",
+          "text": "Deferred tools remain callable because only their definitions load later, cutting upfront cost; `enabled` is what hides one."
+        },
+        {
+          "key": "D",
+          "text": "The teammate is right, and Claude must be sent the beta header once per tool before it can call any deferred one of them."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Two settings on the toolset look similar but do different jobs. `defer_loading` delays loading a tool's definition until the model needs it, which reduces upfront context cost, while `enabled` turns tools on or off so the model never sees them. Analogy: a restaurant can keep its rarely ordered dishes off the printed menu and bring out a separate dessert list only when you ask, or it can stop cooking a dish entirely. The dessert list on request is deferral, and no longer cooking the dish is disabling. Deferred tools can still be ordered.",
+      "distractor_explanations": {
+        "A": "`defer_loading` delays loading the definition. It does not disable the tool, and `enabled` is the separate setting that does that.",
+        "B": "Deferring a definition until the model needs it is what reduces upfront context cost for a server with a large tool list.",
+        "D": "The beta header is set once on the request so that the toolset configuration applies. It is not sent per tool."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "MCP Connector: Deferring vs Disabling",
+      "id": "CCDV-E18-Q47",
+      "exam_id": 18,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q0948"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 48,
+      "prompt": "A security reviewer asks which control enterprise reviewers ask about first, and how it is configured. What is the answer?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A PostToolUse hook, with its log of every call written to an audit store after each tool has run."
+        },
+        {
+          "key": "B",
+          "text": "OS-level sandboxing, with filesystem and network isolation configured through Claude Code settings."
+        },
+        {
+          "key": "C",
+          "text": "A longer system prompt, with the rules of the deployment written out in plain language for the model."
+        },
+        {
+          "key": "D",
+          "text": "A larger context window, with more room for the agent to hold its protected paths in view."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "OS-level sandboxing isolates the agent at the process level, restricting the filesystem to the working directory and outbound network access to a named set of endpoints. Because the operating system enforces it, it holds even when a hook is missing or misconfigured. It is the control enterprise security reviewers ask about first, and it is configured through Claude Code settings, with full documentation at code.claude.com. Analogy: a fence around the whole property still holds when a door lock was left off. The wrong options offer words, records, or room instead of a fence.",
+      "distractor_explanations": {
+        "A": "A PostToolUse hook records calls after they run. It cannot block them, and it is not the control reviewers ask about first.",
+        "C": "A prompt instruction is not a security control. Enforcement lives outside the prompt.",
+        "D": "Window size has nothing to do with isolating the agent from paths and endpoints."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "The OS-Level Control Reviewers Ask About",
+      "id": "CCDV-E18-Q48",
+      "exam_id": 18,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q0949"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 49,
+      "prompt": "A reviewer asks where a Claude integration's data is processed. Which checks answer that question?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The processing region, whether data leaves the customer's boundary, and whether the deployment surface meets it."
+        },
+        {
+          "key": "B",
+          "text": "The tokens used per call, the latency of each tool, and the error rate that the dashboards show for the integration."
+        },
+        {
+          "key": "C",
+          "text": "The identity each call runs under, the audit log that is kept, and whether an administrator has locked the configuration."
+        },
+        {
+          "key": "D",
+          "text": "The model tier in use, the effort setting on each call, and the temperature the application sets for requests."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Data residency is about where data is processed and stored. Answering it means knowing which region processes the request, whether any data leaves the customer's boundary, and whether the deployment surface, the direct API or a cloud provider's hosted version, satisfies the constraint. The reviewer's other two questions, about access logging and managed configuration, are separate checks.",
+      "distractor_explanations": {
+        "B": "Those are cost and reliability metrics. Residency is about where processing happens.",
+        "C": "Those answer the identity, logging, and configuration-control questions, not where data is processed.",
+        "D": "Tier and reasoning settings do not tell a reviewer where data is processed."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Answering Where Data Is Processed",
+      "id": "CCDV-E18-Q49",
+      "exam_id": 18,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q0950"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 50,
+      "prompt": "A team scopes data residency, audit logging, and managed configuration early in a regulated project. Why does that keep the security review from stalling?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Scoping them early lets an administrator approve the review on the team's behalf before the build starts."
+        },
+        {
+          "key": "B",
+          "text": "The three capabilities are optional extras, as a review mostly checks the quality of the model's answers."
+        },
+        {
+          "key": "C",
+          "text": "A regulated review asks to see those capabilities, so an integration scoped for them can show what it has."
+        },
+        {
+          "key": "D",
+          "text": "Scoping them early lets the team skip the review, as the review repeats checks the team has already passed."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A financial or healthcare customer asks early about where data is processed, how access is logged, and whether an administrator can control the configuration centrally. A regulated review is in practice a request to see those three capabilities, so an integration scoped with them in mind passes by showing what it already has, while one that ignores them scrambles to add controls under deadline. Analogy: a restaurant that already keeps its fridge logs and cleaning rota can hand them to the inspector, while one that does not has to invent them that morning. The wrong options treat the capabilities as optional or approvals as transferable.",
+      "distractor_explanations": {
+        "A": "Scoping does not transfer approval. It prepares the evidence the reviewer will ask to inspect.",
+        "B": "A regulated review is a request to see these capabilities, and their absence reads as a risk.",
+        "D": "The review still happens. Early scoping means the answers already exist when the reviewer asks."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Why Scope a Review Early",
+      "id": "CCDV-E18-Q50",
+      "exam_id": 18,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q0951"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 51,
+      "prompt": "A claims workflow chains an API endpoint that receives customer submissions, a Claude Code task that reads partner web pages, and an MCP server that updates the claims system. A reviewer maps one control to each seam. Which control belongs at the entry point, where requests arrive from outside?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Input validation on the requests arriving from outside, together with the identity the call runs under in the app."
+        },
+        {
+          "key": "B",
+          "text": "Scoping the component to least privilege and logging the system access it holds on the application's behalf."
+        },
+        {
+          "key": "C",
+          "text": "Treating the content as data rather than as instructions, as the entry point is where fetched pages first arrive."
+        },
+        {
+          "key": "D",
+          "text": "A PreToolUse hook that blocks the claims system's write tool, since the entry point is where writes are approved."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A multi-component application has a boundary at every seam, and each seam gets the control that fits it. The entry point faces requests from outside, so its controls are input validation and the identity the call runs under. The Claude Code task's seam is the untrusted content it fetched, so the next component treats that content as data. The MCP server's seam is the system access it holds, so it is scoped to least privilege and logged.",
+      "distractor_explanations": {
+        "B": "That is the control for the MCP server, which holds access to the claims system.",
+        "C": "Fetched pages are untrusted at the seam leaving the Claude Code task, not at the entry point.",
+        "D": "The entry point does not approve writes. Its seam is the request arriving from outside the application."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Trust Boundaries Across Components",
+      "id": "CCDV-E18-Q51",
+      "exam_id": 18,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q0952"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 52,
+      "prompt": "A team has a `deploy-prod` procedure that should run only when a developer deliberately invokes it, never because Claude decided a task matched. What should they use?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A rules file with a `paths` glob on the deploy directory, so the procedure loads just when those files are read."
+        },
+        {
+          "key": "B",
+          "text": "A skill whose frontmatter sets `disable-model-invocation: true`, invoked directly by a developer as `/deploy-prod`."
+        },
+        {
+          "key": "C",
+          "text": "A note in CLAUDE.md telling Claude to run the procedure just when asked, since that file loads in each session."
+        },
+        {
+          "key": "D",
+          "text": "A skill with a deliberately vague description, so Claude rarely finds a match between the description and the task."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Skills are the recommended format for both explicit and automatic invocation: you can call one directly with `/skill-name`, or Claude can load it when the request matches its description. When a workflow should run only on an explicit call, the skill's frontmatter carries `disable-model-invocation: true`. A written instruction elsewhere cannot give the same guarantee.",
+      "distractor_explanations": {
+        "A": "A rules file loads automatically when Claude reads a matching file, which is the opposite of explicit-only invocation.",
+        "C": "An instruction in CLAUDE.md is a soft rule that can be followed inconsistently. The frontmatter setting is what makes a workflow explicit-only.",
+        "D": "A vague description makes a skill unreliable to load. It does not guarantee the model will never invoke it."
+      },
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Skills & Explicit Invocation",
+      "id": "CCDV-E18-Q52",
+      "exam_id": 18,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q0953"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-18.json",
+      "source_id": 53,
+      "prompt": "A team's LLM judge already returns strengths, weaknesses, and reasoning before its score. Checked against 100 human-labeled cases, it agrees with the human grade on only about half of them. What should the team do next?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Replace the judge with exact string matching, as a code grader is more accurate than a model for any kind of output."
+        },
+        {
+          "key": "B",
+          "text": "Rely on the scores as they are, since requesting reasoning before the score already makes a judge's output defensible here."
+        },
+        {
+          "key": "C",
+          "text": "Fix the rubric by tightening what each score means and adding a good and a bad example answer, then re-measure agreement."
+        },
+        {
+          "key": "D",
+          "text": "Average the judge's score over several runs per case, which would make its disagreements with humans cancel out."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A judge is only as trustworthy as its measured agreement with people. Calibration means running the judge on cases a human has already labeled and checking how often they agree. If agreement is low, the repair is to the rubric: define what each score means, add a good and a bad example, and measure again. Analogy: two teachers marking the same essays with different ideas of what a B means will disagree until they sit down with a marking guide and a pair of sample essays. The teacher is the judge, the marking guide is the rubric, and the sample essays are the anchor examples. Averaging more marking rounds would only repeat the same disagreement.",
+      "distractor_explanations": {
+        "A": "Exact match is brittle for open-ended answers, where any acceptable paraphrase fails it. It suits outputs with one correct form.",
+        "B": "Reasoning anchors a score, but a judge that disagrees with humans half the time gives a number that looks rigorous and means little.",
+        "D": "Averaging smooths noise but does not fix a rubric that defines scores in a way the human graders did not."
+      },
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "Judge Calibration",
+      "id": "CCDV-E18-Q53",
+      "exam_id": 18,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q0954"
+    }
+  ]
+}

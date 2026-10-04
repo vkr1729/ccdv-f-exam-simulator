@@ -93,7 +93,7 @@ def bundle():
     sources_meta["exams_count"] = len(all_exams)
     sources_meta["questions_per_exam"] = 53
 
-    # Ensure Hard and Moderate Tier sources are registered
+    # Ensure Hard, Moderate, and Exam-Style Tier sources are registered
     sources_list = sources_meta.get("sources", [])
     hard_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (11, 12))
     if hard_tier_count > 0:
@@ -111,10 +111,10 @@ def bundle():
                 "contributed_questions": hard_tier_count
             })
 
-    mod_tier_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (13, 14, 15))
+    mod_tier_count = sum(1 for q in all_questions if 13 <= q.get("exam_id", 0) <= 18)
     if mod_tier_count > 0:
         mod_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)"
-        mod_desc = "Developed specifically for Exams #13, #14 & #15 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps."
+        mod_desc = "Developed specifically for Exams #13–#18 offering a realistic moderate-difficulty full-length simulation across all domains; not sourced from external mock dumps."
         existing_mod = next((s for s in sources_list if s.get("name") == mod_source_name), None)
         if existing_mod:
             existing_mod["contributed_questions"] = mod_tier_count
@@ -125,6 +125,22 @@ def bundle():
                 "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
                 "description": mod_desc,
                 "contributed_questions": mod_tier_count
+            })
+
+    exam_style_count = sum(1 for q in all_questions if q.get("exam_id", 0) == 19)
+    if exam_style_count > 0:
+        es_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)"
+        es_desc = "Developed specifically for Exam #19 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps."
+        existing_es = next((s for s in sources_list if s.get("name") == es_source_name), None)
+        if existing_es:
+            existing_es["contributed_questions"] = exam_style_count
+            existing_es["description"] = es_desc
+        else:
+            sources_list.append({
+                "name": es_source_name,
+                "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
+                "description": es_desc,
+                "contributed_questions": exam_style_count
             })
     sources_meta["sources"] = sources_list
 
@@ -173,6 +189,8 @@ window.EXAM_DATA = {{
             html = f.read()
 
         new_html, count = re.subn(r'Exams \(\d+\)', f'Exams ({len(all_exams)})', html)
+        new_html = re.sub(r'<title>Claude Certified Developer \(CCDV-F\) — \d+ Mock Exam Simulator</title>', f'<title>Claude Certified Developer (CCDV-F) — {len(all_exams)} Mock Exam Simulator</title>', new_html)
+        new_html = re.sub(r'content="\d+ full-length blueprint-balanced practice exams', f'content="{len(all_exams)} full-length blueprint-balanced practice exams', new_html)
         new_html = re.sub(r'\d+ Full Forms · \d+ Questions', f'{len(all_exams)} Full Forms · {len(all_questions)} Questions', new_html)
         new_html = re.sub(r'CCDV-F Exam Simulator · \d+ Practice Exams \(\d+ Questions\)', f'CCDV-F Exam Simulator · {len(all_exams)} Practice Exams ({len(all_questions)} Questions)', new_html)
 

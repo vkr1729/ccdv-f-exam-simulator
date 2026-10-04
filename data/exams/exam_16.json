@@ -1,0 +1,2280 @@
+{
+  "exam_id": 16,
+  "title": "CCDV-F Mock Exam #16 (Moderate Tier)",
+  "description": "Full-length 53-question moderate-difficulty simulation for Claude Certified Developer - Foundations (120 minutes). Realistic exam-style mix of easier, medium, and hard scenario questions.",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 1,
+      "prompt": "A team budgets a summarization feature with a rule of thumb of about four characters per token, measured on the model they ran last year. After moving to a newer model generation, the bill rises roughly 15% on identical documents. What is the most likely explanation?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Newer models bill input by character length rather than by token, since longer documents cost proportionally more regardless of how they are tokenized."
+        },
+        {
+          "key": "B",
+          "text": "The old rule is stale; characters per token depends on the tokenizer, which differs by generation, so count tokens on every new model."
+        },
+        {
+          "key": "C",
+          "text": "The old rule only affects estimates of response length; input is tokenized identically across generations, so the extra cost came from longer outputs."
+        },
+        {
+          "key": "D",
+          "text": "Tokens map to a fixed number of characters on every Claude model, so the increase must come from a higher per-token price on the newer tier."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Claude counts tokens, not characters or words, and the average number of characters per token depends on the tokenizer of the model in use, which differs between model generations. A rule of thumb measured on one model should not be carried to another. Re-measure token counts on the model you actually deploy, and confirm tokenizer behavior again whenever the model changes.",
+      "distractor_explanations": {
+        "A": "Tokens are the unit of both pricing and budget on every model. Billing is not done in characters or words.",
+        "C": "Tokenization of the input changes between generations as well. The rule of thumb is model-dependent for input and output alike.",
+        "D": "Characters per token is not constant. It varies with the tokenizer of each model generation, so identical text can produce a different token count."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Tokens & Tokenizers",
+      "id": "CCDV-E16-Q01",
+      "exam_id": 16,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q0796"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 2,
+      "prompt": "A summarizer's test suite checks that each response is valid JSON with a non-empty `actions` array, and it passes on every run. The team now also wants to know whether each summary is faithful to the source thread. Which approach fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add an eval with a model-graded judge and a faithfulness rubric, and keep all the structural checks as property assertions."
+        },
+        {
+          "key": "B",
+          "text": "Set temperature to 0 and compare the response text with a stored copy, which makes an exact comparison dependable for faithfulness."
+        },
+        {
+          "key": "C",
+          "text": "Extend the structural checks with more required fields, because a response that parses and carries every field must also be faithful."
+        },
+        {
+          "key": "D",
+          "text": "Assert that each response exactly matches a stored reference summary, so any difference in wording is flagged as a regression."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Because sampling makes output non-deterministic, tests should assert on properties that must hold, such as a field being present or the structure parsing. Judging meaning, for example whether a summary is faithful, is a different job that structure checks cannot do, so an eval with a model-graded judge and a clear rubric is the right tool for that part.",
+      "distractor_explanations": {
+        "B": "Temperature 0 makes output more repeatable but never guarantees identical text. Also, the newest models reject non-default sampling values.",
+        "C": "Structure checks show that a response is well formed. They say nothing about whether its content is faithful to the source.",
+        "D": "Identical inputs do not guarantee identical outputs, and the same correct answer can be worded many ways, so exact-text assertions fail inconsistently."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Non-Determinism & Testing",
+      "id": "CCDV-E16-Q02",
+      "exam_id": 16,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q0797"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 3,
+      "prompt": "A developer includes three worked examples in the first request so Claude will learn the required output format, then drops them from later requests to save tokens. Later responses drift back to the old format. Why?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Three samples were too few for the format to stick; roughly ten examples are needed before the model keeps the pattern in later requests."
+        },
+        {
+          "key": "B",
+          "text": "Sampling randomness overrode the earlier examples, so lowering the temperature would have kept the format stable in the later requests."
+        },
+        {
+          "key": "C",
+          "text": "The API caches the examples per conversation, and the format fades once the default cache lifetime ends, so they have to be added again."
+        },
+        {
+          "key": "D",
+          "text": "Examples work only while they are in the prompt, because they are not training data, so they must accompany every call that needs them."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Zero-shot, one-shot, and multi-shot describe how many worked examples sit in the prompt. The examples are not training data: they show the model the shape of the answer only for the request that contains them. If a later call needs the format, the examples have to be in that call, which is also why each example costs tokens on every request.",
+      "distractor_explanations": {
+        "A": "Examples are not training data at any count. They influence a response only while they are present in the prompt.",
+        "B": "The examples were no longer in the prompt, so there was nothing for the model to follow. Temperature does not restore removed context.",
+        "C": "Caching is a cost and latency mechanism for repeated prefixes. It does not act as memory of examples from earlier requests."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Prompting Modes & Examples",
+      "id": "CCDV-E16-Q03",
+      "exam_id": 16,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q0798"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 4,
+      "prompt": "A support engineer pastes one screenshot of a UI bug into an internal tool, which sends it with a question and waits for the answer. The image is never reused. A teammate proposes adding a Files API upload step first. What is the better call?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Submit it through the Message Batches API, which lowers the per-token cost of each request that carries an image, interactive or not."
+        },
+        {
+          "key": "B",
+          "text": "Host the image at a short-lived signed URL and pass that, so Claude fetches it when the request runs and no bytes travel inline."
+        },
+        {
+          "key": "C",
+          "text": "Upload through the Files API anyway, because a `file_id` always reduces the number of visual tokens charged for the image."
+        },
+        {
+          "key": "D",
+          "text": "Send it inline as base64 in the message; a one-off image gains nothing from an extra upload step to the Files API."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Inline base64 is best for a one-off image where an upload step would add complexity without a payoff. The Files API pays off when the same asset appears in many requests, and a URL source needs a stable public address. Batch is for offline workloads, not for a person who is waiting.",
+      "distractor_explanations": {
+        "A": "Batch suits offline work. Here a person is waiting on an immediate answer, so the added latency is unacceptable.",
+        "B": "URL references need a stable, public, reachable address. A short-lived signed link is the case to avoid.",
+        "C": "A `file_id` removes payload weight from later requests. It does not change the visual token cost, and a single use gets no benefit."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Multimodal Input Methods",
+      "id": "CCDV-E16-Q04",
+      "exam_id": 16,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q0799"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 5,
+      "prompt": "A service sends 1,120 × 840 pixel page images to Claude, one visual token per 28 × 28 pixel patch, with no downscaling. A request may spend at most 20,000 visual tokens on images. How many such images can one request carry?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "285 images, found by adding the two patch counts (40 + 30) to get 70 visual tokens per image and dividing 20,000 by that."
+        },
+        {
+          "key": "B",
+          "text": "500 images, found by counting only the 40 patches across the width of each image and ignoring the 30 rows down its height."
+        },
+        {
+          "key": "C",
+          "text": "17 images, since 20,000 / 1,200 is about 16.7, and a fraction of an image still rounds up to a full one."
+        },
+        {
+          "key": "D",
+          "text": "16 images, because each costs 40 × 30 = 1,200 visual tokens and 20,000 / 1,200 is about 16.7."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "An image costs ⌈width / 28⌉ × ⌈height / 28⌉ visual tokens. Here 1,120 / 28 = 40 and 840 / 28 = 30, so each page image costs 40 × 30 = 1,200 tokens. Twenty thousand divided by 1,200 is about 16.7, and since a partial image cannot be sent, 16 images fit; a seventeenth would reach 20,400 tokens. Adding the patch counts or counting only one dimension gives far larger, wrong capacities.",
+      "distractor_explanations": {
+        "A": "The patches form a grid, so the counts are multiplied, giving 1,200 tokens per image rather than 70.",
+        "B": "Both dimensions count. Each image spans 40 patches across and 30 down, which is 1,200 tokens, not 40.",
+        "C": "A seventeenth image would push the request to 20,400 tokens, over the limit, so only whole images that fit can be counted."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Image Token Arithmetic",
+      "id": "CCDV-E16-Q05",
+      "exam_id": 16,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q0800"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 6,
+      "prompt": "A team estimates the cost of a 6,000 × 4,000 pixel photo by applying ⌈w / 28⌉ × ⌈h / 28⌉ to the original size and gets a very large number. The model's documented image limits are far smaller than that photo. How should they estimate the cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Keep the original-size figure, since the API charges visual tokens on the uploaded pixels and shrinks the image only for display."
+        },
+        {
+          "key": "B",
+          "text": "Apply the formula to the scaled size, because oversized images are downscaled first; confirm limits at build time."
+        },
+        {
+          "key": "C",
+          "text": "Treat the model's visual-token limit as the cost of each image, with larger images simply rejected by the API instead of being resized."
+        },
+        {
+          "key": "D",
+          "text": "Send it through the Files API, which resizes each uploaded image to one standard size, so each image costs the same number of tokens."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Each model has a maximum native image resolution, given as a long-edge limit and a visual-token limit, and an image above either limit is downscaled before processing. The patch formula therefore runs on the scaled dimensions. Analogy: a mail slot only takes envelopes up to a set size, so a poster mailed through it is folded down first, and the postage is charged on the folded package rather than on the flat poster. The photo is the poster, the model's limits are the slot, and visual tokens are the postage. Using the original size overstates the cost, and the limits differ by model tier and change over time, so confirm them at build time.",
+      "distractor_explanations": {
+        "A": "Images above the limits are downscaled before processing, so the formula runs on the scaled dimensions, not the uploaded ones.",
+        "C": "Oversized images are downscaled rather than rejected, and smaller images cost less than the limit.",
+        "D": "The Files API changes how an image is sent. It does not set a standard size or a fixed token cost."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Image Token Arithmetic",
+      "id": "CCDV-E16-Q06",
+      "exam_id": 16,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q0801"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 7,
+      "prompt": "A pipeline attaches several high-resolution photos to each request and runs past its token budget once real volume arrives. What is the most direct first fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the photos into the system prompt, where input tokens are counted at a lower rate than they are in the user turn of a request."
+        },
+        {
+          "key": "B",
+          "text": "Send the job through the Message Batches API, which keeps the images out of the context window during processing."
+        },
+        {
+          "key": "C",
+          "text": "Add a resize step that shrinks images before sending, after measuring a typical production image against the context limit."
+        },
+        {
+          "key": "D",
+          "text": "Recompress each photo as a smaller JPEG file, which lowers the visual-token count along with the number of encoded bytes."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Images are charged in visual tokens, ⌈width / 28⌉ × ⌈height / 28⌉ per image, so cost follows pixel dimensions rather than file size. The fix for an over-budget image pipeline is often a short resize step. It is far cheaper to find the problem before deployment, by measuring a typical production image against the context limit before writing the ingestion code.",
+      "distractor_explanations": {
+        "A": "Every block in the request counts toward the budget in the same way, wherever it sits in the request.",
+        "B": "Batches change the price and when results arrive, not how many visual tokens each image uses.",
+        "D": "Visual tokens come from pixel dimensions in 28 by 28 patches, so a smaller file with the same dimensions costs the same."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Image Token Cost",
+      "id": "CCDV-E16-Q07",
+      "exam_id": 16,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q0802"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 8,
+      "prompt": "A team maps the work on a Claude application onto the systems lifecycle. Which TWO activities belong in the test phase? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Writing an integration check that passes real retrieval output into the prompt builder and the model call."
+        },
+        {
+          "key": "B",
+          "text": "Running the eval suite against the graded cases and reading the per-case results to see what failed."
+        },
+        {
+          "key": "C",
+          "text": "Instrumenting token cost, latency, and error rate for each call once the system is live in production."
+        },
+        {
+          "key": "D",
+          "text": "Pinning the full model ID and keeping the prior version available as a rollback target ahead of the release."
+        },
+        {
+          "key": "E",
+          "text": "Choosing the platform that satisfies the customer's residency requirement before the building work starts."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "The lifecycle runs requirements, design, build, test, deploy, operate, and iterate. The test phase is where the built system is checked: evals against graded cases, plus unit, integration, and end-to-end checks that each catch a different kind of break. Pinning a version is deploy work, choosing the platform is design work, and instrumenting live traffic is operate work. Analogy: before a new bridge opens, inspectors load-test each span and check that the spans meet cleanly at the joints. That inspection day is the test phase, while picking the river crossing was design, hanging the opening-day signs is deploy, and counting traffic afterward is operate.",
+      "distractor_explanations": {
+        "C": "Instrumenting live traffic belongs to the operate phase, after release.",
+        "D": "Pinning a version and keeping a rollback target is deploy-phase work, not a test activity.",
+        "E": "Choosing the platform and its constraints is design-phase work. Test checks a built system."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Systems Lifecycle: Test Phase",
+      "id": "CCDV-E16-Q08",
+      "exam_id": 16,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q0803"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 9,
+      "prompt": "A partner wants to embed an agent in its own product, with iteration, tool execution, observation, and termination handled for it, much as Claude Code does in a terminal. Which package provides that loop?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The Claude Agent SDK, which exposes the same agent loop that powers Claude Code and can be embedded inside a product."
+        },
+        {
+          "key": "B",
+          "text": "The async client in the Anthropic SDK, where non-blocking calls let the model plan and run its own follow-up steps."
+        },
+        {
+          "key": "C",
+          "text": "A raw REST client, where the endpoint itself runs the tool-execution loop and returns just the final answer to the caller."
+        },
+        {
+          "key": "D",
+          "text": "Claude Managed Agents, installed as a library so that the hosted loop and its sandbox run inside the partner's own process."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The Claude Agent SDK gives programmatic access to the same agent loop that powers Claude Code: iteration, tool execution, observation, and termination. That lets a partner embed an agent in its own product instead of running Claude Code in a terminal. It is distinct from the Anthropic SDK, which is a thin convenience wrapper over the API and does not run an agent loop. Neither an async client nor a raw REST call adds a loop.",
+      "distractor_explanations": {
+        "B": "Async calls avoid blocking the application's thread. They add no agent behavior.",
+        "C": "The REST endpoint returns one response per request. Looping over tool calls is left to the caller's code or to an SDK that provides it.",
+        "D": "Managed Agents is the path where Anthropic runs the loop and the sandbox; the application streams events to it rather than running it in-process."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Claude Agent SDK vs Anthropic SDK",
+      "id": "CCDV-E16-Q09",
+      "exam_id": 16,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q0804"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 10,
+      "prompt": "A team's design document has a failure-handling section for a Claude-powered feature. Which entry is written concretely enough that a reviewer can check the built system against it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The feature should handle errors gracefully and keep the user informed whenever something goes wrong with the call to the model, as far as is practical."
+        },
+        {
+          "key": "B",
+          "text": "429 and 529 are retriable, up to three backoff attempts honoring `retry-after`; 400 and 401 are terminal, with a clear user message."
+        },
+        {
+          "key": "C",
+          "text": "The team will retry on failures where it makes sense and escalate to an engineer when the same problem keeps appearing over a longer period."
+        },
+        {
+          "key": "D",
+          "text": "The system must stay available and responsive under typical production traffic, without noticeable problems for the people who use the feature daily."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The failure-handling decision in a design document lists the errors production will throw, marks each one retriable or terminal, and says what the user gets when a failure cannot be recovered. Writing it concretely is what lets a reviewer check the build, and it stops the first real rate-limit response from being the moment a team discovers it has no error path.",
+      "distractor_explanations": {
+        "A": "This states an intention but does not classify any failure as retriable or terminal, and it names no behavior that can be verified.",
+        "C": "No failure type, retry limit, or user-facing outcome is named, so the built system cannot be checked against it.",
+        "D": "This is a general quality wish, not a list of the failures the system must survive and what it does for each."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Design Document",
+      "id": "CCDV-E16-Q10",
+      "exam_id": 16,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q0805"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 11,
+      "prompt": "A team will use Claude Code to modernize a large, unfamiliar legacy codebase that many other systems depend on. Which TWO decisions should the team settle before the session starts? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Rely on plan mode to define who approves each phase, because the mode itself decides who signs off at each boundary of the work."
+        },
+        {
+          "key": "B",
+          "text": "Decide on audit logging after the migration, once the final diff shows which files the agent ended up touching during the work."
+        },
+        {
+          "key": "C",
+          "text": "Define and document who approves each phase before the next one begins, instead of leaving that decision implied by default."
+        },
+        {
+          "key": "D",
+          "text": "Let the agent start editing right away and add review points after the first incident shows where they are actually needed."
+        },
+        {
+          "key": "E",
+          "text": "Work out the blast radius of a wrong edit by listing the systems that depend on the changed code and what breaks downstream."
+        }
+      ],
+      "correct_answers": [
+        "C",
+        "E"
+      ],
+      "explanation": "Large changes to unfamiliar legacy code carry high blast radius, unpredictable dependencies, and limited reversibility, so three questions come before the session: what breaks if an edit is wrong, how changes are audited, and who approves each phase. Analogy: before renovating an old house you find out which walls carry load and which pipes feed other flats, and you agree with the owner who signs off after each stage; the builder's cautious pace alone does not say who approves. Plan mode is that cautious pace, not the sign-off itself, and leaving the audit trail until after the migration fails the same test.",
+      "distractor_explanations": {
+        "A": "Plan mode enforces the boundary between exploring and executing, but the approval decision is the team's to define and document.",
+        "B": "Auditing is scoped before work begins, for example with a hook that logs every tool call. A final diff does not record what the agent touched along the way.",
+        "D": "Unfamiliar code with high blast radius and limited reversibility needs its review points defined up front, not discovered after damage."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Regulated Scoping & Modernization",
+      "id": "CCDV-E16-Q11",
+      "exam_id": 16,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q0806"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 12,
+      "prompt": "A customer's internal policy allows workloads only on the cloud vendor its CIO has cleared. Midway through the project, an engineer finds that a different route would be quicker to build on. What should the team do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Switch to the quicker route and request an exception at the end, with a working integration as the best argument for approval."
+        },
+        {
+          "key": "B",
+          "text": "Run both routes in parallel until launch and let measured production latency decide which one the customer keeps in service."
+        },
+        {
+          "key": "C",
+          "text": "Keep building on the SDK client and endpoint setup of the cleared vendor, because procurement rules out other code paths first."
+        },
+        {
+          "key": "D",
+          "text": "Compare per-token prices across the platforms and pick the cheapest, treating total cost as the deciding factor over any vendor policy."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "For a customer with an internal data-residency policy, procurement has already ruled out routes before engineering preferences enter the discussion. In code terms, that means the SDK client and endpoint configuration its CIO has cleared, and the team builds against that route instead of switching mid-project because another looks easier. Analogy: a school trip may use buses from the district's approved company. Even if another company's bus is faster, the teacher boards the approved one, because the rule was settled before anyone compared buses. The tempting wrong options treat the policy as one trade-off among many, which it is not.",
+      "distractor_explanations": {
+        "A": "The policy rules a path out before engineering preference enters. Building first and asking later risks a full rebuild.",
+        "B": "The decision is a procurement constraint, not a latency contest. Production data cannot override a policy on where workloads may run.",
+        "D": "For a pass-or-fail constraint, cost does not decide. The cleared vendor is the placement."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Internal Residency Policy",
+      "id": "CCDV-E16-Q12",
+      "exam_id": 16,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q0807"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 13,
+      "prompt": "A team picks a three-subagent design for a new feature and plans to estimate cost and latency after the first prototype runs. Which change to the process follows the design-document guidance?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set cost, latency, and reliability-floor budgets before choosing architecture, so the design is checked against all three."
+        },
+        {
+          "key": "B",
+          "text": "Estimate cost after the prototype runs, when real token counts for the architecture running from start to finish are available."
+        },
+        {
+          "key": "C",
+          "text": "Leave every budget to the operate phase, when instrumentation can report the actual cost and latency of each call in production."
+        },
+        {
+          "key": "D",
+          "text": "Set only a monthly cost ceiling now, since latency and reliability targets depend on the model chosen and should follow that choice."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A design document names the cost and latency ceiling and the reliability floor the system must stay within, and the guidance is to set these hard budgets before the architecture is determined. The numbers then become the budget you instrument against and the floor you refuse to optimize below. Checking a three-subagent design against them on paper is far cheaper than finding out after building it.",
+      "distractor_explanations": {
+        "B": "Budgets are set before architecture is chosen, so the design can be checked against them before a line of code is written.",
+        "C": "Instrumentation measures against a budget that already exists. Without numbers set in advance there is nothing to compare it with.",
+        "D": "The document states cost, latency, and the minimum reliability the design must hold, all before the architecture is settled."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Design Document",
+      "id": "CCDV-E16-Q13",
+      "exam_id": 16,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q0808"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 14,
+      "prompt": "A team will use an agentic coding tool to build a large feature. Following the design-document approach, what should they give the tool before it writes any code?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The eval score from a previous feature, which shows the tool how much quality the new feature has to reach before it ships to users."
+        },
+        {
+          "key": "B",
+          "text": "A short statement of the overall goal alone, with detailed constraints left out so the tool has more options for a good solution."
+        },
+        {
+          "key": "C",
+          "text": "Nothing beyond the repository, since the tool will infer success criteria from the existing tests and apply them as it builds."
+        },
+        {
+          "key": "D",
+          "text": "A written design document with success criteria and constraints, so the tool assumes less and output can be checked."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The design document is a short written record of what the feature must do, the failures it must survive, its cost and latency limits, and its trust boundary, and it comes before implementation. Handing it to an agentic coding tool lets the tool plan against explicit criteria and constraints instead of assumptions, and it gives the team something concrete to check the result against.",
+      "distractor_explanations": {
+        "A": "Another feature's score says nothing about this feature's own success criteria or constraints.",
+        "B": "Clear success criteria and explicit constraints reduce assumptions. A bare goal leaves the tool guessing what correct means.",
+        "C": "Inferred criteria are exactly the assumptions the document is meant to remove. Defining correct up front prevents rationalizing whatever gets produced."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Design Document",
+      "id": "CCDV-E16-Q14",
+      "exam_id": 16,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q0809"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 15,
+      "prompt": "Three months after launch, logs show many users asking about a product line the assistant was never scoped to cover. The team decides to add that to the assistant's requirements and plan a new release. Which lifecycle phase does this activity belong to?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Iterate, the phase where findings from production are fed back into the requirements for the next release."
+        },
+        {
+          "key": "B",
+          "text": "Design, where the platform, the model, and the trust boundaries are chosen for the application."
+        },
+        {
+          "key": "C",
+          "text": "Deploy, where the version is pinned and promotion is gated on the eval against the pinned baseline."
+        },
+        {
+          "key": "D",
+          "text": "Operate, where the running system is instrumented for cost, latency, and errors and guardrails are enforced."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A Claude application moves through requirements, design, build, test, deploy, operate, and iterate. Operate is where the team watches the running system and collects findings, while iterate is where those findings flow back into the requirements for the next cycle. The scope gap seen in the logs becomes a new requirement, so the work lands in iterate.",
+      "distractor_explanations": {
+        "B": "Design follows requirements. The team is revising the requirements themselves, which comes before any redesign.",
+        "C": "Deploy ships a version that already exists. Here the team is changing what the system must do.",
+        "D": "Operate produces the findings, such as the logs. Turning them into new requirements is the iterate phase."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Systems Lifecycle",
+      "id": "CCDV-E16-Q15",
+      "exam_id": 16,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q0810"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 16,
+      "prompt": "A team on a one-off internal experiment wants to skip the lifecycle phases and gates, and a team on a regulated deployment asks to do the same. What does the lifecycle guidance say?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both teams may collapse phases, since phases are a suggestion and the gates add paperwork without adding control."
+        },
+        {
+          "key": "B",
+          "text": "Neither team may collapse phases, so every Claude application is expected to run all seven phases and gates in full."
+        },
+        {
+          "key": "C",
+          "text": "The regulated team alone may collapse phases, since its compliance review replaces the gates."
+        },
+        {
+          "key": "D",
+          "text": "A one-off experiment may collapse phases, but a regulated deployment cannot skip its phases or their gates."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The lifecycle gates exist so that a regulated engagement stays reviewable: no move from design to build until the platform satisfies the residency requirement, and no move toward full production until the new version clears the eval against the pinned baseline. A one-off experiment has no review to satisfy and may collapse phases, but a regulated deployment cannot.",
+      "distractor_explanations": {
+        "A": "A regulated deployment keeps control through its gates, so it cannot treat them as optional.",
+        "B": "A one-off experiment may collapse phases. The full set matters for work that must stay reviewable.",
+        "C": "A compliance review does not replace the gates. The gates are how a regulated engagement keeps control."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Lifecycle Gates",
+      "id": "CCDV-E16-Q16",
+      "exam_id": 16,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q0811"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 17,
+      "prompt": "A federal contractor plans to buy Claude Enterprise through AWS Marketplace to satisfy a FedRAMP requirement. What is wrong with that plan?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Marketplace purchases are authorized at FedRAMP Moderate, so the plan works for a workload that stays below the High level."
+        },
+        {
+          "key": "B",
+          "text": "Claude Enterprise on AWS Marketplace is not FedRAMP authorized, so the team needs one of the three authorized routes instead."
+        },
+        {
+          "key": "C",
+          "text": "Claude Enterprise is authorized through a single vendor, so the contractor has to buy from that vendor and not from a cloud."
+        },
+        {
+          "key": "D",
+          "text": "Nothing is wrong, since a Claude product billed through an AWS account inherits AWS's own FedRAMP authorization automatically."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "As of publish time, three routes are FedRAMP authorized: Claude for Government (C4G), Claude via Amazon Bedrock GovCloud, and Claude via Vertex AI Assured Workloads. Claude Enterprise on AWS Marketplace is not FedRAMP authorized, so a team that needs FedRAMP compliance must use one of the three routes. Verify current authorization status at the Anthropic Trust Center before configuring anything.",
+      "distractor_explanations": {
+        "A": "Claude Enterprise on AWS Marketplace is listed as not FedRAMP authorized at any level, so it is not a valid route.",
+        "C": "Three routes are authorized: Claude for Government, Claude via Amazon Bedrock GovCloud, and Claude via Vertex AI Assured Workloads.",
+        "D": "Billing through AWS does not transfer authorization. Claude Platform on AWS, for example, runs inference outside the AWS boundary."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "FedRAMP Routes",
+      "id": "CCDV-E16-Q17",
+      "exam_id": 16,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q0812"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 18,
+      "prompt": "A team lead summarizes how the four decisions in a design document are used by the rest of the system. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The document is a one-time sign-off, so once it is approved the later layers can each define their own targets independently of it."
+        },
+        {
+          "key": "B",
+          "text": "The cost and latency numbers become test cases for the eval, since the grader scores each response against its dollar budget."
+        },
+        {
+          "key": "C",
+          "text": "The list of failures becomes the system prompt, where the instructions that define retry and terminal behavior are written."
+        },
+        {
+          "key": "D",
+          "text": "The success criteria become the cases the eval is graded against, which is why writing them first is what makes the eval possible."
+        },
+        {
+          "key": "E",
+          "text": "The trust boundary becomes the input treated as data and the action gated with a hook, rather than a setting someone adds later."
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "The design document records four decisions before any production code: success criteria, failure handling, cost and latency budget, and trust boundary. Each feeds a layer: criteria feed the eval, failures feed error handling, budgets feed instrumentation, and the trust boundary feeds the hook and least-privilege setup. Analogy: for a house, the room list becomes the inspection checklist, the weather the roof must survive becomes the structural tests, the budget becomes the cost tracker, and the lock plan becomes the fitted locks; if each trade invented its own plan, nothing would fit together. The tempting wrong answers swap which layer consumes which decision.",
+      "distractor_explanations": {
+        "A": "The document exists to keep the layers consistent. Without it, each layer ends up solving a different problem.",
+        "B": "They become the budget the system is instrumented against and the floor it refuses to optimize below. Eval cases come from the success criteria.",
+        "C": "The failure list becomes the retriable and terminal cases the error-handling code must cover, not the system prompt."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Design Document",
+      "id": "CCDV-E16-Q18",
+      "exam_id": 16,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q0813"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 19,
+      "prompt": "A ticket classifier returns `This looks like a billing issue.` on some runs and `BILLING` on others. A teammate suggests lowering the temperature so the output takes the right shape. Will that fix the problem?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Yes, but only when the value is set to exactly 0; any other low setting leaves the form of the answer random from run to run."
+        },
+        {
+          "key": "B",
+          "text": "No, as temperature has no effect on a classification task, which returns a fixed label whatever sampling configuration is used."
+        },
+        {
+          "key": "C",
+          "text": "Yes, because a lower temperature forces the model to choose the single likeliest token each time, which always produces the required label."
+        },
+        {
+          "key": "D",
+          "text": "Not reliably; temperature affects only wording variation, not answer form, which an output constraint and examples define."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Sampling draws each next token from a probability distribution, and temperature shapes that distribution: lower values make output more repeatable and higher values make it more varied. Neither changes which form the answer should take. A response that comes back in the wrong shape is missing an output constraint, usually backed by a couple of examples of the exact label and format.",
+      "distractor_explanations": {
+        "A": "Even at 0, outputs are not guaranteed identical, and the setting still does not tell the model which form to use.",
+        "B": "Sampling does affect classification: a lower temperature makes the chosen label more repeatable. It is just not what fixes the output shape.",
+        "C": "Lower temperature makes output more repeatable, but the likeliest wording is not necessarily the required label. The prompt never defined the shape."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Sampling & Output Shape",
+      "id": "CCDV-E16-Q19",
+      "exam_id": 16,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q0814"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 20,
+      "prompt": "A team writes down what it knows about context windows before choosing a model. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The window holds the user's messages and the tool results, while the system prompt and the reply are metered separately."
+        },
+        {
+          "key": "B",
+          "text": "With a 1M-token window the input needs no trimming, because the API silently drops the oldest turns as the limit nears."
+        },
+        {
+          "key": "C",
+          "text": "A 40k-token cap set as a cost control is a budget the team chose, not a limit that the model itself imposes on it."
+        },
+        {
+          "key": "D",
+          "text": "Current Claude models carry a window of at least 200k tokens, and the newest flagship models serve 1M tokens by default."
+        },
+        {
+          "key": "E",
+          "text": "Models in the family share one window size, so window size does not vary between tiers or generations of Claude."
+        }
+      ],
+      "correct_answers": [
+        "C",
+        "D"
+      ],
+      "explanation": "Current Claude API models carry at least a 200k-token window, and the newest flagship models serve 1M tokens by default. A cap such as 40k tokens is a budget a team chooses for cost control, not a limit the model imposes. The window itself holds the system prompt, the conversation, tool definitions and results, and the model's own output, and the application must trim history because the API never does it silently. Analogy: a car's tank holds 60 liters, but a road-trip budget lets you buy only 20 liters of fuel. The 20 is your own decision, not the car's limit, and the tank size is what the model choice sets.",
+      "distractor_explanations": {
+        "A": "The window holds everything at once: system prompt, history, documents, tool definitions, tool results, and the model's own output.",
+        "B": "The API does not silently drop or truncate old turns. An oversized input is rejected, so managing history is the application's job.",
+        "E": "Window size does vary: at least 200k on current models, with 1M on the newest flagships."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Context Window Size",
+      "id": "CCDV-E16-Q20",
+      "exam_id": 16,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q0815"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 21,
+      "prompt": "A team moves a contract-clause extractor from Sonnet to Haiku to save about $40 a day. The eval shows a small accuracy drop, and each missed clause later costs a reviewer hours of rework. How should the team decide?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Weigh the downstream cost of the extra errors against the savings, since a move down is sound only if measured quality holds."
+        },
+        {
+          "key": "B",
+          "text": "Move down, as a lower per-token price makes the smaller model the right choice whenever the accuracy drop is only a few points."
+        },
+        {
+          "key": "C",
+          "text": "Decide on latency alone; the tier with the fastest responses is the right choice regardless of cost or accuracy differences."
+        },
+        {
+          "key": "D",
+          "text": "Stay on Sonnet permanently, because a larger tier is always more accurate and so can never cost more once errors are counted."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Moving down a tier trades quality risk for lower cost and latency, so the decision rests on measurement rather than price alone. The cost of a mistake belongs in that calculation: saving a few dollars a day is not a sound trade if the quality drop introduces errors with significant downstream cost. Move to the smaller model only when the eval shows the quality bar still holds for this task.",
+      "distractor_explanations": {
+        "B": "The cost of a mistake belongs in the calculation. A small daily saving is not sound if the added errors carry significant downstream cost.",
+        "C": "Latency is one of three factors. Cost, latency, and quality are weighed together and measured on an eval.",
+        "D": "There is no globally correct tier. Moving down is right whenever an eval shows the cheaper model holds the quality bar for the task."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model Selection Trade-offs",
+      "id": "CCDV-E16-Q21",
+      "exam_id": 16,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q0816"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 22,
+      "prompt": "A team hesitates to try Haiku on a classification workload because it assumes the application and prompts would need rewriting for each tier. What does the guidance say?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Each tier needs its own prompt format, so a move means a rewrite that should be budgeted as a small migration project."
+        },
+        {
+          "key": "B",
+          "text": "The same prompt runs on any tier, so tier is a per-workload lever that changes without a rewrite; a move still needs eval evidence."
+        },
+        {
+          "key": "C",
+          "text": "The prompt carries over within a single model generation, which allows an upgrade in tier but does not allow a step down to a cheaper one."
+        },
+        {
+          "key": "D",
+          "text": "The prompt carries over unchanged, so the switch can ship at once with the lower price list as sufficient proof of quality."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The same prompt runs on any Claude tier, so model choice is a lever you set per workload and can change without rewriting the application. The lever still has a gate: a model change is promoted on a measured score against your own cases, in both directions. Analogy: a restaurant can serve the same menu card from a small kitchen or a large one, so swapping kitchens needs no new menu, but the owner still tastes the dishes before sending the change to every table. The tempting wrong answers either inflate the cost of switching or skip the tasting.",
+      "distractor_explanations": {
+        "A": "The same prompt runs on any tier. Choosing a model does not require rewriting the application.",
+        "C": "Tier is set per workload and can move in either direction, as long as the eval supports it.",
+        "D": "A move down is promoted on a measured eval score showing the quality drop is acceptable, not on price."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model Choice as a Per-Workload Lever",
+      "id": "CCDV-E16-Q22",
+      "exam_id": 16,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q0817"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 23,
+      "prompt": "A team splits a short set of independent lookups across a lead agent and four parallel subagents to cut response time. Elapsed time improves only slightly. What best explains it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Each subagent re-reads the lead's full conversation before starting, so the plan step ends up as long as the original task."
+        },
+        {
+          "key": "B",
+          "text": "The parallel work shortens only the independent part, while the lead still plans the split and compiles the returns."
+        },
+        {
+          "key": "C",
+          "text": "Subagents queue behind one another by default, so adding more of them does not shorten elapsed time on any task."
+        },
+        {
+          "key": "D",
+          "text": "Parallel subagents use about as many tokens as a single agent, so the slowdown must come from rate limits on the extra requests."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Parallel subagents can cut wall-clock time on independent work, but the lead agent still has to plan the split and compile the returns, and that coordination adds latency of its own. On a short task the fixed overhead can eat most of the gain, while the token cost still multiplies. Analogy: a head chef can hand four cooks one dish each, but writing the order cards and plating the finished dishes still happens one step at a time, so a two-minute meal does not become half as long. The tempting wrong options blame queueing or shared history rather than that fixed hand-off cost.",
+      "distractor_explanations": {
+        "A": "Subagents start from a clean context holding only the task and what it needs. They do not inherit the lead's full history.",
+        "C": "Subagents run in parallel, and for independent work that can cut wall-clock time. The gain is limited by planning and compiling overhead.",
+        "D": "Orchestrator-worker setups use roughly fifteen times the tokens, since every subagent spends its own. Token use is not the explanation here."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Parallel Subagent Latency",
+      "id": "CCDV-E16-Q23",
+      "exam_id": 16,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q0818"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 24,
+      "prompt": "A document pipeline has three steps: look up a customer's plan name, decide whether a refund meets a policy that combines four conditions, and convert the decision into a fixed JSON layout. On which step does extended thinking most clearly earn its cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The plan-name lookup, as a wrong name would send each later step down the wrong path and reasoning prevents that outcome entirely."
+        },
+        {
+          "key": "B",
+          "text": "The refund decision, because it holds several constraints at once and the reasoning pass works through their dependencies."
+        },
+        {
+          "key": "C",
+          "text": "The JSON conversion, as schema mistakes are expensive and reasoning makes a format conversion more accurate in practice."
+        },
+        {
+          "key": "D",
+          "text": "All three equally, with thinking content omitted from the response and therefore adding nothing at all to the bill."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Extended thinking pays off on multi-step problems where the model must hold several constraints at once. Mechanical work such as lookups, extracting a field, or converting a format gains nothing from it, and a clear output constraint is the right tool there. Because thinking is billed like output, applying it only to the refund decision keeps the cost where the benefit is.",
+      "distractor_explanations": {
+        "A": "A lookup is a mechanical task. Thinking adds token cost without improving the answer.",
+        "C": "Format conversion is a task where thinking is left off; a prompt with an output constraint does the job.",
+        "D": "Thinking is billed as output whether or not the content is displayed, so using it on mechanical steps is wasted spend."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "When Extended Thinking Earns Its Cost",
+      "id": "CCDV-E16-Q24",
+      "exam_id": 16,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q0819"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 25,
+      "prompt": "A team plans the budget for a nightly Message Batches job. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "A batch finishes in a predictable few minutes, with the discount paid for by a shorter queue than synchronous traffic gets."
+        },
+        {
+          "key": "B",
+          "text": "Adding prompt caching to a batch cancels the batch discount, so the two are not combined on one scheduled job."
+        },
+        {
+          "key": "C",
+          "text": "Streaming and batching never compete for the same request, because each request is either user-facing or it is not."
+        },
+        {
+          "key": "D",
+          "text": "Batch results come back in the order the requests were submitted, so a result can be matched to its input by position."
+        },
+        {
+          "key": "E",
+          "text": "The batch discount is a version-pinned figure, so the budget should confirm the current rate rather than hardcode it."
+        }
+      ],
+      "correct_answers": [
+        "C",
+        "E"
+      ],
+      "explanation": "The Batches API lowers the cost of non-urgent, high-volume work, and the current discount is version-pinned, so a budget should confirm the rate against the reference at build time instead of baking in a number. Streaming improves how fast one response feels to a user in the loop, while batching lowers the bill where nobody waits, so the two never compete for the same request.",
+      "distractor_explanations": {
+        "A": "Batch latency is non-deterministic and can reach 24 hours. The lower price is paid for with that latency.",
+        "B": "The two compound. The discount lowers each request, and caching lowers the repeated prefix inside each one.",
+        "D": "Results arrive in arbitrary order. A `custom_id` on each request is what joins results to inputs."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Batch Economics",
+      "id": "CCDV-E16-Q25",
+      "exam_id": 16,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q0820"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 26,
+      "prompt": "A Sonnet-based planning agent misses its eval bar. In one release the team moves to Opus, raises the effort setting, and rewrites the system prompt. The score improves and the team credits the model upgrade. What is the flaw in that conclusion?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Moving up a tier is not justified until a prompt rewrite has been tried on every failing case, whatever the eval shows."
+        },
+        {
+          "key": "B",
+          "text": "Raising effort should never be combined with a model change; the two settings conflict and cancel each other out in practice."
+        },
+        {
+          "key": "C",
+          "text": "Three changes shipped together, so no single one earns credit; change only one lever at a time and re-run the eval."
+        },
+        {
+          "key": "D",
+          "text": "The eval should have been skipped, since a model upgrade is validated by reading a few outputs rather than by scores across cases."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The eval workflow is to change one component at a time: if you rewrite the prompt, adjust the reasoning effort, and switch the model in one pass and the score moves, you have learned nothing about which change caused it. Analogy: if you change the recipe, the oven temperature, and the brand of flour in one bake and the cake improves, you cannot say which change mattered or which was wasted money. The Opus upgrade is the priciest of the three, so crediting it without isolating it could lock in avoidable cost.",
+      "distractor_explanations": {
+        "A": "Step up a tier when an eval shows the current model missing the bar on the hardest cases and a wrong answer is costly. No rewrite-first rule exists.",
+        "B": "Model choice and reasoning effort are independent levers that compose. The flaw is changing them together, not combining them.",
+        "D": "A model change is promoted on a measured score against your cases, so the eval is the right instrument."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Eval-Gated Model Changes",
+      "id": "CCDV-E16-Q26",
+      "exam_id": 16,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q0821"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 27,
+      "prompt": "A team runs two features. Feature A answers high-volume lookup questions where the output shape is obvious. Feature B plans dependent multi-step changes where a wrong plan is costly. Which pairing of model and reasoning settings fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both features on the smallest tier with the highest effort; extra reasoning lets the cheapest model cover every level of difficulty seen."
+        },
+        {
+          "key": "B",
+          "text": "Feature A on a smaller or balanced tier with reasoning off; feature B on a capable tier with a higher effort setting for its planning."
+        },
+        {
+          "key": "C",
+          "text": "Feature A on the most capable tier with high effort for safety; feature B on the smallest tier with reasoning off to hold cost down further."
+        },
+        {
+          "key": "D",
+          "text": "Both features on the most capable tier with reasoning off, because choosing the model already decides how much the model thinks."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Model choice and reasoning mode are separate and composable levers. A capable model with reasoning off is fast and direct, while the most demanding tasks pair a capable model with a higher effort setting. Simple, high-volume lookups need neither extra capability nor extra thinking, so spending on them is wasted.",
+      "distractor_explanations": {
+        "A": "Reasoning does not turn a small model into a larger one, and high effort is wasted on lookups.",
+        "C": "This reverses the fit: the simple feature gets expensive capacity and the hard one gets none.",
+        "D": "Model choice and reasoning mode are separate decisions; thinking is set per request."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Model + Reasoning Pairing",
+      "id": "CCDV-E16-Q27",
+      "exam_id": 16,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q0822"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 28,
+      "prompt": "A team is deciding between a workflow and an agent. Which condition counts in favor of building an agent?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The cost of an error is real, and step-level guardrails have to sit in front of each stage of the process."
+        },
+        {
+          "key": "B",
+          "text": "Every execution follows the same sequence of steps, so the whole path can be written down ahead of time by the team."
+        },
+        {
+          "key": "C",
+          "text": "Observability with standard tooling is required, with each step showing up in ordinary operational dashboards."
+        },
+        {
+          "key": "D",
+          "text": "Non-determinism is acceptable, and what the agent can do is constrained by the toolset registered for that agent."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The decision table pairs each agent condition with a workflow condition. A workflow fits when you can enumerate the steps, when errors are costly enough for step-level guardrails, when standard observability is required, and when inputs are constrained. An agent fits when you can specify the goal and the tools but not the path, and when non-determinism is acceptable because the agent's possible actions are constrained by its registered toolset.",
+      "distractor_explanations": {
+        "A": "Step-level guardrails attach to the steps of a workflow. They are a reason to prefer one.",
+        "B": "A fixed, enumerable path points to a workflow. An agent adds behavior the task does not need.",
+        "C": "Standard-tool observability is a reason to choose a workflow, where each step is enumerated in code."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Workflow or Agent",
+      "id": "CCDV-E16-Q28",
+      "exam_id": 16,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q0823"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 29,
+      "prompt": "A team deploys an agent for open-ended vendor research. Operations asks why the usual per-step success dashboards no longer explain what happened in a failed run. What is the underlying reason?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Agent runs are unobservable by design, so teams should rely on final-output checks and skip inspection of intermediate steps."
+        },
+        {
+          "key": "B",
+          "text": "The dashboards were built for workflows, which fail more often than agents, since their thresholds are tuned to the wrong error rates here."
+        },
+        {
+          "key": "C",
+          "text": "Agents run outside the application's process, so their steps are unable to reach a logging system the team already runs."
+        },
+        {
+          "key": "D",
+          "text": "Because the path emerges from the model's reasoning over context, observability needs transcript-level tooling, not standard logging."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "An agent chooses its own path at run time, shaped by the model's reasoning over accumulated context, instead of following branches written in your code. That is why observability moves from standard operational logging to transcript-level tooling. Analogy: a city bus follows a fixed route, so a timetable dashboard shows exactly where it was late, while a taxi picks its own streets, and to understand a bad trip you need the driver's trip log rather than a bus timetable. The bus is a workflow, the taxi is the agent, and the trip log is the transcript. Agent runs are not unobservable; they just need a different kind of record than per-step dashboards.",
+      "distractor_explanations": {
+        "A": "Agent runs can be inspected through transcripts. Skipping intermediate steps leaves failures impossible to localize.",
+        "B": "Failure rates are not the point. An agent's route through a task is chosen at run time, so a per-step view does not describe it.",
+        "C": "Agent loops run in your process or a hosted one, and nothing prevents logging. The issue is that the path is not a fixed sequence of steps."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Cost of Choosing an Agent",
+      "id": "CCDV-E16-Q29",
+      "exam_id": 16,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q0824"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 30,
+      "prompt": "A team is choosing how an agent carries state between sessions. Which statement describes the two opposite ways a wrong memory-scope choice fails?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Too much in-context state inflates every call and its bill, while too little persisted state means unwritten facts vanish at session end."
+        },
+        {
+          "key": "B",
+          "text": "Too much in-context state corrupts the stored summaries, while too little persisted state forces the loop to restart on every turn of a session."
+        },
+        {
+          "key": "C",
+          "text": "Both failures appear in stateless agents, since in-context and persisted memory carry no cost that grows with session length."
+        },
+        {
+          "key": "D",
+          "text": "Too much in-context state makes calls cheaper because the model re-reads less, while too little persisted state raises retrieval latency on each call."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Memory scope sets what an agent knows when a new session starts, and a wrong choice fails in opposite directions. Holding too much state in the active conversation inflates every API call, because the model re-reads the whole conversation each turn and the bill grows with session length. Holding too little in persistent storage strips the agent of memory across sessions, because anything not written down disappears when the conversation ends.",
+      "distractor_explanations": {
+        "B": "In-context state does not corrupt stored summaries. The real risk is a growing token bill and a filling window.",
+        "C": "In-context memory scales cost with session length. Stateless agents avoid that by keeping nothing between sessions.",
+        "D": "The model re-reads the full conversation on every turn, so more in-context state raises the bill rather than lowering it."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Memory Scope Failure Modes",
+      "id": "CCDV-E16-Q30",
+      "exam_id": 16,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q0825"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 31,
+      "prompt": "A bot reviews pull requests and the team lets its approval merge changes automatically, including changes to the payment-authorization module the team has marked sensitive. The bot's findings are usually right. What should change?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Run the bot's review after the merge instead, with findings arriving when a wrong change can still be corrected at no cost to the team."
+        },
+        {
+          "key": "B",
+          "text": "Add a second automated reviewer on a different model, since two agreeing approvals can stand in for the human sign-off step."
+        },
+        {
+          "key": "C",
+          "text": "Treat the bot's work as input and require a person to review sensitive-code changes before merge, however confident the bot or its review sounds."
+        },
+        {
+          "key": "D",
+          "text": "Nothing, since a bot with a strong accuracy record has earned the right to be the only reviewer of low-volume sensitive code."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Gates go where an action is hard to undo or touches code the team has marked sensitive. There the agent's work is an input to a human decision, not a replacement for one, so a person must review before merge no matter how confident the bot or its review sounds. Analogy: a spell-checker can flag typos in a legal contract, but a lawyer still signs it, because the signature is the step that is hard to reverse. The bot is the spell-checker, and the merge is the signature. A second bot is just another spell-checker.",
+      "distractor_explanations": {
+        "A": "A review after merge lets the risky change land first. The gate has to sit before the point where a finding turns into a hard-to-reverse action.",
+        "B": "Two automated approvals are still no human decision, and both can share the same blind spots.",
+        "D": "The agent should never be the only gate on code marked sensitive; its accuracy record does not remove that rule."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Human-in-the-Loop Placement",
+      "id": "CCDV-E16-Q31",
+      "exam_id": 16,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q0826"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 32,
+      "prompt": "An escalation-support agent kept its full history in context during development, in continuous sessions of 10 to 15 turns. In production, state accumulates across several shorter sessions, and by session four over 45,000 tokens are used before the first tool call, so results come back incomplete. What should the team have done before choosing in-context memory?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Raise `max_tokens` on each request, so that the accumulated history has more room inside the model's context window."
+        },
+        {
+          "key": "B",
+          "text": "Test with even longer single sessions in development, which would have shown the window filling at the same point as it did in production."
+        },
+        {
+          "key": "C",
+          "text": "Measure expected state per session, including history and tool schemas, against the context limit, and use external storage if needed."
+        },
+        {
+          "key": "D",
+          "text": "Make the agent stateless, since an agent working escalation cases never needs anything from an earlier session or earlier cases."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Memory scope is chosen at design time from the shape of the session. In-context memory is re-sent on every call, so token cost grows with each turn and across sessions that carry state forward, and the team should measure expected state size against the limit before relying on it. Analogy: packing for a trip by trying the suitcase with one weekend's clothes, then discovering it will not close once a month of laundry is added. The weekend is the single development session, the month is production's accumulated state, and the storage locker is external storage. Packing a longer weekend bag in development would only have repeated the same shape and missed the problem.",
+      "distractor_explanations": {
+        "A": "`max_tokens` limits output length. It does not enlarge the context window or reduce what the history already occupies.",
+        "B": "Development used one long session while production accumulates state across sessions. Those shapes differ, so the test would still have missed it.",
+        "D": "Escalation cases continue across sessions, so the agent needs state carried forward. Stateless fits self-contained jobs."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Memory Scope at Design Time",
+      "id": "CCDV-E16-Q32",
+      "exam_id": 16,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q0827"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 33,
+      "prompt": "A teammate argues that an agent is an upgrade over a simpler pattern in every case. What does choosing an agent add compared with a workflow?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Lower token use on each task, with the model skipping the steps that a workflow would run on every input it receives."
+        },
+        {
+          "key": "B",
+          "text": "A fixed run path that follows the same enumerated steps, which makes the behavior easy to predict and to test."
+        },
+        {
+          "key": "C",
+          "text": "Coordination overhead, expanded context costs, and more surface area for failure than a simpler pattern carries."
+        },
+        {
+          "key": "D",
+          "text": "Standard operational logging that fully explains each run, which removes the need for transcript-level tooling when debugging."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Agents carry coordination overhead, expanded context costs, and more surface area for failure than simpler patterns. That is why the first design decision is whether the problem needs an agent at all, and why the progression runs from a single call to a workflow to an agent.",
+      "distractor_explanations": {
+        "A": "Agents usually add context cost, since tool results and reasoning accumulate in the window.",
+        "B": "A fixed path is the property of a workflow. An agent's path emerges from the model's reasoning.",
+        "D": "Agents need transcript-level tooling to explain a run, because the path is not enumerated in code."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Cost of Choosing an Agent",
+      "id": "CCDV-E16-Q33",
+      "exam_id": 16,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q0828"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 34,
+      "prompt": "A team reviews a product that handles free-form requests. Which TWO statements about choosing between a workflow and an agent are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Inputs drawn from a small, well-constrained set are a sign that an agent fits better, since the model can sequence tools for them."
+        },
+        {
+          "key": "B",
+          "text": "An agent is the safer default for a new feature, since it can do what a workflow does with no added cost."
+        },
+        {
+          "key": "C",
+          "text": "A workflow suits requests whose path cannot be listed ahead of time, as its steps are easy to observe in logs."
+        },
+        {
+          "key": "D",
+          "text": "Variable inputs that would need dozens of conditional branches in a workflow are a sign that an agent may fit better."
+        },
+        {
+          "key": "E",
+          "text": "A workflow chosen where an agent is needed breaks the first time an input falls outside the path it was built for."
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "Choosing the pattern is the first decision, and it fails in two directions. An agent where a workflow would do adds behavioral complexity without adding capability. A workflow where an agent is needed produces a system that breaks whenever input deviates from the predetermined path, and inputs that would need dozens of conditional branches are the usual signal that the path cannot be enumerated.",
+      "distractor_explanations": {
+        "A": "Well-constrained inputs and a fixed sequence point to a workflow. An agent fits when the path cannot be enumerated in advance.",
+        "B": "An agent adds behavioral complexity and cost. The guidance starts from the simplest pattern that works.",
+        "C": "A workflow needs enumerable steps. An unlistable path is a reason to consider an agent."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Workflow or Agent",
+      "id": "CCDV-E16-Q34",
+      "exam_id": 16,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q0829"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 35,
+      "prompt": "A team compares memory approaches for several agents. Which TWO statements about what each approach costs or loses are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Stateless agents carry the heaviest read and write logic, with every independent session rebuilt from stored history."
+        },
+        {
+          "key": "B",
+          "text": "Summarized memory costs fewer tokens than replaying history, since the agent sees only what the summarizer chose to keep."
+        },
+        {
+          "key": "C",
+          "text": "In-context memory adds retrieval latency to every call, because the state has to be fetched from a store before each turn."
+        },
+        {
+          "key": "D",
+          "text": "External storage adds retrieval latency to calls and requires read and write logic that the team must build and maintain."
+        },
+        {
+          "key": "E",
+          "text": "Summarized memory preserves every detail of earlier sessions, so it needs no carefully written summarizer prompt at all."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "Each memory scope has its own cost. In-context memory has zero retrieval overhead but inflates tokens as the conversation grows and vanishes when the session ends. External storage persists state but adds latency and read and write code. Summarized memory is cheaper than full replay but depends on what the summarizer keeps. Stateless agents carry no overhead and lose all prior context. Analogy: a notebook you keep on your desk is quick to read but fills up, a filing cabinet down the hall keeps everything but takes a walk each time, and a one-page recap is quick to read but only has what the writer chose to include. The tempting mistakes hand one approach's cost to another, such as retrieval latency to in-context memory.",
+      "distractor_explanations": {
+        "A": "Stateless agents store and retrieve nothing, so they have no such overhead. They lose all prior context.",
+        "C": "In-context memory has no retrieval overhead. Its cost is that tokens grow with the conversation and everything is lost when the session ends.",
+        "E": "Summarization drops detail by nature. Anything the summarizer does not preserve is unavailable to the agent."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Memory Scope Trade-offs",
+      "id": "CCDV-E16-Q35",
+      "exam_id": 16,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q0830"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 36,
+      "prompt": "A new extraction feature has a strict JSON contract, several known edge cases that examples can cover, and inputs that mix instructions with pasted documents. Which prompt approach fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Few-shot examples alone, as a well-chosen set of examples replaces the need for tags or an explicit output constraint."
+        },
+        {
+          "key": "B",
+          "text": "A longer system prompt with detailed descriptions only, since descriptive text is what pins down edge cases and formats well."
+        },
+        {
+          "key": "C",
+          "text": "Stack all four, using a system prompt for the contract, XML tags for inputs, examples of edge cases, and an output constraint."
+        },
+        {
+          "key": "D",
+          "text": "A single zero-shot instruction, since added techniques only lengthen the prompt and cannot improve a well-defined task like this one."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Stacking all four techniques fits a clearly defined output contract with edge cases that examples can cover: the system prompt carries the contract, XML tags separate inputs from instructions, few-shot examples show the exact shape, and an output constraint fixes the form. A simple task such as summarizing a paragraph would only need one of them.",
+      "distractor_explanations": {
+        "A": "Examples show the pattern, but the constraint states the form, and tags keep inputs and examples separate from the instructions.",
+        "B": "Description alone does not pin down structure. Examples and an output constraint show and fix the shape.",
+        "D": "A strict contract with known edge cases is where the added techniques pay off. Zero-shot suits simple tasks with an obvious shape."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Stacking the Four Techniques",
+      "id": "CCDV-E16-Q36",
+      "exam_id": 16,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q0831"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 37,
+      "prompt": "A team needs few-shot examples for a ticket-labeling prompt and already has an eval set with scored outputs. Where should the examples come from, and how should they be laid out?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Paste the pairs as plain paragraphs after the instructions; tags are needed only when code is mixed with documentation."
+        },
+        {
+          "key": "B",
+          "text": "Draw examples from the top-scoring eval outputs and wrap each pair in tags like `<sample_input>` and `<ideal_output>`."
+        },
+        {
+          "key": "C",
+          "text": "Pick the lowest-scoring outputs, so the examples show Claude exactly which mistakes to avoid in later responses."
+        },
+        {
+          "key": "D",
+          "text": "Write each example by hand; model outputs from an eval would teach the prompt to repeat its own earlier mistakes."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Few-shot examples show a pattern instead of describing it, and one correct input and output pair gives Claude the exact shape to match. You can reuse some of your highest-scoring eval outputs rather than writing examples from scratch, and wrapping them in consistent tags keeps Claude from reading an example as part of the instructions.",
+      "distractor_explanations": {
+        "A": "Consistent XML structure keeps the boundary between examples and the actual prompt clear, so Claude does not read them as part of the task.",
+        "C": "Examples show the pattern to match, so they should be correct input and output pairs, not failures.",
+        "D": "Examples can be drawn from the highest-scoring eval outputs rather than written from scratch."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Few-Shot Examples",
+      "id": "CCDV-E16-Q37",
+      "exam_id": 16,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q0832"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 38,
+      "prompt": "A team plans to use structured outputs in a production pipeline. Which TWO statements about the two mechanisms are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "JSON outputs constrain the final response to a schema, which removes parse-and-retry code that would otherwise wrap each call."
+        },
+        {
+          "key": "B",
+          "text": "Strict tool use and JSON outputs constrain different parts of a request, so they can be used alone or together in one request."
+        },
+        {
+          "key": "C",
+          "text": "A response that matches the schema is certain to arrive, so the application no longer needs to check `stop_reason`."
+        },
+        {
+          "key": "D",
+          "text": "Both mechanisms can be combined with prefilling the assistant message to anchor the opening of the structure in the reply."
+        },
+        {
+          "key": "E",
+          "text": "Strict tool use constrains the model's final prose answer, while JSON outputs validate the arguments that Claude passes to tools."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Structured outputs move output control from the prompt into the API. JSON outputs, set through `output_config.format` with a schema, constrain the final response, and they remove the parse-and-retry code you would otherwise write around each call. Strict tool use validates the arguments Claude passes to a tool before your code runs. The two constrain different parts of a request, so you can use either alone or both together.",
+      "distractor_explanations": {
+        "C": "A refusal or a `max_tokens` truncation can still return output that does not match, so the code still checks `stop_reason`.",
+        "D": "JSON outputs and prefilling are incompatible, so the two patterns cannot run on one request.",
+        "E": "It is the other way round: JSON outputs constrain the final response, and strict tool use validates tool arguments."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Structured Outputs",
+      "id": "CCDV-E16-Q38",
+      "exam_id": 16,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q0833"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 39,
+      "prompt": "In a six-pass classifier trace, the last pass replaces all the descriptive instructions with a JSON schema and two few-shot examples. What does the trace report for that final pass?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Parsing becomes reliable and latency drops, while accuracy on ambiguous tickets stays where pass 4 had already left it."
+        },
+        {
+          "key": "B",
+          "text": "It leaves latency unchanged, as the model still reads about as much instruction text as it did before the rewrite."
+        },
+        {
+          "key": "C",
+          "text": "It shortens the output but fixes nothing about parsing, with pass 4 having already made the output reliable for the parser."
+        },
+        {
+          "key": "D",
+          "text": "It lifts accuracy on ambiguous tickets well above pass 4, with the examples teaching the boundary between the categories."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "In the six-pass trace, pass 6 swaps the pile of descriptive text for an output constraint and two examples. The parser now works on every ticket and latency drops, but accuracy on ambiguous tickets matches pass 4: the rewrite fixed the form and the length of the output, not the model's judgment. Analogy: replacing a rambling instruction manual with a short form that has tick-boxes means the clerk fills it in quickly and consistently, but the form does not make the clerk better at deciding the hard cases. The tempting wrong answers credit the rewrite with accuracy it never produced.",
+      "distractor_explanations": {
+        "B": "The rewrite removes the long instructions and the verbose output they induced, and latency drops.",
+        "C": "Pass 4 still returned full explanations on ambiguous tickets, which broke the parser. The rewrite is what fixed parsing.",
+        "D": "The trace reports accuracy on ambiguous tickets matching pass 4. The gain is in parsing and latency, not accuracy."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Reading the Six-Pass Trace",
+      "id": "CCDV-E16-Q39",
+      "exam_id": 16,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q0834"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 40,
+      "prompt": "In a classifier prompt's revision log, a pass that adds `Never return two categories.` still breaks on ambiguous tickets. A later pass adds two paragraphs of edge cases, and responses grow past 2,000 characters with higher latency and no accuracy gain. Which statement separates the two failures?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Both are diagnostic failures, since adding any text to a prompt is wrong, and the fix for each is to remove the prompt and start over again."
+        },
+        {
+          "key": "B",
+          "text": "The second is the diagnostic failure, as the longer prompt hid the real defect, while the first merely shows that edge cases exist."
+        },
+        {
+          "key": "C",
+          "text": "The first is a diagnostic failure (description instead of a constraint); the second is an engineering failure from prompt length."
+        },
+        {
+          "key": "D",
+          "text": "Both are engineering failures caused by latency, as neither pass changed the model that handles the tickets or its settings."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Two different failures hide in a growing prompt. Describing a problem where a constraint is missing is a diagnostic failure, and a prompt so long that it induces long, unfocused output and slower responses is an engineering failure, which can appear even after the first is fixed. Analogy: a driver who is lost keeps adding stops to the route instead of checking the map, which is the wrong diagnosis, and the heavily loaded car then runs slower, which is a separate cost of all that extra baggage. Both fixes are the same structural move: an output constraint and two examples.",
+      "distractor_explanations": {
+        "A": "The two failures are distinct. A prompt still needs its constraint and examples, and the second failure is about length and latency.",
+        "B": "This reverses them. The first pass misidentified the problem by describing it, while the second is the length and latency regression.",
+        "D": "Only the second shows a latency effect. The first is a misdiagnosis: a constraint was needed, not description."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Diagnosing Before Re-prompting",
+      "id": "CCDV-E16-Q40",
+      "exam_id": 16,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q0835"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 41,
+      "prompt": "A ticket assistant returns a full sentence where the router expects a label, and over a long chat its tone drifts into casual advice. A teammate proposes one long prompt rewrite. What does the diagnosis table suggest?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Do the single long rewrite, letting one longer prompt hold both the label contract and the tone rules without a new technique."
+        },
+        {
+          "key": "B",
+          "text": "Treat them as two failures: an output constraint for the label shape, and a more specific system prompt for the drift."
+        },
+        {
+          "key": "C",
+          "text": "Add few-shot examples only, expecting a handful of examples to fix both the answer shape and the tone drift at once."
+        },
+        {
+          "key": "D",
+          "text": "Add an output constraint alone, expecting that forcing the label shape will also stop the tone from drifting in later turns."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The diagnosis table maps each failure to the technique that is missing: a wrong shape points to an output constraint, and drift across turns points to a more specific system prompt. Two different symptoms mean two different missing pieces, and each gets its own fix rather than one longer rewrite. Analogy: a car that pulls to the left and has a squeaking brake needs the alignment checked and the brake pad replaced; tightening every bolt in the garage fixes neither. The tempting wrong options give one technique credit for both jobs.",
+      "distractor_explanations": {
+        "A": "A longer prompt is the instinct the course warns against. Each failure type names the one technique that is missing.",
+        "C": "Examples address an invented structure. Drift across turns points to an underspecified system prompt, a separate technique.",
+        "D": "An output constraint fixes the form of the response. It does not hold role, scope, and tone steady across turns."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Diagnosing Two Failures",
+      "id": "CCDV-E16-Q41",
+      "exam_id": 16,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q0836"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 42,
+      "prompt": "A team registers two tools named `tool1` and `tool2`, and Claude often picks the wrong one. Which change to the name field helps most?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Keep the generic names but add an alphabetical prefix, as Claude checks tool names in sorted order."
+        },
+        {
+          "key": "B",
+          "text": "Lengthen each name into a full sentence, since Claude routes on the number of words in a tool's name."
+        },
+        {
+          "key": "C",
+          "text": "Use specific names that say what each tool does, such as `get_account_balance` in place of a generic label."
+        },
+        {
+          "key": "D",
+          "text": "Leave the names alone, with the `input_schema` used as the main signal when Claude decides which tool to select."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A tool schema has a name, a description, and an input schema. The name is a short identifier that should be specific, so `get_account_balance` tells Claude far more than `get_data` or `tool1` does. The description does the heavier lifting, but a generic name throws away a free signal.",
+      "distractor_explanations": {
+        "A": "Claude does not pick tools by alphabetical order. It reads the name and the description.",
+        "B": "The name should be a short identifier that is specific. A sentence in the name field is not the fix.",
+        "D": "Claude reads the name and description to decide whether to call a tool. The input schema is a secondary signal."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Schema Anatomy",
+      "id": "CCDV-E16-Q42",
+      "exam_id": 16,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q0837"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 43,
+      "prompt": "A team grows from one MCP server to six, all configured in a `.mcp.json` file that is committed to the repository. Where does the risk concentrate?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "In the context window, where each server's tool definitions carry its secrets into the prompt that Claude reads."
+        },
+        {
+          "key": "B",
+          "text": "In each server's stdio subprocess, where every extra process echoes its environment variables back to the other servers."
+        },
+        {
+          "key": "C",
+          "text": "In the tool-result blocks, where each server logs the credentials it receives into the results it returns to Claude."
+        },
+        {
+          "key": "D",
+          "text": "In the committed `.mcp.json`, because each added server is another place a credential could be written inline by mistake."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Adding MCP servers increases the number of places a secret could be mishandled, and the risk concentrates on the `.mcp.json` file because it is committed to the repository. A value written inline rides along with every clone and enters repository history, where overwriting it later does not remove it. The configuration file should hold only the server address and a variable reference, with the value kept in an environment variable.",
+      "distractor_explanations": {
+        "A": "Tool definitions add context cost, but they do not carry credentials into the prompt.",
+        "B": "Servers do not share environment values with each other. The exposure comes from what is written in the committed file.",
+        "C": "Credentials in a configuration file are not copied into tool results. The risk is the file entering version control."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "MCP Server Risk",
+      "id": "CCDV-E16-Q43",
+      "exam_id": 16,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q0838"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 44,
+      "prompt": "A team can connect a maintained MCP server for a service. Which situation still justifies writing tool schemas by hand instead?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The team wants to narrow the exposed tools, and a connected server's list cannot be restricted."
+        },
+        {
+          "key": "B",
+          "text": "No server covers the use case, or the team needs description quality that a general server's tools lack."
+        },
+        {
+          "key": "C",
+          "text": "The team wants Claude to route among the tools by description, and tools from an MCP server are chosen differently."
+        },
+        {
+          "key": "D",
+          "text": "The service's API changes over time, and hand-written schemas are the way to stay in step with an evolving service."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Hand-written schemas make sense when no MCP server covers the use case, or when the team needs a precision of description quality that a general-purpose server does not offer. Scope control alone is not a reason, because the MCP Connector can allowlist and denylist tools per server. Analogy: buying a ready-made suit covers most people, and you only visit a tailor when no suit exists in your size or when the sleeve length has to be exact. Needing fewer pockets is a job the shop can do without custom cutting. The tempting wrong options treat scope or routing as things only a tailor can fix.",
+      "distractor_explanations": {
+        "A": "The API MCP Connector can allowlist or denylist tools per server through `mcp_toolset`, so scope alone does not justify manual work.",
+        "C": "From Claude's side, MCP tools are selected through the same description-based routing as hand-written ones.",
+        "D": "A maintained server tracks the service's current API. Keeping up with changes is a reason to prefer one."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "MCP vs Manual Schemas",
+      "id": "CCDV-E16-Q44",
+      "exam_id": 16,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q0839"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 45,
+      "prompt": "A team reviews why Claude confuses two of its tools. Which TWO statements about tool selection are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Claude chooses a tool by comparing the input schemas first, so identical parameter shapes do not cause confusion."
+        },
+        {
+          "key": "B",
+          "text": "Claude routes on name plus description, with parameter types serving as a secondary signal for that choice."
+        },
+        {
+          "key": "C",
+          "text": "Tools that do similar things are best kept apart by extending each description to several paragraphs of product detail."
+        },
+        {
+          "key": "D",
+          "text": "Overlapping parameter types between tools are the most common source of wrong-tool calls made by an agent."
+        },
+        {
+          "key": "E",
+          "text": "Adding more required fields to each schema is the usual way to keep two similar tools apart in practice."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "Claude reads the tool name and the description to decide which tool fits, and treats parameter types as a secondary signal. When two tools accept the same parameter shape, routing collapses to the description alone, which is why overlapping parameter types are the most common source of wrong-tool calls. Analogy: two mailboxes with identical slot sizes cannot be told apart by the slot, so the labels on the front decide where the letter goes. If the labels also read alike, letters land in the wrong box. The tempting options add fields or words rather than clearer labels.",
+      "distractor_explanations": {
+        "A": "Claude relies on name and description first. Identical signatures push routing onto descriptions alone.",
+        "C": "Overlong descriptions bury the trigger conditions. Exclusion conditions or a merge into one tool work better.",
+        "E": "Marking fields required does not separate similar tools. Required fields are for inputs the call cannot do without."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Selection Signals",
+      "id": "CCDV-E16-Q45",
+      "exam_id": 16,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q0840"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 46,
+      "prompt": "A team wants Claude to use a project-tracking service. A well-known MCP server for it already exists. Before choosing it over hand-written tool schemas, what should the team verify?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "That the server covers the specific operations they need and is actively maintained against the service's current API as that API changes over time."
+        },
+        {
+          "key": "B",
+          "text": "That the server uses the older SSE transport, which is the transport clients expect from third-party servers and hosted integrations."
+        },
+        {
+          "key": "C",
+          "text": "That each tool description has been cut to a single sentence, so the server's definitions cost less context than hand-written ones."
+        },
+        {
+          "key": "D",
+          "text": "That the server was written by the same team that owns the application, since only in-house servers can be connected by an MCP client."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "When a well-maintained MCP server already exists, connecting to it saves writing and owning schemas for no extra capability, and from Claude's point of view the tools look the same as ones you wrote. The checks are whether it covers the specific operations you need and whether it is actively maintained against the service's current API. If not, writing your own schemas is the better path.",
+      "distractor_explanations": {
+        "B": "SSE-only is deprecated, and new integrations use Streamable HTTP for remote servers. Transport is not what decides adoption.",
+        "C": "Tool definitions from a server still occupy context, and one-sentence descriptions route poorly. Coverage and maintenance are the checks.",
+        "D": "Any MCP server can be connected by a client. Ownership is not a requirement."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "MCP vs Manual Schemas",
+      "id": "CCDV-E16-Q46",
+      "exam_id": 16,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q0841"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 47,
+      "prompt": "A developer inspecting a response sees a block of internal reasoning positioned just ahead of the block that holds the answer. Which setting must have been enabled?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Prompt caching, where a cache write stores a copy of the model's reasoning ahead of each cached answer in the reply."
+        },
+        {
+          "key": "B",
+          "text": "Parallel tool use, where each tool call in a turn is preceded by a block that holds the model's planning notes."
+        },
+        {
+          "key": "C",
+          "text": "Extended thinking, because a thinking block appears in a response only when extended thinking is enabled for it."
+        },
+        {
+          "key": "D",
+          "text": "Structured outputs, which put the reasoning behind a schema-constrained response ahead of the JSON it returns."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A tool-use conversation is built from blocks: text, tool_use, tool_result, and thinking. The thinking block carries Claude's internal reasoning, sits just ahead of the block that holds the answer, and appears only when extended thinking is enabled. On the newest models its content is omitted by default unless a summarized display is requested.",
+      "distractor_explanations": {
+        "A": "Caching stores the processing work for a prefix. It does not produce reasoning blocks.",
+        "B": "Parallel tool use adds more tool_use blocks. Reasoning appears as a thinking block only with extended thinking.",
+        "D": "Structured outputs constrain the response against a schema. They do not add a reasoning block."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Thinking Blocks in Responses",
+      "id": "CCDV-E16-Q47",
+      "exam_id": 16,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q0842"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 48,
+      "prompt": "A security lead reviews an agent that reads untrusted pages. Which statement describes the design the course recommends?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Layer several controls, so a bypass of one degrades the defense instead of collapsing it, because no layer is enough alone."
+        },
+        {
+          "key": "B",
+          "text": "Rely on one strong hook, as an enforced control that runs deterministically makes the other layers redundant for the team."
+        },
+        {
+          "key": "C",
+          "text": "Rely on a detailed system prompt, as clear wording of the rules is the control that holds when the other layers fail."
+        },
+        {
+          "key": "D",
+          "text": "Rely on the model's training against injected instructions, as current models resist them well enough to need no other layer."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Security is layered, and each layer does a different job. The model's training and the classifiers lower how often an injection lands, treating fetched content as data lowers how often a landed one is acted on, and least privilege and hooks bound what an acted-on one can reach. No single layer is sufficient, and a defense that depends on one control holding is one bug away from an incident.",
+      "distractor_explanations": {
+        "B": "Hooks must name what they protect. A defense that depends on one control is one bug away from an incident.",
+        "C": "A prompt instruction is not a security control. Enforcement belongs in hooks, identity, and isolation.",
+        "D": "Training and classifiers are probabilistic. No agent that reads untrusted content is fully immune."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Layered Defense",
+      "id": "CCDV-E16-Q48",
+      "exam_id": 16,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q0843"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 49,
+      "prompt": "A developer asks why Claude acted on a sentence hidden in a retrieved web page even though the system prompt said which instructions to follow. What is the underlying mechanism?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Claude follows instructions that sit inside XML tags, and the page used tags resembling the application's own formatting and structure."
+        },
+        {
+          "key": "B",
+          "text": "Claude loses access to the system prompt once tool results are present, since it follows whichever text it can read at the time."
+        },
+        {
+          "key": "C",
+          "text": "Retrieved pages receive higher priority than the system prompt, because text arriving later in the context overrides earlier instructions in it."
+        },
+        {
+          "key": "D",
+          "text": "The model reads the system prompt, the user's message, and the page as one text stream, with no built-in marker of which tokens are trusted."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A model reads its entire context as one stream of tokens, so it has no built-in way to tell your instructions from instructions embedded in a page, document, or tool result that someone else wrote. That is the mechanism of prompt injection. Because the boundary is not in the text, the reliable defense is to treat fetched content as data and to constrain what the agent can do, rather than to word the prompt more carefully.",
+      "distractor_explanations": {
+        "A": "Models do not require tags to follow instructions. Delimiters help, but they are a soft boundary rather than a rule the model enforces.",
+        "B": "The system prompt remains in context. The problem is that nothing separates it from injected text in the stream.",
+        "C": "No such priority rule exists. The model treats everything in context together, with no structural marker of trust."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Why Injection Works",
+      "id": "CCDV-E16-Q49",
+      "exam_id": 16,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q0844"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 50,
+      "prompt": "A reviewer asks what each defense layer contributes against a hostile instruction hidden in fetched content. Which statement assigns the jobs correctly?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Least privilege lowers how often an injection lands, while training and classifiers bound what a successful action can go on to reach."
+        },
+        {
+          "key": "B",
+          "text": "Hooks lower how often an injection lands by rewriting the page, while classifiers enforce the boundary before each tool call runs."
+        },
+        {
+          "key": "C",
+          "text": "Training and classifiers cut how often injections land, data handling cuts how often they are acted on, and least privilege bounds reach."
+        },
+        {
+          "key": "D",
+          "text": "Treating fetched content as data stops injections from landing at all, so least privilege matters for jailbreak attempts alone."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Each layer does a different job. The model's training and the classifiers over untrusted content reduce how often an injection lands. Treating fetched content as data reduces how often a landed injection is acted on. Least privilege and locked configuration bound what an acted-on instruction can reach, and hooks enforce those bounds before the action and record them. Analogy: a building has a guard who turns most strangers away, a sign saying visitors are not staff, locked doors, and a camera. Each handles a different failure, so removing the locks because the guard is good leaves the building exposed. The wrong options swap the jobs.",
+      "distractor_explanations": {
+        "A": "The jobs are reversed. Training and classifiers act on the model; identity scope bounds the damage.",
+        "B": "Hooks enforce the boundary before a tool runs and log the attempt. They do not rewrite pages or stop injections from landing.",
+        "D": "Data handling reduces how often an injection is acted on. It does not stop injections from landing, and least privilege applies to both threats."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "What Each Defense Layer Does",
+      "id": "CCDV-E16-Q50",
+      "exam_id": 16,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q0845"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 51,
+      "prompt": "A reviewer asks what to log when a steered agent tries to reach a file path or network endpoint that no hook or permission rule names. Which entry fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Each attempted access outside the sandbox boundary, with the triggering tool call and the denied path or endpoint."
+        },
+        {
+          "key": "B",
+          "text": "The fetched source, the action the agent attempted, and the block that stopped it, as for a prompt injection through content."
+        },
+        {
+          "key": "C",
+          "text": "Each privileged action together with the identity that performed it, as for an identity scoped wider than its task."
+        },
+        {
+          "key": "D",
+          "text": "The flagged prompt and the model's refusal of it, as for a jailbreak attempt aimed at the model's safety rules."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The defense checklist pairs each threat with what gets logged. A sandbox escape attempt, where a steered agent reaches for a path or endpoint that no hook or rule names, is logged as every attempted access outside the boundary together with the tool call that triggered it and the path or endpoint denied. Analogy: a building's door log for the fire exit records who pushed on a door they should not have, and which door, whereas the visitor book and the key-card list answer different questions. The wrong options are real entries for other rows of the table.",
+      "distractor_explanations": {
+        "B": "That is the entry for a prompt injection. A sandbox escape is logged by the access attempted and what was denied.",
+        "C": "That entry fits over-broad access. For an escape attempt the record names the denied path or endpoint and the triggering call.",
+        "D": "That is the entry for a jailbreak. A steered agent's out-of-bounds access is recorded as the attempt and its denial."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Logging by Threat",
+      "id": "CCDV-E16-Q51",
+      "exam_id": 16,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q0846"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 52,
+      "prompt": "A developer wants fewer prompts than default mode, but refuses to run in a full bypass on a machine that holds live credentials. Which mode fits, and what is its limit?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "`acceptEdits`, which approves each shell command and file write on the machine, including paths outside the working directory."
+        },
+        {
+          "key": "B",
+          "text": "`dontAsk`, which approves tool calls after a classifier review and is the usual way to cut friction on interactive local work."
+        },
+        {
+          "key": "C",
+          "text": "`plan`, which approves edits once the plan is accepted and keeps a classifier on each later command."
+        },
+        {
+          "key": "D",
+          "text": "Auto mode, where a classifier vets each action first; it is a research preview, not a replacement for review."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Auto mode approves actions after a separate classifier reviews each one first, blocking anything that escalates beyond the request, targets unrecognized infrastructure, or looks driven by hostile content. By default it blocks production deploys, mass deletes, credential exfiltration, and force-push to main. It reduces prompts without a full bypass, but it is a research preview that does not guarantee safety and does not replace reviewing sensitive operations.",
+      "distractor_explanations": {
+        "A": "`acceptEdits` approves edits and common filesystem commands inside the working directory. Other shell commands and protected paths still prompt.",
+        "B": "`dontAsk` auto-denies everything not on an allow list. It is built for locked-down CI, not for reducing local friction.",
+        "C": "Plan mode makes no edits and runs no commands until a plan is approved. It has no classifier."
+      },
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Permission Modes",
+      "id": "CCDV-E16-Q52",
+      "exam_id": 16,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q0847"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Moderate Tier)",
+      "source_file": "moderate-tier-exam-16.json",
+      "source_id": 53,
+      "prompt": "A feature returns the three capital cities of a region as a JSON array, and a correct run sometimes lists them in a different order than the reference. Which grading method fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A code-graded check that parses the JSON and tests that all three cities are present, whatever order they appear in."
+        },
+        {
+          "key": "B",
+          "text": "No automated grader at all, as outputs that vary from run to run cannot be scored by a program with any reliability."
+        },
+        {
+          "key": "C",
+          "text": "Exact string match against the reference text, since the output has a single correct form that can be compared character by character."
+        },
+        {
+          "key": "D",
+          "text": "An LLM judge with a rubric, as only a second model can tell whether a differently ordered list is still correct."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The grading method follows the shape of the output: one correct form takes an exact match, a structural rule takes a code check, and open-ended quality takes a judge. A JSON array of known cities has a rule that a function can validate, so a parse-and-membership check scores a reordered answer correctly at near-zero cost.",
+      "distractor_explanations": {
+        "B": "Code checks suit outputs that must satisfy a rule, such as valid JSON with the right members, even when the exact text varies.",
+        "C": "A reordered but correct array would score zero, since exact match fails every valid reordering or paraphrase.",
+        "D": "A rule that a function can validate does not need a judge. It would add cost and variance for no gain."
+      },
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "Grader Selection",
+      "id": "CCDV-E16-Q53",
+      "exam_id": 16,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q0848"
+    }
+  ]
+}
