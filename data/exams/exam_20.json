@@ -1,0 +1,2280 @@
+{
+  "exam_id": 20,
+  "title": "CCDV-F Mock Exam #20 (Exam-Style Tier)",
+  "description": "Full-length 53-question simulation in the applied-scenario style (120 minutes): constraint-driven scenarios, code and config snippets, and short options that are all real features but only one fits.",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 1,
+      "prompt": "A nightly job streams the results of a finished Message Batch and handles each outcome:\n\n```python\nfor r in client.messages.batches.results(batch_id):\n    kind = r.result.type\n    if kind == \"succeeded\":\n        save(r.custom_id, r.result.message)\n    elif kind == \"errored\":\n        retry_queue.append(r.custom_id)\n```\n\nThe same 3% of records are re-queued every night, fail again in the next batch, and are never saved. Their error type is `invalid_request_error`. What is the flaw in the handler?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It never handles `canceled` and `expired` results, so those requests are dropped without a trace"
+        },
+        {
+          "key": "B",
+          "text": "It requeues errored requests unchanged, but `invalid_request_error` means the body needs fixing first"
+        },
+        {
+          "key": "C",
+          "text": "It should shrink each nightly batch below the 256 MB size limit to stop these errors"
+        },
+        {
+          "key": "D",
+          "text": "It should read the batch's `request_counts` to decide which records to resend in the next nightly batch"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "An `errored` result covers two different situations. When the error type is `invalid_request_error`, the request body itself is wrong, so it must be corrected before it is sent again. Other error types, such as a server error, can simply be retried. A handler that requeues everything keeps replaying the same bad bodies. Analogy: a parcel returned because the address is wrong. Dropping it back in the mailbox unchanged just brings it back next week, so you correct the address first, whereas a parcel delayed by a truck breakdown can simply be sent again. Missing handling for canceled and expired results is a genuine gap, but those are different result types from the one failing here.",
+      "distractor_explanations": {
+        "A": "That gap is real, but it is not what the stem shows. The failing records are `errored` results carrying `invalid_request_error`, not canceled or expired ones.",
+        "C": "Size limits apply to the batch as a whole and can show up as a 413 `request_too_large` at submission. They do not produce per-record errored results for a small share of requests.",
+        "D": "`request_counts` holds only totals for the four result states. It cannot say which records failed or why, while the per-request `custom_id` and error type can."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Errored Batch Results",
+      "id": "CCDV-E20-Q01",
+      "exam_id": 20,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q1008"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 2,
+      "prompt": "A support assistant sends two `document` blocks in one Messages request: a 60-page policy PDF whose answers must show page-level citations, and a short plain-text style guide that should only shape tone. Citations are enabled on the PDF alone. The team wants to keep one request on the first-party API. What is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a `context` string to the style guide stating that Claude must never cite it"
+        },
+        {
+          "key": "B",
+          "text": "Enable `citations` on the style guide too, so the whole request carries one common setting"
+        },
+        {
+          "key": "C",
+          "text": "Convert the style guide into a PDF, giving both documents the same citation format"
+        },
+        {
+          "key": "D",
+          "text": "Split the work into two requests, one per document, and merge the two answers afterwards"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Citations are all-or-none across the documents in a single request: either every document block has `citations.enabled` set to true or none does. Documents that were only meant to guide tone can still be included with citations on, and Claude simply cites what it draws from. Analogy: a group chat where read receipts are on for everyone or off for everyone. You cannot switch them on for one friend only, so you either accept receipts from all or give up on them. A `context` note works like a sticky note on one message, which Claude reads but which does not change the chat setting.",
+      "distractor_explanations": {
+        "A": "`context` is passed to the model as background and is not used toward cited content. It is not a switch that turns citations off for one document.",
+        "C": "The rule concerns the `enabled` flag, not the document type, so a PDF would not change the all-or-none requirement.",
+        "D": "That would avoid the mixed setting, but it breaks the stated wish to keep one request and loses Claude's ability to answer across both documents."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Citations on Some Documents Only",
+      "id": "CCDV-E20-Q02",
+      "exam_id": 20,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q1009"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 3,
+      "prompt": "An overnight analytics job builds a Message Batch whose `custom_id` values are customer email addresses. Creation is rejected, and the error message points at `custom_id`. The job needs to map every result back to its source record, and it runs overnight at the batch discount with no one waiting. Which change fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use an opaque ID like `rec_48213` as `custom_id` and keep a lookup table to the record"
+        },
+        {
+          "key": "B",
+          "text": "Omit `custom_id` and match each result to its request by its position in the results file"
+        },
+        {
+          "key": "C",
+          "text": "Submit one batch per customer, which removes the need for a per-request identifier"
+        },
+        {
+          "key": "D",
+          "text": "Switch the job to synchronous `messages.create` calls and drop the identifiers entirely"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A `custom_id` must be 1 to 64 characters long and contain only letters, digits, hyphens and underscores, so an email address with `@` and dots is rejected. Because results return in any order, the ID is the only reliable join key, so use a short opaque value and keep the mapping to the real record in your own store. This also keeps email addresses out of the batch request itself.",
+      "distractor_explanations": {
+        "B": "`custom_id` is a required field, and results can come back in any order, so position in the file says nothing about which request produced a result.",
+        "C": "Every request in a batch still needs a `custom_id`. One batch per customer also multiplies the calls that count against the batch rate limits.",
+        "D": "That removes the problem but gives up the 50% batch discount. The job is overnight work with no user waiting, which is what batches are for."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batch custom_id Format",
+      "id": "CCDV-E20-Q03",
+      "exam_id": 20,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q1010"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 4,
+      "prompt": "A team passes this schema as `output_config.format` with `type: \"json_schema\"` in a manual request and gets HTTP 400. They still need scores held to 1-5 and summaries kept under 200 characters.\n\n```json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"score\": {\"type\": \"integer\", \"minimum\": 1, \"maximum\": 5},\n    \"summary\": {\"type\": \"string\", \"maxLength\": 200}\n  },\n  \"required\": [\"score\", \"summary\"],\n  \"additionalProperties\": false\n}\n```\n\nWhich change is best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Remove the range and length keywords, keep the types, and check the limits in your own code"
+        },
+        {
+          "key": "B",
+          "text": "Keep the schema unchanged and state both limits in the prompt text for Claude to follow"
+        },
+        {
+          "key": "C",
+          "text": "Declare `score` as an `enum` of the values 1 to 5 and leave the `maxLength` on `summary` in place"
+        },
+        {
+          "key": "D",
+          "text": "Set `additionalProperties` to `true` so the schema may carry keywords the compiler ignores"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Structured outputs accept only part of JSON Schema. Numeric limits such as `minimum` and `maximum`, string limits such as `minLength` and `maxLength`, and `additionalProperties` other than `false` make the API return a 400. Keep the shape in the schema and check the value ranges yourself after parsing. SDK helpers do the same trick for you by stripping the keywords, noting them in the description, and validating locally. Analogy: a vending machine that only accepts certain coins. It cannot check that you paid exactly right for the combo deal, so the cashier at the exit counts the change. Declaring an enum fixes only half of the schema here.",
+      "distractor_explanations": {
+        "B": "The unsupported keywords are still in the schema, so the 400 remains. Moving the limits into the prompt only helps after the schema itself is fixed.",
+        "C": "An `enum` would cover the score, but the `maxLength` on `summary` is still an unsupported keyword, so the request keeps failing with a 400.",
+        "D": "`additionalProperties` must be `false` for objects. The compiler does not ignore unsupported keywords; it rejects the schema with a 400."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Unsupported Schema Keywords",
+      "id": "CCDV-E20-Q04",
+      "exam_id": 20,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q1011"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 5,
+      "prompt": "A contract-review service sends `document` blocks with citations enabled, and its UI links each claim to a PDF page. The team now adds `output_config.format` with a JSON schema so a parser receives typed fields, and every call returns HTTP 400. Only the first-party Messages API is approved. What is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Drop `output_config.format`, keep citations on, and validate the reply's shape in your own code"
+        },
+        {
+          "key": "B",
+          "text": "Keep both, but upload the PDFs through the Files API and reference them by `file_id`"
+        },
+        {
+          "key": "C",
+          "text": "Disable citations and have Claude quote the passage and page number inside the JSON fields"
+        },
+        {
+          "key": "D",
+          "text": "Send the structured call to a Bedrock-hosted model and the citations call to the first-party API"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Citations and structured outputs cannot be combined: if a user-provided document or search result has citations enabled and `output_config.format` is also set, the API returns a 400. Citations need citation blocks interleaved with the text, which strict JSON schema output does not allow. When the UI truly needs citations, keep them and check the reply's shape in your own code. Analogy: a form with fixed boxes versus a report with footnotes. Footnotes cannot live inside the boxes, so you cannot have both on the same page. Moving the files elsewhere does not change the page layout rule.",
+      "distractor_explanations": {
+        "B": "A `file_id` document supports citations like any other source. The conflict is between citations and structured outputs, whatever the document source.",
+        "C": "That gives typed fields, but the page numbers would be model-written text. The UI needs the API-parsed pointers that citations guarantee.",
+        "D": "This uses a second platform that security has not approved, and it leaves two separate answers that still have to be merged."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Citations with Structured Outputs",
+      "id": "CCDV-E20-Q05",
+      "exam_id": 20,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q1012"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 6,
+      "prompt": "A knowledge-base tool returns the block below, and the next request is rejected with a validation error. The app wants Claude to cite the article and also to know how many articles matched.\n\n```json\n{\n  \"type\": \"tool_result\",\n  \"tool_use_id\": \"toolu_01A\",\n  \"content\": [\n    {\"type\": \"text\", \"text\": \"1 article matched.\"},\n    {\"type\": \"search_result\",\n     \"source\": \"kb://refunds\",\n     \"title\": \"Refund policy\",\n     \"content\": [{\"type\": \"text\", \"text\": \"Refunds take 14 days.\"}],\n     \"citations\": {\"enabled\": true}}\n  ]\n}\n```\n\nWhich change fixes it with the least rework?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add `cache_control: {\"type\": \"ephemeral\"}` to the `search_result` block to make the combination valid"
+        },
+        {
+          "key": "B",
+          "text": "Remove the leading text block and put the match count in the `search_result`'s own `content` array"
+        },
+        {
+          "key": "C",
+          "text": "Change `source` to a public https URL instead of the internal `kb://` identifier"
+        },
+        {
+          "key": "D",
+          "text": "Set `citations.enabled` to `false` and let Claude quote the article from plain text"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Inside a `tool_result`, if any block is a `search_result` then every block must be one; mixing in a plain text block triggers a validation error. Supporting text belongs inside one of the search results' own `content` arrays, where it also becomes citable. Analogy: a mail slot labelled for parcels only or letters only. If you shove a letter in with the parcels, the whole delivery bounces, so you tuck the note inside the parcel instead. A different address format would not matter, and a sticker for reuse, the cache setting, does nothing about what the slot accepts.",
+      "distractor_explanations": {
+        "A": "`cache_control` is a real option on search results, used for reuse across requests. It has no effect on the rule about mixing block types.",
+        "C": "`source` accepts any stable string, including internal identifiers. The rejection comes from mixing a text block with a search result in one tool result.",
+        "D": "Tool results can carry cited search results, so this gives up the stated citation need and still leaves the mixed block types in place."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Search Results in Tool Output",
+      "id": "CCDV-E20-Q06",
+      "exam_id": 20,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q1013"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 7,
+      "prompt": "A meeting-notes assistant stores each transcript as a list of speaker turns and must cite whole turns. With plain text documents, citations point at sentence fragments inside a turn. The request uses the same Messages API with citations enabled. Which change fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Send the transcripts as PDF documents so citations are anchored to page numbers"
+        },
+        {
+          "key": "B",
+          "text": "Send each transcript as a custom content document with one content block per speaker turn"
+        },
+        {
+          "key": "C",
+          "text": "Add a `context` string to each document describing the turn boundaries for Claude to respect"
+        },
+        {
+          "key": "D",
+          "text": "Raise `max_tokens` so Claude has room to quote complete turns in its answer"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Plain text and PDF documents are automatically split into sentences, and those are the smallest units Claude can cite. A custom content document is used as supplied, with no further chunking, and its citations refer to your content blocks by index. Putting one block per speaker turn makes each turn the citable unit. Analogy: a pizza. By default the shop cuts it into small slices, and you can only hand over slices. If you want each guest's portion to stay whole, you arrange the pre-cut portions yourself. Telling the shop about portion sizes in a note does not change how it slices.",
+      "distractor_explanations": {
+        "A": "PDF text is chunked into sentences just like plain text, and citations carry page ranges. Neither gives turn-level units.",
+        "C": "`title` and `context` go to the model but are not used toward cited content. The chunking of the document stays the same.",
+        "D": "Chunk granularity is set by the document type, and `cited_text` is not counted toward output tokens, so `max_tokens` plays no part."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Citation Granularity",
+      "id": "CCDV-E20-Q07",
+      "exam_id": 20,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q1014"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 8,
+      "prompt": "A client renders streamed answers from a request with citations enabled:\n\n```typescript\nfor await (const ev of stream) {\n  if (ev.type === \"content_block_delta\") {\n    if (ev.delta.type === \"text_delta\") {\n      blocks[ev.index].text += ev.delta.text;\n    }\n  }\n}\n```\n\nText appears correctly, but no citation ever reaches the UI, although the same request without streaming returns them. What is the flaw?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It should add an `input_json_delta` branch and parse the fragments once the block stops"
+        },
+        {
+          "key": "B",
+          "text": "It should read a final `citations` list from the `message_stop` event once all text has arrived"
+        },
+        {
+          "key": "C",
+          "text": "It indexes `blocks` by `ev.index`, but citations are keyed by `document_index`, so the lookup misses"
+        },
+        {
+          "key": "D",
+          "text": "It ignores `citations_delta` events, each of which carries one citation to add to that text block"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "With streaming, each citation arrives as a `citations_delta` inside a `content_block_delta` event, and each delta holds one citation to push onto the `citations` list of the current text block. A loop that handles only `text_delta` therefore rebuilds the text but silently drops every citation. Analogy: a live TV broadcast that has a captions channel alongside the audio. If you only record the audio track, the words are all there but the on-screen source labels never make it to your copy. Waiting for the end of the show does not help, because the labels were never saved.",
+      "distractor_explanations": {
+        "A": "That delta type streams the input of `tool_use` blocks. Citations use their own delta type inside the same `content_block_delta` event.",
+        "B": "`message_stop` carries no payload. Citations arrive as deltas on the text block while the answer streams.",
+        "C": "`ev.index` is the position of the content block, which is the right key for text. `document_index` sits inside each citation and names the source document."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Streaming Citations",
+      "id": "CCDV-E20-Q08",
+      "exam_id": 20,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q1015"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 9,
+      "prompt": "A gateway routes each request to the cheapest model that accepts PDF input and supports structured outputs. Its routing table is hand-edited after each model launch and has twice sent PDFs to models that rejected them. The first-party API is the only approved platform. What should replace the table?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use `max_input_tokens` from the Models API response as the signal for PDF and structured-output support"
+        },
+        {
+          "key": "B",
+          "text": "Query `GET /v1/models` on a schedule and filter models on their `capabilities` flags before routing"
+        },
+        {
+          "key": "C",
+          "text": "Infer support from the date in each model `id` and assume newer snapshots accept PDFs"
+        },
+        {
+          "key": "D",
+          "text": "Send each request to the cheapest model and retry on the next one after any HTTP 400"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The Models API lists available models and, for each one, a `capabilities` object with flags such as `pdf_input`, `structured_outputs`, `batch` and `citations`, plus fields like `max_input_tokens`. A router that reads those flags stays correct when new models arrive, with no hand-edited table. Analogy: asking the restaurant for today's menu instead of relying on a photocopy from last season. The copy still lists dishes the kitchen stopped making, while a fresh menu always matches what can be ordered. Guessing from the dish name, the model ID, is worse than reading the menu.",
+      "distractor_explanations": {
+        "A": "That field gives the context window size. Support for PDFs and structured outputs sits in the `pdf_input` and `structured_outputs` capability entries.",
+        "C": "A model ID is not a capability signal, and IDs of recent models do not even carry a date. The Models API reports capabilities directly.",
+        "D": "This works, but each rejection costs a round trip, and a 400 can come from a bad request body rather than from missing support."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Capability Routing from the Models API",
+      "id": "CCDV-E20-Q09",
+      "exam_id": 20,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q1016"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 10,
+      "prompt": "A model the organization depends on is marked deprecated with a retirement date. About 30 services and CI jobs share a handful of API keys, and nobody can say which of them still call that model. Which first step finds them most reliably?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Search every repository for the model name and treat the matches as the complete list of callers"
+        },
+        {
+          "key": "B",
+          "text": "Export the Console Usage page as CSV and read the breakdown by API key and model"
+        },
+        {
+          "key": "C",
+          "text": "Wait for the retirement date, then fix whichever services start to fail in production"
+        },
+        {
+          "key": "D",
+          "text": "Replace each pinned model ID with an alias in all services before measuring any usage at all"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Anthropic documents a simple audit: on the Usage page in the Console, export the data as CSV and review the breakdown by API key and model. That shows which keys still send traffic to the deprecated model, so teams can be contacted and migrated before the retirement date. Searching code only finds references that appear in code, and waiting means finding out through failures.",
+      "distractor_explanations": {
+        "A": "Model names often come from environment variables, config services or aliases that a text search misses. Usage data shows what is actually being called.",
+        "C": "Requests to a retired model fail, so this turns the discovery step into a production outage.",
+        "D": "Moving to aliases is not discovery, and it lets future upstream model changes land without anyone tracking them."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Finding Deprecated Model Usage",
+      "id": "CCDV-E20-Q10",
+      "exam_id": 20,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q1017"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 11,
+      "prompt": "A gateway calls the token-counting endpoint before every request to enforce a per-user budget. At peak, count calls return HTTP 429 while `messages.create` calls on the same key still succeed. Only the first-party API is approved. Which explanation and response fit best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Token counting is billed per call, so the account has reached a spend limit and needs it raised"
+        },
+        {
+          "key": "B",
+          "text": "Cache the count responses with a `cache_control` breakpoint so repeated counts stop hitting the limit"
+        },
+        {
+          "key": "C",
+          "text": "Counting shares the input-token budget with `messages.create`, so lower `max_tokens` on the real calls"
+        },
+        {
+          "key": "D",
+          "text": "Counting has its own per-minute limit by tier; count only large prompts or ask for a higher limit"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The token-counting endpoint is free, but it is limited by requests per minute according to your usage tier, and that limit is independent of the limits on creating messages. A gateway that counts every request can exhaust the counting limit while real calls still flow. Counting only prompts near the budget, or requesting a higher limit, addresses the cause. Counting spend is not the issue, because the endpoint costs nothing.",
+      "distractor_explanations": {
+        "A": "Counting is free to use. A spend cap would also block `messages.create`, which the stem says still succeeds.",
+        "B": "Counting does not use prompt caching; `cache_control` blocks are accepted but only act during real message creation.",
+        "C": "Token counting and message creation have separate, independent rate limits, and `max_tokens` affects output rather than the counting endpoint."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Token Counting Limits",
+      "id": "CCDV-E20-Q11",
+      "exam_id": 20,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q1018"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 12,
+      "prompt": "A team puts `cache_control` on a 40k-token system block, then sends the same body to the token-counting endpoint to learn how many tokens a repeat call will bill at the cache-read rate. The response shows one `input_tokens` number for the whole prompt. Which reading is right, and what should they do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Counting applies no caching, so read `cache_read_input_tokens` from `usage` on real responses"
+        },
+        {
+          "key": "B",
+          "text": "Remove `cache_control` from the counting body, which the endpoint rejects"
+        },
+        {
+          "key": "C",
+          "text": "The number already excludes the cached block, so it shows only the part billed at the full rate"
+        },
+        {
+          "key": "D",
+          "text": "Call counting twice with the same body so the second call reads the cache and reports the split"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The token-counting endpoint returns an estimate of total input tokens and does not run caching logic, even if the body carries `cache_control` blocks. To see how much of a real request was read from or written to the cache, inspect `cache_read_input_tokens` and `cache_creation_input_tokens` in the `usage` of an actual response. Analogy: a shop's price estimator on the wall quotes the full shelf price, while only the receipt at checkout shows the coupons that were applied. Asking the estimator twice never produces a coupon. It also does not complain when you hold up a coupon, it just ignores it.",
+      "distractor_explanations": {
+        "B": "The endpoint accepts `cache_control` blocks. It simply does not act on them, so removing them changes nothing about the count.",
+        "C": "Counting is an estimate of the whole prompt without any caching logic. It does not subtract cached content.",
+        "D": "Prompt caching happens only during real message creation. Repeating a count never creates or reads a cache entry."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Counting Does Not Report Cache Reads",
+      "id": "CCDV-E20-Q12",
+      "exam_id": 20,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q1019"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 13,
+      "prompt": "A classifier uses `output_config.format` and declares `category` as an `enum` of three strings. About 1% of replies fail this check, yet each response completes with `stop_reason: end_turn`. Failing values look like `\"Billing issue\"`.\n\n```python\nALLOWED = {\"Billing Issue\", \"Account Access\", \"Feature Request\"}\ndata = json.loads(resp.content[0].text)\nif data[\"category\"] not in ALLOWED:\n    raise ValueError(\"bad category\")\n```\n\nWhat explains this, and what is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A refusal produced the mismatch, so check for `stop_reason: refusal` and retry the call"
+        },
+        {
+          "key": "B",
+          "text": "Enum casing is not guaranteed, so compare case-insensitively or normalise before checking"
+        },
+        {
+          "key": "C",
+          "text": "The 24-hour grammar cache was evicted, so the output ran unconstrained; resubmit the schema"
+        },
+        {
+          "key": "D",
+          "text": "The reply hit `max_tokens` mid-value, so raise the limit to stop the truncated strings"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Structured outputs guarantee the shape of the JSON, but not the capitalization of string `enum` and `const` values: Claude may return a value that differs from the schema only in case, typically the first letter of a word after a space. The response still finishes normally, with no error and no special stop reason. The fix is to compare case-insensitively, and to avoid enum values that differ only by capitalization. Analogy: a librarian looking up a book title on a form. Searching the catalogue ignoring capital letters finds the book every time, whereas demanding identical capitals rejects good matches. The cache, refusals and truncation each leave their own clues, none of which appear here.",
+      "distractor_explanations": {
+        "A": "A refusal is reported through its own stop reason. The stem shows `end_turn` on every failing response.",
+        "C": "The grammar cache affects first-request latency, not correctness, and the replies are well-formed enum-like strings that differ only in case.",
+        "D": "A truncated reply would carry `stop_reason: max_tokens` and cut-off text. `\"Billing issue\"` is a complete value with different capitalization."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Enum Capitalization in Structured Outputs",
+      "id": "CCDV-E20-Q13",
+      "exam_id": 20,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q1020"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 14,
+      "prompt": "A report job creates a batch of 50,000 requests on the first-party API and immediately tries to download from `results_url`, which is `null`. The developer adds a polling loop and needs a stopping rule that always works. Which rule is correct?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Poll until `processing_status` is `ended`, then stream the file at `results_url`"
+        },
+        {
+          "key": "B",
+          "text": "Poll until `request_counts.succeeded` is above zero, then download the finished results"
+        },
+        {
+          "key": "C",
+          "text": "Wait until the `expires_at` time passes, then download whatever results are available"
+        },
+        {
+          "key": "D",
+          "text": "Sleep for 60 minutes and then download; batches are always finished within one hour"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A batch starts as `in_progress` and moves to `ended` once every request has finished. Only then are the results complete and available at `results_url`, which is `null` until that point. Polling `processing_status` is therefore the dependable stopping rule. A partial count or a fixed sleep guesses at the finish time.",
+      "distractor_explanations": {
+        "B": "Some requests succeeding does not mean the batch is done. Results are ready only once processing has ended for all requests.",
+        "C": "`expires_at` is the 24-hour deadline. Waiting for it wastes hours when the batch ends earlier, and an expired request has no result to download.",
+        "D": "Most batches finish within an hour, but a batch can take up to 24 hours and may expire."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batch Polling Condition",
+      "id": "CCDV-E20-Q14",
+      "exam_id": 20,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q1021"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 15,
+      "prompt": "A privacy review finds that a batch still in progress was built from the wrong data extract. The team wants the batch and its stored requests removed as soon as possible. The batch lives on the first-party API. What is the correct sequence?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Call the delete endpoint straight away; it cancels in-progress batches before removing them"
+        },
+        {
+          "key": "B",
+          "text": "Archive the workspace that owns the batch, which removes its batches immediately"
+        },
+        {
+          "key": "C",
+          "text": "Cancel the batch, wait for it to end, then call `DELETE /v1/messages/batches/{batch_id}`"
+        },
+        {
+          "key": "D",
+          "text": "Wait for the 29-day retention window to lapse, as stored batches cannot be deleted sooner"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Batch requests and results are stored for up to 29 days, but you can delete a batch whenever processing has finished with `DELETE /v1/messages/batches/{batch_id}`. A batch that is still running must be canceled first; it moves through `canceling` to `ended`, and then the delete call works. Analogy: a print queue. You stop the job that is still printing before you can delete the file, and shredding the whole office printer to get rid of one job would be far too drastic.",
+      "distractor_explanations": {
+        "A": "An in-progress batch has to be canceled first. The delete call is meant for batches whose processing has finished.",
+        "B": "Archiving a workspace is permanent and takes its keys and other resources with it. It is not the documented way to remove one batch.",
+        "D": "A batch can be deleted at any time after processing. The 29 days is how long results stay downloadable and data is stored."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Deleting an In-Progress Batch",
+      "id": "CCDV-E20-Q15",
+      "exam_id": 20,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q1022"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 16,
+      "prompt": "A team moves a nightly job from synchronous calls to Message Batches on the first-party API. Each request is built like this:\n\n```python\nclient.messages.create(\n    model=MODEL,\n    max_tokens=4096,\n    stream=True,\n    thinking={\"type\": \"adaptive\"},\n    tools=[WEB_SEARCH_TOOL],\n    messages=msgs,\n)\n```\n\nWhich TWO statements are correct for the batch version? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "`thinking` must be dropped, as batch requests cannot use extended or adaptive thinking"
+        },
+        {
+          "key": "B",
+          "text": "The `web_search` server tool can stay, and the batch worker runs the same server-side loop"
+        },
+        {
+          "key": "C",
+          "text": "`stream=True` has to be removed, as batch results arrive in a single results file"
+        },
+        {
+          "key": "D",
+          "text": "The 50% discount covers only input tokens, and output tokens are billed at the standard rate"
+        },
+        {
+          "key": "E",
+          "text": "A `custom_id` may repeat across requests, provided the `messages` differ"
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "A few Messages parameters are not accepted in batch requests, and `stream: true` is one of them because batch results come back as a single results file rather than a stream. Almost everything else carries over, including extended thinking and all server tools, since the batch worker runs the same server-side agentic loop. All usage is billed at half price, and every request needs a unique `custom_id`. Analogy: moving house. The sofa and the boxes go in the truck, but the live phone call to your friend cannot be packed. The things that need an open line are what stay behind, and the rest of your belongings travel as normal.",
+      "distractor_explanations": {
+        "A": "Extended thinking is among the features that can be batched. Only a small set of parameters, such as `stream`, is rejected.",
+        "D": "The batch discount applies to all usage: input tokens, output tokens and special tokens alike.",
+        "E": "Each request in a batch needs its own unique `custom_id`, because results are matched to requests through it."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Moving a Call into a Batch",
+      "id": "CCDV-E20-Q16",
+      "exam_id": 20,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q1023"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 17,
+      "prompt": "A RAG backend returns `search_result` blocks, some inside tool results and some as top-level user content. Which TWO statements describe how those blocks behave? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The `content` array may mix text and image blocks, and Claude can cite either kind"
+        },
+        {
+          "key": "B",
+          "text": "They may appear in user messages and tool results, but an assistant message holding one is rejected"
+        },
+        {
+          "key": "C",
+          "text": "Citations default to off, and all `search_result` blocks in a request must match on `enabled`"
+        },
+        {
+          "key": "D",
+          "text": "A `search_result` block that carries `cache_control` is rejected by the Messages API"
+        },
+        {
+          "key": "E",
+          "text": "`cited_text` is counted toward output tokens, so quoting long passages makes each response costlier"
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "Search result blocks come with a few firm rules. Citations are disabled unless you set `citations.enabled`, and the setting is all-or-nothing: mixed settings in one request cause an error. The blocks belong in user messages, including inside tool results, and an assistant message that contains one is rejected. Analogy: a school trip form. Either every student's slip has the photo-permission box ticked or none does, and only parents, the user side, may hand slips in; a slip from a teacher, the assistant side, is turned away. Laminating a slip, the cache setting, is welcome, and quoting its words costs nothing extra.",
+      "distractor_explanations": {
+        "A": "Search results hold text only, so images and other media are not supported inside the `content` array.",
+        "D": "`cache_control` is supported on search results and lets them be cached for reuse across requests.",
+        "E": "`cited_text` is provided for convenience and does not count toward output tokens."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "How Search Result Blocks Behave",
+      "id": "CCDV-E20-Q17",
+      "exam_id": 20,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q1024"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 18,
+      "prompt": "A platform team writes its model-retirement runbook from Anthropic's lifecycle documentation for the first-party API. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Amazon Bedrock and Google Cloud follow the same retirement dates as the first-party API"
+        },
+        {
+          "key": "B",
+          "text": "Customers with active deployments get at least 60 days' notice before a public model retires"
+        },
+        {
+          "key": "C",
+          "text": "A deprecated model keeps working until its retirement date, and a replacement is named"
+        },
+        {
+          "key": "D",
+          "text": "A model listed as Legacy already has a fixed retirement date and stops working on it"
+        },
+        {
+          "key": "E",
+          "text": "Requests to a retired model are routed to the recommended replacement with no code change needed"
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "Anthropic describes four lifecycle states. Active models are fully supported; Legacy models no longer receive updates and may be deprecated later; Deprecated models still function but come with a recommended replacement and a retirement date; Retired models fail. For publicly released models, customers with active deployments are told at least 60 days ahead. Analogy: an airline schedule change. Your old flight still flies until the announced date and you are offered a replacement flight, but on the day after, the old flight simply does not exist and nobody rebooks you automatically. A different airline, the partner cloud, runs its own timetable.",
+      "distractor_explanations": {
+        "A": "Partner-operated platforms set their own retirement schedules, so lifecycle status and dates can differ there.",
+        "D": "Legacy means the model gets no more updates and may be deprecated later. The retirement date is assigned at the Deprecated stage.",
+        "E": "Requests to a retired model fail. Migrating to the replacement is the customer's job, done before the retirement date."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Model Lifecycle Terms",
+      "id": "CCDV-E20-Q18",
+      "exam_id": 20,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q1025"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 19,
+      "prompt": "A team caches a 3,000-token system prompt with an explicit `cache_control` breakpoint. On Claude Sonnet 4.5 the usage block shows cache writes and then cache reads. After the service moves to Claude Haiku 4.5, `cache_creation_input_tokens` and `cache_read_input_tokens` are both 0 on every request, and no error is returned. What explains this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The breakpoint sits on a block that changes between requests, so the prefix hash does not match."
+        },
+        {
+          "key": "B",
+          "text": "The 5-minute lifetime expired, as Haiku replies take longer to stream than Sonnet replies."
+        },
+        {
+          "key": "C",
+          "text": "Entries are stored per model, so the first Haiku request must warm the cache before reads begin."
+        },
+        {
+          "key": "D",
+          "text": "Haiku 4.5 needs a cached prefix of at least 4,096 tokens, so the prompt goes uncached."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Every model has its own minimum cacheable prompt length: 1,024 tokens for Sonnet 4.5 and 4,096 tokens for Haiku 4.5. A prefix shorter than the minimum is processed without caching and the API returns no error, so both cache usage fields stay at zero. Expanding the cached content to reach 4,096 tokens, or staying on a model with a lower minimum, brings caching back.",
+      "distractor_explanations": {
+        "A": "A changing block would show a fresh cache write on every request. Both fields at 0 means nothing was cached at all.",
+        "B": "An expired entry is rewritten on the next request, which shows up as a non-zero write. It also would not start after a model switch.",
+        "C": "Per-model storage would produce a write on the first Haiku request. Zero writes on every request points to the minimum length instead."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Minimum Cacheable Length",
+      "id": "CCDV-E20-Q19",
+      "exam_id": 20,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q1026"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 20,
+      "prompt": "An analysis agent writes a 40,000-token prefix to the cache with the default settings. Its first response streams for 4 minutes 30 seconds. The user replies 45 seconds after the response ends, and the follow-up shows `cache_read_input_tokens: 0` and a fresh cache write. Which change prevents this miss on slow turns?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Send the first request without streaming and wait for the complete response."
+        },
+        {
+          "key": "B",
+          "text": "Switch to automatic caching with a top-level `cache_control` field on each request."
+        },
+        {
+          "key": "C",
+          "text": "Add a second breakpoint on the user's new message in the follow-up."
+        },
+        {
+          "key": "D",
+          "text": "Set `ttl` to `\"1h\"` on the breakpoint so the entry outlives long generation times."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The cache lifetime is measured from the start of the request that writes or reads the entry, not from the end of its response. A response that streams for 4 minutes 30 seconds leaves only 30 seconds of the default 5 minutes, so a reply 45 seconds later arrives after expiry. A `ttl` of `1h` leaves far more room than any generation time. Analogy: a parking ticket that starts the moment you drive in, not when you walk back from the shops, so a long errand eats the time before you return. A second breakpoint or automatic caching changes where the stamp sits on the ticket, not how long the ticket lasts.",
+      "distractor_explanations": {
+        "A": "The lifetime runs from the start of the request in either mode. Streaming does not change when the clock starts.",
+        "B": "Automatic caching only moves the breakpoint to the last cacheable block. The default 5-minute lifetime and the way it is measured stay the same.",
+        "C": "A new breakpoint writes a new entry. It does not extend the life of the earlier entry that already expired."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Cache Lifetime Clock",
+      "id": "CCDV-E20-Q20",
+      "exam_id": 20,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q1027"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 21,
+      "prompt": "A request marks the end of the `tools` array with a 1-hour breakpoint and the latest user message with a 5-minute breakpoint. Which TWO statements about mixing the two lifetimes in one request are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "A 1-hour breakpoint must appear earlier in the prompt than any 5-minute breakpoint."
+        },
+        {
+          "key": "B",
+          "text": "A hit on a 1-hour entry costs more than a hit on a 5-minute entry."
+        },
+        {
+          "key": "C",
+          "text": "`usage.cache_creation` splits writes into `ephemeral_1h_input_tokens` and `ephemeral_5m_input_tokens`."
+        },
+        {
+          "key": "D",
+          "text": "The 1-hour lifetime is accepted only by the first-party API, and not by Amazon Bedrock or Google Cloud."
+        },
+        {
+          "key": "E",
+          "text": "Tokens read from the cache are billed again at the 5-minute write rate."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "C"
+      ],
+      "explanation": "Prompt prefixes are cached in the order tools, system, messages, and each entry covers everything before its breakpoint. Longer-lived entries therefore have to come first, so the 1-hour breakpoint must sit earlier than any 5-minute one. The response reports the split in `usage.cache_creation`, and the two values add up to `cache_creation_input_tokens`. Analogy: a tower of storage boxes where each label stays valid only while everything beneath it is still there, so the longest rentals go at the bottom. The receipt lists month-long and day-long rentals on separate lines. A pricier read on 1-hour entries is the tempting claim, but only the write costs more.",
+      "distractor_explanations": {
+        "B": "Hits and refreshes are priced the same for both lifetimes. The 1-hour premium applies only when tokens are written.",
+        "D": "The 1-hour duration is documented as available on the Claude API, Bedrock, Claude Platform on AWS, Google Cloud and Foundry.",
+        "E": "Tokens up to the highest hit are billed at the read rate. Only the new tokens past that point are charged as writes."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Mixed Cache Lifetimes",
+      "id": "CCDV-E20-Q21",
+      "exam_id": 20,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q1028"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 22,
+      "prompt": "A team prepares a 50,000-request overnight batch. Every request includes the web search tool and shares one long cached prefix, and nobody needs results before morning. Which TWO statements about this batch are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Cache hits are best-effort, so a `ttl` of `1h` on the shared prefix improves the hit rate."
+        },
+        {
+          "key": "B",
+          "text": "Processing stops the moment the workspace spend limit is reached, so a batch stays under the cap."
+        },
+        {
+          "key": "C",
+          "text": "A request may set `stream: true` to receive its tokens as they are generated."
+        },
+        {
+          "key": "D",
+          "text": "Results stay downloadable for 29 days after the batch finishes processing."
+        },
+        {
+          "key": "E",
+          "text": "A result may end with `stop_reason: \"pause_turn\"`, and a follow-up request can continue that turn."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "E"
+      ],
+      "explanation": "Server tools such as web search work in a batch, but the batch worker can stop a long loop with `pause_turn`, and the paused content can be continued in a follow-up request. Requests are processed concurrently and in any order, so cache hits are best-effort, and a one-hour lifetime on the shared prefix helps entries survive a long run. Analogy: a print shop taking a huge overnight order. Special binding is allowed and a long job may come back half-finished for you to resubmit. The shared master plate is on many presses at once, so reserving it for an hour helps. Live streaming does not exist in that shop.",
+      "distractor_explanations": {
+        "B": "Because of high throughput and concurrent processing, a batch may slightly exceed the workspace spend limit.",
+        "C": "`stream` is rejected in batch requests. Results come back together as a single file once processing ends.",
+        "D": "The 29 days count from the batch's creation time, not from when processing ended."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Batch Request Facts",
+      "id": "CCDV-E20-Q22",
+      "exam_id": 20,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q1029"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 23,
+      "prompt": "An agent on Claude Haiku 4.5 uses extended thinking in a tool loop, with one breakpoint on the last block. Reads stay high across every `tool_result` turn. When the user types a new text message, `cache_read_input_tokens` drops sharply and the history is written to the cache again. The same agent on Claude Sonnet 4.6 keeps its reads. What explains the Haiku behavior?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The prefix fell under the 4,096-token minimum cacheable length for Haiku 4.5."
+        },
+        {
+          "key": "B",
+          "text": "The new text message changed `tool_choice`, which invalidates the message blocks."
+        },
+        {
+          "key": "C",
+          "text": "Haiku drops earlier thinking blocks once a typed message arrives, so later messages leave the cache."
+        },
+        {
+          "key": "D",
+          "text": "Thinking blocks cannot carry `cache_control`, so a turn that contains one is left out of the cache."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "On Haiku models and on earlier Opus and Sonnet models, adding user content that is not a tool result causes earlier thinking blocks to be stripped from context, and the messages after them drop out of the cache. Opus 4.5 and later and Sonnet 4.6 and later keep those blocks, so the prefix stays valid. Analogy: a cook who scribbles notes on an order slip. On older kitchens a new customer request makes the cook bin the earlier notes, and every dish prepared from them is cooked again. Newer kitchens keep the notes. The minimum-length distractor is a real rule, but the history here only grew.",
+      "distractor_explanations": {
+        "A": "The minimum is a property of the prompt size, and the history is larger than it was a turn earlier. Nothing shrank below it.",
+        "B": "`tool_choice` did not change here. That setting invalidates message blocks only when its value differs between requests.",
+        "D": "Thinking blocks cannot be marked directly, but they are cached with surrounding content. Reads stayed high across tool-result turns, which shows this is not the cause."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Thinking Blocks & Cache",
+      "id": "CCDV-E20-Q23",
+      "exam_id": 20,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q1030"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 24,
+      "prompt": "A report service sends the same 50,000-token prefix once every 20 minutes for three hours, which is nine requests. Assume a base input price of $2 per million tokens, 5-minute writes at 1.25x, 1-hour writes at 2x and cache reads at 0.1x. Counting only the prefix, what does switching the breakpoint from the default lifetime to `ttl: \"1h\"` do to the cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "It cuts the prefix cost by about $0.13, from roughly $1.13 to $1.00."
+        },
+        {
+          "key": "B",
+          "text": "It cuts the prefix cost by about $1.05, from roughly $1.13 to $0.08."
+        },
+        {
+          "key": "C",
+          "text": "It raises the prefix cost by about $0.68, from roughly $1.13 to $1.80."
+        },
+        {
+          "key": "D",
+          "text": "It cuts the prefix cost by about $0.85, from roughly $1.13 to $0.28."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "With the default lifetime, 20 minutes between requests means every request finds the entry expired and pays a 1.25x write: 9 x 50,000 x $2.50 per million is about $1.13. With `1h`, the first request pays a 2x write of about $0.20, and the other eight are reads at 0.1x, about $0.01 each, which keep refreshing the entry. That totals about $0.28, a saving near $0.85. Analogy: single bus tickets versus a day pass. The pass costs more up front, but every later ride is nearly free. The tempting claim that 2x writes always cost more ignores that only one write happens.",
+      "distractor_explanations": {
+        "A": "That treats the eight later reads as full-price input. Cache hits are billed at 0.1x, which is $0.20 per million tokens here.",
+        "B": "That figure leaves out the first 1-hour write, which costs 50,000 tokens at 2x, about $0.20.",
+        "C": "That treats every request as a 2x write. After the first write each request is a cheap read that also refreshes the 1-hour entry."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Cache Lifetime Arithmetic",
+      "id": "CCDV-E20-Q24",
+      "exam_id": 20,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q1031"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 25,
+      "prompt": "A first-party API agent puts one `cache_control` breakpoint on the last block of every request. In one turn the model issues 30 parallel `tool_use` blocks and the app returns 30 `tool_result` blocks, so the next request ends more than 60 blocks after the previous breakpoint. What does that request's usage show?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A read of the earlier entry and no new write; the tool blocks are processed as uncached input."
+        },
+        {
+          "key": "B",
+          "text": "Earlier entry read, new blocks written; a run of consecutive tool blocks is one lookback position."
+        },
+        {
+          "key": "C",
+          "text": "A miss unless a second explicit breakpoint is placed within 20 blocks of the first."
+        },
+        {
+          "key": "D",
+          "text": "A full miss and a new write; the entry is now more than 20 blocks behind the new breakpoint."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The lookback window checks at most 20 positions per breakpoint, but on the Claude API a run of consecutive `tool_use` blocks counts as one position and so does a run of consecutive `tool_result` blocks. Thirty parallel calls therefore use only a couple of positions, the walk reaches the previous write, and the new blocks are written at the new breakpoint. Analogy: searching a stack of receipts for your last bookmark. A stapled bundle of 30 receipts counts as a single item in the stack. Adding a second breakpoint is the right cure only when real positions pile up past 20.",
+      "distractor_explanations": {
+        "A": "With the breakpoint on the last block, the added blocks are written to the cache. They are not left uncached.",
+        "C": "A second breakpoint helps when a growing conversation really adds 20 or more positions. A run of parallel tool blocks does not.",
+        "D": "The 20-position window counts each run of consecutive tool blocks once. Here the earlier entry is only a few positions back."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Lookback & Parallel Tool Calls",
+      "id": "CCDV-E20-Q25",
+      "exam_id": 20,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q1032"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 26,
+      "prompt": "A team sends the `diagnostics` object on every turn of a cached conversation. On turn 3, `cache_read_input_tokens` is 0 and the response reports a `cache_miss_reason` of type `tools_changed` with `cache_missed_input_tokens` of 38200. The service builds the `tools` array on each request from a map of schemas. What is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move per-request values out of `system` and into the first user message after the cache breakpoint."
+        },
+        {
+          "key": "B",
+          "text": "Hold the `model` constant for the whole conversation, with no fallback routing between tiers."
+        },
+        {
+          "key": "C",
+          "text": "Send the tools in a fixed order with deterministically serialized schemas, such as sorted keys."
+        },
+        {
+          "key": "D",
+          "text": "Keep the history append-only and echo assistant content and tool results back verbatim."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The `cache_miss_reason` type names the earliest part of the request that differs from the previous turn, and each type has its own remedy. `tools_changed` means tools were added, removed or reordered, or a schema was serialized non-deterministically, so the fix is a stable order and stable serialization. Analogy: a spell-checker that underlines only the first word that differs between two drafts. The suggested cure depends on which word is underlined: a changed system prompt, history or model each have their own cure, which are real but belong to other underlines.",
+      "distractor_explanations": {
+        "A": "That fixes a `system_changed` result. The report names the `tools` array as the first divergence here.",
+        "B": "That fixes a `model_changed` result. The model is not what differs in this response.",
+        "D": "That fixes a `messages_changed` result, which is reported only when model, system and tools all match."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Cache Diagnostics Reasons",
+      "id": "CCDV-E20-Q26",
+      "exam_id": 20,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q1033"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 27,
+      "prompt": "A request returns a 400 error. The team uses automatic caching and also marks the last block explicitly:\n\n```json\n{\n  \"model\": \"claude-sonnet-5-5\",\n  \"max_tokens\": 1024,\n  \"cache_control\": {\"type\": \"ephemeral\"},\n  \"system\": \"You review contracts.\",\n  \"messages\": [{\"role\": \"user\", \"content\": [\n    {\"type\": \"text\", \"text\": \"<contract>...</contract>\",\n     \"cache_control\": {\"type\": \"ephemeral\", \"ttl\": \"1h\"}}\n  ]}]\n}\n```\n\nWhich change fixes the error while keeping automatic caching and the one-hour lifetime on the contract?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `ttl` to `\"1h\"` in the top-level `cache_control` so both lifetimes match."
+        },
+        {
+          "key": "B",
+          "text": "Add a fourth explicit breakpoint on the system prompt to use the free slot."
+        },
+        {
+          "key": "C",
+          "text": "Remove `ttl` from the explicit breakpoint so both use the default lifetime."
+        },
+        {
+          "key": "D",
+          "text": "Remove the top-level `cache_control` and rely only on the explicit breakpoint."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Automatic caching places its breakpoint on the last cacheable block. If that block already has an explicit `cache_control` with the same lifetime, the automatic one does nothing, but if the lifetime differs, the API returns a 400 error. Giving the top-level field the same `ttl: \"1h\"` resolves the clash and keeps both features. Analogy: two clerks stamping the same parcel with different expiry dates. The post office rejects it until both stamps agree. Removing a stamp also stops the error, but it throws away one of the things the team asked for.",
+      "distractor_explanations": {
+        "B": "Extra breakpoints do not change the clash. The last block still carries a different lifetime from the automatic one.",
+        "C": "That removes the error but loses the one-hour lifetime on the contract.",
+        "D": "That removes the error but also drops automatic caching, which the team wants to keep."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Automatic Caching TTL Clash",
+      "id": "CCDV-E20-Q27",
+      "exam_id": 20,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q1034"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 28,
+      "prompt": "A Python Agent SDK service is configured as follows:\n\n```python\nasync def allow_bash(input_data, tool_use_id, context):\n    return {\"hookSpecificOutput\": {\n        \"hookEventName\": \"PreToolUse\",\n        \"permissionDecision\": \"allow\"}}\n\noptions = ClaudeAgentOptions(\n    permission_mode=\"bypassPermissions\",\n    disallowed_tools=[\"Bash(rm *)\"],\n    hooks={\"PreToolUse\": [HookMatcher(matcher=\"Bash\",\n                                      hooks=[allow_bash])]},\n)\n```\n\nClaude proposes `rm -rf build` and then `/bin/rm -rf build`. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The `Bash` tool is removed from Claude's context entirely, so neither command is ever attempted."
+        },
+        {
+          "key": "B",
+          "text": "`rm -rf build` is denied; the hook's `allow` does not skip the deny rule."
+        },
+        {
+          "key": "C",
+          "text": "Both commands run: a hook's `allow` decision overrides the deny rules."
+        },
+        {
+          "key": "D",
+          "text": "`/bin/rm -rf build` is not matched by the rule as written and runs under bypass mode."
+        },
+        {
+          "key": "E",
+          "text": "Both commands are denied; the rule matches commands that invoke `rm` however spelled."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "The SDK checks a tool call in a fixed order: hooks, deny rules, ask rules, the permission mode, allow rules, then the `canUseTool` callback. A hook's `allow` does not skip the deny rules, so `rm -rf build` is blocked even in `bypassPermissions`. A scoped deny such as `Bash(rm *)` matches commands as written and leaves `Bash` available, so `/bin/rm` falls through to a mode that approves it. Analogy: a nightclub with a written ban list. A VIP wristband (the hook) does not erase a name from the list, but the same man under another spelling is not on the list as written, and on open-door night (bypass) he walks in.",
+      "distractor_explanations": {
+        "A": "Only a bare name such as `Bash` removes the tool. A scoped rule leaves the tool available and checks each call.",
+        "C": "Hooks run first, but an `allow` from a hook does not skip the deny and ask rules that come after it.",
+        "E": "Scoped rules match commands as written. `/bin/rm` is a different string, so it falls through to the permission mode."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Permission Evaluation Order",
+      "id": "CCDV-E20-Q28",
+      "exam_id": 20,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q1035"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 29,
+      "prompt": "A CI job syncs checked-in agent definitions to Claude Managed Agents through the update endpoint, sending only the fields that changed in each commit. Which TWO statements describe how an update to an existing agent behaves? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "`tools`, `mcp_servers` and `skills` are replaced in full by the array in the update."
+        },
+        {
+          "key": "B",
+          "text": "Coordinators that list the agent begin delegating to its new version without being updated."
+        },
+        {
+          "key": "C",
+          "text": "Fields left out of the update request are reset to their default values on the agent."
+        },
+        {
+          "key": "D",
+          "text": "Keys sent in `metadata` replace the agent's whole metadata object instead of merging."
+        },
+        {
+          "key": "E",
+          "text": "A supplied `version` that is not the agent's current version is rejected with a 409."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "E"
+      ],
+      "explanation": "An update to a Managed Agents agent changes only what you send: omitted fields are kept and `metadata` is merged key by key. Array fields such as `tools`, `mcp_servers` and `skills` are different, because the new array replaces the old one entirely, so a partial list drops the tools you left out. A supplied `version` must match the current one or the call returns 409, which stops a concurrent edit from being silently overwritten. Analogy: a recipe card with an edition number. A new ingredient list replaces the old list, and bringing edition 3 to an editor holding edition 4 gets you turned away. The reset-to-defaults idea is wrong, since omitted fields stay.",
+      "distractor_explanations": {
+        "B": "A coordinator keeps the version pinned in its roster until the coordinator itself is updated.",
+        "C": "Omitted fields are preserved. Only the fields you send are changed.",
+        "D": "Metadata is merged key by key. Keys you leave out stay, and a key is deleted by setting it to `null`."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Managed Agent Updates",
+      "id": "CCDV-E20-Q29",
+      "exam_id": 20,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q1036"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 30,
+      "prompt": "A compliance team logs and can veto every file edit through a `canUseTool` callback in a Python Agent SDK service. Audits show `Edit` calls missing from the log. The service runs with `permission_mode=\"acceptEdits\"` and `allowed_tools=[\"Read\", \"Edit\"]`. What should the team change so every tool call is seen and can be vetoed?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a `PostToolUse` hook that logs each completed tool call."
+        },
+        {
+          "key": "B",
+          "text": "Register a `PreToolUse` hook that logs each tool call and can deny it."
+        },
+        {
+          "key": "C",
+          "text": "Add `Edit` to `disallowed_tools` so edits fall through to the callback."
+        },
+        {
+          "key": "D",
+          "text": "Switch to `dontAsk` mode, which sends each call to the `canUseTool` callback."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A call approved at an earlier step, by `acceptEdits` or by an `allowed_tools` entry, never reaches the `canUseTool` callback. A `PreToolUse` hook runs before every other step, so it sees each call, and its deny applies even in `bypassPermissions`. Analogy: a building with a front-desk sign-in sheet. Staff with a pre-approved badge walk past the desk and never sign, so the sheet misses them. A turnstile at the front door (the hook) counts everyone and can stop anyone. A camera that only records afterward (the `PostToolUse` hook) cannot stop anyone entering.",
+      "distractor_explanations": {
+        "A": "A post-execution hook sees the call only after it ran, so it cannot veto it.",
+        "C": "A bare name in `disallowed_tools` removes the tool, so no edit can happen at all.",
+        "D": "`dontAsk` never calls the callback. Any call that would prompt is denied instead."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Callback vs Hook Coverage",
+      "id": "CCDV-E20-Q30",
+      "exam_id": 20,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q1037"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 31,
+      "prompt": "A TypeScript service starts the agent like this:\n\n```typescript\nfor await (const msg of query({\n  prompt: \"Fix the failing test in the billing module\",\n  options: {\n    cwd: \"/repo/services/billing\",\n    settingSources: [\"project\"],\n  },\n})) {\n  handle(msg);\n}\n```\n\nThe repository keeps `CLAUDE.md` and `.claude/settings.json` at `/repo`. The settings file registers a `PreToolUse` hook that blocks edits under `migrations/`. Runs follow the `CLAUDE.md` conventions, yet the hook never fires. Which change makes it run?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Run the query with `cwd` set to `/repo`, where `.claude/settings.json` lives."
+        },
+        {
+          "key": "B",
+          "text": "Add `\"local\"` to `settingSources` so settings are read from parent directories too."
+        },
+        {
+          "key": "C",
+          "text": "Pass `/repo` in `additionalDirectories` so its `.claude` folder is loaded."
+        },
+        {
+          "key": "D",
+          "text": "Add `\"user\"` to `settingSources` so the repository's hooks are discovered as well."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Project `settings.json` and hooks load only from `<cwd>/.claude/`, with no fallback to parent directories, while `CLAUDE.md` files are also found in parent directories. With `cwd` at `/repo/services/billing`, the root `CLAUDE.md` loads but the root settings file and its hook never do. Starting the query at `/repo` fixes it. Analogy: a school where the class rulebook is posted in the hallway for every room to read, but the fire-alarm wiring is only connected in the room you stand in. `additionalDirectories` adds extra skill, command and subagent folders, which is the tempting but wrong tool here.",
+      "distractor_explanations": {
+        "B": "The `local` source reads `settings.local.json` under `<cwd>/.claude/`. It does not walk up to parents.",
+        "C": "Added directories contribute skills, commands and subagents. Settings and hooks still come only from `<cwd>/.claude/`.",
+        "D": "The `user` source reads `~/.claude/`. It never looks inside the repository."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Project Settings & cwd",
+      "id": "CCDV-E20-Q31",
+      "exam_id": 20,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q1038"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 32,
+      "prompt": "A team runs nightly Agent SDK jobs on a self-hosted runner, each with `settingSources: []` and no `resume` or `continue` option. A job log shows the agent applying a coding convention that is in neither the prompt nor any CLAUDE.md, and that an earlier job's agent had saved while working. What explains this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Server-managed settings delivered the convention to the runner."
+        },
+        {
+          "key": "B",
+          "text": "Prompt caching shared the earlier job's conversation with this job's requests."
+        },
+        {
+          "key": "C",
+          "text": "`continue: true` silently resumed the most recent session in the working directory."
+        },
+        {
+          "key": "D",
+          "text": "Auto memory is read into the system prompt at session start whatever `settingSources` says."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "`settingSources: []` turns off user, project and local settings, but a few inputs are read regardless: managed policy settings, the global `~/.claude.json`, and auto memory under `~/.claude/projects/<project>/memory/`. Auto memory is loaded into the system prompt at session start, and the agent writes to it with its ordinary Write and Edit tools, so one job can leave a note that the next job follows. Setting `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` in `env` turns it off. Analogy: a hotel room where housekeeping clears everything on your checklist but leaves the previous guest's sticky note on the desk. Prompt caching only reuses identical text and never adds notes.",
+      "distractor_explanations": {
+        "A": "Managed policy is written by administrators. An agent cannot save a convention there while working.",
+        "B": "Caching reuses identical prompt prefixes to save cost. It never adds instructions or changes what the model sees.",
+        "C": "Neither `resume` nor `continue` is set, so each `query()` starts a new session."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Auto Memory Despite settingSources",
+      "id": "CCDV-E20-Q32",
+      "exam_id": 20,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q1039"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 33,
+      "prompt": "A team builds a Managed Agents agent that summarizes pages from untrusted sites. They create its environment with `type: \"cloud\"` and a `pip` package list, set no `networking` field, and assume the sandbox has no outbound access. Which change makes the sandbox's outbound access match that assumption?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `allowed_domains` on the agent's `web_fetch` tool to close the sandbox's outbound access."
+        },
+        {
+          "key": "B",
+          "text": "Leave the request unchanged: an omitted `networking` field defaults to `limited` with no allowed hosts."
+        },
+        {
+          "key": "C",
+          "text": "Add `networking` with `type` set to `\"limited\"` and an explicit `allowed_hosts` list to `config`."
+        },
+        {
+          "key": "D",
+          "text": "Set the `bash` tool's permission policy to `always_ask` and keep the environment unchanged."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "A Managed Agents environment describes the sandbox the agent runs in. Its `networking` field controls outbound access, and a create request that omits the field gets `unrestricted`, which reaches any host except a general safety blocklist. Setting `limited` with `allowed_hosts`, plus flags such as `allow_package_managers`, closes it down. Analogy: a new office phone line that can dial any number in the world unless you pick a restriction. The domain lists on the web tools only filter the web tools, which is a different switch from the dial restriction on the office phone.",
+      "distractor_explanations": {
+        "A": "Those lists filter the web tools, which run on Anthropic's servers. The sandbox's own egress is set by `networking`.",
+        "B": "A create request that omits `networking` gets `unrestricted`. Only the Console form starts at Limited.",
+        "D": "An approval policy adds a pause before commands. It does not change which hosts the sandbox can reach."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Managed Agent Environment Networking",
+      "id": "CCDV-E20-Q33",
+      "exam_id": 20,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q1040"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 34,
+      "prompt": "An Agent SDK agent analyzed an auth module in session `s1`. The team forks it with `resume` set to `s1` and `fork_session` set to `True` to try an OAuth2 approach, and the forked agent edits `auth.py`. Later the team resumes `s1` to continue the JWT approach. What does the resumed agent find?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Its original history, with `auth.py` still showing the forked agent's edits."
+        },
+        {
+          "key": "B",
+          "text": "Its original history and the `auth.py` contents from before the fork."
+        },
+        {
+          "key": "C",
+          "text": "No history; resuming a session that has been forked starts a fresh one."
+        },
+        {
+          "key": "D",
+          "text": "The forked conversation merged into its history, so it knows the OAuth2 outcome."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Forking creates a new session that starts with a copy of the original's history. The original stays unchanged and can still be resumed. A fork branches the conversation, not the filesystem, so the forked agent's edits to `auth.py` are real files that every session sees. File checkpointing is the tool to use when edits also need to be reverted.",
+      "distractor_explanations": {
+        "B": "Forking branches the conversation, not the filesystem. Edits made by the fork are real files.",
+        "C": "The original stays resumable after a fork. Resuming it continues the JWT thread.",
+        "D": "The original session stays unchanged. The fork has its own session ID and its own history."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Forking Sessions",
+      "id": "CCDV-E20-Q34",
+      "exam_id": 20,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q1041"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 35,
+      "prompt": "A team moves a CI job from `claude -p` to the Agent SDK. The Python `query()` call sets no `system_prompt`, and the agent now ignores tool-use conventions and safety guidance it followed under the CLI. The job still edits code in a repository without anyone watching. Which change restores the CLI behavior?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Write a custom `system_prompt` string that restates the CLI's rules from memory."
+        },
+        {
+          "key": "B",
+          "text": "Move the missing guidance into `CLAUDE.md` and enable `setting_sources=[\"project\"]` in the options."
+        },
+        {
+          "key": "C",
+          "text": "Set `system_prompt` to the `claude_code` preset, with `append` for repository rules."
+        },
+        {
+          "key": "D",
+          "text": "Set `permission_mode` to `plan` so the SDK applies the CLI's safety instructions."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Without a `system_prompt`, the SDK uses a minimal prompt that covers tool calling but omits the `claude_code` preset's tool guidance and safety instructions, unlike `claude -p`, which uses the Claude Code prompt by default. Setting the `claude_code` preset restores them, and `append` adds repository-specific rules at the end. Unattended coding automation fits the preset because the work is what the preset was written for.",
+      "distractor_explanations": {
+        "A": "A custom string replaces everything. The team would have to supply the tool guidance and safety rules by hand.",
+        "B": "CLAUDE.md is injected as project context. It leaves the system prompt untouched, so the preset's guidance stays missing.",
+        "D": "Permission modes govern tool approvals. They do not add instruction text to the prompt."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "System Prompt Preset",
+      "id": "CCDV-E20-Q35",
+      "exam_id": 20,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q1042"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 36,
+      "prompt": "A contract-summary service runs on a model with adaptive thinking. Compliance requires logging the first draft, scoring it against a checklist, and routing low scores to a human before any refinement happens. Which design fits these requirements?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Raise `effort` to `high` so the model checks and corrects the draft internally."
+        },
+        {
+          "key": "B",
+          "text": "End the prompt with a line asking Claude to verify its answer against the checklist."
+        },
+        {
+          "key": "C",
+          "text": "Make three calls: draft, review against the checklist, then refine, logging between them."
+        },
+        {
+          "key": "D",
+          "text": "Send one prompt that asks Claude to draft, critique and revise in a single reply, then log the final text."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "With adaptive thinking, Claude handles most multistep reasoning internally, so explicit prompt chaining earns its extra calls only when you need to inspect intermediate outputs or enforce a pipeline structure. This case needs both, because the draft must be logged, scored and routed. The common pattern is self-correction: draft, review against criteria and refine as separate API calls, so you can log, evaluate or branch at any point. Analogy: an assembly line with inspection stations. A craftsperson who checks their own work silently leaves no record, while a checkpoint after each stage lets inspectors log a part and pull it off the line. A closing verify instruction is a real tip, but it stays inside one response.",
+      "distractor_explanations": {
+        "A": "Higher effort deepens internal reasoning. It produces no separate draft or score that the app can inspect.",
+        "B": "A self-check instruction catches errors, but it still happens inside a single response with nothing to log.",
+        "D": "All three steps happen inside one reply, so there is no first draft or score to log or branch on."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Prompt Chaining & Self-correction",
+      "id": "CCDV-E20-Q36",
+      "exam_id": 20,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q1043"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 37,
+      "prompt": "A ticket classifier runs on Claude Sonnet 4.6 with the `thinking` parameter omitted. The prompt says to think step by step, and the code takes the last line of the reply as the label. Some replies end with an explanatory sentence, so parsing fails. What is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a numbered ten-step reasoning checklist that ends with the label."
+        },
+        {
+          "key": "B",
+          "text": "Place a `cache_control` breakpoint after the instructions to make the output format repeat reliably."
+        },
+        {
+          "key": "C",
+          "text": "Ask for reasoning first and the label alone inside `<answer>` tags, then parse only that tag."
+        },
+        {
+          "key": "D",
+          "text": "Lower `temperature` to 0, which makes the final line the label reliably."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "When thinking is off, asking Claude to reason before it answers still helps, but the reply then mixes reasoning with the result. Putting the final answer in `<answer>` tags gives the code one unambiguous thing to extract. Sampling settings, longer fixed plans and caching do not change where the answer appears.",
+      "distractor_explanations": {
+        "A": "A fixed plan does not mark which text is the answer, and general instructions usually work better than prescriptive steps.",
+        "B": "Caching lowers the cost of a repeated prefix. It does not change what the model writes.",
+        "D": "Temperature narrows sampling variation. It imposes no structure on where the label sits in the reply."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Chain-of-Thought Answer Tags",
+      "id": "CCDV-E20-Q37",
+      "exam_id": 20,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q1044"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 38,
+      "prompt": "A coding agent with the memory tool keeps creating near-duplicate notes such as `notes1.md` and `notes_final.md` under `/memories`. A teammate proposes adding the memory protocol, \"always view your memory directory first\", to the system prompt. What is the better step?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a prompt note to keep memory tidy and organized, deleting or renaming stale files."
+        },
+        {
+          "key": "B",
+          "text": "Cap the characters the `view` command returns so Claude sees fewer files."
+        },
+        {
+          "key": "C",
+          "text": "Restate the \"view your memory directory first\" protocol in the system prompt on each request."
+        },
+        {
+          "key": "D",
+          "text": "Move storage from files to a database table so duplicates stop appearing."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "When the memory tool is in `tools`, the API adds the memory protocol to the system prompt automatically: view the directory first, record progress, and assume interruption. Repeating it adds nothing. If Claude still creates cluttered files, a short note to keep memory up to date, coherent and organized, to rename or delete stale files and to create new ones only when necessary, reinforces the tool description. How the handler stores the data does not change what Claude decides to write.",
+      "distractor_explanations": {
+        "B": "Capping `view` output protects context size. It does not stop Claude from creating duplicate files.",
+        "C": "The API already adds that protocol when the memory tool is present, and it addresses recall rather than clutter.",
+        "D": "The handler can store data anywhere, but duplicates come from what Claude chooses to write, not from where it lands."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Memory Tool Prompting",
+      "id": "CCDV-E20-Q38",
+      "exam_id": 20,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q1045"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 39,
+      "prompt": "An agent on the Messages API enables threshold compaction with the `compact_20260112` edit and defines 12 tools. Occasionally a response carries a `compaction` block whose `content` is `null`, so the compaction yields no summary of the earlier work. What is the most direct fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `instructions` to a summarization prompt that tells the model not to call tools."
+        },
+        {
+          "key": "B",
+          "text": "Set `pause_after_compaction` to `true` and re-insert the recent turns yourself."
+        },
+        {
+          "key": "C",
+          "text": "Raise the `trigger` value to 200,000 input tokens so compaction runs less often."
+        },
+        {
+          "key": "D",
+          "text": "Add a `cache_control` breakpoint at the end of the system prompt to protect its cache entry."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "When a request defines `tools`, the model occasionally calls a tool during the internal summarization step instead of writing a summary, and the response then holds a `compaction` block with `content` set to `null`. A custom `instructions` prompt replaces the default summarization prompt completely, so it should say what to keep and add an explicit rule not to call any tools and to answer with text only. Analogy: an assistant asked to write minutes who keeps answering the phone. A note on the desk saying not to pick up the phone while writing fixes it. Changing when the minutes are due, or how they are filed, does not.",
+      "distractor_explanations": {
+        "B": "Pausing lets you add blocks after the summary. The summary step can still call a tool and come back empty.",
+        "C": "A different trigger changes when compaction runs. It does not change what the summarization step does with the tools in the request.",
+        "D": "That keeps the system prompt cached when a summary is written. It does not stop the summary step from calling a tool."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Compaction With Tools Defined",
+      "id": "CCDV-E20-Q39",
+      "exam_id": 20,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q1046"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 40,
+      "prompt": "A coding agent uses threshold compaction. After each compaction it loses the exact error text from the last two exchanges, which the next step needs word for word. Which setting lets the team keep those turns verbatim?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A higher `trigger`, so compaction fires later in the session."
+        },
+        {
+          "key": "B",
+          "text": "A custom `instructions` prompt that asks the summary to quote the last two exchanges verbatim."
+        },
+        {
+          "key": "C",
+          "text": "`pause_after_compaction: true`, then re-insert the last two exchanges after the block."
+        },
+        {
+          "key": "D",
+          "text": "A `cache_control` breakpoint on the compaction block."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "With `pause_after_compaction` set to `true`, the API returns the compaction block and stops with a `compaction` stop reason instead of continuing. That gives your code the chance to append the last few messages word for word before the next request carries on. The summary covers older context while the exact error text rides along unsummarized. Analogy: a note-taker who hands you the minutes before the next meeting starts. You staple the last two pages of the original transcript behind them before carrying on. Asking the minutes to quote those pages is the tempting alternative, but a summary can still paraphrase them.",
+      "distractor_explanations": {
+        "A": "The trigger controls when compaction runs. It says nothing about which turns survive word for word.",
+        "B": "The summary can still paraphrase, and a custom prompt replaces the default one. Nothing guarantees word-for-word text.",
+        "D": "That caches the summary text for cheaper reuse. It does not keep recent turns outside the summary."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Keeping Recent Turns After Compaction",
+      "id": "CCDV-E20-Q40",
+      "exam_id": 20,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q1047"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 41,
+      "prompt": "A team tunes prompts for an agent on Claude Sonnet 5.5 with adaptive thinking. Evals show it reasons well on easy tasks but follows a long scripted plan rigidly on hard ones. Which TWO changes fit Anthropic's prompting guidance? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `thinking` to `{\"type\": \"enabled\", \"budget_tokens\": 4000}` to cap how long it reasons."
+        },
+        {
+          "key": "B",
+          "text": "Add a few worked examples, each giving the problem, the method to apply and the expected answer."
+        },
+        {
+          "key": "C",
+          "text": "Replace a hand-written 12-step reasoning plan with a general instruction to think thoroughly."
+        },
+        {
+          "key": "D",
+          "text": "Require each reply to write out its full reasoning inside `<thinking>` tags within the visible answer text."
+        },
+        {
+          "key": "E",
+          "text": "Set `thinking` to `disabled` and ask for step-by-step reasoning in the reply instead."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "C"
+      ],
+      "explanation": "For models with adaptive thinking, a general instruction such as \"think thoroughly\" often produces better reasoning than a hand-written step-by-step plan, because Claude's reasoning frequently exceeds what a person would prescribe. Worked examples also work with thinking: they shape how Claude approaches similar problems in its own thinking blocks. Depth is steered with `effort`, not manual budgets. Analogy: coaching a chess player. Telling them to study the whole board beats a scripted list of twelve moves, and a few annotated games teach the method better than rules alone. Forcing the player to narrate every thought aloud at the table is the unwelcome extra.",
+      "distractor_explanations": {
+        "A": "Sonnet 5.5 rejects `enabled` with a 400 error. Reasoning depth is steered with `effort`.",
+        "D": "On the newest models such a request may be declined. The guidance is to rely on thinking, at a lower effort if cost or latency matters.",
+        "E": "Sonnet 5.5 rejects `disabled` with a 400 error. Manual chain-of-thought is a fallback for models where thinking is off."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Prompting With Adaptive Thinking",
+      "id": "CCDV-E20-Q41",
+      "exam_id": 20,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q1048"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 42,
+      "prompt": "A request that enables the `web_fetch` server tool and a client tool named `get_account_plan` returns this response:\n\n```json\n{\n  \"stop_reason\": \"tool_use\",\n  \"content\": [\n    {\"type\": \"server_tool_use\", \"id\": \"srvtoolu_01\",\n     \"name\": \"web_fetch\", \"input\": {\"url\": \"https://docs.example.com/limits\"}},\n    {\"type\": \"tool_use\", \"id\": \"toolu_02\",\n     \"name\": \"get_account_plan\", \"input\": {\"user_id\": \"u_42\"}}\n  ]\n}\n```\n\nWhat should the next request contain?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The assistant turn without its `server_tool_use` block, then the `tool_result` for `toolu_02`."
+        },
+        {
+          "key": "B",
+          "text": "The assistant turn as returned, then a user message with the `tool_result` for `toolu_02` only."
+        },
+        {
+          "key": "C",
+          "text": "The assistant turn as returned, then `tool_result` blocks for both `toolu_02` and `srvtoolu_01`."
+        },
+        {
+          "key": "D",
+          "text": "The paused assistant turn resent unchanged with no new user message, as for `pause_turn`."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "When Claude calls a server tool and a client tool in the same group of parallel calls, the API does not run the server tool. It returns at once with `stop_reason: \"tool_use\"`, a `server_tool_use` block that has no result block yet, and your client `tool_use`. You run the client tool and send back the assistant turn unchanged plus its `tool_result`, and the API then runs the server call in that next request. Analogy: a restaurant order with one dish from the kitchen and one you must fetch from the bar yourself. The waiter says to bring the bar item back first, and only then does the kitchen start its dish. Nobody asks you to cook the kitchen's dish for it.",
+      "distractor_explanations": {
+        "A": "Assistant content goes back unchanged. The unfinished server call is what the API completes on the next request.",
+        "C": "A server tool never needs a `tool_result` from your code. The API runs the fetch itself once the client result arrives.",
+        "D": "That handling is for `stop_reason: \"pause_turn\"`. Here the API returned early with `tool_use` so the client tool can run first."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Mixed Server and Client Tool Turn",
+      "id": "CCDV-E20-Q42",
+      "exam_id": 20,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q1049"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 43,
+      "prompt": "A research agent calls the Messages API with the web search tool set to `max_uses: 3`. The logs show HTTP 200 and `stop_reason: \"end_turn\"` on every call, yet answers to broad questions are thin. How can the app detect that the limit was reached?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "An HTTP 429 response with a `retry-after` header on the request that hit the cap."
+        },
+        {
+          "key": "B",
+          "text": "A 400 `invalid_request_error` naming the `max_uses` parameter."
+        },
+        {
+          "key": "C",
+          "text": "A response with `stop_reason: \"pause_turn\"` that must be sent back to continue."
+        },
+        {
+          "key": "D",
+          "text": "A `web_search_tool_result` whose `content` is an error object with code `max_uses_exceeded`."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "When Claude tries more searches than `max_uses` allows, the API still returns HTTP 200. The error appears in the response body as a `web_search_tool_result` whose `content` is a `web_search_tool_result_error` with `error_code` set to `max_uses_exceeded`. Claude sees it and carries on, which explains the thin answers. Analogy: a library card that allows three book requests per visit. The librarian does not call security on the fourth request; she stamps limit reached on the slip, and you leave with what you have. A rate-limit status code is the tempting but different signal.",
+      "distractor_explanations": {
+        "A": "A 429 reports a rate limit on the API request. A search error from the tool arrives inside a 200 response.",
+        "B": "A 400 is for an invalid request, such as supplying both domain lists. Reaching the cap is not a validation failure.",
+        "C": "`pause_turn` marks a long-running turn the API paused. It is not how the search cap is reported."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Web Search Max Uses",
+      "id": "CCDV-E20-Q43",
+      "exam_id": 20,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q1050"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 44,
+      "prompt": "A support bot's web search tool must return results only from the vendor's documentation, so the team restricts it with `allowed_domains`. Which TWO statements about how those entries are matched are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "`docs.example.com` returns results only from that subdomain, not from `example.com`."
+        },
+        {
+          "key": "B",
+          "text": "`example.com` also covers its subdomains, such as `docs.example.com`."
+        },
+        {
+          "key": "C",
+          "text": "`*.example.com` is the supported wildcard form for covering all subdomains."
+        },
+        {
+          "key": "D",
+          "text": "`allowed_domains` and `blocked_domains` can be combined, with blocked entries taking priority."
+        },
+        {
+          "key": "E",
+          "text": "Entries should include the scheme, such as `https://docs.example.com`."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "B"
+      ],
+      "explanation": "Domain filters take bare domains without a scheme. A plain domain such as `example.com` also covers its subdomains, while a specific subdomain such as `docs.example.com` restricts results to just that subdomain. Wildcards are accepted only in the path after the domain, and a request that supplies both lists, or an invalid format, is rejected with a 400 `invalid_request_error`. Analogy: a street address. Naming the whole street covers every house on it, while naming house number 12 gets you only that house. A wildcard in front of the street name is something the post office will not accept.",
+      "distractor_explanations": {
+        "C": "Wildcards are allowed only in the path after the domain. An entry like `*.example.com` is rejected with a 400.",
+        "D": "Supplying both in one request returns a 400. A request uses one list or the other.",
+        "E": "Entries are bare domains. Including the HTTP or HTTPS scheme makes the format invalid."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Web Search Domain Matching",
+      "id": "CCDV-E20-Q44",
+      "exam_id": 20,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q1051"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 45,
+      "prompt": "A support agent has `web_fetch` enabled. Its system prompt lists the runbook URL `https://runbooks.example.com/db-failover`, and the user asks it to follow the failover runbook. The tool result is a `web_fetch_tool_result_error` with `error_code` set to `url_not_in_prior_context`. What is the fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Raise `max_content_tokens` so the runbook page is not truncated."
+        },
+        {
+          "key": "B",
+          "text": "Add `runbooks.example.com` to `allowed_domains` on the tool."
+        },
+        {
+          "key": "C",
+          "text": "Set `citations` to `{\"enabled\": true}` on the tool so the URL is accepted as a source."
+        },
+        {
+          "key": "D",
+          "text": "Include the URL in a user message, or return it in a client tool result."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Web fetch can only retrieve URLs that have already appeared in the conversation: in user messages, in client tool results, or in earlier web search or fetch results. A URL that appears only in the system prompt, or only in Claude's own output, is refused with `url_not_in_prior_context`, which limits data exfiltration. Putting the URL in a user message fixes it. Analogy: a courier who collects only from addresses written on a slip a customer hands over. An address pinned on the depot noticeboard does not count, and the depot's approved-areas list is a separate check.",
+      "distractor_explanations": {
+        "A": "That setting limits how much fetched content enters context. The fetch here was refused before any content was read.",
+        "B": "Domain filtering produces `url_not_allowed`. This error says the URL never appeared in the conversation.",
+        "C": "Citations control whether the answer cites passages. They do not decide which URLs may be fetched."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Web Fetch URL Validation",
+      "id": "CCDV-E20-Q45",
+      "exam_id": 20,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q1052"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 46,
+      "prompt": "An agent built with the SDK tool runner is about to get a `refund_order` tool. Company policy requires a person to approve every refund before it executes, and refunds must never run unattended. Which approach fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use a manual tool-use loop and pause for approval before running `refund_order`."
+        },
+        {
+          "key": "B",
+          "text": "Keep the tool runner and set `max_iterations` to 1 so the loop stops before each refund."
+        },
+        {
+          "key": "C",
+          "text": "Use `until_done()` and have a person review the final message the runner returns."
+        },
+        {
+          "key": "D",
+          "text": "Wrap `refund_order` so exceptions return a tool result with `is_error: true`."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The tool runner automates the loop, so it runs tools as soon as Claude requests them. When you need human-in-the-loop approval, custom logging or conditional execution, the manual loop is the documented choice, because your code sits between the `tool_use` block and its execution. `max_iterations` only bounds the number of turns, and reviewing a final message happens after the refunds have run.",
+      "distractor_explanations": {
+        "B": "`max_iterations` bounds how many turns the loop takes. It does not present an approval step for a specific call.",
+        "C": "By then the refunds have already run. A review of the final message comes too late.",
+        "D": "That handles failures after a tool runs. Approval has to happen before the tool executes."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Runner vs Manual Loop",
+      "id": "CCDV-E20-Q46",
+      "exam_id": 20,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q1053"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 47,
+      "prompt": "Two separate calls use the code execution tool, as shown with headers omitted. Claude answers request 2 by saying that `report.csv` does not exist.\n\n```bash\n# request 1\ncurl https://api.anthropic.com/v1/messages -d '{\n  \"model\": \"claude-sonnet-5-5\", \"max_tokens\": 2048,\n  \"messages\": [{\"role\": \"user\", \"content\": \"Write report.csv\"}],\n  \"tools\": [{\"type\": \"code_execution_20250825\",\n             \"name\": \"code_execution\"}]}'\n\n# request 2, a few minutes later\ncurl https://api.anthropic.com/v1/messages -d '{\n  \"model\": \"claude-sonnet-5-5\", \"max_tokens\": 2048,\n  \"messages\": [{\"role\": \"user\", \"content\": \"Chart report.csv\"}],\n  \"tools\": [{\"type\": \"code_execution_20250825\",\n             \"name\": \"code_execution\"}]}'\n```\n\nWhich change fixes it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Switch to `code_execution_20260120`, which keeps the workspace between requests."
+        },
+        {
+          "key": "B",
+          "text": "Raise `max_tokens` on the second request so the chart code can finish."
+        },
+        {
+          "key": "C",
+          "text": "Add a `cache_control` breakpoint to the first request's tool result."
+        },
+        {
+          "key": "D",
+          "text": "Pass the `container` ID from the first response in the second request."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Each request that uses the code execution tool runs in a new container unless you pass back the container ID from an earlier response in the `container` parameter. Reusing the container keeps the files created before, so the chart request can find `report.csv`. Containers expire 30 days after creation and are checkpointed after about five minutes of inactivity, so a reused ID inside that window is restored.",
+      "distractor_explanations": {
+        "A": "Newer versions keep interpreter state only when the same container is reused. A request without the ID still starts fresh.",
+        "B": "The file is missing because the second request starts in a new container, not because the reply ran short.",
+        "C": "Caching reuses prompt tokens. It does not keep files inside a sandbox container."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Code Execution Container Reuse",
+      "id": "CCDV-E20-Q47",
+      "exam_id": 20,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q1054"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 48,
+      "prompt": "Security requires that sandboxed Bash commands on MDM-managed laptops reach only `github.com` and `registry.npmjs.org`, even when a developer switches to `bypassPermissions` mode. Both hosts are already listed in `sandbox.network.allowedDomains` in user settings. Which change enforces the rule?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add `network.deniedDomains` entries for the hosts developers should not reach."
+        },
+        {
+          "key": "B",
+          "text": "Add `strictAllowlist: true` to each repository's `.claude/settings.json`."
+        },
+        {
+          "key": "C",
+          "text": "Add a CLAUDE.md rule telling Claude to contact only those two hosts."
+        },
+        {
+          "key": "D",
+          "text": "Deploy managed settings that set `allowManagedDomainsOnly` to `true` and list the two hosts."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The sandbox proxy checks each host against the allowed domains, but a host outside the list is not always refused: in `bypassPermissions` mode it is allowed without a prompt. Setting `allowManagedDomainsOnly` in managed settings makes the proxy refuse non-allowed domains in every permission mode, and only the managed `allowedDomains` count, so developers cannot widen the list. Analogy: a building's front gate. Guards normally question visitors who are not on the list, but when the manager waves everyone through the gate stays open, unless head office locks it so only head office's guest list counts. A noticeboard asking visitors to behave is not a lock.",
+      "distractor_explanations": {
+        "A": "A deny list blocks only the hosts it names. Any unlisted host would still be allowed without a prompt in bypass mode.",
+        "B": "`strictAllowlist` set in a repository's settings has no effect. It is read from user, managed or command-line settings.",
+        "C": "An instruction is soft guidance. The proxy still allows other hosts without a prompt in bypass mode."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Managed Sandbox Domain Lock",
+      "id": "CCDV-E20-Q48",
+      "exam_id": 20,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q1055"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 49,
+      "prompt": "A project's `.claude/settings.json`, in the directory `/Users/dana/billing`, contains the rule below, yet Claude's Read tool still opens `/Users/dana/billing/.env`.\n\n```json\n{\n  \"permissions\": {\n    \"deny\": [\"Read(/Users/dana/billing/.env)\"]\n  }\n}\n```\n\nWhich change is correct?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a `Bash(cat .env)` deny rule next to the existing rule."
+        },
+        {
+          "key": "B",
+          "text": "Change the rule to `Read(./.env)`, a path relative to the current directory."
+        },
+        {
+          "key": "C",
+          "text": "Rewrite it as `Write(/Users/dana/billing/.env)` to block access to the file."
+        },
+        {
+          "key": "D",
+          "text": "Move the rule to `permissions.ask` so Claude must prompt before reading the file."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "In Read and Edit rules a single leading slash does not mean the filesystem root. It anchors at the settings source, so in project settings `/Users/dana/billing/.env` resolves to `<project>/Users/dana/billing/.env`, a path that does not exist. Use a relative path such as `./.env`, or `//Users/dana/billing/.env` for a true absolute path. Analogy: directions that begin from the school gate. Written inside the project, they start at the project's own front door instead of the town square, so you end up in an empty field. Moving the rule to ask, or writing it for another tool, leaves the address wrong.",
+      "distractor_explanations": {
+        "A": "That covers one shell command. The Read tool can still open the file.",
+        "C": "Path rules for `Write` are never consulted, and the single leading slash still anchors at the project.",
+        "D": "An ask rule uses the same path anchoring, so it would still point at a path that does not exist."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Deny Rule Path Anchors",
+      "id": "CCDV-E20-Q49",
+      "exam_id": 20,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q1056"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 50,
+      "prompt": "An administrator deploys managed settings that deny `Read(./.env)` and `Read(./secrets/**)`. The administrator now wants developers' own `permissions.allow` rules in user, project and local settings, and rules passed with `--allowedTools`, to stop applying, so that only the organization's permission rules count. Which setting does that?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Copy the managed deny rules into each repository's `.claude/settings.json`."
+        },
+        {
+          "key": "B",
+          "text": "Set `permissions.disableBypassPermissionsMode` to `\"disable\"` in managed settings."
+        },
+        {
+          "key": "C",
+          "text": "Set `allowManagedPermissionRulesOnly` to `true` in the managed settings."
+        },
+        {
+          "key": "D",
+          "text": "Set `allowManagedHooksOnly` to `true`, which restricts which hooks run."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Managed deny rules already cannot be overridden, but developers' allow rules still merge with the organization's. `allowManagedPermissionRulesOnly`, a managed-only key, makes managed settings the only source of permission rules, so user, project and local rules and `--allowedTools` are ignored. Analogy: a company dress code that already forbids certain clothes and now also says only HR's approved-items list counts, so employees can no longer add their own exceptions. Turning off bypass mode or limiting hooks closes other doors, not the list of allowed items.",
+      "distractor_explanations": {
+        "A": "Project files are editable by developers and do not remove allow rules from other sources.",
+        "B": "That blocks bypass mode. Developers' allow rules from their own settings files keep merging in.",
+        "D": "That limits hooks, not permission rules. Developers' allow rules would still apply."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Managed Permission Rules Only",
+      "id": "CCDV-E20-Q50",
+      "exam_id": 20,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q1057"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 51,
+      "prompt": "A team adds `Write(./infra/**)` to `permissions.deny` to stop file changes under `infra/`, while Claude must still be able to read those files. Afterwards Claude edits `infra/main.tf` with its Edit tool. What is the correct fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a second rule, `Write(./infra/*)`, to catch single-level paths."
+        },
+        {
+          "key": "B",
+          "text": "Move the rule from `deny` to `ask`, so each write prompts for approval."
+        },
+        {
+          "key": "C",
+          "text": "Replace the rule with `Edit(./infra/**)`, which governs every built-in tool that writes files."
+        },
+        {
+          "key": "D",
+          "text": "Add `Read(./infra/**)` to the deny list as well."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Claude Code checks file permissions against `Edit(path)` and `Read(path)` rules only. A path rule written for `Write` is accepted but never consulted, so the edit goes through. `Edit` rules apply to every built-in tool that edits files and leave reading allowed. A `Read` deny would also stop edits, but it stops reading as well.",
+      "distractor_explanations": {
+        "A": "Path rules for `Write` are accepted but never consulted, whatever the pattern.",
+        "B": "The path rule for `Write` is still never consulted, and a prompt would not block anything.",
+        "D": "A Read deny does block edits on the path, but it blocks reading too, which the team needs."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Edit Rules Not Write Rules",
+      "id": "CCDV-E20-Q51",
+      "exam_id": 20,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q1058"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 52,
+      "prompt": "A developer is deep in a long Claude Code session where `Allow for this session` approvals for `npm test` and `git diff` are already granted. They want to try a different design on a copy of the conversation, leave the original session untouched on disk, and keep those approvals without granting them again. Which action fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Run `/compact` with instructions to focus the summary on the new design"
+        },
+        {
+          "key": "B",
+          "text": "Run `/clear`, then describe the design to Claude again from scratch"
+        },
+        {
+          "key": "C",
+          "text": "Run `/branch try-streaming` from inside the session that is already running"
+        },
+        {
+          "key": "D",
+          "text": "Exit the session, then start a new process with `claude --continue --fork-session`"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "`/branch` copies the conversation so far into a new session and switches the running Claude Code process into it, leaving the original unchanged and still listed in the picker. Because the process stays the same, \"Allow for this session\" grants carry over. Forking from the command line with `--fork-session` also creates a copy, but it launches a new process that starts without those grants. Analogy: copying a save file inside a video game versus quitting and loading a copy from the main menu. Inside the game, your unlocked doors stay unlocked, while a fresh launch makes you open each door again. `/compact` is like overwriting your save with a shorter summary.",
+      "distractor_explanations": {
+        "A": "`/compact` replaces the history of the current session with a summary in place. It does not leave an untouched original to return to.",
+        "B": "`/clear` saves the old conversation but starts the new one empty, so there is no copy of the conversation to work from.",
+        "D": "A fork made in a separate process starts without the session-scoped approvals, so they would have to be granted again."
+      },
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Branching a Session",
+      "id": "CCDV-E20-Q52",
+      "exam_id": 20,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q1059"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-20.json",
+      "source_id": 53,
+      "prompt": "A support agent has been live for a month. The team keeps a 40-task capability eval that the agent passes about half the time. Customers have reported 25 distinct failures in the support queue, and engineers fix them one at a time, worried that earlier fixes will break. What is the best addition to the eval work?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Have engineers re-grade the 25 cases by hand before each release, as they know the failures best"
+        },
+        {
+          "key": "B",
+          "text": "Hold off until about 500 tasks have been collected so the sample is statistically sound"
+        },
+        {
+          "key": "C",
+          "text": "Fold the 25 failures into the 40-task capability set and track a single pass rate for everything"
+        },
+        {
+          "key": "D",
+          "text": "Turn each reported failure into a task with a clear pass/fail check and run them on every change"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Real failures from the support queue or bug tracker make the most useful eval tasks, and 20 to 50 of them is a good start. Each should be unambiguous, so that two experts would reach the same verdict, and be graded by a check that can run on every change. Held apart from capability evals, which start with low pass rates, these form a regression suite expected to pass nearly every time. Analogy: a mechanic's logbook. Every fault a customer once reported becomes a line on the pre-delivery checklist, and each car is checked against all of them every time. Mixing the list in with experimental road tests would blur what the score means.",
+      "distractor_explanations": {
+        "A": "Human grading is the gold standard but scales slowly. Tasks with clear pass/fail checks can be run automatically on every change.",
+        "B": "The guidance is to start with 20-50 tasks drawn from real failures, since early gains are large. Waiting delays protection against regressions.",
+        "C": "A capability eval is meant to start with a low pass rate. Regression tasks should sit near 100%, and blending them hides which kind of change moved the number."
+      },
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "Regression Suite from Reported Failures",
+      "id": "CCDV-E20-Q53",
+      "exam_id": 20,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q1060"
+    }
+  ]
+}

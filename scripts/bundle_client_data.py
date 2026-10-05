@@ -127,10 +127,10 @@ def bundle():
                 "contributed_questions": mod_tier_count
             })
 
-    exam_style_count = sum(1 for q in all_questions if q.get("exam_id", 0) == 19)
+    exam_style_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (19, 20))
     if exam_style_count > 0:
         es_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)"
-        es_desc = "Developed specifically for Exam #19 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps."
+        es_desc = "Developed specifically for Exams #19 & #20 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps."
         existing_es = next((s for s in sources_list if s.get("name") == es_source_name), None)
         if existing_es:
             existing_es["contributed_questions"] = exam_style_count
