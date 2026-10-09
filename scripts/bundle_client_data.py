@@ -2,7 +2,7 @@
 """
 scripts/bundle_client_data.py
 
-Compiles all available exam forms in data/exams/ (supporting 10 or 12 exams)
+Compiles all available exam forms in data/exams/ (supporting 10 to 22 exams)
 into data/all_questions.json and js/exam-data.js, and updates UI count badges.
 
 Usage:
@@ -127,10 +127,10 @@ def bundle():
                 "contributed_questions": mod_tier_count
             })
 
-    exam_style_count = sum(1 for q in all_questions if q.get("exam_id", 0) in (19, 20))
+    exam_style_count = sum(1 for q in all_questions if 19 <= q.get("exam_id", 0) <= 22)
     if exam_style_count > 0:
         es_source_name = "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)"
-        es_desc = "Developed specifically for Exams #19 & #20 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps."
+        es_desc = "Developed specifically for Exams #19–#22 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps."
         existing_es = next((s for s in sources_list if s.get("name") == es_source_name), None)
         if existing_es:
             existing_es["contributed_questions"] = exam_style_count

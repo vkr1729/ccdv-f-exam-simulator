@@ -1,6 +1,6 @@
 {
-  "total_questions": 1060,
-  "exams_count": 20,
+  "total_questions": 1166,
+  "exams_count": 22,
   "questions_per_exam": 53,
   "sources": [
     {
@@ -48,8 +48,8 @@
     {
       "name": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
       "url": "https://github.com/vkr1729/ccdv-f-exam-simulator",
-      "description": "Developed specifically for Exams #19 & #20 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps.",
-      "contributed_questions": 106
+      "description": "Developed specifically for Exams #19–#22 offering an applied-scenario simulation with constraint-driven scenarios, realistic code and config snippets, and short plausible options; not sourced from external mock dumps.",
+      "contributed_questions": 212
     }
   ],
   "provenance": [
@@ -8531,6 +8531,854 @@
       "domain": "D8",
       "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
       "source_file": "exam-style-tier-exam-20.json",
+      "source_id": "53"
+    },
+    {
+      "id": "CCDV-E21-Q01",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "1"
+    },
+    {
+      "id": "CCDV-E21-Q02",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "2"
+    },
+    {
+      "id": "CCDV-E21-Q03",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "3"
+    },
+    {
+      "id": "CCDV-E21-Q04",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "4"
+    },
+    {
+      "id": "CCDV-E21-Q05",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "5"
+    },
+    {
+      "id": "CCDV-E21-Q06",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "6"
+    },
+    {
+      "id": "CCDV-E21-Q07",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "7"
+    },
+    {
+      "id": "CCDV-E21-Q08",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "8"
+    },
+    {
+      "id": "CCDV-E21-Q09",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "9"
+    },
+    {
+      "id": "CCDV-E21-Q10",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "10"
+    },
+    {
+      "id": "CCDV-E21-Q11",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "11"
+    },
+    {
+      "id": "CCDV-E21-Q12",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "12"
+    },
+    {
+      "id": "CCDV-E21-Q13",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "13"
+    },
+    {
+      "id": "CCDV-E21-Q14",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "14"
+    },
+    {
+      "id": "CCDV-E21-Q15",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "15"
+    },
+    {
+      "id": "CCDV-E21-Q16",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "16"
+    },
+    {
+      "id": "CCDV-E21-Q17",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "17"
+    },
+    {
+      "id": "CCDV-E21-Q18",
+      "exam": 21,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "18"
+    },
+    {
+      "id": "CCDV-E21-Q19",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "19"
+    },
+    {
+      "id": "CCDV-E21-Q20",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "20"
+    },
+    {
+      "id": "CCDV-E21-Q21",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "21"
+    },
+    {
+      "id": "CCDV-E21-Q22",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "22"
+    },
+    {
+      "id": "CCDV-E21-Q23",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "23"
+    },
+    {
+      "id": "CCDV-E21-Q24",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "24"
+    },
+    {
+      "id": "CCDV-E21-Q25",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "25"
+    },
+    {
+      "id": "CCDV-E21-Q26",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "26"
+    },
+    {
+      "id": "CCDV-E21-Q27",
+      "exam": 21,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "27"
+    },
+    {
+      "id": "CCDV-E21-Q28",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "28"
+    },
+    {
+      "id": "CCDV-E21-Q29",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "29"
+    },
+    {
+      "id": "CCDV-E21-Q30",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "30"
+    },
+    {
+      "id": "CCDV-E21-Q31",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "31"
+    },
+    {
+      "id": "CCDV-E21-Q32",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "32"
+    },
+    {
+      "id": "CCDV-E21-Q33",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "33"
+    },
+    {
+      "id": "CCDV-E21-Q34",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "34"
+    },
+    {
+      "id": "CCDV-E21-Q35",
+      "exam": 21,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "35"
+    },
+    {
+      "id": "CCDV-E21-Q36",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "36"
+    },
+    {
+      "id": "CCDV-E21-Q37",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "37"
+    },
+    {
+      "id": "CCDV-E21-Q38",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "38"
+    },
+    {
+      "id": "CCDV-E21-Q39",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "39"
+    },
+    {
+      "id": "CCDV-E21-Q40",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "40"
+    },
+    {
+      "id": "CCDV-E21-Q41",
+      "exam": 21,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "41"
+    },
+    {
+      "id": "CCDV-E21-Q42",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "42"
+    },
+    {
+      "id": "CCDV-E21-Q43",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "43"
+    },
+    {
+      "id": "CCDV-E21-Q44",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "44"
+    },
+    {
+      "id": "CCDV-E21-Q45",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "45"
+    },
+    {
+      "id": "CCDV-E21-Q46",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "46"
+    },
+    {
+      "id": "CCDV-E21-Q47",
+      "exam": 21,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "47"
+    },
+    {
+      "id": "CCDV-E21-Q48",
+      "exam": 21,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "48"
+    },
+    {
+      "id": "CCDV-E21-Q49",
+      "exam": 21,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "49"
+    },
+    {
+      "id": "CCDV-E21-Q50",
+      "exam": 21,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "50"
+    },
+    {
+      "id": "CCDV-E21-Q51",
+      "exam": 21,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "51"
+    },
+    {
+      "id": "CCDV-E21-Q52",
+      "exam": 21,
+      "domain": "D7",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "52"
+    },
+    {
+      "id": "CCDV-E21-Q53",
+      "exam": 21,
+      "domain": "D8",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-21.json",
+      "source_id": "53"
+    },
+    {
+      "id": "CCDV-E22-Q01",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "1"
+    },
+    {
+      "id": "CCDV-E22-Q02",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "2"
+    },
+    {
+      "id": "CCDV-E22-Q03",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "3"
+    },
+    {
+      "id": "CCDV-E22-Q04",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "4"
+    },
+    {
+      "id": "CCDV-E22-Q05",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "5"
+    },
+    {
+      "id": "CCDV-E22-Q06",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "6"
+    },
+    {
+      "id": "CCDV-E22-Q07",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "7"
+    },
+    {
+      "id": "CCDV-E22-Q08",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "8"
+    },
+    {
+      "id": "CCDV-E22-Q09",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "9"
+    },
+    {
+      "id": "CCDV-E22-Q10",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "10"
+    },
+    {
+      "id": "CCDV-E22-Q11",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "11"
+    },
+    {
+      "id": "CCDV-E22-Q12",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "12"
+    },
+    {
+      "id": "CCDV-E22-Q13",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "13"
+    },
+    {
+      "id": "CCDV-E22-Q14",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "14"
+    },
+    {
+      "id": "CCDV-E22-Q15",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "15"
+    },
+    {
+      "id": "CCDV-E22-Q16",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "16"
+    },
+    {
+      "id": "CCDV-E22-Q17",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "17"
+    },
+    {
+      "id": "CCDV-E22-Q18",
+      "exam": 22,
+      "domain": "D1",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "18"
+    },
+    {
+      "id": "CCDV-E22-Q19",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "19"
+    },
+    {
+      "id": "CCDV-E22-Q20",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "20"
+    },
+    {
+      "id": "CCDV-E22-Q21",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "21"
+    },
+    {
+      "id": "CCDV-E22-Q22",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "22"
+    },
+    {
+      "id": "CCDV-E22-Q23",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "23"
+    },
+    {
+      "id": "CCDV-E22-Q24",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "24"
+    },
+    {
+      "id": "CCDV-E22-Q25",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "25"
+    },
+    {
+      "id": "CCDV-E22-Q26",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "26"
+    },
+    {
+      "id": "CCDV-E22-Q27",
+      "exam": 22,
+      "domain": "D2",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "27"
+    },
+    {
+      "id": "CCDV-E22-Q28",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "28"
+    },
+    {
+      "id": "CCDV-E22-Q29",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "29"
+    },
+    {
+      "id": "CCDV-E22-Q30",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "30"
+    },
+    {
+      "id": "CCDV-E22-Q31",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "31"
+    },
+    {
+      "id": "CCDV-E22-Q32",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "32"
+    },
+    {
+      "id": "CCDV-E22-Q33",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "33"
+    },
+    {
+      "id": "CCDV-E22-Q34",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "34"
+    },
+    {
+      "id": "CCDV-E22-Q35",
+      "exam": 22,
+      "domain": "D3",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "35"
+    },
+    {
+      "id": "CCDV-E22-Q36",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "36"
+    },
+    {
+      "id": "CCDV-E22-Q37",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "37"
+    },
+    {
+      "id": "CCDV-E22-Q38",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "38"
+    },
+    {
+      "id": "CCDV-E22-Q39",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "39"
+    },
+    {
+      "id": "CCDV-E22-Q40",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "40"
+    },
+    {
+      "id": "CCDV-E22-Q41",
+      "exam": 22,
+      "domain": "D4",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "41"
+    },
+    {
+      "id": "CCDV-E22-Q42",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "42"
+    },
+    {
+      "id": "CCDV-E22-Q43",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "43"
+    },
+    {
+      "id": "CCDV-E22-Q44",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "44"
+    },
+    {
+      "id": "CCDV-E22-Q45",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "45"
+    },
+    {
+      "id": "CCDV-E22-Q46",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "46"
+    },
+    {
+      "id": "CCDV-E22-Q47",
+      "exam": 22,
+      "domain": "D5",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "47"
+    },
+    {
+      "id": "CCDV-E22-Q48",
+      "exam": 22,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "48"
+    },
+    {
+      "id": "CCDV-E22-Q49",
+      "exam": 22,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "49"
+    },
+    {
+      "id": "CCDV-E22-Q50",
+      "exam": 22,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "50"
+    },
+    {
+      "id": "CCDV-E22-Q51",
+      "exam": 22,
+      "domain": "D6",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "51"
+    },
+    {
+      "id": "CCDV-E22-Q52",
+      "exam": 22,
+      "domain": "D7",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": "52"
+    },
+    {
+      "id": "CCDV-E22-Q53",
+      "exam": 22,
+      "domain": "D8",
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
       "source_id": "53"
     }
   ]

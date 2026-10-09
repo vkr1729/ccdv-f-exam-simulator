@@ -3,7 +3,7 @@
 validate_site.py
 Comprehensive integrity and validation test suite for CCDV-F Exam Simulator:
 1. Asserts all static assets and client bundles exist.
-2. Asserts all available exam files (10 to 12) exist, each containing exactly 53 questions.
+2. Asserts all available exam files (10 to 22) exist, each containing exactly 53 questions.
 3. Asserts official CCDV-F blueprint weights (18/9/8/6/6/4/1/1) on EVERY form.
 4. Asserts strictly unique question IDs and prompts across the entire system.
 5. Asserts multi-source distribution on base-10 forms: Non-Srinipusuluri >= 65%, Srinipusuluri <= 35%.

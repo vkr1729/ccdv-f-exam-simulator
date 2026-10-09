@@ -41,7 +41,9 @@ GLOBAL_ID_RANGES = {
     17: (849, 901),
     18: (902, 954),
     19: (955, 1007),
-    20: (1008, 1060)
+    20: (1008, 1060),
+    21: (1061, 1113),
+    22: (1114, 1166)
 }
 
 def load_existing_prompts(exams_dir, exclude_exam_ids):

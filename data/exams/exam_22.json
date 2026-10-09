@@ -1,0 +1,2280 @@
+{
+  "exam_id": 22,
+  "title": "CCDV-F Mock Exam #22 (Exam-Style Tier)",
+  "description": "Full-length 53-question simulation in the applied-scenario style (120 minutes): constraint-driven scenarios, code and config snippets, and short options that are all real features but only one fits.",
+  "time_limit_minutes": 120,
+  "passing_score_percentage": 72,
+  "scaled_pass_score": 720,
+  "scaled_max_score": 1000,
+  "question_count": 53,
+  "domains": [
+    {
+      "id": "D1",
+      "name": "Applications & Integration",
+      "count": 18,
+      "weight": 33.1
+    },
+    {
+      "id": "D2",
+      "name": "Model Selection & Optimization",
+      "count": 9,
+      "weight": 16.8
+    },
+    {
+      "id": "D3",
+      "name": "Agents & Workflows",
+      "count": 8,
+      "weight": 14.7
+    },
+    {
+      "id": "D4",
+      "name": "Prompt & Context Engineering",
+      "count": 6,
+      "weight": 11.0
+    },
+    {
+      "id": "D5",
+      "name": "Tools & MCPs",
+      "count": 6,
+      "weight": 10.6
+    },
+    {
+      "id": "D6",
+      "name": "Security & Safety",
+      "count": 4,
+      "weight": 8.1
+    },
+    {
+      "id": "D7",
+      "name": "Claude Code",
+      "count": 1,
+      "weight": 3.1
+    },
+    {
+      "id": "D8",
+      "name": "Eval, Testing & Debugging",
+      "count": 1,
+      "weight": 2.6
+    }
+  ],
+  "questions": [
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 1,
+      "prompt": "A deployment service uses one service account key that has access to both the Dev and Staging workspaces. Policy allows only identity-backed keys, so legacy workspace keys are out, and the service must keep this single key. Every call now fails with HTTP 400 `invalid_request_error`, and the message says `anthropic-workspace-id is required`. What should the service change?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Retry each call with exponential backoff until the 400 response stops appearing"
+        },
+        {
+          "key": "B",
+          "text": "Send the target workspace's `wrkspc_` ID in the `anthropic-workspace-id` header on every request"
+        },
+        {
+          "key": "C",
+          "text": "Create a legacy workspace key for each environment and choose whichever key matches the target call"
+        },
+        {
+          "key": "D",
+          "text": "Replace the key with an Admin API key from the Admin keys page of the Console"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A personal or service account key that is not tied to one workspace does not say where a request should run, so each call must name the workspace in the `anthropic-workspace-id` header. Omitting it returns a 400 `invalid_request_error`; a key created for a single workspace needs no header. In the Python SDK you can set it once through `default_headers` on a client per workspace. Analogy: a hotel keycard that opens doors on several floors still needs you to press the floor button in the elevator, otherwise the lift refuses to move. A legacy workspace key is like a card cut for one floor, which the policy forbids here.",
+      "distractor_explanations": {
+        "A": "A 400 `invalid_request_error` is terminal. The request stays malformed on every retry until the header is added.",
+        "C": "Workspace keys would work, since each one belongs to a single workspace, but they are legacy and the policy rules them out.",
+        "D": "Admin API keys authenticate the Admin-section APIs such as Usage and Cost. They are not a way to choose a workspace for Messages calls."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Multi-Workspace Key Header",
+      "id": "CCDV-E22-Q01",
+      "exam_id": 22,
+      "exam_question_num": 1,
+      "global_id": "CCDV-Q1114"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 2,
+      "prompt": "A CI job on a self-hosted build server calls the first-party API with a personal key that belongs to an engineer who has just left. Calls began failing after the offboarding. The server has no cloud or OIDC identity that could be federated. What is the best replacement for this unattended job?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A different engineer's personal key, kept in the CI system's secret store"
+        },
+        {
+          "key": "B",
+          "text": "A service account key created by an organization admin and scoped to the job's workspace"
+        },
+        {
+          "key": "C",
+          "text": "Workload Identity Federation, exchanging an identity token that the build server itself presents"
+        },
+        {
+          "key": "D",
+          "text": "A legacy workspace key created for the job's workspace and stored as a CI secret"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "A personal key acts as the person who made it and is archived when that person leaves the organization. For shared or unattended workloads, an organization admin creates a service account, and the job uses a key that belongs to it. That identity-backed key keeps working when individual engineers come and go. Workload Identity Federation is even better when a platform identity exists, but this server has none.",
+      "distractor_explanations": {
+        "A": "A personal key acts as one person and stops working when that person leaves, so the same failure would return.",
+        "C": "Federation exchanges a token issued by an identity provider. This server has no such identity to exchange.",
+        "D": "It would work, but workspace keys are legacy. Identity-backed keys are preferred for new integrations."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Credential for Unattended Jobs",
+      "id": "CCDV-E22-Q02",
+      "exam_id": 22,
+      "exam_question_num": 2,
+      "global_id": "CCDV-Q1115"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 3,
+      "prompt": "A company signs 250 developers in to Claude Code through Console billing. Finance wants each developer capped at an individual monthly spend. Production services run in the Default Workspace, and the organization's default cap of 100 workspaces applies. Which approach fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set a per-user monthly spend limit for each developer in the Claude Code workspace"
+        },
+        {
+          "key": "B",
+          "text": "Set one monthly spend limit on the Claude Code workspace as a whole"
+        },
+        {
+          "key": "C",
+          "text": "Issue each developer a key in the Default Workspace and give each of those keys its own spend limit"
+        },
+        {
+          "key": "D",
+          "text": "Create one workspace per developer and set a spend limit on each of them"
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Claude Code sign-in through the Console creates a dedicated Claude Code workspace and mints a key for each user inside it. That workspace is the only one that supports per-user monthly spend limits, so it is where individual caps belong. Analogy: a family phone plan where each line has its own data cap, instead of one pool that the biggest user can drain. A workspace-wide limit is the pool, and buying a separate plan per person runs into the 100-workspace ceiling long before 250 developers are covered.",
+      "distractor_explanations": {
+        "B": "That caps the combined spend of the whole workspace, so a single heavy user could still use up everyone's share.",
+        "C": "The Default Workspace cannot carry custom limits, and Claude Code mints its per-user keys in its own workspace.",
+        "D": "250 workspaces is more than the default cap of 100 per organization, and this is not how per-user limits are meant to be set."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Claude Code Workspace Limits",
+      "id": "CCDV-E22-Q03",
+      "exam_id": 22,
+      "exam_question_num": 3,
+      "global_id": "CCDV-Q1116"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 4,
+      "prompt": "A team uses the same byte-identical 30k-token compliance prompt in two services on the first-party API. Support runs in the Support workspace and Sales in the Sales workspace. The plan is to let Support warm the prompt cache so that Sales reads it at the cache-read price. Sales sees no cache reads. What is the flaw in this plan?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The two services send different tool definitions, and a tools change invalidates the whole cache"
+        },
+        {
+          "key": "B",
+          "text": "The first-party API caches per organization, while Amazon Bedrock isolates caches by workspace"
+        },
+        {
+          "key": "C",
+          "text": "Five minutes is too short a lifetime; entries need the one-hour `ttl` before another service can read them"
+        },
+        {
+          "key": "D",
+          "text": "Prompt caches do not cross workspaces; Sales has to write its own cache entry before it can read it"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "On the first-party API, prompt caches are isolated per workspace, so an entry written in one workspace can never be read from another, even inside the same organization. Sales therefore pays the cache-write price once and only then earns reads. If both services must share one cache, they have to run in the same workspace. Analogy: two branches of a bakery chain that each keep their own fridge. Dough prepared in the Support branch cannot be pulled out of the Sales branch's fridge, however identical the recipe is. A longer TTL only keeps each fridge's dough fresh longer.",
+      "distractor_explanations": {
+        "A": "That is a real invalidation rule, but the stem says the prompts are identical. The barrier here is the workspace boundary.",
+        "B": "It is the other way round. The first-party API isolates caches per workspace, while Bedrock and Google Cloud isolate per organization.",
+        "C": "The TTL controls how long an entry lives for the workspace that wrote it. A longer TTL does not make an entry visible to another workspace."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Cache Isolation Across Workspaces",
+      "id": "CCDV-E22-Q04",
+      "exam_id": 22,
+      "exam_question_num": 4,
+      "global_id": "CCDV-Q1117"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 5,
+      "prompt": "Several services share one organization, and billing shows a usage spike under a workspace nobody recognizes. The team wants every logged call to record which workspace the request counted toward:\n\n```python\nraw = client.messages.with_raw_response.create(\n    model=MODEL, max_tokens=256, messages=msgs,\n)\nmsg = raw.parse()\nlog.info(\"req=%s workspace=%s\", msg._request_id, WORKSPACE)\n```\n\nWhat should replace `WORKSPACE`?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "`raw.headers.get(\"request-id\")`, the identifier the API assigns to this single request"
+        },
+        {
+          "key": "B",
+          "text": "`raw.headers.get(\"anthropic-organization-id\")`, the ID of the organization that owns the key"
+        },
+        {
+          "key": "C",
+          "text": "`msg.usage.service_tier`, the tier the API assigned to the request"
+        },
+        {
+          "key": "D",
+          "text": "`raw.headers.get(\"anthropic-workspace-id\")`, the ID of the workspace the key resolved to"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Claude API responses carry an `anthropic-workspace-id` header holding the `wrkspc_` ID of the workspace that the credential resolved to, including the Default Workspace. Reading it through `with_raw_response` lets you match calls against the `workspace_id` in usage and cost reports. The organization ID and request ID headers sit beside it but identify different things.",
+      "distractor_explanations": {
+        "A": "It identifies one request for support. It is the same value as `msg._request_id` and says nothing about the workspace.",
+        "B": "That header is returned too, but every workspace in the organization shares the same value, so it cannot point to one workspace.",
+        "C": "That field reports the capacity tier, such as standard or priority, not the workspace."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Workspace Response Header",
+      "id": "CCDV-E22-Q05",
+      "exam_id": 22,
+      "exam_question_num": 5,
+      "global_id": "CCDV-Q1118"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 6,
+      "prompt": "An organization still holds an existing Priority Tier commitment on one model, reserved for its customer-facing app. A nightly backfill on the same model runs the code below, and its logs show `priority`, so it eats committed capacity. Results are needed within minutes and the job must stay on this model:\n\n```python\nresp = client.messages.create(\n    model=MODEL, max_tokens=512, messages=msgs,\n)\nlog.info(resp.usage.service_tier)  # priority\n```\n\nWhich change fits?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the backfill to the Message Batches API and read results the next morning"
+        },
+        {
+          "key": "B",
+          "text": "Add `service_tier=\"auto\"` to the call and let the API pick the capacity tier for each request"
+        },
+        {
+          "key": "C",
+          "text": "Set a monthly spend limit on the backfill's workspace to stop it at a dollar cap"
+        },
+        {
+          "key": "D",
+          "text": "Add `service_tier=\"standard_only\"` to the call to keep it off Priority Tier capacity"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The `service_tier` request parameter accepts `auto`, the default, which uses Priority Tier capacity when the organization has it and falls back to standard otherwise, and `standard_only`, which never touches Priority capacity. The response `usage.service_tier` field reports what was actually used. Analogy: a company car park with reserved bays for customers and a general lot. A delivery van that is marked general-lot-only never takes a reserved bay, however empty one looks. Batch would be a third car park far across town, too slow for this job.",
+      "distractor_explanations": {
+        "A": "Batch is a separate tier, but results can take up to a day. The job needs them within minutes.",
+        "B": "`auto` is already the default. It prefers Priority Tier capacity when available, which is exactly what the job is doing now.",
+        "C": "A spend limit caps dollars. Until the cap is hit, each request would still draw Priority capacity."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Keeping Jobs off Priority Capacity",
+      "id": "CCDV-E22-Q06",
+      "exam_id": 22,
+      "exam_question_num": 6,
+      "global_id": "CCDV-Q1119"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 7,
+      "prompt": "A dashboard for a Console organization needs per-minute token usage for a three-hour window, returned in a single Usage API response. The request below returns only the first hour, and the response says `\"has_more\": true`:\n\n```shell\ncurl \"https://api.anthropic.com/v1/organizations/usage_report/messages?\\\nstarting_at=2026-03-02T09:00:00Z&\\\nending_at=2026-03-02T12:00:00Z&\\\nbucket_width=1m\" \\\n  -H \"anthropic-version: 2023-06-01\" \\\n  -H \"x-api-key: $ANTHROPIC_ADMIN_KEY\"\n```\n\nWhich change fixes it?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Follow the `next_page` value in a second request, and repeat until `has_more` is `false`"
+        },
+        {
+          "key": "B",
+          "text": "Change to `bucket_width=1h` and add `limit=180` so the window fits one response"
+        },
+        {
+          "key": "C",
+          "text": "Add `limit=180` to the URL's query string; `1m` buckets allow up to 1,440 in a single response"
+        },
+        {
+          "key": "D",
+          "text": "Send the same window to `/v1/organizations/cost_report` with `bucket_width=1m`"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The Usage API returns a page of time buckets whose default size depends on the bucket width: 60 for `1m`, 24 for `1h` and 7 for `1d`, with maximums of 1,440, 168 and 31. Three hours at one-minute width is 180 buckets, so the default page stops after the first hour and sets `has_more`. Raising `limit` to 180 fits the whole window in one response, far below the 1,440 cap. Analogy: a printer tray that holds 60 sheets unless you load more, so a 180-page job needs the tray loaded once instead of a refill halfway through. Following `next_page` also gets every bucket, which makes it tempting, but it costs a second request and the dashboard wants one.",
+      "distractor_explanations": {
+        "A": "That also retrieves every bucket, but it takes more than one response, and the dashboard needs a single response.",
+        "B": "That returns hourly buckets rather than per-minute ones, and `1h` buckets top out at 168 per response.",
+        "D": "The Cost API reports dollars in daily buckets (`1d`) only, so it cannot give per-minute token counts."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Usage Report Bucket Limit",
+      "id": "CCDV-E22-Q07",
+      "exam_id": 22,
+      "exam_question_num": 7,
+      "global_id": "CCDV-Q1120"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 8,
+      "prompt": "A service must keep all inference in US infrastructure, and security has approved only the first-party API. The call below returns HTTP 400:\n\n```python\nresp = client.messages.create(\n    model=\"claude-haiku-4-5\",\n    max_tokens=512,\n    inference_geo=\"us\",\n    messages=msgs,\n)\n```\n\nWhich change fixes it while keeping US-only inference?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the workload to Amazon Bedrock and choose a US region or a US inference profile there"
+        },
+        {
+          "key": "B",
+          "text": "Change `inference_geo` to `\"global\"` and keep the same model"
+        },
+        {
+          "key": "C",
+          "text": "Add `allowed_inference_geos` with `\"us\"` to the workspace, leaving the model unchanged"
+        },
+        {
+          "key": "D",
+          "text": "Switch `model` to a Claude 4.6 or later model that accepts the `inference_geo` parameter"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The `inference_geo` parameter is supported on Claude 4.6 and later models. Sending it to Claude Haiku 4.5, Sonnet 4.5, Opus 4.5 or earlier returns a 400 error. To keep US-only inference on the first-party API, the model has to change, not the parameter or the platform. Workspace geo settings control which values are allowed, but they cannot add support to a model that lacks it.",
+      "distractor_explanations": {
+        "A": "Bedrock sets the region by endpoint or inference profile, but security approved only the first-party API.",
+        "B": "Global routing may run anywhere, which breaks the US-only requirement.",
+        "C": "That setting restricts which geos a workspace may use. It does not add `inference_geo` support to an older model."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "inference_geo Model Support",
+      "id": "CCDV-E22-Q08",
+      "exam_id": 22,
+      "exam_question_num": 8,
+      "global_id": "CCDV-Q1121"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 9,
+      "prompt": "A health-data team shares one first-party workspace across five services. Compliance wants every request in that workspace processed in US infrastructure, whatever developers put in their code, and any request asking for another geo must be rejected. No application changes are allowed. What should the admin configure?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the services to the Batch API, which accepts `inference_geo` on each request"
+        },
+        {
+          "key": "B",
+          "text": "Set `default_inference_geo` alone to `us`, which applies when a request omits the parameter"
+        },
+        {
+          "key": "C",
+          "text": "Set `allowed_inference_geos` to `[\"us\"]` and `default_inference_geo` to `us` on the workspace"
+        },
+        {
+          "key": "D",
+          "text": "Ask each team to add `inference_geo=\"us\"` to its calls through a shared wrapper library in each repo"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Two workspace settings work together. `allowed_inference_geos` is the fence: a request naming a geo outside the list gets an error. `default_inference_geo` is the fallback used when a request leaves `inference_geo` out. Setting both to US makes omitted values resolve to the US and rejects explicit attempts at global, with no code changes, and the Console or the Admin API `data_residency` field can set them. Analogy: a school that both locks the doors to forbidden rooms and seats pupils in the right classroom by default. The seating alone does not stop anyone walking into another room.",
+      "distractor_explanations": {
+        "A": "Batch supports a per-request value, but it enforces nothing across a workspace.",
+        "B": "The default is only a fallback. A call that explicitly sends `inference_geo: \"global\"` can still override it.",
+        "D": "That needs application changes, and any direct call to the API bypasses the wrapper."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Workspace Inference Geo Policy",
+      "id": "CCDV-E22-Q09",
+      "exam_id": 22,
+      "exam_question_num": 9,
+      "global_id": "CCDV-Q1122"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 10,
+      "prompt": "An insurer runs Claude on Microsoft Foundry with a model hosted on Azure, and inference must stay in the United States. Developers propose adding `inference_geo: \"us\"` to every request, as they would on the first-party API. What is the correct way to meet the requirement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Choose the Hosted on Anthropic option, which offers Global Standard deployments alone"
+        },
+        {
+          "key": "B",
+          "text": "Send `inference_geo: \"us\"` on each request and keep the existing Global Standard deployment in place"
+        },
+        {
+          "key": "C",
+          "text": "Keep Global as the region scope and rely on default routing to stay in the US"
+        },
+        {
+          "key": "D",
+          "text": "Deploy the model with the Data Zone region scope, creating a US Data Zone Standard deployment"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "On Foundry the geography is chosen when you create the deployment, not on each request. Selecting the Data Zone region scope for a model hosted on Azure creates a US Data Zone Standard deployment, which keeps inference in the United States and matches what `inference_geo: \"us\"` does on the Claude API. Analogy: ordering a pizza for local delivery at the shop counter, where the delivery zone is fixed by the order slip you choose, rather than scribbling a note on every box afterwards. Hosted on Anthropic offers only Global Standard, so it cannot give that guarantee.",
+      "distractor_explanations": {
+        "A": "Hosted on Anthropic has no US Data Zone deployment type, so it cannot keep inference in the United States.",
+        "B": "`inference_geo` is not applicable on Foundry. The geography is a property of the deployment.",
+        "C": "Global Standard may serve requests from any geography and gives no US-only guarantee."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Foundry US Data Zone",
+      "id": "CCDV-E22-Q10",
+      "exam_id": 22,
+      "exam_question_num": 10,
+      "global_id": "CCDV-Q1123"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 11,
+      "prompt": "A team's nightly job sends 200,000 requests through the Message Batches API for the discount. Policy now moves it to Claude in Amazon Bedrock, the Messages API served at `/anthropic/v1/messages`. The batch calls fail there. What is the right reading of this failure?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Send the batch to the first-party batches endpoint using the Bedrock credentials"
+        },
+        {
+          "key": "B",
+          "text": "Turn on prompt caching for the prompts, which yields the same discount as batching on repeated prefixes"
+        },
+        {
+          "key": "C",
+          "text": "Message Batches is not offered there; run ordinary calls with bounded concurrency and retries"
+        },
+        {
+          "key": "D",
+          "text": "Request Priority Tier capacity on Bedrock to finish the job inside its window"
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The Claude in Amazon Bedrock page lists Message Batches among the API endpoints that are not supported, together with the Models, Admin, Compliance and Usage and Cost APIs. A migration plan therefore has to replace batching with ordinary requests, controlling concurrency and backing off on 429 responses, and accept the loss of the batch discount. The platform's feature list should be read before a design is moved across.",
+      "distractor_explanations": {
+        "A": "Bedrock credentials are AWS credentials and are not accepted by the first-party API.",
+        "B": "Prompt caching is supported there, but its savings come from cheaper repeated prefixes and do not replace the batch discount.",
+        "D": "Priority Tier is a first-party API commitment and does not address a missing batch endpoint."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Batches on Bedrock",
+      "id": "CCDV-E22-Q11",
+      "exam_id": 22,
+      "exam_question_num": 11,
+      "global_id": "CCDV-Q1124"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 12,
+      "prompt": "A Python service fans out thousands of calls like this. Throughput flattens well below its rate limits, there are no 429 responses, and nothing is failing:\n\n```python\nclient = AsyncAnthropic()\nsem = asyncio.Semaphore(400)\n\nasync def one(req):\n    async with sem:\n        return await client.messages.create(**req)\n\nout = await asyncio.gather(*(one(r) for r in reqs))\n```\n\nWhich change most directly improves concurrency?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add `stream=True` to each call and consume the events as they arrive"
+        },
+        {
+          "key": "B",
+          "text": "Install `anthropic[aiohttp]` and use `DefaultAioHttpClient()` as the client's `http_client`"
+        },
+        {
+          "key": "C",
+          "text": "Raise `max_retries` to 5 on the client, which attempts failed calls more often"
+        },
+        {
+          "key": "D",
+          "text": "Switch to the sync `Anthropic` client and call it through `asyncio.to_thread` workers"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The async client works out of the box on its default HTTP backend, but the Python SDK documents an `aiohttp` backend for better async concurrency. You install the `aiohttp` extra and pass `DefaultAioHttpClient()` as the `http_client`. The semaphore and gather pattern is already fine, and no errors or 429s point to retries or limits as the cause. Analogy: swapping a single toll booth for an electronic transponder lane. The cars, the traffic rules and the road stay the same, but more of them get through per minute. Extra staff in the booth, the threads, would not help.",
+      "distractor_explanations": {
+        "A": "Streaming changes how a single response is delivered. It does not change the HTTP engine's concurrency.",
+        "C": "Retries resend failed calls. Nothing is failing here, so they add no concurrency.",
+        "D": "Worker threads add overhead and give up the async client. The SDK's documented route to better concurrency is the aiohttp backend."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "aiohttp Backend for Async Fan-Out",
+      "id": "CCDV-E22-Q12",
+      "exam_id": 22,
+      "exam_question_num": 12,
+      "global_id": "CCDV-Q1125"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 13,
+      "prompt": "A report generator asks for very long outputs. This call raises a `ValueError` from the SDK before any request is sent, and the company proxy drops connections that stay idle for about 60 seconds:\n\n```python\nresp = client.messages.create(\n    model=MODEL,\n    max_tokens=64000,\n    messages=msgs,\n)\n```\n\nWhich change is correct?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Pass `timeout=3600` on the call, which turns off the SDK's ten-minute check on non-streaming requests"
+        },
+        {
+          "key": "B",
+          "text": "Set `max_retries=0` on the client and let the single attempt run to completion over the proxy"
+        },
+        {
+          "key": "C",
+          "text": "Catch the `ValueError` and send the same call again, perhaps after waiting a few seconds"
+        },
+        {
+          "key": "D",
+          "text": "Use `client.messages.stream(...)` and read the finished message with `get_final_message()`"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The Python SDK raises a `ValueError` for a non-streaming request that is expected to take longer than about ten minutes, which a very large `max_tokens` implies. Passing `stream=True` or overriding the timeout disables the check, but only streaming keeps bytes flowing so that idle-connection limits are not hit. `client.messages.stream()` with `get_final_message()` returns the complete message. Analogy: a long phone call where the switchboard hangs up after a minute of silence. Allowing a longer call does nothing, while talking in small chunks keeps the line alive. Raising the timeout is the first of those two, which is why it fails.",
+      "distractor_explanations": {
+        "A": "That really does silence the check, but the proxy would still drop the idle connection long before an hour passes.",
+        "B": "Retries are unrelated to the check. The error is raised before a request is made.",
+        "C": "The same arguments trigger the same error every time."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Long Requests and the SDK Check",
+      "id": "CCDV-E22-Q13",
+      "exam_id": 22,
+      "exam_question_num": 13,
+      "global_id": "CCDV-Q1126"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 14,
+      "prompt": "A document-intake service worked on the first-party API with scans of about 8 MB each, sent inline as base64. After moving to Claude on Google Cloud, requests with those scans fail with HTTP 400. The team wants to keep sending the scans inline. Which change addresses the platform difference?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Upload each scan once through the Files API and then send just the `file_id`"
+        },
+        {
+          "key": "B",
+          "text": "Downscale or recompress each scan to under 5 MB base64, the per-image limit there"
+        },
+        {
+          "key": "C",
+          "text": "Raise `max_tokens` to give the larger images more room in the reply budget"
+        },
+        {
+          "key": "D",
+          "text": "Switch the image blocks to `url` sources that point at publicly reachable copies of each scan"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Per-image limits differ by platform: images may be up to 10 MB of base64 on the Claude API directly but only 5 MB on Amazon Bedrock and Google Cloud, and those two platforms accept only base64 image sources. Files API ids and URLs, which could shrink payloads on the first-party API, are therefore unavailable. Analogy: moving flats where the new building's lift takes only smaller boxes and has no crane for hoisting furniture through the window. You repack the boxes smaller; hiring a crane, which is the URL option, is not on offer there.",
+      "distractor_explanations": {
+        "A": "On Amazon Bedrock and Google Cloud only base64 sources are available, so there is no `file_id` option.",
+        "C": "`max_tokens` limits output tokens. It has no effect on the size of an input image.",
+        "D": "URL sources are not available on those platforms either. Only base64 is accepted."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Image Limits Across Platforms",
+      "id": "CCDV-E22-Q14",
+      "exam_id": 22,
+      "exam_question_num": 14,
+      "global_id": "CCDV-Q1127"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 15,
+      "prompt": "A Console organization on the first-party API wants a nightly job that pulls usage reports. The security lead asks for an Admin API key limited to read-only access to those reports. The person creating it holds the organization `admin` role. What should the team plan for?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Use a personal key scoped to the Production workspace, which Admin endpoints accept"
+        },
+        {
+          "key": "B",
+          "text": "Pick a read-only scope when creating the key under Settings > Admin keys in the Console"
+        },
+        {
+          "key": "C",
+          "text": "Let a Workspace Developer create the key with the narrower rights that role carries"
+        },
+        {
+          "key": "D",
+          "text": "Console Admin keys cannot be scoped; use a short expiry and keep the key in a secrets manager"
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "A key created under Settings > Admin keys in a Console organization carries full access to every endpoint that accepts Admin API keys; there is no scope picker. Scopes such as `read:analytics` exist only on keys made for Claude Enterprise organizations. The practical controls are the ones available at creation: choose a short expiration, store the secret once in a secrets manager, and restrict who may read it. Analogy: a company credit card whose issuer offers no way to set a spending cap on the card itself. You cannot narrow the card, so you lock it in a safe and have it expire soon.",
+      "distractor_explanations": {
+        "A": "Admin endpoints accept a personal or service account key only when it is not scoped to a specific workspace.",
+        "B": "Console Admin keys have no selectable scopes. Scopes belong to the Claude Enterprise keys created from claude.ai.",
+        "C": "Only organization members with the admin role can create Admin API keys. A workspace role does not qualify."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Admin API Key Scoping",
+      "id": "CCDV-E22-Q15",
+      "exam_id": 22,
+      "exam_question_num": 15,
+      "global_id": "CCDV-Q1128"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 16,
+      "prompt": "A team deploys a Claude model hosted on Azure in Microsoft Foundry under the deployment name `claims-opus` and ports its first-party code to it. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Requests go to `api.anthropic.com` with the Azure key in the `x-api-key` header"
+        },
+        {
+          "key": "B",
+          "text": "The `model` field carries the deployment name `claims-opus`, not the Anthropic model ID"
+        },
+        {
+          "key": "C",
+          "text": "The Files API works on this deployment, so uploaded `file_id` references can be reused"
+        },
+        {
+          "key": "D",
+          "text": "Responses omit the `anthropic-ratelimit-*` headers, so limits are tracked in Azure monitoring"
+        },
+        {
+          "key": "E",
+          "text": "Message Batches can be used there for the same 50% discount that the first-party API gives"
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "On Foundry the value you pass as `model` is the name of your deployment, which defaults to the model ID but can be renamed, so the code has to use `claims-opus`. Foundry also omits Anthropic's standard rate-limit headers, so backoff logic that reads them gets nothing and should lean on 429 responses and Azure monitoring. Analogy: ordering at a department store counter that has its own ticket names and its own receipts. You quote the counter's ticket name, and the maker's loyalty-card figures never print on the slip. Batches and Files are products the counter simply does not stock.",
+      "distractor_explanations": {
+        "A": "Requests go to the resource's own endpoint, `{resource}.services.ai.azure.com/anthropic/v1/*`, not to the first-party host.",
+        "C": "For deployments hosted on Azure the Files API is unsupported, and such requests return 400 by design.",
+        "E": "The Message Batches API is on the list of features Foundry does not support."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Porting Code to Foundry",
+      "id": "CCDV-E22-Q16",
+      "exam_id": 22,
+      "exam_question_num": 16,
+      "global_id": "CCDV-Q1129"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 17,
+      "prompt": "A team on the first-party API is designing data-residency controls for a new workspace. Which TWO statements about these controls are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Workspace geo is chosen when the workspace is created and cannot be changed afterwards"
+        },
+        {
+          "key": "B",
+          "text": "Workspace geo decides where inference runs, making a per-request `inference_geo` unnecessary here"
+        },
+        {
+          "key": "C",
+          "text": "Rate limits are tracked per geo, so US-only traffic gets its own separate allowance"
+        },
+        {
+          "key": "D",
+          "text": "On Claude 4.6 and later, `inference_geo: \"us\"` is billed at 1.1x the standard rate on all tokens"
+        },
+        {
+          "key": "E",
+          "text": "`inference_geo` accepts `\"us\"`, `\"eu\"` and `\"global\"`, with `\"global\"` as the default"
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "D"
+      ],
+      "explanation": "Two independent settings govern residency. Inference geo, per request or as a workspace default, controls where the model runs; on Claude 4.6 and later, US-only inference costs 1.1x across input, output and cache categories. Workspace geo controls where data is stored at rest and where endpoint processing happens, and it is fixed when the workspace is created. Analogy: a restaurant's pantry is built where the restaurant opens and never moves, while the chef can be told per order to cook in a local kitchen at a 10% surcharge. The pantry's location does not decide where each dish is cooked.",
+      "distractor_explanations": {
+        "B": "Workspace geo covers data at rest and endpoint processing such as image transcoding. Inference geo is a separate setting.",
+        "C": "Rate limits are shared across all geos.",
+        "E": "Only `\"us\"` and `\"global\"` are available at present. The default is global, but there is no `\"eu\"` value."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Data Residency Controls",
+      "id": "CCDV-E22-Q17",
+      "exam_id": 22,
+      "exam_question_num": 17,
+      "global_id": "CCDV-Q1130"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 18,
+      "prompt": "A document-review tool sends scans and photos to Claude as `image` blocks on the first-party API. Which TWO statements about how images are handled are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "An animated GIF is read frame by frame and analysed like a short video clip"
+        },
+        {
+          "key": "B",
+          "text": "Images sent inline are retained and can be listed and deleted later through the Files API"
+        },
+        {
+          "key": "C",
+          "text": "The `url` source type works on every platform, including Amazon Bedrock and Google Cloud"
+        },
+        {
+          "key": "D",
+          "text": "Claude does not read image metadata such as EXIF, so needed details must go into the text"
+        },
+        {
+          "key": "E",
+          "text": "Images placed after text still work, though image-then-text is preferred when possible"
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "Claude does not receive image metadata, so details such as capture time or location have to be written into the prompt. Ordering is a preference rather than a rule: Claude works best with images before text, but images after or interleaved with text still perform well. Analogy: sliding a photo into an envelope. The caption printed on the back is not read aloud to the recipient, so you write what matters on the cover note, and showing the photo before the note is simply the clearest way to present it. The GIF and storage claims describe features the images block does not have.",
+      "distractor_explanations": {
+        "A": "Animations are unsupported. Only the first frame of a GIF is used.",
+        "B": "Inline images are ephemeral and are not stored beyond the request. Only files you upload are kept in the Files API.",
+        "C": "On Bedrock and Google Cloud only base64 sources are available."
+      },
+      "domain_id": "D1",
+      "domain_name": "Applications & Integration",
+      "topic": "Handling Image Inputs",
+      "id": "CCDV-E22-Q18",
+      "exam_id": 22,
+      "exam_question_num": 18,
+      "global_id": "CCDV-Q1131"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 19,
+      "prompt": "A ticket tool calls a model without streaming and waits about eight seconds, because the model writes 400-word summaries while agents only need the gist. The model follows instructions well. Which change cuts the delay with the least risk to the summaries?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `max_tokens` to 60 and let each summary simply stop wherever that budget ends."
+        },
+        {
+          "key": "B",
+          "text": "Ask for a summary of at most three sentences, keeping `max_tokens` as a cap."
+        },
+        {
+          "key": "C",
+          "text": "Ask for summaries of exactly 70 words and nothing longer than that."
+        },
+        {
+          "key": "D",
+          "text": "Add a `cache_control` breakpoint after the ticket text in each request."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Generation time grows with the number of output tokens, so the direct latency lever is a shorter answer. A sentence or paragraph limit is more dependable than a word count because models count tokens, and `max_tokens` stays as a backstop instead of the main control. Analogy: asking a speaker to keep a toast to three sentences gets a tidy short toast, while a stage manager who cuts the microphone at 60 seconds ends it mid-word. The sentence limit is the request to the speaker and `max_tokens` is the stage manager. Caching a unique ticket is like rehearsing a speech nobody has heard before, which does not shorten what gets said.",
+      "distractor_explanations": {
+        "A": "`max_tokens` is a hard limit, and a reply that reaches it is cut off, perhaps mid-sentence. It suits short answers, not summaries that must read completely.",
+        "C": "Models count tokens rather than words, so an exact word target is less reliable than a sentence or paragraph limit.",
+        "D": "Caching speeds up re-reading a repeated prefix. Each ticket is different, and the time to write 400 words would not change."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Output Length & Latency",
+      "id": "CCDV-E22-Q19",
+      "exam_id": 22,
+      "exam_question_num": 19,
+      "global_id": "CCDV-Q1132"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 20,
+      "prompt": "A service sends the same 40,000-token system prompt, marked with `cache_control`, on every request. When fast mode is rate limited it falls back as shown.\n\n```python\ntry:\n    msg = client.with_options(max_retries=0).beta.messages.create(\n        model=\"claude-opus-5-5\", speed=\"fast\", system=SYSTEM,\n        betas=[\"fast-mode-2026-02-01\"], **params)\nexcept anthropic.RateLimitError:\n    msg = client.beta.messages.create(\n        model=\"claude-opus-5-5\", system=SYSTEM, **params)\n```\n\nDuring bursts, the fallback calls show large `cache_creation_input_tokens` and no `cache_read_input_tokens`, though the prompt text is identical. What explains this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "The fallback omits the `fast-mode-2026-02-01` beta header, and cache reads depend on that header."
+        },
+        {
+          "key": "B",
+          "text": "Cache entries can be read only by the SDK client object that wrote them."
+        },
+        {
+          "key": "C",
+          "text": "A `429` response from the first call evicts the system prompt entry from the cache."
+        },
+        {
+          "key": "D",
+          "text": "Cache entries are kept per speed, so a standard-speed call cannot read a fast-speed entry."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Fast and standard speed run with different inference configurations, and requests at different speeds do not share cached prefixes. So the fallback call finds nothing to read, writes its own entry, and pays the write price until standard-speed entries exist. Analogy: a store with an express counter and a regular counter that each keep their own shelf of pre-packed orders. An order packed at the express counter cannot be collected at the regular one, so the first regular customer waits for a fresh pack. The beta header is only the sign on the express door and has nothing to do with which shelf is used.",
+      "distractor_explanations": {
+        "A": "The beta header enables the `speed` field. Cache reads do not depend on it, and speed is what separates the entries.",
+        "B": "Caching is based on the request prefix, not on the client object that sent it.",
+        "C": "A rate-limit error leaves cache entries alone. They expire only by their lifetime."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Fast Mode Fallback & Cache",
+      "id": "CCDV-E22-Q20",
+      "exam_id": 22,
+      "exam_question_num": 20,
+      "global_id": "CCDV-Q1133"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 21,
+      "prompt": "A support chat streams its replies from an Opus-tier model. Each request carries the same 12,000-token policy prefix, and users wait several seconds before the first word appears. An eval shows a Sonnet-tier model meets the quality bar. Which TWO changes most directly shorten the wait for the first word? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Move the feature to the Sonnet-tier model that already meets the eval bar."
+        },
+        {
+          "key": "B",
+          "text": "Turn on fast mode with `speed: \"fast\"` for the Opus requests that serve the chat."
+        },
+        {
+          "key": "C",
+          "text": "Lower `max_tokens` from 4096 to 1024 on the chat requests."
+        },
+        {
+          "key": "D",
+          "text": "Mark the stable policy prefix with a `cache_control` breakpoint for cache reads."
+        },
+        {
+          "key": "E",
+          "text": "Send the chat requests through the Message Batches API instead."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "D"
+      ],
+      "explanation": "With streaming already on, the silence before the first word is the time the model spends processing the prompt. Caching lets a repeated prefix be read rather than reprocessed, and a smaller tier processes any prompt faster, so both attack that silence. Analogy: a librarian who must reread a 12-page manual before answering each visitor. A bookmark on the unchanged pages is the cache, and a quicker librarian is the smaller model. A librarian who talks faster once started (fast mode) or who stops after fewer sentences (lower `max_tokens`) does nothing about the quiet before the first word.",
+      "distractor_explanations": {
+        "B": "Fast mode raises output tokens per second. Its gain is not aimed at time to first token, and it carries premium pricing.",
+        "C": "It caps how long the reply can grow. The first word arrives after the same prompt-processing time.",
+        "E": "Batches are asynchronous and can take up to 24 hours. They suit work where nobody is waiting."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Time to First Token",
+      "id": "CCDV-E22-Q21",
+      "exam_id": 22,
+      "exam_question_num": 21,
+      "global_id": "CCDV-Q1134"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 22,
+      "prompt": "A team wants to send one request that carries an 800,000-token document set to Claude Opus 5, which lists input at $5 per MTok and a 1M-token context window. What should the team expect?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "No beta header is needed, and the 800,000 input tokens cost $4.00 at the standard rate."
+        },
+        {
+          "key": "B",
+          "text": "The input costs $4.00, but just when the document set goes through the Message Batches API."
+        },
+        {
+          "key": "C",
+          "text": "The API rejects the request with a 400 once it passes the 200,000-token input maximum of Opus 5."
+        },
+        {
+          "key": "D",
+          "text": "The request needs a long-context beta header, and tokens above 200k are billed at a premium."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Claude 4.6 and later models include the full 1M-token window by default, with no beta header, and long requests are billed at the same per-token rate as short ones. The arithmetic is 800,000 tokens times $5 per million, which is $4.00. Prompt caching and batch discounts apply at standard rates across the whole window.",
+      "distractor_explanations": {
+        "B": "The standard rate applies on the ordinary Messages API. Batches would apply a further 50% discount on top.",
+        "C": "Opus 5 has a 1M-token window. A 400 appears only when the input alone exceeds the window.",
+        "D": "That was the arrangement for earlier long-context betas. On Claude 4.6 and later models 1M is the default window at standard pricing."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "1M Context Window Pricing",
+      "id": "CCDV-E22-Q22",
+      "exam_id": 22,
+      "exam_question_num": 22,
+      "global_id": "CCDV-Q1135"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 23,
+      "prompt": "A model priced at $2 per MTok input and $10 per MTok output receives a 2,000-token prompt and writes a 500-token reply. Adaptive thinking is on with `display` set to `\"summarized\"`. The returned summary is 800 tokens long, and internal traces show the model generated 6,000 thinking tokens. What does one request cost?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "About $0.077: 2,000 input tokens plus 7,300 output tokens."
+        },
+        {
+          "key": "B",
+          "text": "About $0.017: 2,000 input tokens plus 1,300 output tokens in total."
+        },
+        {
+          "key": "C",
+          "text": "About $0.009: 2,000 input tokens plus just the 500 reply tokens."
+        },
+        {
+          "key": "D",
+          "text": "About $0.069: 2,000 input tokens plus 6,500 output tokens."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "Thinking tokens are billed as output, and with summarized display you pay for the full thinking the model generated, not the shorter summary you receive. Output is 6,000 thinking plus 500 reply, or 6,500 tokens at $10 per million, which is $0.065. Input adds 2,000 tokens at $2 per million, or $0.004, for $0.069 in total. Analogy: a taxi meter runs for the whole route the driver actually drove, while the receipt shows only a short route summary. Billing from the summary would be like paying for the printed lines instead of the kilometres.",
+      "distractor_explanations": {
+        "A": "This adds the 800-token summary on top of the 6,000 thinking tokens. The summary is a view of the thinking, not extra billed output.",
+        "B": "This bills the 800-token summary as the thinking. Billing follows the full thinking tokens generated, not the summary tokens.",
+        "C": "This counts only the visible reply. Thinking tokens are billed as output even though they are not shown in full."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Thinking Token Billing",
+      "id": "CCDV-E22-Q23",
+      "exam_id": 22,
+      "exam_question_num": 23,
+      "global_id": "CCDV-Q1136"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 24,
+      "prompt": "A team plans to move a service from Claude Sonnet 4.6 to a newer model that uses a newer tokenizer but lists the same per-token input and output prices. Prompts and replies stay the same text. Finance wants a forecast based on the team's own traffic, not on a published average, before cutover. What is the best approach?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Count a sample of real prompts with `count_tokens` on the new model and price from those counts."
+        },
+        {
+          "key": "B",
+          "text": "Add a flat 30% to the current bill, using the roughly 30% increase documented for the newer tokenizer."
+        },
+        {
+          "key": "C",
+          "text": "Estimate tokens as characters divided by four for both models and compare the prices."
+        },
+        {
+          "key": "D",
+          "text": "Keep the current forecast: identical per-token prices mean an identical bill."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The bill is tokens times price, and a newer tokenizer can turn the same text into roughly 30% more tokens, depending on the content. Equal list prices therefore do not mean equal cost. The dependable forecast is to run representative prompts through the token counting endpoint for the new model and price those counts. Analogy: two shops sell rope at the same price per metre, but one measures with a ruler that marks shorter metres. The same rope costs more there. Adding a flat 30% is a reasonable guess, but measuring your own rope is better.",
+      "distractor_explanations": {
+        "B": "The documented figure is approximate and depends on content and workload shape, so a measured sample gives a better forecast.",
+        "C": "A fixed characters-per-token rule ignores the tokenizer difference. It makes the two models look identical.",
+        "D": "Price per token is equal, but the same text can become more tokens, and tokens are what get billed."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Tokenizer Change & Cost Forecast",
+      "id": "CCDV-E22-Q24",
+      "exam_id": 22,
+      "exam_question_num": 24,
+      "global_id": "CCDV-Q1137"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 25,
+      "prompt": "A research agent has a lead and several look-up subagents. The subagent tasks are short, well-specified fetch-and-extract jobs. The team wants lower latency and cost for them without changing the model tier. What should they change?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add `speed: \"fast\"` to the subagent requests."
+        },
+        {
+          "key": "B",
+          "text": "Set `max_tokens` to 200 on the subagent requests."
+        },
+        {
+          "key": "C",
+          "text": "Stream the subagent responses and consume the events as they arrive."
+        },
+        {
+          "key": "D",
+          "text": "Set `output_config.effort` to `low` on the subagent requests."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The `effort` parameter scales how many tokens Claude spends across thinking, text and tool calls. The `low` level is meant for simple, speed- and cost-sensitive work such as subagents, and it also tends to produce fewer, terser tool calls. It needs no change of model and should be confirmed on your evals.",
+      "distractor_explanations": {
+        "A": "Fast mode is a research preview for some Opus models at premium prices, which works against the goal of lower cost.",
+        "B": "It is a strict cutoff. Extractions that need more room would be truncated instead of becoming more efficient.",
+        "C": "Streaming improves how soon a reader sees text. It does not reduce the work or tokens a subagent spends, and its results are consumed by code."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Effort Low for Subagents",
+      "id": "CCDV-E22-Q25",
+      "exam_id": 22,
+      "exam_question_num": 25,
+      "global_id": "CCDV-Q1138"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 26,
+      "prompt": "A help desk sends 1,000,000 requests a month, each with 1,000 input and 200 output tokens. All run on a Sonnet-tier model priced at $2 input and $10 output per MTok. An eval shows a Haiku-tier model ($1 input, $5 output per MTok) meets the quality bar on 80% of the requests. How much does routing that 80% to Haiku save per month?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "About $800 saved: the bill falls from $4,000 to $3,200."
+        },
+        {
+          "key": "B",
+          "text": "About $1,600 saved: the bill falls from $4,000 to $2,400."
+        },
+        {
+          "key": "C",
+          "text": "About $2,400 saved: the bill falls from $4,000 to $1,600."
+        },
+        {
+          "key": "D",
+          "text": "About $2,000 saved: the bill falls from $4,000 to $2,000 in total."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Each Sonnet request costs 1,000 times $2 per million plus 200 times $10 per million, which is $0.004, so a million requests cost $4,000. A Haiku request costs $0.002. Routing 800,000 requests to Haiku costs $1,600, and the remaining 200,000 on Sonnet cost $800, for $2,400 in total, a saving of $1,600.",
+      "distractor_explanations": {
+        "A": "This takes 20% of the bill instead of the 40% price difference applied to 80% of requests.",
+        "C": "This treats the new bill as the saving. $2,400 is what the bill becomes, not what is saved.",
+        "D": "That is the saving if every request moved to Haiku. Only 80% of them can."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Routing Cost Arithmetic",
+      "id": "CCDV-E22-Q26",
+      "exam_id": 22,
+      "exam_question_num": 26,
+      "global_id": "CCDV-Q1139"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 27,
+      "prompt": "A team reads the fast mode documentation before adopting it for an Opus-tier agent. Which TWO statements about fast mode are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "The fast mode premium applies only to the part of a request above 200k input tokens."
+        },
+        {
+          "key": "B",
+          "text": "A `speed: \"fast\"` request to `claude-opus-4-7` returns an error, not a standard-speed run."
+        },
+        {
+          "key": "C",
+          "text": "Fast mode requests can be placed inside a Message Batches job to combine both discounts."
+        },
+        {
+          "key": "D",
+          "text": "Fast mode runs a separate smaller model, so quality can drop on harder tasks."
+        },
+        {
+          "key": "E",
+          "text": "Fast mode has its own rate limit, separate from the standard Opus limits."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "E"
+      ],
+      "explanation": "Fast mode is a faster inference configuration of the same model, offered for specific Opus models as a research preview. A model without it, such as Opus 4.7, rejects `speed: \"fast\"` with an error instead of quietly running slower. Fast mode also has a dedicated rate limit with its own `anthropic-fast-*` headers, and its premium pricing applies across the whole context window, including requests over 200k input tokens. Analogy: a toll road with an express lane that has its own capacity and its own counters, where a vehicle that is not permitted on it is turned back at the gate. The tempting claim that the premium starts only above 200k tokens is like thinking the express toll begins halfway down the road, when it is charged for the whole trip.",
+      "distractor_explanations": {
+        "A": "Fast mode pricing is a multiplier on standard rates across the full context window, including requests over 200k input tokens.",
+        "C": "Fast mode is not available with the Batch API.",
+        "D": "It runs the same model weights with a faster inference configuration. Intelligence and capabilities are unchanged."
+      },
+      "domain_id": "D2",
+      "domain_name": "Model Selection & Optimization",
+      "topic": "Fast Mode Behaviour",
+      "id": "CCDV-E22-Q27",
+      "exam_id": 22,
+      "exam_question_num": 27,
+      "global_id": "CCDV-Q1140"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 28,
+      "prompt": "In a long-running coding harness, the initializer session wrote a JSON feature list that later coding sessions read. One entry looks like this:\n\n```json\n{\n  \"category\": \"functional\",\n  \"description\": \"User can send a message and see a reply in the chat\",\n  \"steps\": [\"Open the app\", \"Type a message\", \"Press send\", \"Reply appears\"],\n  \"passes\": false\n}\n```\n\nWhich change may a coding session make to this entry?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `passes` to `true` once it has tested the feature end to end."
+        },
+        {
+          "key": "B",
+          "text": "Set `passes` to `\"partial\"` for a feature that is half built."
+        },
+        {
+          "key": "C",
+          "text": "Reword the `steps` to match what the session actually built."
+        },
+        {
+          "key": "D",
+          "text": "Delete the entry when the feature proves too hard to finish in the session."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The feature list is a fixed definition of done. Every feature starts as failing, and a coding session may only flip `passes` after it has verified the behavior, so later sessions cannot declare the project finished while features are still missing. JSON was chosen because models are less likely to overwrite it carelessly than a Markdown file. Analogy: a building inspector's checklist. The builder can tick an item only after the inspector's test passes, and may not cross out items or rewrite them to match what was built. A partial tick would let the site be declared finished with the roof missing.",
+      "distractor_explanations": {
+        "B": "The field is a pass or fail marker. A half-built feature stays failing until it has been verified.",
+        "C": "Rewriting the steps turns the list from a fixed target into a record of whatever was built, so it no longer exposes gaps.",
+        "D": "Removing or editing tests is not acceptable, because it hides missing or buggy functionality from later sessions."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Feature List Editing Rules",
+      "id": "CCDV-E22-Q28",
+      "exam_id": 22,
+      "exam_question_num": 28,
+      "global_id": "CCDV-Q1141"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 29,
+      "prompt": "Each later session of a long-running coding agent spends many turns working out what earlier sessions did and how to start the dev server. The team wants the first session to be a dedicated initializer. Which set of outputs should it leave behind?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A vector index of the repository that each session queries before acting."
+        },
+        {
+          "key": "B",
+          "text": "A test folder that each later session deletes and regenerates from the original spec."
+        },
+        {
+          "key": "C",
+          "text": "A long codebase summary pasted into the system prompt of each later session."
+        },
+        {
+          "key": "D",
+          "text": "An `init.sh` start script, a progress log file, and an initial git commit."
+        }
+      ],
+      "correct_answers": [
+        "D"
+      ],
+      "explanation": "The initializer session sets up the environment so later sessions can orient quickly: `init.sh` starts the development server, a progress file logs what agents have done, and an initial git commit gives a baseline to inspect or revert. Each coding session then reads these, picks the next unfinished feature, and leaves the files updated.",
+      "distractor_explanations": {
+        "A": "An index helps find code, but it records neither what was done nor how to start the app.",
+        "B": "Regenerating tests each time discards the fixed target and invites tests rewritten to fit the code.",
+        "C": "It goes stale as the code changes and fills every session's context. A progress file plus git history stays current."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Initializer Session Output",
+      "id": "CCDV-E22-Q29",
+      "exam_id": 22,
+      "exam_question_num": 29,
+      "global_id": "CCDV-Q1142"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 30,
+      "prompt": "Agents in a long-running coding harness keep leaving half-finished work in the repository and marking features as done without testing them. Which TWO changes fit the harness approach for these two problems? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a prompt line asking the agent to be careful and to keep going until everything is finished."
+        },
+        {
+          "key": "B",
+          "text": "Drop the progress log and compact the context between features to save tokens."
+        },
+        {
+          "key": "C",
+          "text": "Limit each session to one feature, then commit it with a note in the progress log."
+        },
+        {
+          "key": "D",
+          "text": "Give the agent browser automation and require an end-to-end check before it sets `passes`."
+        },
+        {
+          "key": "E",
+          "text": "Raise the effort level to `max` so each session finishes more features in a single run."
+        }
+      ],
+      "correct_answers": [
+        "C",
+        "D"
+      ],
+      "explanation": "The harness works because each session does one feature, leaves a clean commit with a descriptive message and an updated progress log, and verifies behavior the way a user would, for example by driving the app with browser automation, before marking it passing. Analogy: a bakery that finishes and boxes one cake before starting the next, and tastes it before putting it on the shelf. Starting five cakes at once leaves five half-baked trays, and a baker told only to be careful still has no rule for when a cake counts as done. More effort is a hotter oven, which does not stop the juggling.",
+      "distractor_explanations": {
+        "A": "A general request gives no checkable condition. The agent still decides for itself when a feature is done.",
+        "B": "Without the log and commits, the next session cannot see what is finished or revert a bad change.",
+        "E": "More effort does not fix the tendency to do too much at once. Work still ends half done without a one-feature limit."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Harness Failure Fixes",
+      "id": "CCDV-E22-Q30",
+      "exam_id": 22,
+      "exam_question_num": 30,
+      "global_id": "CCDV-Q1143"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 31,
+      "prompt": "A log-analysis agent has Bash and file tools. Its harness pastes excerpts from every file of a 3 GB incident archive into the prompt before each task, and accuracy drops as the context fills. Which design change follows context-engineering guidance?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Keep file paths and queries as lightweight references, and load data on demand using tools."
+        },
+        {
+          "key": "B",
+          "text": "Split the archive across five subagents that each read the full archive before answering."
+        },
+        {
+          "key": "C",
+          "text": "Move to a 1M-token window and paste a much larger share of the archive into each prompt."
+        },
+        {
+          "key": "D",
+          "text": "Summarize the whole archive into one digest and then discard the original files."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "As context grows, a model's recall of it degrades, so the goal is the smallest set of high-signal tokens. Just-in-time retrieval keeps cheap references such as paths, stored queries and links, and uses tools like `grep`, `head` and `tail` to pull in only what the current step needs. Analogy: a researcher who carries a library catalog card index and fetches single books when needed, instead of hauling the whole library to the desk. A bigger desk (larger window) lets more books pile up but does not make the pile easier to search.",
+      "distractor_explanations": {
+        "B": "Each subagent would still load everything. Delegation helps when each one reads only a distinct slice.",
+        "C": "A bigger window gives more room, but recall still degrades as tokens accumulate. Curating what enters context matters.",
+        "D": "A single digest loses detail the agent may need. Loading specific files on demand keeps the originals available."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Just-in-Time Context",
+      "id": "CCDV-E22-Q31",
+      "exam_id": 22,
+      "exam_question_num": 31,
+      "global_id": "CCDV-Q1144"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 32,
+      "prompt": "An agent migrates a 200-module codebase over several weeks. Context is reset between sessions, progress has clear milestones (module done or not done), and recorded decisions must survive each reset exactly. Which technique fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Structured note-taking to a notes file that the agent rereads after each reset."
+        },
+        {
+          "key": "B",
+          "text": "Tool result clearing alone, with the `clear_tool_uses_20250919` strategy."
+        },
+        {
+          "key": "C",
+          "text": "Compaction of the conversation each time the window fills, using a summarizer prompt."
+        },
+        {
+          "key": "D",
+          "text": "A fleet of parallel subagents that explore different modules at the same time."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Each technique has a home. Compaction keeps conversational flow in tasks with extensive back-and-forth, multi-agent designs suit research where parallel exploration pays off, and structured note-taking suits iterative development with clear milestones, because the agent writes progress and decisions to a file outside the context window and rereads them after a reset. Analogy: a hiker's trail log. After a night's sleep (the reset) the hiker reads exact entries about which peaks are done, rather than relying on a friend's retelling of the trip. Tool result clearing only tidies the backpack and writes nothing in the log.",
+      "distractor_explanations": {
+        "B": "It removes stale tool outputs to save space. It stores nothing about decisions or milestones.",
+        "C": "Compaction suits long back-and-forth conversations. A summary can blur exact decisions across many resets.",
+        "D": "Multi-agent designs pay off for parallel exploration. They add no durable record of milestones across resets."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Choosing a Long-Horizon Technique",
+      "id": "CCDV-E22-Q32",
+      "exam_id": 22,
+      "exam_question_num": 32,
+      "global_id": "CCDV-Q1145"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 33,
+      "prompt": "A research agent answers broad questions by running subagents one after another, and each subagent calls its search tools one at a time. Answer quality is good, but complex queries take many minutes. Which change matches the lesson from Anthropic's multi-agent research system?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Raise each subagent's `max_tokens` to cut the number of turns it needs to finish."
+        },
+        {
+          "key": "B",
+          "text": "Have the lead launch subagents in parallel and let each one call several tools at once."
+        },
+        {
+          "key": "C",
+          "text": "Run the lead on a stronger model and keep the subagents sequential."
+        },
+        {
+          "key": "D",
+          "text": "Add a final reviewing subagent that checks the finished report for duplicated or missing findings."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "The system sped up in two ways: the lead launches several subagents in parallel instead of serially, and each subagent uses several tools in parallel. Together these cut research time by up to 90% for complex queries, while the work done stays the same. Analogy: a newsroom that sends five reporters to five sources at once and lets each phone three contacts at the same time, instead of one reporter doing every call in order. Adding an editor at the end, or hiring a star editor, does not shorten the phone calls.",
+      "distractor_explanations": {
+        "A": "A larger limit does not change how many searches run at once. Turn count is driven by the questions, not the cap.",
+        "C": "A stronger lead does not change the serial structure that makes complex queries slow.",
+        "D": "A reviewer adds another step at the end. The delay comes from running work one piece at a time."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Parallelism in Research Agents",
+      "id": "CCDV-E22-Q33",
+      "exam_id": 22,
+      "exam_question_num": 33,
+      "global_id": "CCDV-Q1146"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 34,
+      "prompt": "An agent updates records in a booking database through tools. An eval compares each run's tool-call sequence with a reference sequence and fails runs that reached the correct final database state by a different route. Which change fits the guidance for evaluating such agents?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add more reference sequences until each valid route to the final state is covered."
+        },
+        {
+          "key": "B",
+          "text": "Have a judge grade the agent's last chat message for accuracy and tone."
+        },
+        {
+          "key": "C",
+          "text": "Compare the final database state with the expected state, plus checkpoints for key changes."
+        },
+        {
+          "key": "D",
+          "text": "Constrain the tool order in the system prompt so each run follows the reference route."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "For agents that change state, judging each step penalizes valid alternative paths. End-state evaluation checks whether the correct final state was reached, optionally with discrete checkpoints where specific changes must have happened, so any route that works passes. Analogy: marking a maths exam by the final answer and key steps rather than demanding every student use the teacher's method. Matching a reference sequence is like failing a student who reached the right answer by a different method. Grading only the last chat message is like marking the cover page.",
+      "distractor_explanations": {
+        "A": "The number of valid routes grows without limit, and a new route will still fail until someone adds it.",
+        "B": "The message can sound right while the database is wrong. The state change is what the task requires.",
+        "D": "This removes the agent's ability to adapt, and the eval would still not verify the final state."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "End-State Evaluation",
+      "id": "CCDV-E22-Q34",
+      "exam_id": 22,
+      "exam_question_num": 34,
+      "global_id": "CCDV-Q1147"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 35,
+      "prompt": "A team designs a research agent with a lead and several subagents. It wants better search quality and less information loss when large results pass between agents. Which TWO practices come from Anthropic's multi-agent research system? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Let the lead plan with extended thinking and subagents think after each tool result."
+        },
+        {
+          "key": "B",
+          "text": "Route each subagent result through the lead's context, letting nothing bypass the coordinator."
+        },
+        {
+          "key": "C",
+          "text": "Have subagents store large outputs outside the conversation and hand the lead a reference."
+        },
+        {
+          "key": "D",
+          "text": "Give each subagent the lead's full conversation history for one shared view of the task."
+        },
+        {
+          "key": "E",
+          "text": "Score each subagent turn against a fixed script to catch emergent behavior early."
+        }
+      ],
+      "correct_answers": [
+        "A",
+        "C"
+      ],
+      "explanation": "Extended thinking serves as a controllable scratchpad: the lead uses it to plan the approach, and subagents use interleaved thinking after each tool result to judge quality, spot gaps and refine the next query. For large outputs, subagents write to external storage and pass the lead a lightweight reference, which preserves fidelity and avoids copying big text through conversation history. Analogy: a detective who jots notes after every clue, and sends the evidence box number rather than retyping the files into the chief's memo. Retyping everything through the chief is the tempting route and loses detail.",
+      "distractor_explanations": {
+        "B": "Copying large outputs through the lead loses information and costs tokens. Persisted artifacts avoid both.",
+        "D": "Shared history grows each subagent's context and blurs task boundaries. Subagents need a focused brief.",
+        "E": "The lesson on evaluation favors judging final outcomes. Fixed turn-by-turn scripts penalize valid paths."
+      },
+      "domain_id": "D3",
+      "domain_name": "Agents & Workflows",
+      "topic": "Research Agent Design Lessons",
+      "id": "CCDV-E22-Q35",
+      "exam_id": 22,
+      "exam_question_num": 35,
+      "global_id": "CCDV-Q1148"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 36,
+      "prompt": "A contracts assistant sometimes adds general legal knowledge to answers that must reflect only the 40-page agreement pasted into the prompt. Which instruction best addresses this?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Lower `max_tokens` to shrink the room that answers have for outside material."
+        },
+        {
+          "key": "B",
+          "text": "Place the agreement after the question in the prompt, keeping the question easier to see."
+        },
+        {
+          "key": "C",
+          "text": "Tell Claude to answer only from the provided agreement and not from general knowledge."
+        },
+        {
+          "key": "D",
+          "text": "Ask Claude to sound confident in every answer, which makes gaps in the agreement less obvious."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Explicitly instructing Claude to use only the provided documents, and not its general knowledge, is a documented way to reduce hallucination. It sets the boundary of acceptable sources directly in the prompt. Tone, layout and length limits do not do that.",
+      "distractor_explanations": {
+        "A": "It cuts replies off at a fixed length. It does not keep outside knowledge out of what is written.",
+        "B": "Layout does not limit sources, and long documents work better above the query than below it.",
+        "D": "Tone does not restrict the source of the answer. Confident wording makes unsupported statements harder to spot."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Restricting to Provided Documents",
+      "id": "CCDV-E22-Q36",
+      "exam_id": 22,
+      "exam_question_num": 36,
+      "global_id": "CCDV-Q1149"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 37,
+      "prompt": "A research agent investigates why a metric dropped by searching internal documents over many rounds. It latches onto the first plausible cause and stops testing it. Which prompt addition fits best?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Tell it to run exactly three searches in total and then state the most likely cause."
+        },
+        {
+          "key": "B",
+          "text": "Ask for the final answer as strict JSON with a single `cause` field."
+        },
+        {
+          "key": "C",
+          "text": "Ask it to keep competing hypotheses, track confidence in notes, and self-critique."
+        },
+        {
+          "key": "D",
+          "text": "Lower the effort level to make it commit to an answer sooner."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "For complex research, a structured approach helps: define success criteria, verify across sources, and have Claude develop several competing hypotheses, track its confidence levels in progress notes, and regularly self-critique its plan. That keeps the first plausible story from winning by default. Analogy: a doctor working up a differential diagnosis lists several possible illnesses, notes how likely each is, and orders tests that could rule one out. Settling on the first fever explanation is like stopping at the first guess. Capping the number of tests or hurrying the doctor only makes that earlier.",
+      "distractor_explanations": {
+        "A": "A fixed search count forces an early commitment, which is the same flaw as latching onto the first cause.",
+        "B": "An output format changes how the answer is shaped, not how the agent reasons across rounds.",
+        "D": "Lower effort means less exploration. The problem is too little testing of alternatives."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Structured Research Prompting",
+      "id": "CCDV-E22-Q37",
+      "exam_id": 22,
+      "exam_question_num": 37,
+      "global_id": "CCDV-Q1150"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 38,
+      "prompt": "An insurance assistant on Claude Opus 5 sometimes quotes the wrong deductible. Engineers want to see why it reached those answers, without changing the model. Thinking is already running, but every logged `thinking` block has an empty `thinking` field. Which change helps most?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Ask Claude to explain its reasoning in a sentence after each answer, and log that sentence."
+        },
+        {
+          "key": "B",
+          "text": "Set `display` to `\"omitted\"`, expecting the signature field to carry the readable reasoning."
+        },
+        {
+          "key": "C",
+          "text": "Set `display` to `\"summarized\"` in the thinking config, then read the blocks from wrong answers."
+        },
+        {
+          "key": "D",
+          "text": "Raise `max_tokens` so the thinking text is no longer cut off in the logs."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "The hallucination guide lists chain-of-thought verification: use thinking with `display: \"summarized\"` and review the thinking blocks when an answer looks wrong. On Claude Opus 5, thinking runs by default but `display` defaults to `\"omitted\"`, so blocks come back empty even though the thinking is still billed. Switching to `\"summarized\"` returns a readable summary of the reasoning, not the raw chain of thought. Analogy: a flight recorder that is recording but has playback switched off; turning display on lets investigators hear the cockpit after an incident. A pilot's after-the-fact explanation is like a statement taken later, which can differ from the recording.",
+      "distractor_explanations": {
+        "A": "A note written after the answer is new text and may not match what actually led to it. The thinking block is the documented way to inspect reasoning.",
+        "B": "`omitted` is what produces the empty field here, and the signature is encrypted. It is not readable reasoning.",
+        "D": "A token cap does not blank a field. Empty text is what the `omitted` display setting returns, and it is the default on this model."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Reviewing Reasoning on Wrong Answers",
+      "id": "CCDV-E22-Q38",
+      "exam_id": 22,
+      "exam_question_num": 38,
+      "global_id": "CCDV-Q1151"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 39,
+      "prompt": "A customer chat assistant for tax software gives generic answers. The developer wants a more focused tone and domain behavior with a minimal change. What should they do?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Upload a custom Skill containing the role and attach it to each request."
+        },
+        {
+          "key": "B",
+          "text": "Raise `effort` to `max` to make answers more specialized to tax questions."
+        },
+        {
+          "key": "C",
+          "text": "Add a one-sentence role to the system prompt, such as a tax support specialist."
+        },
+        {
+          "key": "D",
+          "text": "Start the assistant turn with the role text as a prefilled reply on each request."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Setting a role in the system prompt focuses Claude's behavior and tone, and even a single sentence makes a difference. It is the smallest change that addresses generic answers.",
+      "distractor_explanations": {
+        "A": "Skills package reusable procedures and need a code execution container on the API. That is heavy for one line of role text.",
+        "B": "Effort controls how many tokens Claude spends. It does not set a persona or domain focus.",
+        "D": "Prefilled last assistant messages return a 400 on Claude 4.6 and later models. A system prompt is the supported place for a role."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Role Prompting",
+      "id": "CCDV-E22-Q39",
+      "exam_id": 22,
+      "exam_question_num": 39,
+      "global_id": "CCDV-Q1152"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 40,
+      "prompt": "A streaming summarizer on a newest-generation model loses its connection 1,400 tokens into a 2,000-token reply, and users are already reading the text. The old retry code resent the conversation with the partial reply as the final assistant message, and the API now returns a 400. What is the best fix?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add the partial text to `stop_sequences`, expecting generation to resume after it."
+        },
+        {
+          "key": "B",
+          "text": "Retry the whole request from scratch and replace the text the user is reading."
+        },
+        {
+          "key": "C",
+          "text": "Put the partial text in a user message and ask Claude to continue from where it stopped."
+        },
+        {
+          "key": "D",
+          "text": "Pass the partial text through the `system` field and resend with a higher `max_tokens`."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Newer models reject a prefilled last assistant message, so a continuation moves into the user turn: tell Claude that its previous response was interrupted, include the final text it produced, and ask it to continue from where it left off. A plain retry is fine when there is no user-visible cost, but here the reader has already seen most of the answer. Analogy: a friend who loses the phone line mid-story. You call back and say, \"you stopped at the part about the bridge, carry on from there\", rather than asking them to start the whole story again or handing them a script of the first half.",
+      "distractor_explanations": {
+        "A": "Stop sequences end generation when a string appears. They do not make the model resume from a given text.",
+        "B": "A full retry is acceptable when users see nothing yet. Here it throws away text they are already reading.",
+        "D": "A system prompt is not a continuation point, and the cut came from the connection, not from a token cap."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Continuing an Interrupted Reply",
+      "id": "CCDV-E22-Q40",
+      "exam_id": 22,
+      "exam_question_num": 40,
+      "global_id": "CCDV-Q1153"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 41,
+      "prompt": "A team upgrades a service to Claude 4.6 or later, where a prefilled last assistant message returns a 400. The prefill was used to skip lead-ins such as `Here is the summary:` and to refresh reminders in very long chats. Which TWO replacements fit? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Set `tool_choice` to `none`, expecting the model to skip introductions and lead-ins."
+        },
+        {
+          "key": "B",
+          "text": "Keep the prefill and add a `cache_control` breakpoint to the final assistant message."
+        },
+        {
+          "key": "C",
+          "text": "Add a `stop_sequences` entry for `Here is`, expecting the lead-in to be cut off."
+        },
+        {
+          "key": "D",
+          "text": "In very long conversations, move the reminder text into the user turn instead."
+        },
+        {
+          "key": "E",
+          "text": "Tell the model in the system prompt to answer directly, with no `Here is` lead-ins."
+        }
+      ],
+      "correct_answers": [
+        "D",
+        "E"
+      ],
+      "explanation": "On Claude 4.6 and later models, prefilled assistant turns are rejected, and the documented replacements are plain ones. To drop lead-ins, instruct the model in the system prompt to respond directly without preamble. To refresh context or role reminders in very long conversations, inject what was prefilled into the user turn. Analogy: instead of whispering the first words into an actor's mouth, you give the director's note before the scene and slip a reminder card into the script pages. A stop sequence on `Here is` would be like cutting the microphone the moment the actor speaks, ending the scene early.",
+      "distractor_explanations": {
+        "A": "It only forbids tool calls. Lead-in text before an answer is still allowed.",
+        "B": "Caching changes cost and speed for a prefix. It does not make a rejected prefill acceptable.",
+        "C": "A stop sequence ends generation when the string appears. The reply would stop before the summary started."
+      },
+      "domain_id": "D4",
+      "domain_name": "Prompt & Context Engineering",
+      "topic": "Replacing Prefill Uses",
+      "id": "CCDV-E22-Q41",
+      "exam_id": 22,
+      "exam_question_num": 41,
+      "global_id": "CCDV-Q1154"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 42,
+      "prompt": "An agent has Asana tools named `search` and `lookup` and Jira tools named `find` and `get`, all with short, similar descriptions. It often picks a tool from the wrong service. Which change best reduces this confusion?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Attach a single `input_examples` entry to each of the tools."
+        },
+        {
+          "key": "B",
+          "text": "Merge the tools into a single `search` tool that takes a `service` string parameter."
+        },
+        {
+          "key": "C",
+          "text": "Prefix names by service and resource, such as `asana_search` and `jira_search`."
+        },
+        {
+          "key": "D",
+          "text": "Mark the tools `defer_loading: true`, giving Claude fewer tools to compare."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "Tools are easier to choose when their names carry the service and the resource, such as `asana_search`, `jira_search` or `asana_projects_search`. A clear prefix gives the agent a cue before it reads any description, which cuts wrong-service calls and wasted context. Analogy: a school hallway where every locker is labelled with the grade and the class (7B-14) instead of just numbered 14. Students find theirs, and nobody opens a locker in the wrong wing. Adding sample contents to each locker or hiding half the lockers does not tell the wings apart.",
+      "distractor_explanations": {
+        "A": "Examples show input formats. They do not tell the agent which service a tool belongs to.",
+        "B": "Merging unrelated services into one tool hides distinct behaviors. Consolidation fits chained operations, not different systems.",
+        "D": "Deferral reduces upfront context. Once loaded, the tools are still hard to tell apart."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Tool Namespacing",
+      "id": "CCDV-E22-Q42",
+      "exam_id": 22,
+      "exam_question_num": 42,
+      "global_id": "CCDV-Q1155"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 43,
+      "prompt": "A `get_thread` tool returns 40 fields per message, including internal IDs and the full HTML body. Most tasks need only the sender and text, but some need the IDs to take follow-up actions. Context fills quickly. Which design change fits tool-design guidance?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add a `response_format` enum with `concise` and `detailed` values, default concise."
+        },
+        {
+          "key": "B",
+          "text": "Set `strict: true` on the tool to give responses fewer fields."
+        },
+        {
+          "key": "C",
+          "text": "Cut each response to its first 200 characters, with no marker or guidance on what was dropped."
+        },
+        {
+          "key": "D",
+          "text": "Return IDs without the text, leaving the agent to fetch each message."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "A simple `response_format` enum lets the agent choose how much to receive: concise output with the human-meaningful fields for most steps, and detailed output with IDs only when a follow-up call needs them. Defaulting to concise protects the context window. Analogy: a restaurant menu with a short version for ordering and a full ingredient sheet for guests with allergies. Most diners read the short menu, and the sheet is there when needed. Chopping every dish description at 200 characters would hide the allergy warning along with the rest.",
+      "distractor_explanations": {
+        "B": "Strict mode validates the tool's inputs against the schema. It does not shrink what the tool returns.",
+        "C": "Silent truncation hides data and gives the agent no way to ask for more or to narrow its request.",
+        "D": "That multiplies calls and context use. The agent usually needs the sender and text straight away."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Concise vs Detailed Tool Responses",
+      "id": "CCDV-E22-Q43",
+      "exam_id": 22,
+      "exam_question_num": 43,
+      "global_id": "CCDV-Q1156"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 44,
+      "prompt": "A custom Skill bundles `SKILL.md` and a 2,000-line `validate_form.py`. During a task Claude runs the script through bash. How much of the script's content enters the context window?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Only the script's output enters context; the code never loads."
+        },
+        {
+          "key": "B",
+          "text": "Nothing: neither the code nor the output is placed in the context window."
+        },
+        {
+          "key": "C",
+          "text": "The whole file, loaded at the moment Claude decides to run the script."
+        },
+        {
+          "key": "D",
+          "text": "About 100 tokens of the file, the same share as the metadata level."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Skills load in stages: name and description at startup, the SKILL.md body when triggered, and bundled files only when needed. When Claude runs a bundled script through bash, the code never enters the context window and only what the script prints does, which makes scripts far cheaper than having Claude generate the same code. Analogy: asking a calculator to total a receipt. You do not read its internal circuitry into your head, only the number it shows. Reading a reference file is the opposite, like copying a whole page of a manual into your notes.",
+      "distractor_explanations": {
+        "B": "The script's output does enter context, since Claude needs the result such as a validation message.",
+        "C": "Scripts are executed, not read. Reading a file into context is what reference files such as `FORMS.md` do.",
+        "D": "The metadata level is each Skill's name and description. It is unrelated to the contents of bundled scripts."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Skill Scripts & Context",
+      "id": "CCDV-E22-Q44",
+      "exam_id": 22,
+      "exam_question_num": 44,
+      "global_id": "CCDV-Q1157"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 45,
+      "prompt": "A developer sends a Messages API request whose `container` lists a Skill:\n\n```json\n{\n  \"container\": {\n    \"skills\": [{\"type\": \"anthropic\", \"skill_id\": \"xlsx\", \"version\": \"latest\"}]\n  },\n  \"messages\": [{\"role\": \"user\", \"content\": \"Build a budget workbook\"}]\n}\n```\n\nWhat else must the request include for the Skill to run?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "A Files API upload of the Skill's `SKILL.md` and a `file_id` reference."
+        },
+        {
+          "key": "B",
+          "text": "A code execution tool in the request's `tools` list alongside the container."
+        },
+        {
+          "key": "C",
+          "text": "A `tool_choice` of `any` to force a Skill call on every turn."
+        },
+        {
+          "key": "D",
+          "text": "A `memory` tool entry in `tools`, which Claude would use to read the Skill's files."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "Skills run in the code execution tool's container, with filesystem and bash access, so a Messages API request that references Skills in `container` must also include the code execution tool. Pre-built Skills such as `xlsx` are named by `skill_id`, and custom ones are uploaded through the Skills API.",
+      "distractor_explanations": {
+        "A": "Pre-built Skills are referenced by `skill_id`. Custom Skills are uploaded through the Skills API, not through the Files API.",
+        "C": "Forcing tool use does not provide the environment the Skill runs in, and Claude decides when to use a Skill.",
+        "D": "The memory tool stores notes across sessions. Skills read their files inside the code execution container."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Skills in the Messages API",
+      "id": "CCDV-E22-Q45",
+      "exam_id": 22,
+      "exam_question_num": 45,
+      "global_id": "CCDV-Q1158"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 46,
+      "prompt": "A team wants Claude to make at most one tool call per response, but the call below does not do that.\n\n```typescript\nconst res = await client.messages.create({\n  model: MODEL,\n  max_tokens: 1024,\n  tools,\n  tool_choice: { type: \"auto\" },\n  disable_parallel_tool_use: true,\n  messages,\n});\n```\n\nWhich change is correct?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Change `tool_choice` to `{ type: \"any\" }` and leave the flag at the top level of the request."
+        },
+        {
+          "key": "B",
+          "text": "Replace the flag with a system prompt line asking for one tool call at a time."
+        },
+        {
+          "key": "C",
+          "text": "Move `disable_parallel_tool_use: true` into the `tool_choice` object of the request."
+        },
+        {
+          "key": "D",
+          "text": "Set `strict: true` on the tools, expecting a single call to be emitted."
+        }
+      ],
+      "correct_answers": [
+        "C"
+      ],
+      "explanation": "`disable_parallel_tool_use` is a field of the `tool_choice` object, not a top-level request parameter. With type `auto` it means Claude makes at most one tool call per response and can still answer in plain text, while with `any` or `tool` it means exactly one call. Analogy: a shop's one-item-per-customer rule is written on the checkout counter's own sign, not on the shop's front door where nobody checks it. Moving the sign inside `tool_choice` puts the rule where the cashier reads it. Switching to `any` would force a purchase from every visitor.",
+      "distractor_explanations": {
+        "A": "The flag would still be outside `tool_choice`, and `any` forces a tool call on every turn.",
+        "B": "A prompt line only encourages the behavior. The flag inside `tool_choice` is the setting that limits calls.",
+        "D": "Strict tool use guarantees that inputs match the schema. It does not limit how many calls appear."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Disabling Parallel Tool Use",
+      "id": "CCDV-E22-Q46",
+      "exam_id": 22,
+      "exam_question_num": 46,
+      "global_id": "CCDV-Q1159"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 47,
+      "prompt": "A team decides where to keep a custom Skill and what it can do at run time. Which TWO statements are accurate? (Select TWO.)",
+      "type": "multiple",
+      "options": [
+        {
+          "key": "A",
+          "text": "Custom Skills added in claude.ai are shared with the whole organization by default."
+        },
+        {
+          "key": "B",
+          "text": "A Skill in a repository's `.claude/skills/` folder is a filesystem-based Claude Code Skill."
+        },
+        {
+          "key": "C",
+          "text": "A Skill uploaded in claude.ai also becomes available to API requests across the same organization."
+        },
+        {
+          "key": "D",
+          "text": "A custom Skill uploaded through the API is available to all members of that workspace."
+        },
+        {
+          "key": "E",
+          "text": "Skills running through the API can reach the internet to install packages at run time."
+        }
+      ],
+      "correct_answers": [
+        "B",
+        "D"
+      ],
+      "explanation": "Custom Skills do not sync between surfaces, and each surface has its own sharing scope. API uploads are workspace-wide, claude.ai uploads belong to one user, and Claude Code Skills are filesystem-based folders, personal in `~/.claude/skills/` or per project in `.claude/skills/`. On the API they run in a sandbox with no network access. Analogy: three separate school lockers: one shared by a whole class (workspace), one that is your own (claude.ai), and one in your own backpack (Claude Code). Putting a book in one does not put it in the others, and none of them has a phone line to the outside.",
+      "distractor_explanations": {
+        "A": "In claude.ai, custom Skills belong to the individual user and have no org-wide distribution.",
+        "C": "Custom Skills do not sync across surfaces. Each surface needs its own upload.",
+        "E": "On the API, Skills run with no network access and no runtime package installation."
+      },
+      "domain_id": "D5",
+      "domain_name": "Tools & MCPs",
+      "topic": "Skill Sharing & Environments",
+      "id": "CCDV-E22-Q47",
+      "exam_id": 22,
+      "exam_question_num": 47,
+      "global_id": "CCDV-Q1160"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 48,
+      "prompt": "A bank has a ZDR arrangement and may not have prompts or outputs stored at rest. On a ZDR-eligible model, an engineer must process 5,000 documents overnight. Which design stays inside the arrangement?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Have Claude analyze the documents with the code execution tool running in a container."
+        },
+        {
+          "key": "B",
+          "text": "Ordinary Messages API calls, with prompt caching on the shared instructions."
+        },
+        {
+          "key": "C",
+          "text": "A single Message Batches job holding the 5,000 requests."
+        },
+        {
+          "key": "D",
+          "text": "Upload each document with the Files API and reference it by `file_id`."
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "ZDR covers the Messages and Token Counting APIs for eligible features, and plain calls with prompt caching qualify. Features that need to store state, such as batch jobs, uploaded files and code execution containers, are marked not eligible, and using them steps outside the arrangement for that data. Analogy: a bank vault that keeps nothing overnight accepts same-day cash handling. A storage locker with a 29-day hold, a filing cabinet that keeps files until someone deletes them, or a workshop that holds your tools for a month are all places where papers stay behind. The overnight volume does not change which doors are allowed.",
+      "distractor_explanations": {
+        "A": "Code execution is not ZDR eligible. Container data can be retained for up to 30 days.",
+        "C": "Batch processing is not ZDR eligible. Results are retained for the asynchronous job, with a 29-day retention period.",
+        "D": "Files are retained until they are deleted or expire. The Files API is not ZDR eligible."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "ZDR Scope",
+      "id": "CCDV-E22-Q48",
+      "exam_id": 22,
+      "exam_question_num": 48,
+      "global_id": "CCDV-Q1161"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 49,
+      "prompt": "A developer commits a Console API key to a public repository, and the same key is used in dev, staging and production. The history is rewritten and force-pushed an hour later. What should the team do next?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Disable or delete the key, then issue per-environment replacements held in a secrets manager."
+        },
+        {
+          "key": "B",
+          "text": "Keep the key in service once the rewritten history no longer shows it in the public repository."
+        },
+        {
+          "key": "C",
+          "text": "Keep the key and add a workspace spend limit to cap the damage."
+        },
+        {
+          "key": "D",
+          "text": "Change the key's expiration to one day and keep using it until then."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "Rewriting history does not un-leak a key, so the key must be treated as compromised: disable it (reversible) or delete it (permanent), then create new keys, ideally one per environment or workspace so one leak cannot touch the others, and store them in a secrets manager. Analogy: a house key photographed and posted online. Cutting the photo out of the album does not help. You change the lock and hand out separate keys for each door. Setting the old key to expire next week is not possible after it is cut, and a budget cap only limits what a burglar can spend.",
+      "distractor_explanations": {
+        "B": "Copies of the old commit may already exist elsewhere. A key that was exposed has to be treated as compromised.",
+        "C": "A spend limit bounds the cost of misuse but leaves the exposed credential working.",
+        "D": "Expiration is chosen when a key is created and cannot be changed afterwards. A leaked key stays usable meanwhile."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Leaked API Key Response",
+      "id": "CCDV-E22-Q49",
+      "exam_id": 22,
+      "exam_question_num": 49,
+      "global_id": "CCDV-Q1162"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 50,
+      "prompt": "A team lets Claude drive a browser on a desktop that holds the operator's saved logins, to run checks on vendor portals. Pages on those portals are untrusted. Which setup follows the computer use safety guidance?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Run it in a dedicated VM with minimal privileges, no saved logins and a domain allowlist."
+        },
+        {
+          "key": "B",
+          "text": "Keep the desktop and add a system prompt line telling Claude to ignore instructions found on pages."
+        },
+        {
+          "key": "C",
+          "text": "Turn off the screenshot injection classifiers to avoid interruptions in the checks."
+        },
+        {
+          "key": "D",
+          "text": "Let Claude confirm purchases and agreements itself, trusting its grasp of the task."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "For computer use, the guidance is to isolate the agent: a dedicated virtual machine or container with minimal privileges, no access to sensitive data such as account logins, internet access limited to an allowlist of domains, and a human to confirm consequential decisions. Analogy: letting a visiting contractor work in a bare room with only the tools for the job, rather than in your office with your keys and passwords on the desk. A note on the wall saying \"ignore strangers\" helps less than a locked door, and removing the smoke detector does not make the room safer.",
+      "distractor_explanations": {
+        "B": "A prompt line is soft protection. Claude can still follow commands found in page content or images.",
+        "C": "The classifiers are an extra layer that steers Claude to verify instructions. They are not a cause of risk.",
+        "D": "Decisions with real-world consequences, such as purchases or terms, should be confirmed by a human."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Computer Use Safety",
+      "id": "CCDV-E22-Q50",
+      "exam_id": 22,
+      "exam_question_num": 50,
+      "global_id": "CCDV-Q1163"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 51,
+      "prompt": "A team's agent only needs to read channels and search messages through a Slack MCP server. The OAuth grant it receives also allows posting and managing channels. The server is configured like this:\n\n```json\n{\n  \"mcpServers\": {\n    \"slack\": {\n      \"type\": \"http\",\n      \"url\": \"https://mcp.slack.com/mcp\"\n    }\n  }\n}\n```\n\nWhich change limits the permissions of the grant itself?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Add `\"oauth\": {\"scopes\": \"channels:read search:read\"}` to the `slack` entry."
+        },
+        {
+          "key": "B",
+          "text": "Add a deny rule for the Slack posting tools in the Claude Code permission settings."
+        },
+        {
+          "key": "C",
+          "text": "Re-add the server with `--scope local`, expecting narrower permissions."
+        },
+        {
+          "key": "D",
+          "text": "Add an `allowedMcpServers` entry for `slack` in the managed settings."
+        }
+      ],
+      "correct_answers": [
+        "A"
+      ],
+      "explanation": "The `oauth.scopes` field in the server entry pins the scopes Claude Code requests, so the grant carries only read and search rights. Least privilege works best at the credential, because a token cannot do what it was never granted, whichever tool or client is used. Analogy: a hotel key card programmed for one floor versus a master key with a note saying \"only use the gym\". A rule against using the master key helps, but the card that cannot open the door is safer. Scope flags and allowlists decide where a key is stored or which hotels you may visit.",
+      "distractor_explanations": {
+        "B": "A deny rule blocks the tool in Claude Code. The token still carries write rights wherever else it is used.",
+        "C": "The `--scope` flag decides where a server's configuration is stored and shared. It does not change what the token may do.",
+        "D": "An allowlist decides which servers may be used at all. It does not narrow the permissions a server is granted."
+      },
+      "domain_id": "D6",
+      "domain_name": "Security & Safety",
+      "topic": "Least-Privilege MCP Credentials",
+      "id": "CCDV-E22-Q51",
+      "exam_id": 22,
+      "exam_question_num": 51,
+      "global_id": "CCDV-Q1164"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 52,
+      "prompt": "A team wants Claude Code to refuse edits under `migrations/`. The hook runs, but the edit goes ahead anyway. Config and script:\n\n```json\n{\"hooks\": {\"PreToolUse\": [{\n  \"matcher\": \"Edit|Write\",\n  \"hooks\": [{\"type\": \"command\", \"command\": \".claude/hooks/freeze.sh\"}]\n}]}}\n```\n\n```bash\n#!/bin/bash\nf=$(jq -r '.tool_input.file_path')\nif [[ \"$f\" == *\"/migrations/\"* ]]; then\n  echo \"migrations/ is frozen\" >&2\n  exit 1\nfi\n```\n\nWhich change makes the hook block the edit?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "Change the matcher to `*` so the hook also sees tools other than `Edit` and `Write`"
+        },
+        {
+          "key": "B",
+          "text": "Change `exit 1` to `exit 2`, the exit code that blocks a `PreToolUse` call"
+        },
+        {
+          "key": "C",
+          "text": "Print the message to stdout and `exit 0`, which Claude Code reads as a refusal"
+        },
+        {
+          "key": "D",
+          "text": "Move the hook to `PostToolUse`, where the script runs after the file has been written"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "For most hook events, exit code 2 is the only code that blocks through the exit status alone. Claude Code treats exit 1, the usual Unix failure code, as a non-blocking error and lets the action continue, so a policy hook must use `exit 2`. In `PreToolUse`, that blocks the tool call. Analogy: an airport guard who writes a complaint on a form and waves your bag through, versus one who actually stops the bag at the scanner. The form is exit 1, and the stop is exit 2. A `PostToolUse` hook would be a guard standing at the far end of the airport after the bag has already left.",
+      "distractor_explanations": {
+        "A": "The matcher already matches both edit tools. Widening it changes which tools trigger the hook, not what its exit code does.",
+        "C": "Exit 0 means success. Plain stdout is not treated as a refusal for this event, and the edit would proceed.",
+        "D": "A `PostToolUse` hook cannot undo anything. The tool has already run by the time it fires."
+      },
+      "domain_id": "D7",
+      "domain_name": "Claude Code",
+      "topic": "Hook Exit Codes",
+      "id": "CCDV-E22-Q52",
+      "exam_id": 22,
+      "exam_question_num": 52,
+      "global_id": "CCDV-Q1165"
+    },
+    {
+      "source_repo": "Anthropic Partner Academy / CCDV-F Official Prep (Exam-Style Tier)",
+      "source_file": "exam-style-tier-exam-22.json",
+      "source_id": 53,
+      "prompt": "A support agent resolves refund tickets with no human review. The eval runs each task 5 times, and per-trial success is about 90%. Leadership needs confidence that a ticket type succeeds every time it shows up, not just sometimes. Which metric should the team report?",
+      "type": "single",
+      "options": [
+        {
+          "key": "A",
+          "text": "`pass@5`, the chance at least one of five trials succeeds, which is close to 100%"
+        },
+        {
+          "key": "B",
+          "text": "`pass^5`, the chance all five trials succeed, which comes to about 59% at 90% per trial"
+        },
+        {
+          "key": "C",
+          "text": "`pass@1` from a single run per task, as extra trials add cost without new information"
+        },
+        {
+          "key": "D",
+          "text": "The mean per-trial success rate of 90%, averaged over every task"
+        }
+      ],
+      "correct_answers": [
+        "B"
+      ],
+      "explanation": "`pass@k` is the probability of at least one success in k tries and rises as k grows. `pass^k` is the probability that all k tries succeed and falls as k grows, so it measures consistency. For an agent that acts unattended and must work every time, `pass^k` is the right lens: with 90% per trial, 0.9 to the fifth power is about 59%, far below the flattering near-100% of `pass@5`. A single run or an average cannot show this.",
+      "distractor_explanations": {
+        "A": "`pass@k` rises with k and suits settings where one good attempt is enough, such as a developer picking the best of several. It hides inconsistency.",
+        "C": "One run cannot reveal run-to-run variance, which is what the leadership question is about.",
+        "D": "The average says how often a single attempt works. It does not show whether the same task keeps succeeding across repeated runs."
+      },
+      "domain_id": "D8",
+      "domain_name": "Eval, Testing & Debugging",
+      "topic": "pass@k vs pass^k",
+      "id": "CCDV-E22-Q53",
+      "exam_id": 22,
+      "exam_question_num": 53,
+      "global_id": "CCDV-Q1166"
+    }
+  ]
+}

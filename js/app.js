@@ -372,7 +372,7 @@ function renderDashboard() {
     const formNum = String(exam.exam_id).padStart(2, '0');
     const isHardTier = exam.exam_id === 11 || exam.exam_id === 12;
     const isModerateTier = exam.exam_id >= 13 && exam.exam_id <= 18;
-    const isExamStyleTier = exam.exam_id === 19 || exam.exam_id === 20;
+    const isExamStyleTier = exam.exam_id >= 19 && exam.exam_id <= 22;
 
     let statusBadge = `<span class="text-xs font-mono text-stone-500">Untested</span>`;
     if (bestAttempt) {
@@ -551,7 +551,7 @@ function renderCurrentQuestion() {
   const modeSuffix = State.isReviewMode ? ' (Review Mode)' : (State.isStudyMode ? ' (Study Mode)' : '');
   const isHardTier = exam.exam_id === 11 || exam.exam_id === 12;
   const isModerateTier = exam.exam_id >= 13 && exam.exam_id <= 18;
-  const isExamStyleTier = exam.exam_id === 19 || exam.exam_id === 20;
+  const isExamStyleTier = exam.exam_id >= 19 && exam.exam_id <= 22;
   document.getElementById('exam-title-header').textContent = exam.title + modeSuffix;
   document.getElementById('q-counter').textContent = `Question ${qNum} of ${totalQ}`;
 
@@ -1564,7 +1564,7 @@ const ORIGINAL_SOURCES = [
     url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
     description: "Developed directly against official Anthropic CCDV-F blueprint specifications. Provides full-length 53-question moderate-difficulty simulations with realistic exam-style scenarios across all 8 domains and comprehensive technical explanations. Completely original and not sourced from external mock dumps.",
     contributed: 318,
-    share: "30.0%"
+    share: "27.3%"
   },
   {
     tier: "Hard Tier",
@@ -1576,19 +1576,19 @@ const ORIGINAL_SOURCES = [
     url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
     description: "Developed directly against official Anthropic CCDV-F blueprint specifications. Features elevated difficulty with subtle near-miss distractors and deep architectural edge cases, expanded with detailed rationales for every option. Completely original and not sourced from external mock dumps.",
     contributed: 106,
-    share: "10.0%"
+    share: "9.1%"
   },
   {
     tier: "Exam-Style Tier",
     badgeClass: "bg-purple-100 text-purple-900 border-purple-300",
-    exams: "Exams #19 & #20",
+    exams: "Exams #19–#22",
     title: "Exam-Style Tier Applied Simulation",
     author: "CCDV-F Exam Simulator",
     repo: "vkr1729/ccdv-f-exam-simulator",
     url: "https://github.com/vkr1729/ccdv-f-exam-simulator",
     description: "Developed directly against official Anthropic CCDV-F blueprint specifications. Features applied scenarios with code and configuration snippets, subtle distractors where all choices represent real features, and strict single-best-answer alignment. Completely original and not sourced from external mock dumps.",
-    contributed: 106,
-    share: "10.0%"
+    contributed: 212,
+    share: "18.2%"
   }
 ];
 
@@ -1599,7 +1599,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/srinipusuluri/CCDV-F-SET1",
     description: "Compiled an extensive 9-set collection of developer practice questions with detailed explanations and distractor reasoning.",
     contributed: 149,
-    share: "14.1%"
+    share: "12.8%"
   },
   {
     author: "Nat Sh.",
@@ -1607,7 +1607,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/natsh/claude-developer-foundations-prep",
     description: "Authored the comprehensive 5-module quiz bank based on the Anthropic Partner Academy curriculum plus advanced exam practice sets.",
     contributed: 132,
-    share: "12.5%"
+    share: "11.3%"
   },
   {
     author: "Turjoy Real",
@@ -1615,7 +1615,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/turjoy-real/CCDV-F",
     description: "Created realistic 53-item practice mock exams and multi-domain developer practice scenario drills.",
     contributed: 88,
-    share: "8.3%"
+    share: "7.5%"
   },
   {
     author: "H. Bacheller",
@@ -1623,7 +1623,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/hbacheller-tribe/CCDV-F-Exam",
     description: "Engineered blueprint-weighted scenario questions with insightful technical rationales for real-world development patterns.",
     contributed: 85,
-    share: "8.0%"
+    share: "7.3%"
   },
   {
     author: "Amey Thakur",
@@ -1631,7 +1631,7 @@ const COMMUNITY_SOURCES = [
     url: "https://github.com/Amey-Thakur/CLAUDE-CERTIFICATIONS",
     description: "Developed comprehensive Developer Foundations question collections and timed practice exam modules.",
     contributed: 76,
-    share: "7.2%"
+    share: "6.5%"
   }
 ];
 
@@ -1648,7 +1648,7 @@ function renderSourcesView() {
         <span class="text-xs font-editorial uppercase tracking-widest text-brand-terracotta font-semibold">Attribution &amp; Provenance</span>
         <h2 class="text-2xl sm:text-3xl font-editorial text-stone-900">Question Bank Provenance &amp; Creator Attribution</h2>
         <p class="text-sm text-stone-600 leading-relaxed max-w-3xl">
-          This platform synthesizes <strong>1,060 authentic scenario questions</strong> structured into <strong>20 full-length 53-question practice exams</strong> (120 minutes each). All questions strictly adhere to Anthropic's official 8-domain blueprint weights and have been verified for developer accuracy.
+          This platform synthesizes <strong>1,166 authentic scenario questions</strong> structured into <strong>22 full-length 53-question practice exams</strong> (120 minutes each). All questions strictly adhere to Anthropic's official 8-domain blueprint weights and have been verified for developer accuracy.
         </p>
       </div>
 
@@ -1663,12 +1663,12 @@ function renderSourcesView() {
         </p>
         <ul class="text-xs sm:text-sm text-stone-700 space-y-1.5 list-disc pl-5">
           <li><strong>Base Practice Forms (Exams #1–#10 · 530 Questions)</strong>: Interleaved across 5 independent community study repositories so every form draws from multiple creators under official blueprint weights.</li>
-          <li><strong>Blueprint Originals (Exams #11–#20 · 530 Questions)</strong>: Developed directly against official Anthropic blueprints across Moderate Tier (#13–#18), Hard Tier (#11 &amp; #12), and Exam-Style Tier (#19 &amp; #20) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
+          <li><strong>Blueprint Originals (Exams #11–#22 · 636 Questions)</strong>: Developed directly against official Anthropic blueprints across Moderate Tier (#13–#18), Hard Tier (#11 &amp; #12), and Exam-Style Tier (#19–#22) with elevated distractor plausibility and deep architectural explanations. None of these questions originate from public mock dumps.</li>
         </ul>
         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs font-mono text-stone-600 border-t border-brand-terracotta-line/50">
           <span>✓ 100% Free &amp; Open Source</span>
           <span>✓ Strict Creator Attribution</span>
-          <span>✓ 530 Blueprint Original Items</span>
+          <span>✓ 636 Blueprint Original Items</span>
           <span>✓ No NDA / Non-Public Exam Dumps</span>
           <span>✓ Educational Fair Use</span>
         </div>
@@ -1677,7 +1677,7 @@ function renderSourcesView() {
       <!-- Blueprint Originals Section -->
       <div class="space-y-4 pt-2">
         <div class="flex items-baseline justify-between flex-wrap gap-2">
-          <h3 class="text-base font-semibold text-stone-900">Blueprint Originals (530 Questions Total · Exams #11–#20)</h3>
+          <h3 class="text-base font-semibold text-stone-900">Blueprint Originals (636 Questions Total · Exams #11–#22)</h3>
           <span class="text-xs font-mono text-stone-500">Developed directly against Anthropic CCDV-F blueprints</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1754,28 +1754,28 @@ function renderSourcesView() {
         </div>
       </div>
 
-      <!-- Multi-Source Distribution Breakdown Across All 20 Exams -->
+      <!-- Multi-Source Distribution Breakdown Across All 22 Exams -->
       <div class="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
-        <h3 class="text-sm font-semibold text-stone-900">Comprehensive Question Bank Distribution (1,060 Questions Total)</h3>
+        <h3 class="text-sm font-semibold text-stone-900">Comprehensive Question Bank Distribution (1,166 Questions Total)</h3>
         <p class="text-xs text-stone-600 leading-relaxed">
           Every single 53-question mock exam in this simulator strictly adheres to Anthropic's official blueprint weights (Applications &amp; Integration: 33.1%, Model Selection: 16.8%, Agents &amp; Workflows: 14.7%, Prompt Engineering: 11.0%, Tools &amp; MCP: 10.6%, Security &amp; Safety: 8.1%, Claude Code: 3.1%, Eval &amp; Testing: 2.6%).
         </p>
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-2 text-center text-xs font-mono">
           <div class="p-2.5 rounded-lg bg-sky-50 border border-sky-200">
             <div class="font-bold text-sky-950">318</div>
-            <div class="text-[10px] text-sky-800 truncate" title="Moderate Tier (Exams 13-18)">Moderate (30%)</div>
+            <div class="text-[10px] text-sky-800 truncate" title="Moderate Tier (Exams 13-18)">Moderate (27%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">149</div>
-            <div class="text-[10px] text-stone-500 truncate" title="Srinivas Pusuluri">Srinipusuluri (14%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Srinivas Pusuluri">Srinipusuluri (13%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">132</div>
-            <div class="text-[10px] text-stone-500 truncate" title="Nat Sh.">Nat Sh. (12%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="Nat Sh.">Nat Sh. (11%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200">
             <div class="font-bold text-amber-950">106</div>
-            <div class="text-[10px] text-amber-800 truncate" title="Hard Tier (Exams 11-12)">Hard Tier (10%)</div>
+            <div class="text-[10px] text-amber-800 truncate" title="Hard Tier (Exams 11-12)">Hard Tier (9%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">88</div>
@@ -1783,15 +1783,15 @@ function renderSourcesView() {
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">85</div>
-            <div class="text-[10px] text-stone-500 truncate" title="H. Bacheller">H. Bacheller (8%)</div>
+            <div class="text-[10px] text-stone-500 truncate" title="H. Bacheller">H. Bacheller (7%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-white border border-stone-200">
             <div class="font-bold text-stone-900">76</div>
             <div class="text-[10px] text-stone-500 truncate" title="Amey Thakur">Amey Thakur (7%)</div>
           </div>
           <div class="p-2.5 rounded-lg bg-purple-50 border border-purple-200">
-            <div class="font-bold text-purple-950">106</div>
-            <div class="text-[10px] text-purple-800 truncate" title="Exam-Style Tier (Exams 19-20)">Exam-Style (10%)</div>
+            <div class="font-bold text-purple-950">212</div>
+            <div class="text-[10px] text-purple-800 truncate" title="Exam-Style Tier (Exams 19-22)">Exam-Style (18%)</div>
           </div>
         </div>
       </div>
